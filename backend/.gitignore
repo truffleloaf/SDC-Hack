@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.tmp/
+task_shift.db
+test_task_shift.db
+.env
+
+# local tooling and pip scratch directories
+.tools/
+pip-*/
+
