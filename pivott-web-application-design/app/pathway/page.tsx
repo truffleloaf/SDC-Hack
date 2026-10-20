@@ -1,0 +1,170 @@
+'use client'
+
+import { ArrowRight, CalendarPlus } from 'lucide-react'
+import { AnimatePresence, motion } from 'motion/react'
+import { toast } from 'sonner'
+import { StepCard } from '@/components/pathway/step-card'
+import { LogoMark } from '@/components/pivott/logo'
+import { MobileActionBar } from '@/components/pivott/mobile-action-bar'
+import { PButton, PLink } from '@/components/pivott/p-button'
+import { CountUp, ProgressRing } from '@/components/pivott/progress-ring'
+import { PageIntro } from '@/components/pivott/route-stepper'
+import { NeedsProfile, PageSkeleton } from '@/components/pivott/states'
+import { ValueSlider } from '@/components/pivott/value-slider'
+import { Switch } from '@/components/ui/switch'
+import { roleById } from '@/lib/data/seed'
+import { buildPathway } from '@/lib/engine'
+import { buildIcs, downloadFile } from '@/lib/ics'
+import { displayName, greetingName, possessive, setState, useAnalysis, useAppState } from '@/lib/store'
+
+export default function PathwayPage() {
+  const { state, hydrated } = useAppState()
+  const { routes } = useAnalysis(state)
+
+  if (!hydrated) return <PageSkeleton />
+  if (!state.roleId) return <NeedsProfile step="job" />
+  const targetId = state.targetRoleId ?? routes[0]?.roleId
+  if (!targetId) return <NeedsProfile step="route" />
+
+  const role = roleById[targetId]
+  const { steps, totalHours, weeks } = buildPathway({
+    targetRoleId: targetId,
+    levels: state.skills,
+    hoursPerWeek: state.hoursPerWeek,
+    freeOnly: state.freeOnly,
+  })
+  const doneIds = new Set(state.completedSteps.filter((id) => steps.some((s) => s.id === id)))
+  const progress = steps.length ? doneIds.size / steps.length : 1
+  const complete = steps.length > 0 && doneIds.size === steps.length
+
+  const fill = steps.length ? doneIds.size / steps.length : 0
+
+  function toggle(id: string) {
+    setState((s) => ({
+      completedSteps: s.completedSteps.includes(id) ? s.completedSteps.filter((x) => x !== id) : [...s.completedSteps, id],
+    }))
+  }
+
+  function exportIcs() {
+    downloadFile(buildIcs(steps, role.title), `pivott-${role.id}-pathway.ics`, 'text/calendar;charset=utf-8')
+    toast.success('Calendar file downloaded', { description: `${steps.length} learning blocks, starting next Monday.` })
+  }
+
+  return (
+    <div className="mx-auto w-full max-w-[1200px] px-5 pb-32 pt-10 lg:pb-20">
+      <PageIntro eyebrow={`Step 5 · ${possessive(displayName(state))} route to ${role.title}`} title="Your route, one step at a time.">
+        Hi {greetingName(state)} — steps are ordered by gap priority, so the skills that matter most for this role come first.
+      </PageIntro>
+
+      <div className="mt-12 grid gap-10 lg:grid-cols-[1fr_340px]">
+        <div className="relative">
+          <span aria-hidden className="absolute bottom-10 left-5 top-10 border-l-2 border-dotted border-border-strong sm:left-7" />
+          <motion.span
+            aria-hidden
+            className="absolute left-5 top-10 border-l-2 border-dotted border-teal sm:left-7"
+            initial={false}
+            animate={{ height: `calc(${fill * 100}% - ${fill * 80}px)` }}
+            transition={{ duration: 0.45, ease: [0.2, 0.7, 0.2, 1] }}
+          />
+          <ol className="flex flex-col gap-5" aria-label="Learning steps">
+            {steps.map((s) => (
+              <StepCard key={s.id} step={s} done={doneIds.has(s.id)} onToggle={() => toggle(s.id)} />
+            ))}
+            <li className="relative grid grid-cols-[40px_1fr] gap-4 sm:grid-cols-[56px_1fr]">
+              <div className="relative z-10 flex justify-center pt-5">
+                <span className={`grid size-9 place-items-center rounded-full border-2 bg-background ${complete ? 'border-teal' : 'border-border-strong'}`}>
+                  <span className={`size-2.5 rounded-full ${complete ? 'bg-teal' : 'bg-border-strong'}`} />
+                </span>
+              </div>
+              <AnimatePresence mode="wait">
+                {complete ? (
+                  <motion.div
+                    key="done"
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex items-center gap-5 rounded-[20px] border border-teal/30 bg-mint p-6"
+                  >
+                    <LogoMark animated className="size-14 shrink-0 text-foreground" />
+                    <div className="flex flex-col gap-1">
+                      <p className="font-serif text-2xl">You’ve arrived.</p>
+                      <p className="text-sm leading-relaxed text-muted-foreground">
+                        Every step toward {role.title} is complete. Your Skill Passport is ready.
+                      </p>
+                    </div>
+                  </motion.div>
+                ) : (
+                  <motion.div key="todo" className="flex flex-col gap-1 py-5">
+                    <p className="font-serif text-xl">{role.title}</p>
+                    <p className="text-sm text-muted-foreground">Destination · {steps.length - doneIds.size} steps to go</p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </li>
+          </ol>
+        </div>
+
+        <aside className="lg:sticky lg:top-24 lg:self-start">
+          <div className="card-surface flex flex-col gap-6 p-6">
+            <div className="flex items-center gap-4">
+              <ProgressRing value={progress} size={76} stroke={6} label="Pathway progress">
+                <span className="font-mono text-sm">{Math.round(progress * 100)}%</span>
+              </ProgressRing>
+              <div className="flex flex-col">
+                <span className="font-serif text-3xl leading-none">
+                  <CountUp value={weeks} /> <span className="font-sans text-sm text-muted-foreground">weeks</span>
+                </span>
+                <span className="mt-1 font-mono text-xs text-muted-foreground">
+                  {totalHours} h · {doneIds.size}/{steps.length} done
+                </span>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-1 border-t border-border pt-5">
+              <div className="flex items-baseline justify-between">
+                <span className="text-sm font-medium">Hours per week</span>
+                <span className="font-mono text-sm">{state.hoursPerWeek} h</span>
+              </div>
+              <ValueSlider
+                label="Hours per week"
+                value={state.hoursPerWeek}
+                min={2}
+                max={20}
+                format={(v) => `${v} h`}
+                onChange={(v) => setState({ hoursPerWeek: v })}
+              />
+              <p className="font-mono text-[11px] text-faint">
+                weeks = ceil({totalHours} / {state.hoursPerWeek}) = {weeks}
+              </p>
+            </div>
+
+            <label className="flex min-h-11 cursor-pointer items-center justify-between gap-3 border-t border-border pt-5">
+              <span className="flex flex-col">
+                <span className="text-sm font-medium">Free resources only</span>
+                <span className="text-xs text-muted-foreground">Swap paid courses for free ones</span>
+              </span>
+              <Switch checked={state.freeOnly} onCheckedChange={(v) => setState({ freeOnly: v })} />
+            </label>
+
+            <div className="flex flex-col gap-3 border-t border-border pt-5">
+              <PButton variant="secondary" onClick={exportIcs} disabled={!steps.length}>
+                <CalendarPlus aria-hidden />
+                Add to calendar
+              </PButton>
+              <PLink href="/passport" className="hidden lg:inline-flex">
+                Create my Skill Passport
+                <ArrowRight aria-hidden />
+              </PLink>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <MobileActionBar>
+        <PLink href="/passport" className="w-full">
+          Create my Skill Passport
+          <ArrowRight aria-hidden />
+        </PLink>
+      </MobileActionBar>
+    </div>
+  )
+}
