@@ -1,18 +1,18 @@
-# Pivott 后端文档索引
+# Pivott documentation / 文档索引
 
-| 文档 | 内容 |
-|---|---|
-| [../README.md](../README.md) | 快速开始、API 表、数据、测试、设计说明 |
-| [../PROJECTS.md](../PROJECTS.md) | 构建说明、与最初计划的差异、可选后续 |
-| [architecture.md](architecture.md) | 系统边界、数据流、评分链路、安全与部署 |
-| [demo-script.md](demo-script.md) | 3 分钟评委演示脚本与兜底 |
-| [verification.md](verification.md) | 测试、golden 对拍、手工验证清单 |
-| [../../pivott-web-application-design/README.md](../../pivott-web-application-design/README.md) | 前端 README（未改动） |
-| [../../README.md](../../README.md) | 仓库根 README（未改动） |
+| Document / 文档 | Contents / 内容 |
+| --- | --- |
+| [Backend README](../README.md) | Setup, API, data, privacy, CORS and limitations |
+| [Architecture — English](architecture.en.md) | Components, routing, formulas, custom-input verification, CI and security |
+| [架构 — 中文](architecture.md) | 系统边界、数据流、评分链路、安全与部署 |
+| [Demo script — English](demo-script.en.md) | Three-minute demo, default route, Verify with API and honest fallbacks |
+| [演示脚本 — 中文](demo-script.md) | 数据、Normal/Fast 排名、路径和测试证据 |
+| [验证清单 — 中文](verification.md) | pytest, golden parity and manual API checks |
+| [Build notes](../PROJECTS.md) | Original implementation and optional future work |
+| [Frontend README](../../pivott-web-application-design/README.md) | Website setup, API verification and UI workflow |
+| [Repository README](../../README.md) | Pitch, screenshot, architecture, run commands and limitations |
+| [Vercel deployment](../../VERCEL.md) | Two services, public routing and local combined smoke check |
 
-## 约定
+The source dataset is `pivott-web-application-design/lib/data/seed.ts`; `app/data/seed.json` is its generated export. Never hand-edit it. Run `node scripts/generate-data.mjs` from the repository root after seed or mirrored-engine changes, then run frontend tests/type checking/build and backend pytest. Use `--check` to verify that exports are current. The root has both backend and frontend CI workflows.
 
-- 数据唯一来源是 `app/data/seed.json`，它是前端 `lib/data/seed.ts` 的 1:1 导出。
-- 不要手改 `seed.json`；前端数据变了就重新导出。
-- 公式改动必须同时跑 `pytest -q`，并确认 `tests/test_engine.py` 的 golden 对拍仍然通过。
-- 根目录 `README.md` 和 `pivott-web-application-design/` 不属于后端范围，未做改动。
+数据变更请修改前端 `seed.ts` 后重新导出；评分公式变更必须同步 TypeScript/Python，并运行两边测试。用户资料保存在浏览器；仅点击 Verify with API 时发送计算输入，服务端不持久化。

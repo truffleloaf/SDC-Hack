@@ -6,8 +6,9 @@ export async function POST(req: Request) {
   const parsed = parseProfile(await req.json().catch(() => null))
   if (!parsed.ok) return json({ error: parsed.error }, 400)
   const p = parsed.value
-  const signals = allSignals()
-  const tasks = scoreTasks(p.selections, taskById, p.scenario, signals)
+  const signals = allSignals(p.customSignals)
+  const lookup = { ...taskById, ...Object.fromEntries((p.customTasks ?? []).map((task) => [task.id, task])) }
+  const tasks = scoreTasks(p.selections, lookup, p.scenario, signals)
   const userTaskSkills = [...new Set(tasks.flatMap((t) => t.skills))]
   return json({
     scenario: p.scenario,

@@ -3,6 +3,7 @@
 import { ArrowRight, Info, Layers, List, Map as MapIcon } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useState } from 'react'
+import { VerifyAnalysis } from '@/components/map/verify-analysis'
 import { SkillsPanel, deriveSkillGroups } from '@/components/map/skills-panel'
 import { TaskListTable } from '@/components/map/task-list-table'
 import { TaskMapCanvas } from '@/components/map/task-map-canvas'
@@ -130,6 +131,7 @@ export default function MapPage() {
               )}
             </motion.div>
           </AnimatePresence>
+          <VerifyAnalysis state={state} />
         </section>
 
         <aside className="hidden lg:block">

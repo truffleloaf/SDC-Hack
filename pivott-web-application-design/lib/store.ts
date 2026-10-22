@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo, useSyncExternalStore } from 'react'
+import { DEMO_HOURS_PER_WEEK, DEMO_SCENARIO } from './demo'
 import { demoPersona, signals as seedSignals, tasksForRole, taskById, type Signal } from './data/seed'
 import {
   computeRoutes,
@@ -56,6 +57,8 @@ export function demoState(): AppState {
   return {
     ...emptyState,
     mode: 'demo',
+    scenario: DEMO_SCENARIO,
+    hoursPerWeek: DEMO_HOURS_PER_WEEK,
     name: demoPersona.name,
     roleId: demoPersona.roleId,
     selections: tasksForRole(demoPersona.roleId).map((t) => ({ taskId: t.id, share: t.defaultShare })),

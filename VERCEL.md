@@ -11,7 +11,7 @@ The API rewrite comes first. It preserves the `/api` prefix, which FastAPI alrea
 
 ## Calls and bindings
 
-There are no existing cross-service calls, hardcoded service hostnames, or frontend API base URLs to replace. Pivott's browser workflow currently computes scores and pathways locally using `lib/engine.ts` and browser state. Next.js also has standalone API handlers; in the combined deployment, public `/api/*` traffic goes to FastAPI instead. Plain `pnpm dev` continues to provide the standalone Next.js API.
+There are no existing cross-service calls, hardcoded service hostnames, or frontend API base URLs to replace. Pivott's browser workflow computes scores and pathways locally using `lib/engine.ts` and browser state. The opt-in Verify with API control sends task/skill inputs to same-origin `/api/analysis`; under services routing this reaches FastAPI. Next.js also has standalone API handlers; in the combined deployment, public `/api/*` traffic goes to FastAPI instead. Plain `pnpm dev` continues to provide the standalone Next.js API.
 
 No binding or environment variable is necessary for this topology. Do not add a dummy binding, expose an internal URL with a `NEXT_PUBLIC_*` variable, or set a binding variable manually. If server-side Next.js functions later call an internal backend, declare a service binding on the Next.js service and read its injected URL at request time. Browser-side calls should use same-origin `/api/*` paths.
 
@@ -35,11 +35,11 @@ Run the automated routing check against the printed local origin:
 python scripts/smoke_vercel.py http://localhost:3000
 ```
 
-The check exercises page/asset routing, FastAPI analysis in both scenarios, query parameters, pathway creation/retrieval, and the FastAPI 404 response. It uses only Python’s standard library. You can also check manually:
+Use the printed `localhost` hostname for browser checks; Next.js rejects dev-only requests from unconfigured host aliases. The check exercises page/asset routing, FastAPI analysis in both scenarios, query parameters, pathway creation/retrieval, and the FastAPI 404 response. It uses only Python’s standard library. You can also check manually:
 
 - `/` renders Pivott's landing page.
 - `/_next/*` assets and the local font files load from Next.js.
-- `/api/health` returns `status: "ok"`, seed version `2026.10.1`, and counts including 6 roles and 31 tasks.
+- `/api/health` returns `status: "ok"`, seed version `2026.10.2`, and counts including 6 roles and 31 tasks.
 - `/api/analysis` and `/api/pathways` accept the documented payloads in `backend/README.md`.
 - Open the demo and complete map → routes → pathway → passport; verify signals, scenario controls and export tools remain available.
 

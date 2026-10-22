@@ -1,9 +1,14 @@
+import { getDemoJourney } from '@/lib/demo'
+
 /** A diagram of the existing demo journey, rather than a decorative stock illustration. */
 export function CareerRoute() {
+  const { source, destination } = getDemoJourney()
+  const words = destination.title.split(' ')
+  const middle = Math.ceil(words.length / 2)
   return (
     <svg viewBox="0 0 620 240" role="img" aria-labelledby="career-route-title career-route-desc" className="w-full">
       <title id="career-route-title">A route built on your existing skills</title>
-      <desc id="career-route-desc">The Finance Admin example connects Excel, ERP and controls skills to a possible Finance Systems Analyst pathway.</desc>
+      <desc id="career-route-desc">{source.title} to {destination.title}: an illustrative route based on the default demo profile.</desc>
       <g fill="none" stroke="var(--border-strong)" strokeWidth="1">
         <path d="M30 50H590 M30 190H590" strokeDasharray="2 7" />
         <path d="M60 24V216 M560 24V216" strokeDasharray="2 7" />
@@ -25,9 +30,9 @@ export function CareerRoute() {
         </g>
       ))}
       <g className="fill-foreground font-sans" fontSize="12" fontWeight="500">
-        <text x="60" y="159" textAnchor="middle">Finance Admin</text>
-        <text x="560" y="164" textAnchor="middle">Finance Systems</text>
-        <text x="560" y="181" textAnchor="middle">Analyst</text>
+        <text x="60" y="159" textAnchor="middle">{source.title}</text>
+        <text x="560" y="164" textAnchor="middle">{words.slice(0, middle).join(' ')}</text>
+        <text x="560" y="181" textAnchor="middle">{words.slice(middle).join(' ')}</text>
       </g>
       <text x="278" y="122" textAnchor="middle" fontSize="12" className="fill-muted-foreground font-sans">Build on what you know</text>
     </svg>

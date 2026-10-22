@@ -7,14 +7,14 @@
 ```powershell
 cd backend
 .\.venv\Scripts\Activate.ps1
-pytest -q                     # 31 passed
+pytest -q                     # 64 passed
 uvicorn app.main:app --port 8000
 ```
 
 - [ ] 打开 <http://127.0.0.1:8000/docs>
 - [ ] 打开 <http://127.0.0.1:8000/api/health>
 - [ ] 关闭通知和无关标签
-- [ ] 记下 `seedVersion = 2026.10.1`、`dataAsOf = 2026-10-01`
+- [ ] 记下 `seedVersion = 2026.10.2`、`dataAsOf = 2026-10-01`
 
 ## 1. 数据（0:00–0:30）
 
@@ -23,13 +23,13 @@ uvicorn app.main:app --port 8000
 ```json
 {
   "status": "ok",
-  "seedVersion": "2026.10.1",
+  "seedVersion": "2026.10.2",
   "dataAsOf": "2026-10-01",
   "counts": { "roles": 6, "tasks": 31, "skills": 15, "signals": 20 }
 }
 ```
 
-**`GET /api/seed`**：6 角色 / 31 任务 / 15 技能 / 20 信号 / 4 SDG / 24 资源 / 2 情景 / Aisyah。
+**`GET /api/seed`**：6 角色 / 31 任务 / 15 技能 / 20 信号 / 4 SDG / 25 资源 / 2 情景 / Aisyah。
 
 > 话术：数据不是前端硬编码，后端有同一份 versioned seed；每个信号都有日期、来源和 evidence。
 
@@ -74,13 +74,13 @@ Normal 排名：
 
 ## 4. 路径（2:00–2:30）
 
-**`POST /api/pathways`**，`targetRoleId = "finance-systems-analyst"`，`hoursPerWeek = 8`：
+**默认故事：`POST /api/pathways`**，`targetRoleId = "operations-coordinator"`，`hoursPerWeek = 6`：
 
 ```json
 {
-  "totalHours": 90,
-  "weeks": 12,
-  "steps": "5 个"
+  "totalHours": 48,
+  "weeks": 8,
+  "steps": "4 个"
 }
 ```
 
@@ -103,7 +103,7 @@ Normal 排名：
 **`pytest -q`**：
 
 ```text
-31 passed
+64 passed
 ```
 
 > 话术：同一份 seed、同一套公式，Python 端口和前端 `engine.ts` 的输出做过 golden 对拍；没有 LLM，没有随机数。
@@ -130,3 +130,5 @@ Normal 排名：
 | Swagger 打不开 | 直接 `curl http://127.0.0.1:8000/api/health` |
 | 现场网络差 | 全部本地，无外部依赖 |
 | 时间不够 | 只演示 `/api/health` → `/api/analysis` normal/fast → `pytest -q` |
+
+英文版本：[demo-script.en.md](demo-script.en.md)。在地图点击 “Verify with API”，Normal/Fast 都应匹配；添加信号后先 Recompute 再验证。API 出错不影响本地计算。

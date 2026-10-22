@@ -11,10 +11,10 @@ Pivott shows how AI may affect the individual **tasks** in a job, then routes yo
 - Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS v4
 - Framer Motion (motion), D3 force simulation (task map), Radix primitives, Lucide icons
 - `html-to-image` (PNG) and `jspdf` (PDF) for Skill Passport export
-- Next.js Route Handlers under `app/api/*` act as the API layer. They share the same scoring engine (`lib/engine.ts`) with the client, so results are identical on both sides.
+- Next.js Route Handlers under `app/api/*` act as the API layer. They share the same scoring engine (`lib/engine.ts`) with the client, with parity checks against the FastAPI port, including validated custom tasks and applied signals.
 - Vitest for unit and workflow tests
 
-> The original brief proposed FastAPI + SQLite. To keep the hackathon build to one deployable app with no extra services, the API is implemented as Next.js Route Handlers over an in-memory seed. The endpoint contract is unchanged, so a FastAPI backend could replace it later without touching the UI.
+> The repository includes a FastAPI port in `backend/`. In the multi-service Vercel deployment, `/api/*` routes to FastAPI; standalone `pnpm dev` uses the Next.js handlers. Browser scoring remains local, with an opt-in Verify with API control on the map.
 
 ## Setup
 
@@ -27,8 +27,8 @@ No environment variables, database, or login are required.
 
 ## Seed data and reset
 
-- Seed data lives in `lib/data/seed.ts`: 6 roles, ~30 tasks, 13 skills, ~20 dated signals, 2 scenarios, SDG mappings, learning resources, and the demo persona **Aisyah (Finance Admin)**.
-- `GET /api/seed` returns the seed version and counts. `POST /api/seed` resets server-side demo state (custom signals) back to the seed.
+- Seed data lives in `lib/data/seed.ts`: 6 roles, 31 tasks, 15 skills, 20 dated signals, 2 scenarios, 4 SDGs, 25 learning resources (at least one free option for each skill), and the demo persona **Aisyah (Finance Admin)**.
+- `GET /api/seed` returns the seed version and counts. `POST /api/seed` returns the demo persona for a stateless reset; it does not store or clear browser-local custom signals.
 - In the browser, **⋯ menu → Delete my data** clears your locally stored profile and progress (`pivott:v1` and `pivott:v1:personal` in localStorage).
 
 ## API
@@ -88,8 +88,18 @@ Your name is optional and is stored only in localStorage. You can set or edit it
 
 ## Privacy
 
-There is no login. Your profile and progress stay in your browser. The server routes are stateless apart from demo signals, which you can reset.
+There is no login. Your saved profile and progress stay in your browser. Clicking **Verify with API** on the task map sends task selections, skill levels, custom tasks, and applied custom signals for a stateless comparison. It omits your display name, completion history, cookies, and pending signals. No check runs automatically; local results remain usable if the API is offline.
 
 ## Styleguide
 
 Visit `/styleguide` to see every shared component and its states.
+
+Regenerate backend seed and golden outputs after a seed change with `node scripts/generate-data.mjs` from the repository root. Use `--check` to verify the exports are current.
+
+## Verify with API
+
+On `/map`, click **Verify with API**. It checks task exposures, weighted role exposure, and ranked role IDs against same-origin `POST /api/analysis` (FastAPI under Vercel services; the Next handler under `pnpm dev`). A tolerance of `1e-9` accommodates JavaScript/Python floating-point differences. Failed checks do not change your results. Changing inputs invalidates an old verification result.
+
+The API accepts up to 100 custom tasks, 100 selected tasks, and 100 applied custom signals, with at most 100 impacts per signal. Custom task IDs must start `custom-`; custom signal IDs must start `user-`. Seed IDs cannot be overridden. Exposure/judgment are clamped to 0–1; signal strength to 0.1–1 and impact to 0.05–0.4, rounded to two decimals as in the editor. Dates must be real ISO dates no later than the seed cut-off, source URLs must use HTTPS, and custom evidence is always `user`. The same validation is implemented in both APIs.
+
+The API is a public, unauthenticated demo. CORS is not authentication or rate limiting: configure abuse/rate controls at the hosting edge before wider use. The backend allows the deployed origin and localhost by default; see `backend/README.md` for explicit CORS configuration.

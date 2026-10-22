@@ -13,7 +13,7 @@ frontend can point its API base URL at this service without UI changes.
 - Versioned seed dataset exported from
   [`pivott-web-application-design/lib/data/seed.ts`](../pivott-web-application-design/lib/data/seed.ts)
 - 10 `/api` endpoints across 8 route groups; Swagger at `/docs`
-- **31 tests**, including golden-output parity with the frontend engine
+- **64 tests**, including golden-output parity with the frontend engine
 - Stateless by design (same as the frontend API): no login, no database, no secrets
 
 ## Data
@@ -25,7 +25,7 @@ frontend can point its API base URL at this service without UI changes.
 | Skills | 15 |
 | Dated signals | 20 |
 | SDGs | 4 |
-| Learning resources | 24 |
+| Learning resources | 25 |
 | Scenarios | 2 (Normal / Fast) |
 | Demo persona | Aisyah, Finance Admin |
 
@@ -134,7 +134,7 @@ pytest -q
 ```
 
 ```text
-31 passed
+64 passed
 ```
 
 [`tests/golden.json`](tests/golden.json) is generated from the frontend
@@ -173,7 +173,7 @@ backend/
   pathway ids encode their input. The FastAPI port keeps that contract, which
   makes the demo reproducible and removes database/secrets setup.
 - **No LLM.** Every number is deterministic and testable.
-- **CORS** is open for local development; tighten it before a public deployment.
+- **CORS** defaults to `https://pivottstudio.vercel.app`, `http://localhost:3000`, and `http://127.0.0.1:3000`. Override with a comma-separated `PIVOTT_CORS_ORIGINS` environment variable for your actual deployment or preview origins; no wildcard is enabled. Same-origin `/api/*` requests through Vercel need no extra CORS origin. CORS is not authentication.
 - **No auth.** Demo only. Do not expose it publicly without authentication and
   rate limiting.
 - **Data is illustrative.** Signals carry `evidence: "verified" | "illustrative"`;
@@ -184,5 +184,13 @@ backend/
 
 - Add Supabase persistence for profiles and pathway progress (the current
   contract is stateless, so this is an extension, not a fix).
-- Add a root-level GitHub Actions workflow that runs `pytest -q` in `backend/`.
+- CI already runs backend tests and frontend tests/type checking/build from `.github/workflows/`.
 - Add admin endpoints for injecting signals and diffing recomputed exposure.
+
+## Browser verification and custom inputs
+
+The map's opt-in **Verify with API** button calls this service through same-origin `/api/analysis` in the combined Vercel deployment. It sends task and skill inputs only when clicked; display name, completion history, and unapplied signals are omitted. Inputs are processed for the response and are not stored by this application. The browser keeps its local engine and saved state, so verification failure does not block the app.
+
+`POST /api/analysis` accepts optional `customTasks` and `customSignals` arrays. Only applied custom signals should be sent. Both APIs validate custom IDs, finite scores, HTTPS source links and real dates up to the data cut-off; reject unknown impact tasks and duplicate IDs; clamp editor ranges; and mark custom evidence as `user`. Limits are 100 custom tasks, 100 selections, 100 signals and 100 impacts per signal. See the frontend README for ranges and `tests/golden.json` for a custom-input request and matching outputs in both scenarios.
+
+This demo has no application rate limiter or authentication. Configure hosting-edge rate limits/body-size limits before wider public use; do not treat the CORS allowlist as an abuse control. Never log request bodies containing user task/skill inputs.

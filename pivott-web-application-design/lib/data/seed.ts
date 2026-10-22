@@ -72,7 +72,7 @@ export interface Sdg {
 }
 
 export const DATA_AS_OF = '2026-10-01'
-export const SEED_VERSION = '2026.10.1'
+export const SEED_VERSION = '2026.10.2'
 
 export const scenarios: Scenario[] = [
   {
@@ -262,6 +262,7 @@ export const resources: Resource[] = [
   { id: 'r-analysis-gda', skillId: 'analysis', title: 'Google Data Analytics Certificate', provider: 'Coursera', url: 'https://www.coursera.org/professional-certificates/google-data-analytics', free: false },
   { id: 'r-analysis-cfi', skillId: 'analysis', title: 'Financial analysis courses', provider: 'Corporate Finance Institute', url: 'https://corporatefinanceinstitute.com/', free: false },
   { id: 'r-stats-khan', skillId: 'stats', title: 'Statistics and probability', provider: 'Khan Academy', url: 'https://www.khanacademy.org/math/statistics-probability', free: true },
+  { id: 'r-analysis-ms', skillId: 'analysis', title: 'Working with Data', provider: 'Microsoft', url: 'https://github.com/microsoft/Data-Science-For-Beginners/tree/main/2-Working-With-Data', free: true },
   { id: 'r-controls-cfi', skillId: 'controls', title: 'Accounting & controls courses', provider: 'Corporate Finance Institute', url: 'https://corporatefinanceinstitute.com/', free: false },
   { id: 'r-controls-open', skillId: 'controls', title: 'OpenLearn free courses', provider: 'The Open University', url: 'https://www.open.edu/openlearn/', free: true },
   { id: 'r-stakeholder-open', skillId: 'stakeholder', title: 'OpenLearn free courses', provider: 'The Open University', url: 'https://www.open.edu/openlearn/', free: true },
