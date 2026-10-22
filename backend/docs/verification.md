@@ -20,7 +20,7 @@ pytest -q
 预期：
 
 ```text
-31 passed
+64 passed
 ```
 
 测试分两类：
@@ -37,6 +37,7 @@ pytest -q
 
 - `analysisNormal`：任务地图、roleExposure、confidence、3 条 routes
 - `analysisFast`：同上，Fast 情景
+- `customProfile` / `analysisCustomNormal` / `analysisCustomFast`：自定义任务与已应用信号的请求及跨语言输出
 - `pathway` / `pathwayFree`：`finance-systems-analyst` 的 5 步路径
 - `roleTasks`：`finance-admin` 的默认任务地图
 
@@ -54,7 +55,7 @@ uvicorn app.main:app --port 8000
 | 检查 | 期望 |
 |---|---|
 | `GET /api/health` | `counts = {roles:6, tasks:31, skills:15, signals:20}`，`seedVersion = 2026.10.2` |
-| `GET /api/seed` | 6/31/15/20/4/24；`demoPersona.name = "Aisyah"` |
+| `GET /api/seed` | 6/31/15/20/4/25；`demoPersona.name = "Aisyah"` |
 | `POST /api/analysis`（Aisyah，normal） | `roleExposure ≈ 0.619031`，`confidence = "Medium"`，6 tasks，3 routes |
 | 同上，`scenario = "fast"` | `roleExposure ≈ 0.763981`，第一名变成 `finance-systems-analyst` |
 | `GET /api/roles/finance-admin/tasks?scenario=normal` | 6 tasks，`roleExposure ≈ 0.619031` |
@@ -81,7 +82,7 @@ uvicorn app.main:app --port 8000
 1. `/docs` 里的 10 个 `/api` 端点；
 2. `/api/health` 的数据计数；
 3. Normal → Fast 的 `roleExposure` 和排名变化；
-4. `pytest -q` 的 `31 passed`；
+4. `pytest -q` 的 `64 passed`；
 5. `tests/golden.json` + `tests/test_engine.py` 的前后端对拍；
 6. `README.md` 里的公式和架构图。
 

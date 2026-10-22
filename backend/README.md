@@ -13,7 +13,7 @@ frontend can point its API base URL at this service without UI changes.
 - Versioned seed dataset exported from
   [`pivott-web-application-design/lib/data/seed.ts`](../pivott-web-application-design/lib/data/seed.ts)
 - 10 `/api` endpoints across 8 route groups; Swagger at `/docs`
-- **31 tests**, including golden-output parity with the frontend engine
+- **64 tests**, including golden-output parity with the frontend engine
 - Stateless by design (same as the frontend API): no login, no database, no secrets
 
 ## Data
@@ -134,7 +134,7 @@ pytest -q
 ```
 
 ```text
-31 passed
+64 passed
 ```
 
 [`tests/golden.json`](tests/golden.json) is generated from the frontend
@@ -184,7 +184,7 @@ backend/
 
 - Add Supabase persistence for profiles and pathway progress (the current
   contract is stateless, so this is an extension, not a fix).
-- Add a root-level GitHub Actions workflow that runs `pytest -q` in `backend/`.
+- CI already runs backend tests and frontend tests/type checking/build from `.github/workflows/`.
 - Add admin endpoints for injecting signals and diffing recomputed exposure.
 
 ## Browser verification and custom inputs

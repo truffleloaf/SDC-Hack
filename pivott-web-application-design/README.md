@@ -11,10 +11,10 @@ Pivott shows how AI may affect the individual **tasks** in a job, then routes yo
 - Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS v4
 - Framer Motion (motion), D3 force simulation (task map), Radix primitives, Lucide icons
 - `html-to-image` (PNG) and `jspdf` (PDF) for Skill Passport export
-- Next.js Route Handlers under `app/api/*` act as the API layer. They share the same scoring engine (`lib/engine.ts`) with the client, so results are identical on both sides.
+- Next.js Route Handlers under `app/api/*` act as the API layer. They share the same scoring engine (`lib/engine.ts`) with the client, with parity checks against the FastAPI port, including validated custom tasks and applied signals.
 - Vitest for unit and workflow tests
 
-> The original brief proposed FastAPI + SQLite. To keep the hackathon build to one deployable app with no extra services, the API is implemented as Next.js Route Handlers over an in-memory seed. The endpoint contract is unchanged, so a FastAPI backend could replace it later without touching the UI.
+> The repository includes a FastAPI port in `backend/`. In the multi-service Vercel deployment, `/api/*` routes to FastAPI; standalone `pnpm dev` uses the Next.js handlers. Browser scoring remains local, with an opt-in Verify with API control on the map.
 
 ## Setup
 
@@ -28,7 +28,7 @@ No environment variables, database, or login are required.
 ## Seed data and reset
 
 - Seed data lives in `lib/data/seed.ts`: 6 roles, 31 tasks, 15 skills, 20 dated signals, 2 scenarios, 4 SDGs, 25 learning resources (at least one free option for each skill), and the demo persona **Aisyah (Finance Admin)**.
-- `GET /api/seed` returns the seed version and counts. `POST /api/seed` resets server-side demo state (custom signals) back to the seed.
+- `GET /api/seed` returns the seed version and counts. `POST /api/seed` returns the demo persona for a stateless reset; it does not store or clear browser-local custom signals.
 - In the browser, **⋯ menu → Delete my data** clears your locally stored profile and progress (`pivott:v1` and `pivott:v1:personal` in localStorage).
 
 ## API

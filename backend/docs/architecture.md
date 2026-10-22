@@ -60,7 +60,7 @@ Pivott 回答四个问题：
 角色：Finance Admin、Finance Systems Analyst、Data Analyst、Marketing Executive、
 Customer Support Specialist、Operations Coordinator。
 
-演示人物：Aisyah（Finance Admin，15 个技能等级，8 小时/周）。
+演示人物：Aisyah（Finance Admin，15 个技能等级，默认 6 小时/周；API 示例也使用 8 小时/周）。
 
 ## 4. 一次分析请求
 
@@ -136,14 +136,14 @@ route_score       = 0.7 × fit + 0.3 × 100 × (1 - target_exposure)
 ## 7. 安全与部署
 
 - 无登录、无数据库、无密钥。演示用，**不要直接公开部署**。
-- CORS 当前为 `*`；上线前改成前端域名。
+- CORS 默认仅允许已配置的生产域名与 localhost；可用 `PIVOTT_CORS_ORIGINS` 明确设置，不能代替认证或限流。
 - 部署：`uvicorn app.main:app --host 0.0.0.0 --port $PORT`。
-- 反向代理 / 平台需要把 `/docs` 和 `/openapi.json` 一并暴露。
+- 当前 Vercel 配置仅公开 `/api/*`；`/docs` 和 `/openapi.json` 不公开，独立后端本地可用。
 - 数据是合成的；`signals[].evidence` 区分 `verified` / `illustrative`。
 
 ## 8. 与前端的关系
 
-- 前端可以把 API base URL 指向 FastAPI；请求/响应 shape 与 Next.js Route Handlers 相同。
+- “Verify with API”通过同源 `/api/analysis` 检查本地结果；Vercel 下转发到 FastAPI，独立 Next.js 下使用 Route Handler。
 - 前端目前也可以完全不调后端（它自己直接 import engine/seed）；FastAPI 是**可替换的独立后端**，不是 demo 的硬依赖。
 - 这也是为什么后端保持无状态：不引入第二套 profile/pathway 存储语义。
 
@@ -152,4 +152,6 @@ route_score       = 0.7 × fit + 0.3 × 100 × (1 - target_exposure)
 - 没有数据库持久化；pathway 进度只在客户端。
 - 没有 auth / rate limit。
 - 没有 admin 加信号 + recompute diff 端点（repo 前端目前也没有这个 API）。
-- 没有根目录 CI；workflow 需要单独加在仓库根。
+- 根目录已有 `.github/workflows/backend-tests.yml` 和 `.github/workflows/frontend.yml`，分别验证后端与前端。
+
+英文版本：[architecture.en.md](architecture.en.md)。自定义任务与已应用信号只在用户点击验证时发送；服务端校验、clamp 并始终标为 `user`，不持久化。
