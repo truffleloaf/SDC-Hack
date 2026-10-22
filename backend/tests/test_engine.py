@@ -210,3 +210,10 @@ def test_normal_and_fast_change_ranking() -> None:
 @pytest.mark.parametrize("skill", SKILLS, ids=lambda skill: skill["id"])
 def test_every_skill_has_a_free_resource(skill):
     assert any(resource["skillId"] == skill["id"] and resource["free"] for resource in RESOURCES)
+
+
+@pytest.mark.parametrize("scenario,key", [("normal", "analysisCustomNormal"), ("fast", "analysisCustomFast")])
+def test_custom_api_analysis_matches_frontend_golden(client, scenario, key):
+    response = client.post("/api/analysis", json={**GOLDEN["customProfile"], "scenario": scenario})
+    assert response.status_code == 200
+    assert_close(response.json(), {**GOLDEN[key], "illustrative": True})

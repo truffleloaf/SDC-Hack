@@ -197,3 +197,66 @@ def test_root(client):
     response = client.get("/")
     assert response.status_code == 200
     assert response.json()["docs"] == "/docs"
+
+
+def custom_payload():
+    import json
+    from pathlib import Path
+    return json.loads(Path(__file__).with_name("golden.json").read_text())["customProfile"]
+
+
+def test_custom_input_clamps_and_evidence(client):
+    from app.parsing import parse_profile
+    body = custom_payload()
+    body["customTasks"][0].update(baseExposure=-3, humanJudgment=9)
+    body["customTasks"][0]["skills"].append("unknown")
+    body["customSignals"][0].update(strength=9, evidence="verified")
+    body["customSignals"][0]["impacts"][0]["impact"] = 9
+    parsed = parse_profile(body)
+    task = parsed["customTasks"][0]
+    assert task["baseExposure"] == 0 and task["humanJudgment"] == 1
+    assert task["skills"] == ["analysis", "writing"]
+    signal = parsed["customSignals"][0]
+    assert signal["strength"] == 1 and signal["evidence"] == "user"
+    assert signal["impacts"][0]["impact"] == 0.4
+    assert client.post("/api/analysis", json=body).status_code == 200
+
+
+@pytest.mark.parametrize("date", ["2026-02-30", "2026-13-01", "not-a-date", "2099-01-01", "2026-10-01suffix"])
+def test_custom_signal_rejects_invalid_dates(client, date):
+    body = custom_payload()
+    body["customSignals"][0]["date"] = date
+    assert client.post("/api/analysis", json=body).status_code == 400
+
+
+@pytest.mark.parametrize("case", ["override", "duplicate-task", "duplicate-signal", "unknown-impact", "url", "null-tasks", "null-signals", "bad-score", "bad-direction"])
+def test_custom_input_rejects_invalid_payloads(client, case):
+    body = custom_payload()
+    if case == "override":
+        body["customTasks"][0]["id"] = "fa-invoice"
+    elif case == "duplicate-task":
+        body["customTasks"].append(body["customTasks"][0])
+    elif case == "duplicate-signal":
+        body["customSignals"].append(body["customSignals"][0])
+    elif case == "unknown-impact":
+        body["customSignals"][0]["impacts"][0]["taskId"] = "unknown"
+    elif case == "url":
+        body["customSignals"][0]["sourceUrl"] = "javascript:alert(1)"
+    elif case == "null-tasks":
+        body["customTasks"] = None
+    elif case == "null-signals":
+        body["customSignals"] = None
+    elif case == "bad-score":
+        body["customTasks"][0]["baseExposure"] = "NaN"
+    else:
+        body["customSignals"][0]["direction"] = True
+    assert client.post("/api/analysis", json=body).status_code == 400
+
+
+def test_cors_allows_deployed_origin_and_rejects_unlisted_origins(client):
+    allowed = client.options("/api/analysis", headers={"Origin": "https://pivottstudio.vercel.app", "Access-Control-Request-Method": "POST"})
+    assert allowed.status_code == 200
+    assert allowed.headers["access-control-allow-origin"] == "https://pivottstudio.vercel.app"
+    denied = client.options("/api/analysis", headers={"Origin": "https://untrusted.invalid", "Access-Control-Request-Method": "POST"})
+    assert denied.status_code == 400
+    assert "access-control-allow-origin" not in denied.headers

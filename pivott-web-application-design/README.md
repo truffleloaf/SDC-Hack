@@ -88,10 +88,18 @@ Your name is optional and is stored only in localStorage. You can set or edit it
 
 ## Privacy
 
-There is no login. Your profile and progress stay in your browser. The server routes are stateless apart from demo signals, which you can reset.
+There is no login. Your saved profile and progress stay in your browser. Clicking **Verify with API** on the task map sends task selections, skill levels, custom tasks, and applied custom signals for a stateless comparison. It omits your display name, completion history, cookies, and pending signals. No check runs automatically; local results remain usable if the API is offline.
 
 ## Styleguide
 
 Visit `/styleguide` to see every shared component and its states.
 
 Regenerate backend seed and golden outputs after a seed change with `node scripts/generate-data.mjs` from the repository root. Use `--check` to verify the exports are current.
+
+## Verify with API
+
+On `/map`, click **Verify with API**. It checks task exposures, weighted role exposure, and ranked role IDs against same-origin `POST /api/analysis` (FastAPI under Vercel services; the Next handler under `pnpm dev`). A tolerance of `1e-9` accommodates JavaScript/Python floating-point differences. Failed checks do not change your results. Changing inputs invalidates an old verification result.
+
+The API accepts up to 100 custom tasks, 100 selected tasks, and 100 applied custom signals, with at most 100 impacts per signal. Custom task IDs must start `custom-`; custom signal IDs must start `user-`. Seed IDs cannot be overridden. Exposure/judgment are clamped to 0–1; signal strength to 0.1–1 and impact to 0.05–0.4, rounded to two decimals as in the editor. Dates must be real ISO dates no later than the seed cut-off, source URLs must use HTTPS, and custom evidence is always `user`. The same validation is implemented in both APIs.
+
+The API is a public, unauthenticated demo. CORS is not authentication or rate limiting: configure abuse/rate controls at the hosting edge before wider use. The backend allows the deployed origin and localhost by default; see `backend/README.md` for explicit CORS configuration.

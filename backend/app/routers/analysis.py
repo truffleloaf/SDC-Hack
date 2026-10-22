@@ -16,7 +16,9 @@ async def analyze(request: Request):
     except ProfileError as error:
         return JSONResponse(status_code=400, content={"error": str(error)})
 
-    tasks = score_tasks(profile["selections"], TASK_BY_ID, profile["scenario"], SIGNALS)
+    signals = [*SIGNALS, *profile.get("customSignals", [])]
+    lookup = {**TASK_BY_ID, **{task["id"]: task for task in profile.get("customTasks", [])}}
+    tasks = score_tasks(profile["selections"], lookup, profile["scenario"], signals)
     user_task_skills = list(dict.fromkeys(skill for task in tasks for skill in task["skills"]))
 
     routes = compute_routes(
@@ -24,14 +26,14 @@ async def analyze(request: Request):
         user_task_skills=user_task_skills,
         levels=profile["skills"],
         scenario_id=profile["scenario"],
-        signals=SIGNALS,
+        signals=signals,
         hours_per_week=profile["hoursPerWeek"],
     )
 
     return {
         "scenario": profile["scenario"],
         "roleExposure": role_exposure(tasks),
-        "confidence": confidence(tasks, SIGNALS),
+        "confidence": confidence(tasks, signals),
         "tasks": tasks,
         "routes": routes,
         "illustrative": True,

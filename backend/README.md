@@ -173,7 +173,7 @@ backend/
   pathway ids encode their input. The FastAPI port keeps that contract, which
   makes the demo reproducible and removes database/secrets setup.
 - **No LLM.** Every number is deterministic and testable.
-- **CORS** is open for local development; tighten it before a public deployment.
+- **CORS** defaults to `https://pivottstudio.vercel.app`, `http://localhost:3000`, and `http://127.0.0.1:3000`. Override with a comma-separated `PIVOTT_CORS_ORIGINS` environment variable for your actual deployment or preview origins; no wildcard is enabled. Same-origin `/api/*` requests through Vercel need no extra CORS origin. CORS is not authentication.
 - **No auth.** Demo only. Do not expose it publicly without authentication and
   rate limiting.
 - **Data is illustrative.** Signals carry `evidence: "verified" | "illustrative"`;
@@ -186,3 +186,11 @@ backend/
   contract is stateless, so this is an extension, not a fix).
 - Add a root-level GitHub Actions workflow that runs `pytest -q` in `backend/`.
 - Add admin endpoints for injecting signals and diffing recomputed exposure.
+
+## Browser verification and custom inputs
+
+The map's opt-in **Verify with API** button calls this service through same-origin `/api/analysis` in the combined Vercel deployment. It sends task and skill inputs only when clicked; display name, completion history, and unapplied signals are omitted. Inputs are processed for the response and are not stored by this application. The browser keeps its local engine and saved state, so verification failure does not block the app.
+
+`POST /api/analysis` accepts optional `customTasks` and `customSignals` arrays. Only applied custom signals should be sent. Both APIs validate custom IDs, finite scores, HTTPS source links and real dates up to the data cut-off; reject unknown impact tasks and duplicate IDs; clamp editor ranges; and mark custom evidence as `user`. Limits are 100 custom tasks, 100 selections, 100 signals and 100 impacts per signal. See the frontend README for ranges and `tests/golden.json` for a custom-input request and matching outputs in both scenarios.
+
+This demo has no application rate limiter or authentication. Configure hosting-edge rate limits/body-size limits before wider public use; do not treat the CORS allowlist as an abuse control. Never log request bodies containing user task/skill inputs.

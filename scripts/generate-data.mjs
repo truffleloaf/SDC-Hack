@@ -5,16 +5,18 @@ import { loadFrontendModules } from './frontend-modules.mjs'
 
 const { seed, engine } = loadFrontendModules()
 const selections = seed.tasksForRole('finance-admin').map((task) => ({ taskId: task.id, share: task.defaultShare }))
-function analysis(scenario) {
-  const tasks = engine.scoreTasks(selections, seed.taskById, scenario, seed.signals)
+function analysis(scenario, profile = {}) {
+  const signals = [...seed.signals, ...(profile.customSignals ?? [])]
+  const lookup = { ...seed.taskById, ...Object.fromEntries((profile.customTasks ?? []).map((task) => [task.id, task])) }
+  const tasks = engine.scoreTasks(profile.selections ?? selections, lookup, scenario, signals)
   return {
     scenario,
     roleExposure: engine.roleExposure(tasks),
-    confidence: engine.confidence(tasks, seed.signals),
+    confidence: engine.confidence(tasks, signals),
     tasks,
     routes: engine.computeRoutes({
       currentRoleId: 'finance-admin', userTaskSkills: [...new Set(tasks.flatMap((task) => task.skills))],
-      levels: seed.demoPersona.skills, scenarioId: scenario, signals: seed.signals, hoursPerWeek: 8,
+      levels: seed.demoPersona.skills, scenarioId: scenario, signals, hoursPerWeek: 8,
     }),
   }
 }
@@ -23,9 +25,19 @@ const pathway = { targetRoleId: 'finance-systems-analyst', levels: seed.demoPers
 const data = Object.fromEntries([
   'DATA_AS_OF', 'SEED_VERSION', 'scenarios', 'sdgs', 'skills', 'roles', 'tasks', 'resources', 'signals', 'demoPersona',
 ].map((key) => [key, seed[key]]))
+const customProfile = {
+  roleId: 'finance-admin', selections: [...selections, { taskId: 'custom-review', share: 25 }],
+  skills: seed.demoPersona.skills, scenario: 'normal', hoursPerWeek: 8, freeOnly: false,
+  customTasks: [{ id: 'custom-review', name: 'Review project notes', skills: ['analysis', 'writing'], baseExposure: 0.5, humanJudgment: 0.5 }],
+  customSignals: [{ ...seed.signals[0], id: 'user-parity', date: seed.DATA_AS_OF, evidence: 'user', strength: 0.6,
+    impacts: [{ taskId: 'fa-invoice', impact: 0.15 }, { taskId: 'custom-review', impact: 0.15 }] }],
+}
 const golden = {
   analysisNormal: normal,
   analysisFast: analysis('fast'),
+  customProfile,
+  analysisCustomNormal: analysis('normal', customProfile),
+  analysisCustomFast: analysis('fast', customProfile),
   pathway: engine.buildPathway({ ...pathway, freeOnly: false }),
   pathwayFree: engine.buildPathway({ ...pathway, freeOnly: true }),
   roleTasks: { role: seed.roleById['finance-admin'], scenario: 'normal', roleExposure: normal.roleExposure, tasks: normal.tasks },
