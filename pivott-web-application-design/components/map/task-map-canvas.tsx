@@ -127,18 +127,7 @@ export function TaskMapCanvas({
             role="group"
             aria-label={`Task map with ${tasks.length} tasks. Bubble size shows time share; the filled core shows exposure.`}
           >
-            <defs>
-              <radialGradient id="tm-hl" cx="32%" cy="28%" r="75%">
-                <stop offset="0%" stopColor="#fff" stopOpacity="0.55" />
-                <stop offset="55%" stopColor="#fff" stopOpacity="0" />
-              </radialGradient>
-              <filter id="tm-shadow" x="-30%" y="-30%" width="160%" height="160%">
-                <feDropShadow dx="0" dy="6" stdDeviation="8" floodColor="#0f322e" floodOpacity="0.12" />
-              </filter>
-              <filter id="tm-shadow-lift" x="-30%" y="-30%" width="160%" height="170%">
-                <feDropShadow dx="0" dy="12" stdDeviation="12" floodColor="#0f322e" floodOpacity="0.22" />
-              </filter>
-            </defs>
+
 
             {wide && active && activePos && (
               <motion.path
@@ -211,14 +200,12 @@ export function TaskMapCanvas({
                       fillOpacity={0.42}
                       stroke="var(--card)"
                       strokeWidth={2}
-                      filter={isActive ? 'url(#tm-shadow-lift)' : 'url(#tm-shadow)'}
                     />
                     <motion.circle
                       initial={false}
                       animate={{ r: p.r * Math.sqrt(t.exposure), fill: color }}
                       transition={{ duration: 0.45, ease: [0.2, 0.7, 0.2, 1] }}
                     />
-                    <circle r={p.r} fill="url(#tm-hl)" pointerEvents="none" />
                     {inside ? (
                       <g pointerEvents="none" className="font-sans">
                         {lines.map((l, i) => (
@@ -268,7 +255,7 @@ export function TaskMapCanvas({
         </AnimatePresence>
       </div>
 
-      <p className="font-mono text-[10px] uppercase tracking-wider text-faint">
+      <p className="font-sans text-xs font-medium text-faint">
         Size = time share · Filled core = exposure · Click a bubble to pin details
       </p>
 
@@ -316,7 +303,7 @@ export function TaskDetailCard({ task, pinned, onClose }: { task: ScoredTask; pi
       </div>
       {task.classification === 'Augment' && (
         <div className="mt-4 rounded-xl bg-mint p-3">
-          <p className="font-mono text-[10px] uppercase tracking-wider text-accent-foreground">Try this week</p>
+          <p className="font-sans text-xs font-medium text-accent-foreground">Try this week</p>
           <p className="mt-1 text-sm leading-relaxed text-foreground">{task.tryThisWeek}</p>
           <div className="mt-2 flex justify-end">
             <CopyButton text={task.tryThisWeek} label="Copy" toastMessage="Suggestion copied" />

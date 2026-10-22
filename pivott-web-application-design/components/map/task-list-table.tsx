@@ -30,7 +30,7 @@ export function TaskListTable({ tasks, highlightIds = [] }: { tasks: ScoredTask[
         <button
           type="button"
           onClick={() => setSort((s) => ({ key, dir: s.key === key ? ((-s.dir) as 1 | -1) : key === 'name' ? 1 : -1 }))}
-          className="inline-flex min-h-9 items-center gap-1.5 rounded-md font-mono text-[11px] uppercase tracking-wider text-muted-foreground hover:text-foreground"
+          className="inline-flex min-h-9 items-center gap-1.5 rounded-md font-sans text-xs font-medium text-muted-foreground hover:text-foreground"
         >
           {label}
           <Icon className={cn('size-3.5', active ? 'text-primary' : 'text-faint')} aria-hidden />
@@ -49,7 +49,7 @@ export function TaskListTable({ tasks, highlightIds = [] }: { tasks: ScoredTask[
             {header('share', 'Time')}
             {header('exposure', 'Exposure')}
             {header('classification', 'Class')}
-            <th scope="col" className="px-4 py-3 text-left font-mono text-[11px] font-normal uppercase tracking-wider text-muted-foreground">
+            <th scope="col" className="px-4 py-3 text-left font-sans text-xs font-normal text-muted-foreground">
               Skills
             </th>
           </tr>

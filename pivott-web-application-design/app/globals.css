@@ -5,9 +5,9 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-sans: var(--font-inter), 'Inter', ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-newsreader), 'Newsreader', ui-serif, Georgia, serif;
-  --font-mono: var(--font-geist-mono), 'Geist Mono', ui-monospace, monospace;
+  --font-sans: var(--font-plex), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-plex), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, monospace;
 
   --color-ring: var(--ring);
   --color-input: var(--input);
@@ -158,7 +158,7 @@
 @utility card-surface {
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 20px;
+  border-radius: 16px;
   box-shadow: var(--shadow-soft);
   transition:
     transform 220ms cubic-bezier(0.2, 0.7, 0.2, 1),
@@ -169,8 +169,8 @@
 
 @utility card-lift {
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lift);
+    border-color: var(--border-strong);
+    box-shadow: none;
   }
 }
 
@@ -209,12 +209,12 @@
 }
 
 .float-node {
-  animation: pivott-float 7s ease-in-out infinite;
+  animation: none;
   transform-box: fill-box;
 }
 
 .route-flow {
-  animation: pivott-dash 2.4s linear infinite;
+  animation: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -228,4 +228,27 @@
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
   }
+}
+
+/* The landing illustration borrows its colours from Pivott's exposure map. */
+.landing-hero {
+  background: linear-gradient(115deg, var(--background) 42%, var(--mint) 145%);
+  border-bottom: 1px solid var(--border);
+}
+.hero-contour::before,
+.hero-contour::after {
+  content: '';
+  position: absolute;
+  inset: 48px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+}
+.hero-contour::after {
+  inset: 96px;
+}
+.task-atlas {
+  box-shadow: 0 24px 64px -32px color-mix(in srgb, var(--primary) 28%, transparent);
+}
+.task-atlas > div:nth-child(2) {
+  background: radial-gradient(ellipse at center, var(--mint), var(--card) 72%);
 }

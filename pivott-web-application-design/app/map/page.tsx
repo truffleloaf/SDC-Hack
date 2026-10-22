@@ -51,7 +51,7 @@ export default function MapPage() {
     <div className="mx-auto w-full max-w-[1200px] px-5 pb-32 pt-10 lg:pb-20">
       <section aria-labelledby="summary-title" className="grid gap-8 md:grid-cols-[auto_1fr] md:items-end md:gap-14">
         <div className="flex flex-col gap-2">
-          <p className="font-mono text-xs uppercase tracking-[0.14em] text-primary">
+          <p className="font-sans text-sm font-medium text-primary">
             Step 3 · {possessive(displayName(state))} task map · {role?.title}
           </p>
           <h1 id="summary-title" className="flex items-baseline gap-3 font-serif tracking-[-0.03em]">
@@ -64,7 +64,7 @@ export default function MapPage() {
         <div className="flex flex-col gap-4 md:pb-2">
           <dl className="flex flex-wrap gap-x-8 gap-y-3">
             <div className="flex flex-col gap-1">
-              <dt className="font-mono text-[11px] uppercase tracking-wider text-faint">Confidence</dt>
+              <dt className="font-sans text-xs font-medium text-faint">Confidence</dt>
               <dd className="flex items-center gap-1.5 text-sm font-medium">
                 {conf}
                 <Tooltip>
@@ -78,11 +78,11 @@ export default function MapPage() {
               </dd>
             </div>
             <div className="flex flex-col gap-1">
-              <dt className="font-mono text-[11px] uppercase tracking-wider text-faint">Last updated</dt>
+              <dt className="font-sans text-xs font-medium text-faint">Last updated</dt>
               <dd className="font-mono text-sm">{fmtDate(lastUpdated)}</dd>
             </div>
             <div className="flex flex-col gap-1">
-              <dt className="font-mono text-[11px] uppercase tracking-wider text-faint">Tasks</dt>
+              <dt className="font-sans text-xs font-medium text-faint">Tasks</dt>
               <dd className="text-sm">
                 {counts.Automate} automate · {counts.Augment} augment · {counts.Protect} protect
               </dd>

@@ -52,16 +52,20 @@ export function LivingTaskMap() {
   const cls: Classification | null = current ? classify(current.exposure, current.judgment) : null
 
   return (
-    <div className="relative mx-auto aspect-[56/48] w-full max-w-[600px]">
+    <div className="task-atlas relative mx-auto w-full max-w-[620px] overflow-hidden rounded-[28px] border border-border bg-card">
+      <div className="relative z-10 flex items-start justify-between gap-3 border-b border-border px-5 py-4 sm:px-7">
+        <div><p className="text-sm font-semibold">Aisyah’s task landscape</p><p className="mt-1 text-xs text-muted-foreground">Finance Admin · Illustrative example</p></div>
+        <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-2.5 py-1 text-xs text-accent-foreground"><span className="size-1.5 rounded-full bg-primary" aria-hidden />Task map</span>
+      </div>
+      <div className="relative aspect-[56/48]">
       <svg viewBox={`0 0 ${W} ${H}`} className="absolute inset-0 size-full overflow-visible" aria-labelledby="ltm-title ltm-desc" role="group">
         <title id="ltm-title">Living task map</title>
         <desc id="ltm-desc">An illustrative map of a Finance Admin’s tasks, sized by time and coloured by AI exposure.</desc>
-        <defs>
-          <radialGradient id="ltm-hl" cx="35%" cy="30%" r="70%">
-            <stop offset="0%" stopColor="#fff" stopOpacity="0.65" />
-            <stop offset="60%" stopColor="#fff" stopOpacity="0" />
-          </radialGradient>
-        </defs>
+        <g aria-hidden="true" fill="none" stroke="var(--border-strong)">
+          <ellipse cx="282" cy="246" rx="212" ry="188" strokeDasharray="3 8" opacity="0.45" />
+          <ellipse cx="282" cy="246" rx="138" ry="122" opacity="0.35" />
+          <path d="M282 34V46 M282 446V458 M44 246H56 M508 246H520" strokeWidth="1.5" />
+        </g>
 
         <g aria-hidden>
           {nodes.map((n) => (
@@ -70,8 +74,8 @@ export function LivingTaskMap() {
               d={curve(CENTER, n)}
               fill="none"
               stroke="var(--teal)"
-              strokeWidth={1.25}
-              strokeDasharray="1 6"
+              strokeWidth={1.5}
+              strokeDasharray="3 5"
               strokeLinecap="round"
               className="route-flow transition-opacity duration-300"
               opacity={active && active !== n.id ? 0.15 : active === n.id ? 0.95 : 0.45}
@@ -80,7 +84,7 @@ export function LivingTaskMap() {
           {skills.map((s) => (
             <g key={s.label}>
               <rect x={s.x - 4} y={s.y - 4} width={8} height={8} rx={2} transform={`rotate(45 ${s.x} ${s.y})`} fill="var(--card)" stroke="var(--teal)" strokeWidth={1.2} />
-              <text x={s.x + 10} y={s.y + 3.5} className="fill-muted-foreground font-mono" fontSize={10}>
+              <text x={s.x + 10} y={s.y + 3.5} className="fill-muted-foreground font-sans" fontSize={10}>
                 {s.label}
               </text>
             </g>
@@ -101,6 +105,15 @@ export function LivingTaskMap() {
                 tabIndex={0}
                 role="button"
                 aria-label={`${n.label}: ${Math.round(n.exposure * 100)}% illustrative exposure, ${c}`}
+                aria-pressed={isActive}
+                onClick={() => setActive(isActive ? null : n.id)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault()
+                    setActive(isActive ? null : n.id)
+                  }
+                  if (event.key === 'Escape') setActive(null)
+                }}
                 onMouseEnter={() => setActive(n.id)}
                 onMouseLeave={() => setActive(null)}
                 onFocus={() => setActive(n.id)}
@@ -115,11 +128,11 @@ export function LivingTaskMap() {
                   fill={exposureColor(n.exposure)}
                   stroke="var(--card)"
                   strokeWidth={1.5}
-                  style={{ transition: 'r 250ms cubic-bezier(.2,.7,.2,1)', filter: 'drop-shadow(0 6px 14px rgba(15,50,46,0.12))' }}
+                  style={{ transition: 'r 250ms cubic-bezier(.2,.7,.2,1)' }}
                 />
-                <circle cx={n.x} cy={n.y} r={n.r} fill="url(#ltm-hl)" pointerEvents="none" />
+                <circle cx={n.x} cy={n.y} r={n.r - 5} fill="none" stroke="var(--exp-ink)" strokeOpacity="0.1" pointerEvents="none" />
                 {n.showLabel && n.r >= 34 && (
-                  <text x={n.x} y={n.y + 4} textAnchor="middle" fontSize={11} className="pointer-events-none fill-exp-ink font-mono">
+                  <text x={n.x} y={n.y + 4} textAnchor="middle" fontSize={11} className="pointer-events-none fill-exp-ink font-sans">
                     {Math.round(n.exposure * 100)}%
                   </text>
                 )}
@@ -141,8 +154,8 @@ export function LivingTaskMap() {
 
         <g aria-hidden>
           <circle cx={CENTER.x} cy={CENTER.y} r={22} fill="var(--card)" stroke="var(--border-strong)" />
-          <circle cx={CENTER.x} cy={CENTER.y} r={7} fill="var(--teal)" />
-          <circle cx={CENTER.x} cy={CENTER.y} r={14} fill="none" stroke="var(--teal)" strokeOpacity={0.35} strokeDasharray="1 4" strokeLinecap="round" />
+          <text x={CENTER.x} y={CENTER.y + 4} textAnchor="middle" fontSize="11" className="fill-primary font-sans" fontWeight="600">You</text>
+
         </g>
       </svg>
 
@@ -168,10 +181,15 @@ export function LivingTaskMap() {
               <span className="font-mono text-xs text-muted-foreground">{Math.round(current.exposure * 100)}% exposure</span>
               <span className="text-xs font-medium text-primary">{cls}</span>
             </div>
-            <p className="mt-1.5 font-mono text-[10px] uppercase tracking-wider text-faint">Illustrative</p>
+            <p className="mt-1.5 font-sans text-xs text-faint">Illustrative</p>
           </motion.div>
         )}
       </AnimatePresence>
+      </div>
+      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border px-5 py-4 text-xs text-muted-foreground sm:px-7">
+        <span>Explore a task to see its exposure</span>
+        <span className="flex items-center gap-2"><span>Lower</span><span className="flex gap-1" aria-hidden><i className="size-2.5 rounded-full bg-exp-low" /><i className="size-2.5 rounded-full bg-exp-mid" /><i className="size-2.5 rounded-full bg-exp-high" /></span><span>Higher</span></span>
+      </div>
     </div>
   )
 }

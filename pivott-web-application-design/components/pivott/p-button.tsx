@@ -5,12 +5,12 @@ import type { ComponentProps, ReactNode } from 'react'
 import { cn } from '@/lib/utils'
 
 export const pButton = cva(
-  'relative inline-flex shrink-0 select-none items-center justify-center gap-2 whitespace-nowrap rounded-xl font-medium transition-[background-color,box-shadow,transform,color,border-color] duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-px disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0',
+  'relative inline-flex shrink-0 select-none items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition-[background-color,box-shadow,transform,color,border-color] duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-px disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0',
   {
     variants: {
       variant: {
         primary:
-          'bg-primary text-primary-foreground shadow-soft hover:shadow-[0_0_0_4px_color-mix(in_srgb,var(--teal)_18%,transparent),0_10px_30px_-8px_color-mix(in_srgb,var(--teal)_55%,transparent)]',
+          'bg-primary text-primary-foreground hover:bg-primary/90',
         secondary: 'border border-border-strong bg-card text-foreground hover:border-teal/60 hover:bg-mint',
         ghost: 'text-muted-foreground hover:bg-subtle hover:text-foreground',
         link: 'h-auto rounded-md px-0 text-primary underline-offset-4 hover:underline',

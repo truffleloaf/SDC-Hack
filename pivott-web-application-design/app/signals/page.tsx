@@ -173,7 +173,7 @@ export default function SignalsPage() {
               <motion.li key={s.id} layout className="grid gap-3 sm:grid-cols-[72px_24px_1fr] sm:gap-4">
                 <div className="hidden pt-5 text-right sm:block">
                   {showMonth && (
-                    <time dateTime={month} className="font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
+                    <time dateTime={month} className="font-sans text-xs font-medium text-muted-foreground">
                       {new Date(s.date).toLocaleDateString('en-GB', { month: 'short' })}
                       <br />
                       {s.date.slice(0, 4)}
@@ -222,7 +222,7 @@ export default function SignalsPage() {
                     </a>
                     <div className="flex items-center gap-4">
                       <span className="flex items-center gap-2" aria-label={`Strength ${Math.round(s.strength * 100)}%`}>
-                        <span className="font-mono text-[11px] uppercase tracking-wider text-faint">Strength</span>
+                        <span className="font-sans text-xs font-medium text-faint">Strength</span>
                         <span className="flex gap-0.5" aria-hidden>
                           {[0.2, 0.4, 0.6, 0.8, 1].map((t) => (
                             <span key={t} className={cn('h-3 w-1.5 rounded-sm', s.strength >= t - 0.1 ? 'bg-teal' : 'bg-border')} />

@@ -51,7 +51,7 @@ export function RouteStepper() {
                 </span>
                 <span
                   className={cn(
-                    'hidden font-mono text-[11px] uppercase tracking-wider sm:block',
+                    'hidden font-sans text-xs font-medium sm:block',
                     active ? 'text-foreground' : 'text-muted-foreground',
                   )}
                 >
@@ -80,7 +80,7 @@ export function PageIntro({
 }) {
   return (
     <div className={cn('flex flex-col gap-3', className)}>
-      {eyebrow && <p className="font-mono text-xs uppercase tracking-[0.14em] text-primary">{eyebrow}</p>}
+      {eyebrow && <p className="font-sans text-sm font-medium text-primary">{eyebrow}</p>}
       <h1 className="font-serif text-4xl leading-[1.05] tracking-[-0.02em] text-balance md:text-5xl">{title}</h1>
       {children && <div className="max-w-2xl text-base leading-relaxed text-muted-foreground text-pretty">{children}</div>}
     </div>
