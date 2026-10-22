@@ -1,4 +1,8 @@
 import { describe, expect, it } from 'vitest'
+import { createElement } from 'react'
+import { renderToStaticMarkup } from 'react-dom/server'
+import { CareerRoute } from '../components/landing/career-route'
+import { getDemoJourney } from './demo'
 import { analyze, demoState, displayName, emptyState, greetingName, possessive, sanitizeName, type AppState } from './store'
 import { buildPathway } from './engine'
 import { buildIcs } from './ics'
@@ -58,6 +62,15 @@ describe('task selection workflow', () => {
 
 describe('end-to-end journey (demo persona)', () => {
   const demo = demoState()
+
+  it('uses the default top route in the landing illustration and demo destination', () => {
+    const routes = analyze(demo).routes
+    expect(getDemoJourney().destination.roleId).toBe(routes[0].roleId)
+    expect(routes[0].title).toBe('Operations Coordinator')
+    expect(renderToStaticMarkup(createElement(CareerRoute))).toContain(`Finance Admin to ${routes[0].title}`)
+    expect(demo.targetRoleId ?? routes[0].roleId).toBe(getDemoJourney().destination.roleId)
+    expect(getDemoJourney('fast').destination.title).toBe('Finance Systems Analyst')
+  })
 
   it('produces a map, ranked routes, and a pathway from the same profile', () => {
     const result = analyze(demo)
