@@ -54,7 +54,7 @@ export function SkillsPanel({ stays, reinforce }: { stays: string[]; reinforce: 
       </section>
 
       <section aria-labelledby="legend-title" className="flex flex-col gap-3 border-t border-border pt-6">
-        <h3 id="legend-title" className="font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
+        <h3 id="legend-title" className="font-sans text-xs font-medium text-muted-foreground">
           Exposure legend
         </h3>
         <ul className="flex flex-col gap-2.5 text-sm">

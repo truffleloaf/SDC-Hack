@@ -39,7 +39,7 @@ export function WhySheet({
         {route && role && (
           <>
             <SheetHeader className="border-b border-border p-6">
-              <p className="font-mono text-[11px] uppercase tracking-wider text-primary">Why this score?</p>
+              <p className="font-sans text-xs font-medium text-primary">Why this score?</p>
               <SheetTitle className="font-serif text-3xl font-normal">{route.title}</SheetTitle>
               <SheetDescription>Every number below is deterministic and reproducible from the stored data.</SheetDescription>
             </SheetHeader>
@@ -48,7 +48,7 @@ export function WhySheet({
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
-                      <tr className="text-left font-mono text-[11px] uppercase tracking-wider text-faint">
+                      <tr className="text-left font-sans text-xs font-medium text-faint">
                         <th scope="col" className="py-2 font-normal">Skill</th>
                         <th scope="col" className="py-2 text-right font-normal">You</th>
                         <th scope="col" className="py-2 text-right font-normal">Need</th>

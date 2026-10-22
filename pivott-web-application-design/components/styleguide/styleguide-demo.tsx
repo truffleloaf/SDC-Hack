@@ -20,7 +20,7 @@ import { pButton } from '@/components/pivott/p-button'
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="flex flex-col gap-4 border-t border-border pt-8">
-      <h2 className="font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground">{title}</h2>
+      <h2 className="font-sans text-sm font-medium text-muted-foreground">{title}</h2>
       <div className="flex flex-wrap items-center gap-3">{children}</div>
     </section>
   )

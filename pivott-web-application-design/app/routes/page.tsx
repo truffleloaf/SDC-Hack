@@ -88,7 +88,7 @@ export default function RoutesPage() {
                     <td className="w-40" />
                     {routes.map((r, i) => (
                       <th key={r.roleId} scope="col" className={cn('p-4 text-left align-bottom font-normal', r.roleId === selectedId && 'bg-mint/60 rounded-t-xl')}>
-                        {i === 0 && <span className="mb-2 block font-mono text-[10px] uppercase tracking-wider text-primary">Closest match</span>}
+                        {i === 0 && <span className="mb-2 block font-sans text-xs font-medium text-primary">Closest match</span>}
                         <span className="font-serif text-xl">{r.title}</span>
                       </th>
                     ))}
@@ -106,7 +106,7 @@ export default function RoutesPage() {
                     { label: 'SDGs', get: (r: (typeof routes)[number]) => <span className="flex flex-wrap gap-1">{r.sdgs.map((s) => <SdgBadge key={s} id={s} />)}</span> },
                   ].map((row) => (
                     <tr key={row.label} className="border-t border-border">
-                      <th scope="row" className="p-4 text-left font-mono text-[11px] font-normal uppercase tracking-wider text-faint">
+                      <th scope="row" className="p-4 text-left font-sans text-xs font-normal text-faint">
                         {row.label}
                       </th>
                       {routes.map((r) => (
@@ -171,7 +171,7 @@ function RouteFan({ current, count }: { current: string; count: number }) {
       <div className="absolute left-1/2 top-0 flex -translate-x-1/2 items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5 shadow-soft">
         <span className="size-2 rounded-full bg-foreground" />
         <span className="text-xs font-medium">{current}</span>
-        <span className="font-mono text-[10px] uppercase tracking-wider text-faint">now</span>
+        <span className="font-sans text-xs font-medium text-faint">now</span>
       </div>
     </div>
   )

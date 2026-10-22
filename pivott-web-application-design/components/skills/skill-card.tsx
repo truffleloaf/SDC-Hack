@@ -37,7 +37,7 @@ export function SkillCard({
           <h3 id={`${id}-l`} className="font-medium leading-snug">
             {skill.name}
           </h3>
-          <span className="font-mono text-[11px] uppercase tracking-wider text-faint">{skill.category}</span>
+          <span className="font-sans text-xs font-medium text-faint">{skill.category}</span>
         </div>
         {suggested && (
           <span className="shrink-0 rounded-full bg-sky px-2 py-0.5 text-[11px] font-medium text-foreground">Suggested</span>

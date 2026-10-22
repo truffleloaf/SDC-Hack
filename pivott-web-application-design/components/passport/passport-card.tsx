@@ -61,18 +61,18 @@ export const PassportCard = forwardRef<HTMLDivElement, { data: PassportData }>(f
     <div
       ref={ref}
       className="light-scope relative overflow-hidden rounded-[28px] p-3 sm:p-4"
-      style={{ background: 'linear-gradient(120deg, #E6F7F4 0%, #EEF7F9 45%, #EAF4FF 100%)' }}
+      style={{ background: 'var(--subtle)' }}
     >
-      <div className="relative flex flex-col overflow-hidden rounded-[20px] bg-card shadow-[0_1px_2px_rgba(15,50,46,0.06),0_20px_40px_-20px_rgba(15,50,46,0.25)] md:flex-row">
+      <div className="relative flex flex-col overflow-hidden rounded-[20px] border border-border bg-card md:flex-row">
         <div className="flex flex-1 flex-col gap-8 p-6 sm:p-8">
           <div className="flex items-start justify-between gap-4">
             <div className="flex flex-col gap-1">
-              <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-faint">Skill Passport</span>
+              <span className="font-sans text-xs font-medium text-faint">Skill Passport</span>
               <span className="font-serif text-2xl leading-tight">{data.name || 'Your name'}</span>
               <span className="text-sm text-muted-foreground">{data.currentRole}</span>
             </div>
             <div className="flex flex-col items-end gap-1 text-right">
-              <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-faint">Pass no.</span>
+              <span className="font-sans text-xs font-medium text-faint">Pass no.</span>
               <span className="font-mono text-sm">{data.code}</span>
             </div>
           </div>
@@ -87,7 +87,7 @@ export const PassportCard = forwardRef<HTMLDivElement, { data: PassportData }>(f
             </div>
             <div className="flex items-end justify-between gap-4">
               <div className="flex flex-col gap-1">
-                <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-faint">Destination</span>
+                <span className="font-sans text-xs font-medium text-faint">Destination</span>
                 <span className="font-serif text-3xl leading-[1.05] tracking-[-0.02em] sm:text-4xl">{data.destination}</span>
                 <span className="text-sm text-muted-foreground">{data.destinationFamily}</span>
               </div>
@@ -96,21 +96,21 @@ export const PassportCard = forwardRef<HTMLDivElement, { data: PassportData }>(f
 
           <div className="grid grid-cols-2 gap-6 sm:grid-cols-[auto_auto_1fr]">
             <div className="flex flex-col gap-1">
-              <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-faint">Skill match</span>
+              <span className="font-sans text-xs font-medium text-faint">Skill match</span>
               <span className="font-serif text-5xl leading-none tracking-[-0.03em]">
                 {Math.round(data.match)}
                 <span className="text-2xl text-muted-foreground">%</span>
               </span>
             </div>
             <div className="flex flex-col gap-1">
-              <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-faint">Est. route</span>
+              <span className="font-sans text-xs font-medium text-faint">Est. route</span>
               <span className="font-serif text-5xl leading-none tracking-[-0.03em]">
                 {data.weeks}
                 <span className="text-2xl text-muted-foreground"> wks</span>
               </span>
             </div>
             <div className="col-span-2 flex flex-col gap-2 sm:col-span-1">
-              <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-faint">Durable skills</span>
+              <span className="font-sans text-xs font-medium text-faint">Durable skills</span>
               <div className="flex flex-wrap gap-1.5">
                 {data.skills.slice(0, 5).map((s) => (
                   <SkillChip key={s} skillId={s} tone="teal" />
@@ -131,7 +131,7 @@ export const PassportCard = forwardRef<HTMLDivElement, { data: PassportData }>(f
         <div className="relative flex flex-col gap-5 border-t-2 border-dashed border-border-strong bg-subtle p-6 sm:p-8 md:w-72 md:border-l-2 md:border-t-0">
           <span aria-hidden className="absolute -left-3 -top-3 hidden size-6 rounded-full md:block" style={{ background: '#E9F5F6' }} />
           <span aria-hidden className="absolute -bottom-3 -left-3 hidden size-6 rounded-full md:block" style={{ background: '#EAF3FC' }} />
-          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-faint">Route stops</span>
+          <span className="font-sans text-xs font-medium text-faint">Route stops</span>
           <ol className="relative flex flex-col gap-4">
             <span aria-hidden className="absolute bottom-2 left-[5px] top-2 border-l-2 border-dotted border-teal/60" />
             {stubSteps.map((s) => {

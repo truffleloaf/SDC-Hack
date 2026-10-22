@@ -106,7 +106,7 @@ export function EvidenceBadge({ evidence }: { evidence: 'verified' | 'illustrati
   }[evidence]
   const Icon = map.icon
   return (
-    <span className={cn('inline-flex items-center gap-1 font-mono text-[11px] uppercase tracking-wider', map.cls)}>
+    <span className={cn('inline-flex items-center gap-1 font-sans text-xs font-medium', map.cls)}>
       <Icon className="size-3.5" aria-hidden />
       {map.label}
     </span>
@@ -132,7 +132,7 @@ export function DemoLabel({ className }: { className?: string }) {
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1 rounded-full border border-dashed border-border-strong px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-muted-foreground',
+        'inline-flex items-center gap-1 rounded-full border border-dashed border-border-strong px-2 py-0.5 font-sans text-xs font-medium text-muted-foreground',
         className,
       )}
     >

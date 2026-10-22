@@ -80,7 +80,7 @@ export function AdminSheet({ open, onOpenChange, state }: { open: boolean; onOpe
       <SheetContent side="right" className="w-full overflow-y-auto p-0 sm:max-w-lg">
         <form onSubmit={submit} noValidate className="flex min-h-full flex-col">
           <SheetHeader className="border-b border-border p-6">
-            <p className="font-mono text-[11px] uppercase tracking-wider text-primary">Admin</p>
+            <p className="font-sans text-xs font-medium text-primary">Admin</p>
             <SheetTitle className="font-serif text-3xl font-normal">Add a signal</SheetTitle>
             <SheetDescription>Signals adjust task exposure by at most ±20 points, weighted by recency.</SheetDescription>
           </SheetHeader>

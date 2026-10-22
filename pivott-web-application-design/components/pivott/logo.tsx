@@ -75,7 +75,7 @@ export function LogoMark({
       />
       <motion.circle
         r={3.5}
-        fill="#14B8A6"
+        fill="var(--primary)"
         stroke="none"
         initial={play ? { cx: 22, cy: 54, opacity: 0 } : false}
         animate={play ? { cx: intro.xs, cy: intro.ys, opacity: [0, 1, 1] } : { cx: 49, cy: 25, opacity: 1 }}
@@ -88,7 +88,7 @@ export function LogoMark({
 }
 
 export function Wordmark({ className }: { className?: string }) {
-  return <span className={cn('font-serif text-[1.375rem] leading-none tracking-[-0.02em]', className)}>Pivott</span>
+  return <span className={cn('font-sans font-semibold text-[1.375rem] leading-none tracking-[-0.02em]', className)}>Pivott</span>
 }
 
 export function Logo({ animated, className }: { animated?: boolean; className?: string }) {

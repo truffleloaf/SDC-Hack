@@ -82,13 +82,13 @@ export function SiteHeader() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 px-3 pt-3 sm:px-5">
+      <header className="sticky top-0 z-40 border-b border-border bg-card px-5">
         <nav
           aria-label="Main"
-          className="mx-auto flex h-14 bg-card/85 backdrop-blur-xl backdrop-saturate-150 w-full max-w-[1200px] items-center justify-between rounded-2xl border border-border/80 pl-4 pr-2 shadow-soft"
+          className="mx-auto flex h-18 w-full max-w-[1200px] items-center justify-between"
         >
           <Link href="/" className="rounded-lg" aria-label="Pivott home">
-            <Logo animated={pathname === '/'} />
+            <Logo />
           </Link>
           <div className="flex items-center gap-1">
             <Link

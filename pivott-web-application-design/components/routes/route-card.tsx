@@ -16,7 +16,7 @@ export function ExposureCompare({ current, target }: { current: number; target: 
         { label: 'Target', v: target },
       ].map((row) => (
         <div key={row.label} className="grid grid-cols-[48px_1fr_40px] items-center gap-2">
-          <span className="font-mono text-[11px] uppercase tracking-wider text-faint">{row.label}</span>
+          <span className="font-sans text-xs font-medium text-faint">{row.label}</span>
           <span className="h-1.5 overflow-hidden rounded-full bg-subtle">
             <motion.span
               className="block h-full rounded-full"
@@ -82,13 +82,13 @@ export function RouteCard({
 
       <dl className="grid grid-cols-2 gap-4 border-y border-border py-4">
         <div className="flex flex-col gap-1">
-          <dt className="font-mono text-[11px] uppercase tracking-wider text-faint">Prepare</dt>
+          <dt className="font-sans text-xs font-medium text-faint">Prepare</dt>
           <dd className="font-serif text-2xl leading-none">
             {route.weeks} <span className="font-sans text-sm text-muted-foreground">weeks</span>
           </dd>
         </div>
         <div className="flex flex-col gap-1">
-          <dt className="font-mono text-[11px] uppercase tracking-wider text-faint">Skill gaps</dt>
+          <dt className="font-sans text-xs font-medium text-faint">Skill gaps</dt>
           <dd className="font-serif text-2xl leading-none">{route.gaps.length}</dd>
         </div>
       </dl>
@@ -96,7 +96,7 @@ export function RouteCard({
       <ExposureCompare current={currentExposure} target={route.targetExposure} />
 
       <div className="flex flex-col gap-2">
-        <p className="font-mono text-[11px] uppercase tracking-wider text-faint">Top gaps</p>
+        <p className="font-sans text-xs font-medium text-faint">Top gaps</p>
         <div className="flex flex-wrap gap-1.5">
           {route.gaps.slice(0, 2).map((g) => (
             <SkillChip key={g.skillId} label={`${g.name} · +${g.gap}`} tone="peach" />
