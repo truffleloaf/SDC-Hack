@@ -1,0 +1,30 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "services": {
+    "backend": {
+      "root": "backend",
+      "framework": "fastapi",
+      "entrypoint": "app/main.py"
+    },
+    "pivott-web-application-design": {
+      "root": "pivott-web-application-design",
+      "framework": "nextjs",
+      "installCommand": "npx --yes pnpm@12.3.4 install --frozen-lockfile",
+      "buildCommand": "npx --yes pnpm@12.3.4 build"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": {
+        "service": "backend"
+      }
+    },
+    {
+      "source": "/(.*)",
+      "destination": {
+        "service": "pivott-web-application-design"
+      }
+    }
+  ]
+}
