@@ -27,7 +27,7 @@ No environment variables, database, or login are required.
 
 ## Seed data and reset
 
-- Seed data lives in `lib/data/seed.ts`: 6 roles, ~30 tasks, 13 skills, ~20 dated signals, 2 scenarios, SDG mappings, learning resources, and the demo persona **Aisyah (Finance Admin)**.
+- Seed data lives in `lib/data/seed.ts`: 6 roles, 31 tasks, 15 skills, 20 dated signals, 2 scenarios, 4 SDGs, 25 learning resources (at least one free option for each skill), and the demo persona **Aisyah (Finance Admin)**.
 - `GET /api/seed` returns the seed version and counts. `POST /api/seed` resets server-side demo state (custom signals) back to the seed.
 - In the browser, **⋯ menu → Delete my data** clears your locally stored profile and progress (`pivott:v1` and `pivott:v1:personal` in localStorage).
 
@@ -93,3 +93,5 @@ There is no login. Your profile and progress stay in your browser. The server ro
 ## Styleguide
 
 Visit `/styleguide` to see every shared component and its states.
+
+Regenerate backend seed and golden outputs after a seed change with `node scripts/generate-data.mjs` from the repository root. Use `--check` to verify the exports are current.

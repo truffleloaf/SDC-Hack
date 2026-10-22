@@ -34,7 +34,7 @@ def test_seed_get_and_reset(client):
     response = client.get("/api/seed")
     assert response.status_code == 200
     body = response.json()
-    assert body["version"] == "2026.10.1"
+    assert body["version"] == "2026.10.2"
     assert len(body["roles"]) == 6
     assert len(body["tasks"]) == 31
     assert len(body["skills"]) == 15

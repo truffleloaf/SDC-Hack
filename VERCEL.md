@@ -39,7 +39,7 @@ The check exercises page/asset routing, FastAPI analysis in both scenarios, quer
 
 - `/` renders Pivott's landing page.
 - `/_next/*` assets and the local font files load from Next.js.
-- `/api/health` returns `status: "ok"`, seed version `2026.10.1`, and counts including 6 roles and 31 tasks.
+- `/api/health` returns `status: "ok"`, seed version `2026.10.2`, and counts including 6 roles and 31 tasks.
 - `/api/analysis` and `/api/pathways` accept the documented payloads in `backend/README.md`.
 - Open the demo and complete map → routes → pathway → passport; verify signals, scenario controls and export tools remain available.
 

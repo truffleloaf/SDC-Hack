@@ -9,7 +9,7 @@ of truth for this backend:
 - 15 skills
 - 20 dated signals
 - 4 SDGs
-- 24 learning resources
+- 25 learning resources
 - 2 scenarios
 - the Aisyah demo persona
 

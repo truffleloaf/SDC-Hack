@@ -54,7 +54,7 @@ Pivott 回答四个问题：
 | skills | 15 |
 | signals | 20 |
 | SDGs | 4 |
-| resources | 24 |
+| resources | 25 |
 | scenarios | 2 |
 
 角色：Finance Admin、Finance Systems Analyst、Data Analyst、Marketing Executive、

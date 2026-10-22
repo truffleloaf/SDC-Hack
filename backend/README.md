@@ -25,7 +25,7 @@ frontend can point its API base URL at this service without UI changes.
 | Skills | 15 |
 | Dated signals | 20 |
 | SDGs | 4 |
-| Learning resources | 24 |
+| Learning resources | 25 |
 | Scenarios | 2 (Normal / Fast) |
 | Demo persona | Aisyah, Finance Admin |
 

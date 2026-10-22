@@ -88,7 +88,7 @@ def test_seed_counts() -> None:
     assert len(SKILLS) == 15
     assert len(SIGNALS) == 20
     assert len(SDGS) == 4
-    assert len(RESOURCES) == 24
+    assert len(RESOURCES) == 25
     assert len(SCENARIOS) == 2
 
 
@@ -205,3 +205,8 @@ def test_normal_and_fast_change_ranking() -> None:
     assert normal[0] == "operations-coordinator"
     assert fast[0] == "finance-systems-analyst"
     assert normal != fast
+
+
+@pytest.mark.parametrize("skill", SKILLS, ids=lambda skill: skill["id"])
+def test_every_skill_has_a_free_resource(skill):
+    assert any(resource["skillId"] == skill["id"] and resource["free"] for resource in RESOURCES)

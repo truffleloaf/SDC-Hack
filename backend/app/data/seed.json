@@ -1,6 +1,6 @@
 {
   "DATA_AS_OF": "2026-10-01",
-  "SEED_VERSION": "2026.10.1",
+  "SEED_VERSION": "2026.10.2",
   "scenarios": [
     {
       "id": "normal",
@@ -969,6 +969,14 @@
       "title": "Statistics and probability",
       "provider": "Khan Academy",
       "url": "https://www.khanacademy.org/math/statistics-probability",
+      "free": true
+    },
+    {
+      "id": "r-analysis-ms",
+      "skillId": "analysis",
+      "title": "Working with Data",
+      "provider": "Microsoft",
+      "url": "https://github.com/microsoft/Data-Science-For-Beginners/tree/main/2-Working-With-Data",
       "free": true
     },
     {

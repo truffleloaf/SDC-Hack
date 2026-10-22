@@ -14,7 +14,7 @@ uvicorn app.main:app --port 8000
 - [ ] 打开 <http://127.0.0.1:8000/docs>
 - [ ] 打开 <http://127.0.0.1:8000/api/health>
 - [ ] 关闭通知和无关标签
-- [ ] 记下 `seedVersion = 2026.10.1`、`dataAsOf = 2026-10-01`
+- [ ] 记下 `seedVersion = 2026.10.2`、`dataAsOf = 2026-10-01`
 
 ## 1. 数据（0:00–0:30）
 
@@ -23,7 +23,7 @@ uvicorn app.main:app --port 8000
 ```json
 {
   "status": "ok",
-  "seedVersion": "2026.10.1",
+  "seedVersion": "2026.10.2",
   "dataAsOf": "2026-10-01",
   "counts": { "roles": 6, "tasks": 31, "skills": 15, "signals": 20 }
 }

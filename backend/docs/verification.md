@@ -53,7 +53,7 @@ uvicorn app.main:app --port 8000
 
 | 检查 | 期望 |
 |---|---|
-| `GET /api/health` | `counts = {roles:6, tasks:31, skills:15, signals:20}`，`seedVersion = 2026.10.1` |
+| `GET /api/health` | `counts = {roles:6, tasks:31, skills:15, signals:20}`，`seedVersion = 2026.10.2` |
 | `GET /api/seed` | 6/31/15/20/4/24；`demoPersona.name = "Aisyah"` |
 | `POST /api/analysis`（Aisyah，normal） | `roleExposure ≈ 0.619031`，`confidence = "Medium"`，6 tasks，3 routes |
 | 同上，`scenario = "fast"` | `roleExposure ≈ 0.763981`，第一名变成 `finance-systems-analyst` |

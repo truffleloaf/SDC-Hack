@@ -7,7 +7,7 @@ import { analyze, demoState, displayName, emptyState, greetingName, possessive, 
 import { buildPathway } from './engine'
 import { buildIcs } from './ics'
 import { addTask, removeTask, setShare } from './shares'
-import { resources, tasksForRole } from './data/seed'
+import { resources, skills, tasksForRole } from './data/seed'
 
 describe('display name', () => {
   it('falls back to "there" in greetings when no name is set', () => {
@@ -122,5 +122,12 @@ describe('end-to-end journey (demo persona)', () => {
     expect(ics.startsWith('BEGIN:VCALENDAR')).toBe(true)
     expect(ics.trim().endsWith('END:VCALENDAR')).toBe(true)
     expect(ics.match(/BEGIN:VEVENT/g)?.length).toBe(steps.length)
+  })
+})
+
+
+describe('free resource coverage', () => {
+  it.each(skills)('provides a free resource for $name', (skill) => {
+    expect(resources.some((resource) => resource.skillId === skill.id && resource.free)).toBe(true)
   })
 })
