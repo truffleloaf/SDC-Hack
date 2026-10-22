@@ -10,12 +10,13 @@ function analysis(scenario, profile = {}) {
   const lookup = { ...seed.taskById, ...Object.fromEntries((profile.customTasks ?? []).map((task) => [task.id, task])) }
   const tasks = engine.scoreTasks(profile.selections ?? selections, lookup, scenario, signals)
   return {
+    ...engine.assessmentSummary(profile.selections ?? selections, lookup),
     scenario,
     roleExposure: engine.roleExposure(tasks),
     confidence: engine.confidence(tasks, signals),
     tasks,
     routes: engine.computeRoutes({
-      currentRoleId: 'finance-admin', userTaskSkills: [...new Set(tasks.flatMap((task) => task.skills))],
+      currentRoleId: 'finance-admin', userTaskSkills: [...new Set((profile.selections ?? selections).flatMap((selection) => lookup[selection.taskId].skills))],
       levels: seed.demoPersona.skills, scenarioId: scenario, signals, hoursPerWeek: 8,
     }),
   }

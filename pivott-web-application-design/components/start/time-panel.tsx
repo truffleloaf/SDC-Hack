@@ -42,7 +42,7 @@ export function TimePanel({ state }: { state: AppState }) {
                 style={{ backgroundColor: `color-mix(in srgb, var(--teal) ${tints[i % tints.length] * 100}%, var(--mint))` }}
                 aria-hidden
               />
-              <span className="truncate">{lookup[s.taskId].name}</span>
+              <span className="truncate">{state.taskNames[s.taskId] || lookup[s.taskId].name}</span>
             </span>
             <span className="font-mono tabular-nums text-muted-foreground">{Math.round(s.share)}%</span>
           </li>
@@ -55,13 +55,13 @@ export function TimePanel({ state }: { state: AppState }) {
       </p>
 
       <PLink
-        href="/skills"
+        href="/map"
         className="hidden w-full lg:inline-flex"
         aria-disabled={items.length === 0}
         tabIndex={items.length === 0 ? -1 : undefined}
         onClick={(e) => items.length === 0 && e.preventDefault()}
       >
-        Continue to skills
+        View my task map
         <ArrowRight aria-hidden />
       </PLink>
     </section>

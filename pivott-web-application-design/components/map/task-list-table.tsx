@@ -1,7 +1,8 @@
 'use client'
 
 import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react'
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
+import { TaskDetailCard } from './task-map-canvas'
 import { ClassificationBadge, ExposureBadge, SkillChip } from '@/components/pivott/badges'
 import type { ScoredTask } from '@/lib/engine'
 import { cn } from '@/lib/utils'
@@ -10,6 +11,7 @@ type Key = 'name' | 'share' | 'exposure' | 'classification'
 
 export function TaskListTable({ tasks, highlightIds = [] }: { tasks: ScoredTask[]; highlightIds?: string[] }) {
   const [sort, setSort] = useState<{ key: Key; dir: 1 | -1 }>({ key: 'exposure', dir: -1 })
+  const [openId, setOpenId] = useState<string | null>(null)
 
   const sorted = [...tasks].sort((a, b) => {
     const av = a[sort.key]
@@ -46,18 +48,18 @@ export function TaskListTable({ tasks, highlightIds = [] }: { tasks: ScoredTask[
         <thead className="border-b border-border bg-subtle">
           <tr>
             {header('name', 'Task')}
-            {header('share', 'Time')}
+            {header('share', 'Assessed time')}
             {header('exposure', 'Exposure')}
             {header('classification', 'Class')}
             <th scope="col" className="px-4 py-3 text-left font-sans text-xs font-normal text-muted-foreground">
               Skills
             </th>
+            <th scope="col" className="sr-only">Task details</th>
           </tr>
         </thead>
         <tbody>
           {sorted.map((t) => (
-            <tr
-              key={t.id}
+            <Fragment key={t.id}><tr
               className={cn(
                 'border-b border-border bg-card transition-colors last:border-b-0 hover:bg-subtle/60',
                 highlightIds.includes(t.id) && 'bg-mint/60',
@@ -80,7 +82,9 @@ export function TaskListTable({ tasks, highlightIds = [] }: { tasks: ScoredTask[
                   ))}
                 </div>
               </td>
+              <td className="px-3"><button className="min-h-11 text-sm text-primary" aria-expanded={openId === t.id} aria-controls={`details-${t.id}`} onClick={() => setOpenId(openId === t.id ? null : t.id)}>{openId === t.id ? 'Hide details' : 'Show details'}</button></td>
             </tr>
+            {openId === t.id && <tr id={`details-${t.id}`}><td colSpan={6} className="border-b border-border bg-card p-3"><TaskDetailCard task={t} pinned={false} onClose={() => setOpenId(null)} surface="solid" /></td></tr>}</Fragment>
           ))}
         </tbody>
       </table>

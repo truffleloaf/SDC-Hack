@@ -1,5 +1,7 @@
 {
   "analysisNormal": {
+    "assessmentCoverage": 1,
+    "unassessedTasks": [],
     "scenario": "normal",
     "roleExposure": 0.6190312308415231,
     "confidence": "Medium",
@@ -169,7 +171,8 @@
         "sdgs": [
           8,
           9
-        ]
+        ],
+        "unknownSkillIds": []
       },
       {
         "roleId": "finance-systems-analyst",
@@ -238,7 +241,8 @@
         "sdgs": [
           8,
           9
-        ]
+        ],
+        "unknownSkillIds": []
       },
       {
         "roleId": "marketing-executive",
@@ -306,11 +310,14 @@
         "weeks": 7,
         "sdgs": [
           8
-        ]
+        ],
+        "unknownSkillIds": []
       }
     ]
   },
   "analysisFast": {
+    "assessmentCoverage": 1,
+    "unassessedTasks": [],
     "scenario": "fast",
     "roleExposure": 0.7639809198931331,
     "confidence": "Medium",
@@ -490,7 +497,8 @@
         "sdgs": [
           8,
           9
-        ]
+        ],
+        "unknownSkillIds": []
       },
       {
         "roleId": "operations-coordinator",
@@ -549,7 +557,8 @@
         "sdgs": [
           8,
           9
-        ]
+        ],
+        "unknownSkillIds": []
       },
       {
         "roleId": "marketing-executive",
@@ -617,7 +626,8 @@
         "weeks": 7,
         "sdgs": [
           8
-        ]
+        ],
+        "unknownSkillIds": []
       }
     ]
   },
@@ -710,15 +720,23 @@
     ]
   },
   "analysisCustomNormal": {
+    "assessmentCoverage": 0.7999999999999999,
+    "unassessedTasks": [
+      {
+        "id": "custom-review",
+        "name": "Review project notes",
+        "share": 0.2
+      }
+    ],
     "scenario": "normal",
-    "roleExposure": 0.6348249846732185,
+    "roleExposure": 0.6460312308415231,
     "confidence": "Medium",
     "tasks": [
       {
         "id": "fa-invoice",
         "name": "Invoice entry",
         "description": "Capture supplier invoices and code them to the ledger.",
-        "share": 0.24,
+        "share": 0.3,
         "baseExposure": 0.78,
         "adjustment": 0.13183436982796656,
         "exposure": 0.9118343698279666,
@@ -735,7 +753,7 @@
         "id": "fa-recon",
         "name": "Bank reconciliation",
         "description": "Match bank lines to ledger entries and clear differences.",
-        "share": 0.16,
+        "share": 0.2,
         "baseExposure": 0.66,
         "adjustment": 0.030009838925370354,
         "exposure": 0.6900098389253704,
@@ -753,7 +771,7 @@
         "id": "fa-exception",
         "name": "Exception handling",
         "description": "Investigate mismatches, duplicates, and policy breaches.",
-        "share": 0.12,
+        "share": 0.15,
         "baseExposure": 0.4,
         "adjustment": -0.040265342383718504,
         "exposure": 0.35973465761628154,
@@ -771,7 +789,7 @@
         "id": "fa-reporting",
         "name": "Month-end reporting",
         "description": "Prepare month-end packs and variance commentary.",
-        "share": 0.12,
+        "share": 0.15,
         "baseExposure": 0.56,
         "adjustment": 0.0307792540251913,
         "exposure": 0.5907792540251914,
@@ -789,7 +807,7 @@
         "id": "fa-comms",
         "name": "Client communication",
         "description": "Resolve payment queries with vendors and internal teams.",
-        "share": 0.08,
+        "share": 0.1,
         "baseExposure": 0.28,
         "adjustment": -0.02013528295209619,
         "exposure": 0.2598647170479038,
@@ -807,7 +825,7 @@
         "id": "fa-expense",
         "name": "Expense claim review",
         "description": "Check claims against policy and approve or return them.",
-        "share": 0.08,
+        "share": 0.1,
         "baseExposure": 0.62,
         "adjustment": 0.039153936570477034,
         "exposure": 0.659153936570477,
@@ -819,23 +837,6 @@
         ],
         "tryThisWeek": "Turn your expense policy into a checklist an AI tool can pre-screen against, then spot-check results.",
         "custom": false
-      },
-      {
-        "id": "custom-review",
-        "name": "Review project notes",
-        "description": "Your own task",
-        "share": 0.2,
-        "baseExposure": 0.5,
-        "adjustment": 0.09,
-        "exposure": 0.59,
-        "humanJudgment": 0.5,
-        "classification": "Augment",
-        "skills": [
-          "analysis",
-          "writing"
-        ],
-        "tryThisWeek": "Try one AI-assisted run of this task and note which steps still needed your judgment.",
-        "custom": true
       }
     ],
     "routes": [
@@ -896,7 +897,8 @@
         "sdgs": [
           8,
           9
-        ]
+        ],
+        "unknownSkillIds": []
       },
       {
         "roleId": "finance-systems-analyst",
@@ -965,7 +967,8 @@
         "sdgs": [
           8,
           9
-        ]
+        ],
+        "unknownSkillIds": []
       },
       {
         "roleId": "marketing-executive",
@@ -1033,20 +1036,29 @@
         "weeks": 7,
         "sdgs": [
           8
-        ]
+        ],
+        "unknownSkillIds": []
       }
     ]
   },
   "analysisCustomFast": {
+    "assessmentCoverage": 0.7999999999999999,
+    "unassessedTasks": [
+      {
+        "id": "custom-review",
+        "name": "Review project notes",
+        "share": 0.2
+      }
+    ],
     "scenario": "fast",
-    "roleExposure": 0.7541847359145065,
+    "roleExposure": 0.7639809198931331,
     "confidence": "Medium",
     "tasks": [
       {
         "id": "fa-invoice",
         "name": "Invoice entry",
         "description": "Capture supplier invoices and code them to the ledger.",
-        "share": 0.24,
+        "share": 0.3,
         "baseExposure": 0.78,
         "adjustment": 0.13183436982796656,
         "exposure": 1,
@@ -1063,7 +1075,7 @@
         "id": "fa-recon",
         "name": "Bank reconciliation",
         "description": "Match bank lines to ledger entries and clear differences.",
-        "share": 0.16,
+        "share": 0.2,
         "baseExposure": 0.66,
         "adjustment": 0.030009838925370354,
         "exposure": 0.8550098389253704,
@@ -1081,7 +1093,7 @@
         "id": "fa-exception",
         "name": "Exception handling",
         "description": "Investigate mismatches, duplicates, and policy breaches.",
-        "share": 0.12,
+        "share": 0.15,
         "baseExposure": 0.4,
         "adjustment": -0.040265342383718504,
         "exposure": 0.4597346576162815,
@@ -1099,7 +1111,7 @@
         "id": "fa-reporting",
         "name": "Month-end reporting",
         "description": "Prepare month-end packs and variance commentary.",
-        "share": 0.12,
+        "share": 0.15,
         "baseExposure": 0.56,
         "adjustment": 0.0307792540251913,
         "exposure": 0.7307792540251914,
@@ -1117,7 +1129,7 @@
         "id": "fa-comms",
         "name": "Client communication",
         "description": "Resolve payment queries with vendors and internal teams.",
-        "share": 0.08,
+        "share": 0.1,
         "baseExposure": 0.28,
         "adjustment": -0.02013528295209619,
         "exposure": 0.3298647170479038,
@@ -1135,7 +1147,7 @@
         "id": "fa-expense",
         "name": "Expense claim review",
         "description": "Check claims against policy and approve or return them.",
-        "share": 0.08,
+        "share": 0.1,
         "baseExposure": 0.62,
         "adjustment": 0.039153936570477034,
         "exposure": 0.8141539365704771,
@@ -1147,23 +1159,6 @@
         ],
         "tryThisWeek": "Turn your expense policy into a checklist an AI tool can pre-screen against, then spot-check results.",
         "custom": false
-      },
-      {
-        "id": "custom-review",
-        "name": "Review project notes",
-        "description": "Your own task",
-        "share": 0.2,
-        "baseExposure": 0.5,
-        "adjustment": 0.09,
-        "exposure": 0.715,
-        "humanJudgment": 0.5,
-        "classification": "Augment",
-        "skills": [
-          "analysis",
-          "writing"
-        ],
-        "tryThisWeek": "Try one AI-assisted run of this task and note which steps still needed your judgment.",
-        "custom": true
       }
     ],
     "routes": [
@@ -1234,7 +1229,8 @@
         "sdgs": [
           8,
           9
-        ]
+        ],
+        "unknownSkillIds": []
       },
       {
         "roleId": "operations-coordinator",
@@ -1293,7 +1289,8 @@
         "sdgs": [
           8,
           9
-        ]
+        ],
+        "unknownSkillIds": []
       },
       {
         "roleId": "marketing-executive",
@@ -1361,7 +1358,8 @@
         "weeks": 7,
         "sdgs": [
           8
-        ]
+        ],
+        "unknownSkillIds": []
       }
     ]
   },

@@ -1,6 +1,6 @@
 import { allSignals, json, parseProfile } from '@/lib/api'
 import { taskById } from '@/lib/data/seed'
-import { computeRoutes, confidence, roleExposure, scoreTasks } from '@/lib/engine'
+import { assessmentSummary, computeRoutes, confidence, roleExposure, scoreTasks } from '@/lib/engine'
 
 export async function POST(req: Request) {
   const parsed = parseProfile(await req.json().catch(() => null))
@@ -9,8 +9,9 @@ export async function POST(req: Request) {
   const signals = allSignals(p.customSignals)
   const lookup = { ...taskById, ...Object.fromEntries((p.customTasks ?? []).map((task) => [task.id, task])) }
   const tasks = scoreTasks(p.selections, lookup, p.scenario, signals)
-  const userTaskSkills = [...new Set(tasks.flatMap((t) => t.skills))]
+  const userTaskSkills = [...new Set(p.selections.flatMap((selection) => lookup[selection.taskId]?.skills ?? []))]
   return json({
+    ...assessmentSummary(p.selections, lookup),
     scenario: p.scenario,
     roleExposure: roleExposure(tasks),
     confidence: confidence(tasks, signals),

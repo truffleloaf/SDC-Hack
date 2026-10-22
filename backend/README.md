@@ -115,7 +115,7 @@ role_exposure     = sum(time_share × exposure)
 classification    = Automate if exposure >= 0.65 and human_judgment < 0.4
                     Protect  if human_judgment >= 0.65
                     Augment  otherwise
-skill_coverage    = sum(importance × min(current / required, 1)) / sum(importance)
+skill_coverage    = sum_rated(importance × min(current / required, 1)) / sum_rated(importance)
 fit               = 100 × (0.8 × coverage + 0.2 × task_similarity)  (falls back to coverage)
 gap               = max(0, required - current)
 gap_priority      = gap × importance × (role_demand / 100)
@@ -194,3 +194,7 @@ The map's opt-in **Verify with API** button calls this service through same-orig
 `POST /api/analysis` accepts optional `customTasks` and `customSignals` arrays. Only applied custom signals should be sent. Both APIs validate custom IDs, finite scores, HTTPS source links and real dates up to the data cut-off; reject unknown impact tasks and duplicate IDs; clamp editor ranges; and mark custom evidence as `user`. Limits are 100 custom tasks, 100 selections, 100 signals and 100 impacts per signal. See the frontend README for ranges and `tests/golden.json` for a custom-input request and matching outputs in both scenarios.
 
 This demo has no application rate limiter or authentication. Configure hosting-edge rate limits/body-size limits before wider public use; do not treat the CORS allowlist as an abuse control. Never log request bodies containing user task/skill inputs.
+
+## Personal profiles and unknown inputs
+
+Unrated requirements remain unknown, distinct from explicit level 0, and are excluded from coverage and learning gaps. With no rated requirements, provisional fit uses task similarity only. Custom tasks remain unassessed; exposure is normalized over reference tasks, with assessment coverage returned separately. Optional Supabase accounts are independent of the stateless scoring API; see [account setup](../supabase/README.md).

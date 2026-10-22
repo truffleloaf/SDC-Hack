@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse
 
-from app.engine import compute_routes, confidence, role_exposure, score_tasks
+from app.engine import assessment_summary, compute_routes, confidence, role_exposure, score_tasks
 from app.parsing import ProfileError, parse_profile, read_json
 from app.seed import SIGNALS, TASK_BY_ID
 
@@ -19,7 +19,7 @@ async def analyze(request: Request):
     signals = [*SIGNALS, *profile.get("customSignals", [])]
     lookup = {**TASK_BY_ID, **{task["id"]: task for task in profile.get("customTasks", [])}}
     tasks = score_tasks(profile["selections"], lookup, profile["scenario"], signals)
-    user_task_skills = list(dict.fromkeys(skill for task in tasks for skill in task["skills"]))
+    user_task_skills = list(dict.fromkeys(skill for selection in profile["selections"] for skill in lookup[selection["taskId"]]["skills"]))
 
     routes = compute_routes(
         current_role_id=profile["roleId"],
@@ -31,6 +31,7 @@ async def analyze(request: Request):
     )
 
     return {
+        **assessment_summary(profile["selections"], lookup),
         "scenario": profile["scenario"],
         "roleExposure": role_exposure(tasks),
         "confidence": confidence(tasks, signals),

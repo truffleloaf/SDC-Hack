@@ -76,8 +76,8 @@ export interface CustomTask {
   id: string
   name: string
   skills: string[]
-  baseExposure: number
-  humanJudgment: number
+  baseExposure?: number
+  humanJudgment?: number
 }
 
 export interface ScoredTask {
@@ -102,11 +102,12 @@ export function scoreTasks(
   signals: Signal[],
 ): ScoredTask[] {
   const { multiplier } = getScenario(scenarioId)
-  const normalized = normalizeShares(selections.filter((s) => taskLookup[s.taskId]))
+  const normalized = normalizeShares(selections.filter((s) => taskLookup[s.taskId] && 'roleId' in taskLookup[s.taskId]))
   return normalized.map(({ taskId, share }) => {
     const t = taskLookup[taskId]
+    if (!('roleId' in t)) throw new Error('Only reference tasks have an exposure assessment')
     const adjustment = signalAdjustment(taskId, signals)
-    const exposure = taskExposure(t.baseExposure, multiplier, adjustment)
+    const exposure = taskExposure(t.baseExposure!, multiplier, adjustment)
     const isSeed = 'roleId' in t
     return {
       id: taskId,
@@ -116,8 +117,8 @@ export function scoreTasks(
       baseExposure: t.baseExposure,
       adjustment,
       exposure,
-      humanJudgment: t.humanJudgment,
-      classification: classify(exposure, t.humanJudgment),
+      humanJudgment: t.humanJudgment!,
+      classification: classify(exposure, t.humanJudgment!),
       skills: t.skills,
       tryThisWeek: isSeed
         ? t.tryThisWeek
@@ -127,11 +128,19 @@ export function scoreTasks(
   })
 }
 
-/** skill_coverage = sum(importance × min(current_level / required_level, 1)) / sum(importance) */
+/** Exposure is conditional on assessed reference tasks; custom tasks stay unknown. */
+export function assessmentSummary(selections: ShareInput[], lookup: Record<string, Task | CustomTask>) {
+  const valid = normalizeShares(selections.filter((item) => lookup[item.taskId]))
+  const unassessedTasks = valid.filter((item) => !('roleId' in lookup[item.taskId])).map((item) => ({ id: item.taskId, name: lookup[item.taskId].name, share: item.share }))
+  return { assessmentCoverage: valid.filter((item) => 'roleId' in lookup[item.taskId]).reduce((sum, item) => sum + item.share, 0), unassessedTasks }
+}
+
+/** Coverage uses rated requirements only, preserving unknown separately from explicit zero. */
 export function skillCoverage(role: Role, levels: Record<string, number>) {
-  const totalImportance = role.requirements.reduce((a, r) => a + r.importance, 0)
+  const rated = role.requirements.filter((r) => levels[r.skillId] !== undefined)
+  const totalImportance = rated.reduce((a, r) => a + r.importance, 0)
   if (!totalImportance) return 0
-  const covered = role.requirements.reduce(
+  const covered = rated.reduce(
     (a, r) => a + r.importance * Math.min((levels[r.skillId] ?? 0) / r.requiredLevel, 1),
     0,
   )
@@ -169,6 +178,7 @@ export interface SkillGap {
 /** gap = max(0, required − current); gap_priority = gap × importance × (role_demand / 100) */
 export function skillGaps(role: Role, levels: Record<string, number>): SkillGap[] {
   return role.requirements
+    .filter((r) => levels[r.skillId] !== undefined)
     .map((r) => {
       const current = levels[r.skillId] ?? 0
       const gap = Math.max(0, r.requiredLevel - current)
@@ -226,6 +236,7 @@ export interface RouteResult {
   totalGapHours: number
   weeks: number
   sdgs: number[]
+  unknownSkillIds: string[]
 }
 
 export function computeRoutes(params: {
@@ -243,7 +254,8 @@ export function computeRoutes(params: {
     .map((role) => {
       const coverage = skillCoverage(role, levels)
       const similarity = taskSimilarity(userTaskSkills, role.id)
-      const fit = roleFit(coverage, similarity)
+      const unknownSkillIds = role.requirements.filter((r) => levels[r.skillId] === undefined).map((r) => r.skillId)
+      const fit = unknownSkillIds.length === role.requirements.length ? 100 * (similarity ?? 0) : roleFit(coverage, similarity)
       const exposure = targetRoleExposure(role.id, scenarioId, signals)
       const gaps = skillGaps(role, levels)
       const totalGapHours = gaps.reduce((a, g) => a + g.hours, 0)
@@ -261,6 +273,7 @@ export function computeRoutes(params: {
         totalGapHours,
         weeks: learningWeeks(totalGapHours, hoursPerWeek),
         sdgs: role.sdgs,
+        unknownSkillIds,
       }
     })
     .sort((a, b) => b.score - a.score || a.title.localeCompare(b.title))

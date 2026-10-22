@@ -2,7 +2,8 @@
 
 import { AnimatePresence, motion } from 'motion/react'
 import { useState } from 'react'
-import { classify, exposureColor, type Classification } from '@/lib/engine'
+import { classify, exposureColor, scoreTasks, type Classification } from '@/lib/engine'
+import { signals, taskById, tasksForRole } from '@/lib/data/seed'
 import { cn } from '@/lib/utils'
 
 interface HeroNode {
@@ -20,21 +21,27 @@ const W = 560
 const H = 480
 const CENTER = { x: 282, y: 246 }
 
-const nodes: HeroNode[] = [
-  { id: 'invoice', label: 'Invoice entry', x: 128, y: 118, r: 50, exposure: 0.82, judgment: 0.15, showLabel: true },
-  { id: 'exception', label: 'Exception handling', x: 432, y: 112, r: 36, exposure: 0.36, judgment: 0.68, showLabel: true },
-  { id: 'analysis', label: 'Data analysis', x: 446, y: 318, r: 42, exposure: 0.52, judgment: 0.45, showLabel: true },
-  { id: 'comms', label: 'Client communication', x: 146, y: 372, r: 38, exposure: 0.26, judgment: 0.72, showLabel: true },
-  { id: 'reporting', label: 'Reporting', x: 310, y: 418, r: 28, exposure: 0.59, judgment: 0.42, showLabel: true },
-  { id: 'automation', label: 'Process automation', x: 296, y: 88, r: 24, exposure: 0.44, judgment: 0.5, showLabel: true },
-  { id: 'recon', label: 'Bank reconciliation', x: 70, y: 252, r: 26, exposure: 0.69, judgment: 0.3 },
-  { id: 'expense', label: 'Expense review', x: 506, y: 214, r: 20, exposure: 0.66, judgment: 0.38 },
-  { id: 'vendor', label: 'Vendor queries', x: 214, y: 254, r: 16, exposure: 0.48, judgment: 0.55 },
-]
+// Use the same Finance Admin data and Normal scenario as View an example.
+const positions: Record<string, { x: number; y: number }> = {
+  'fa-invoice': { x: 128, y: 112 },
+  'fa-recon': { x: 290, y: 88 },
+  'fa-exception': { x: 440, y: 148 },
+  'fa-reporting': { x: 435, y: 340 },
+  'fa-comms': { x: 150, y: 365 },
+  'fa-expense': { x: 78, y: 252 },
+}
+const nodes: HeroNode[] = scoreTasks(
+  tasksForRole('finance-admin').map((task) => ({ taskId: task.id, share: task.defaultShare })),
+  taskById, 'normal', signals,
+).map((task) => ({
+  id: task.id, label: task.name, ...positions[task.id],
+  r: 100 * Math.sqrt(task.share), exposure: task.exposure,
+  judgment: task.humanJudgment, showLabel: true,
+}))
 
 const skills = [
   { label: 'Controls', x: 378, y: 200 },
-  { label: 'SQL', x: 196, y: 186 },
+  { label: 'Spreadsheets', x: 170, y: 196 },
   { label: 'Stakeholders', x: 236, y: 330 },
 ]
 
@@ -54,7 +61,7 @@ export function LivingTaskMap() {
   return (
     <div className="task-atlas relative mx-auto w-full max-w-[620px] overflow-hidden rounded-[28px] border border-border bg-card">
       <div className="relative z-10 flex items-start justify-between gap-3 border-b border-border px-5 py-4 sm:px-7">
-        <div><p className="text-sm font-semibold">Aisyah’s task landscape</p><p className="mt-1 text-xs text-muted-foreground">Finance Admin · Illustrative example</p></div>
+        <div><p className="text-sm font-semibold">Finance Admin · Example</p><p className="mt-1 text-xs text-muted-foreground">Select a task to see how it could change.</p></div>
         <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-2.5 py-1 text-xs text-accent-foreground"><span className="size-1.5 rounded-full bg-primary" aria-hidden />Task map</span>
       </div>
       <div className="relative aspect-[56/48]">
@@ -91,15 +98,13 @@ export function LivingTaskMap() {
           ))}
         </g>
 
-        {nodes.map((n, i) => {
+        {nodes.map((n) => {
           const isActive = active === n.id
           const dim = active !== null && !isActive
           const c = classify(n.exposure, n.judgment)
           return (
             <g
               key={n.id}
-              className="float-node"
-              style={{ animationDelay: `${-i * 0.9}s`, animationDuration: `${6 + (i % 3)}s` }}
             >
               <g
                 tabIndex={0}
@@ -169,7 +174,7 @@ export function LivingTaskMap() {
             exit={{ opacity: 0, y: 4 }}
             transition={{ duration: 0.16 }}
             className={cn(
-              'pointer-events-none absolute z-10 w-48 -translate-x-1/2 rounded-2xl border border-border bg-card/95 p-3 shadow-lift backdrop-blur',
+              'glass-panel pointer-events-none absolute z-10 w-48 -translate-x-1/2 rounded-xl p-3',
             )}
             style={{
               left: `${(Math.min(Math.max(current.x, 100), W - 100) / W) * 100}%`,
@@ -187,7 +192,7 @@ export function LivingTaskMap() {
       </AnimatePresence>
       </div>
       <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border px-5 py-4 text-xs text-muted-foreground sm:px-7">
-        <span>Explore a task to see its exposure</span>
+        <span>Illustrative estimates</span>
         <span className="flex items-center gap-2"><span>Lower</span><span className="flex gap-1" aria-hidden><i className="size-2.5 rounded-full bg-exp-low" /><i className="size-2.5 rounded-full bg-exp-mid" /><i className="size-2.5 rounded-full bg-exp-high" /></span><span>Higher</span></span>
       </div>
     </div>

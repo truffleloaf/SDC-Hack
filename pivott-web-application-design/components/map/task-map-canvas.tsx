@@ -2,6 +2,7 @@
 
 import { forceCollide, forceSimulation, forceX, forceY, type SimulationNodeDatum } from 'd3-force'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import { X } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { ClassificationBadge, ExposureBadge, SkillChip } from '@/components/pivott/badges'
@@ -92,7 +93,7 @@ export function TaskMapCanvas({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [shareKey, W, H])
 
-  const activeId = hovered ?? pinned
+  const activeId = pinned ?? hovered
   const active = tasks.find((t) => t.id === activeId) ?? null
   const activePos = active ? positions.get(active.id) : null
 
@@ -157,8 +158,8 @@ export function TaskMapCanvas({
                 <motion.g
                   key={t.id}
                   initial={reduce ? false : { x: W / 2, y: H / 2, opacity: 0 }}
-                  animate={{ x: p.x, y: p.y - (isActive ? 4 : 0), opacity: dim ? 0.6 : 1 }}
-                  transition={{ type: 'spring', stiffness: 170, damping: 24 }}
+                  animate={{ x: p.x, y: p.y, opacity: dim ? 0.6 : 1 }}
+                  transition={{ duration: reduce ? 0 : 0.25 }}
                 >
                   <g
                     tabIndex={0}
@@ -188,8 +189,8 @@ export function TaskMapCanvas({
                         stroke="var(--teal)"
                         strokeWidth={2}
                         initial={{ opacity: 0.9, scale: 0.95 }}
-                        animate={{ opacity: [0.9, 0.2, 0.9], scale: [0.95, 1.06, 0.95] }}
-                        transition={{ duration: 1.6, repeat: 3 }}
+                        animate={{ opacity: 0.6, scale: 1 }}
+                        transition={{ duration: 0.2 }}
                       />
                     )}
                     <circle className="ring opacity-0 transition-opacity" r={p.r + 5} fill="none" stroke="var(--ring)" strokeWidth={2} />
@@ -259,30 +260,21 @@ export function TaskMapCanvas({
         Size = time share · Filled core = exposure · Click a bubble to pin details
       </p>
 
-      {!wide && (
-        <AnimatePresence mode="wait">
-          {active ? (
-            <motion.div key={active.id} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-              <TaskDetailCard task={active} pinned={pinned === active.id} onClose={() => setPinned(null)} />
-            </motion.div>
-          ) : (
-            <p className="text-center text-sm text-muted-foreground">Tap a bubble to see what it means.</p>
-          )}
-        </AnimatePresence>
-      )}
+      {!wide && <Sheet open={!!pinned} onOpenChange={(open) => !open && setPinned(null)}><SheetContent side="bottom" className="max-h-[80dvh] overflow-y-auto rounded-t-xl"><SheetHeader><SheetTitle>Task details</SheetTitle></SheetHeader>{active && <TaskDetailCard task={active} pinned onClose={() => setPinned(null)} />}</SheetContent></Sheet>}
+
     </div>
   )
 }
 
-export function TaskDetailCard({ task, pinned, onClose }: { task: ScoredTask; pinned: boolean; onClose: () => void }) {
+export function TaskDetailCard({ task, pinned, onClose, surface = 'glass' }: { task: ScoredTask; pinned: boolean; onClose: () => void; surface?: 'glass' | 'solid' }) {
   const explanation = {
-    Automate: `High exposure and low reliance on judgment. Tools can already handle much of ${task.name.toLowerCase()} — your role shifts to checking outputs.`,
+    Automate: `High exposure and low reliance on judgment. This illustrative estimate suggests tools may assist with routine parts of ${task.name.toLowerCase()}. Outputs still need checking.`,
     Augment: `AI can speed up parts of ${task.name.toLowerCase()}, while your judgment shapes the result.`,
-    Protect: `${task.name} leans heavily on human judgment and relationships. This is durable work worth leaning into.`,
+    Protect: `${task.name} leans heavily on human judgment and relationships. The estimate does not establish how a particular employer will use AI.`,
   }[task.classification]
 
   return (
-    <div className={cn('rounded-[20px] border border-border bg-card p-5 shadow-lift', pinned && 'border-teal/40')}>
+    <div className={cn('rounded-xl p-5', surface === 'glass' ? 'glass-panel' : 'bg-card', pinned && 'border-teal/40')}>
       <div className="flex items-start justify-between gap-2">
         <h3 className="font-serif text-xl leading-tight">{task.name}</h3>
         {pinned && (
@@ -291,6 +283,7 @@ export function TaskDetailCard({ task, pinned, onClose }: { task: ScoredTask; pi
           </button>
         )}
       </div>
+      <p className="mt-2 text-sm text-muted-foreground">{Math.round(task.share * 100)}% of assessed working time · Illustrative estimate</p>
       <div className="mt-3 flex flex-wrap items-center gap-2">
         <ExposureBadge value={task.exposure} />
         <ClassificationBadge value={task.classification} />
@@ -301,7 +294,8 @@ export function TaskDetailCard({ task, pinned, onClose }: { task: ScoredTask; pi
           <SkillChip key={s} skillId={s} />
         ))}
       </div>
-      {task.classification === 'Augment' && (
+      <p className="mt-3 text-sm text-muted-foreground">Human judgment: {task.humanJudgment >= 0.65 ? "context, relationships and exceptions remain important." : "check accuracy, handle exceptions and decide when to intervene."}</p>
+      {(
         <div className="mt-4 rounded-xl bg-mint p-3">
           <p className="font-sans text-xs font-medium text-accent-foreground">Try this week</p>
           <p className="mt-1 text-sm leading-relaxed text-foreground">{task.tryThisWeek}</p>

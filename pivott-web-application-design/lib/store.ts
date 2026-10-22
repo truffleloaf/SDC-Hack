@@ -17,6 +17,11 @@ export interface AppState {
   version: 1
   mode: ProfileMode
   name: string
+  jobTitle: string
+  taskNames: Record<string, string>
+  careerGoal: string
+  savedRouteIds: string[]
+  updatedAt: string | null
   roleId: string | null
   selections: { taskId: string; share: number }[]
   customTasks: CustomTask[]
@@ -39,6 +44,7 @@ export const emptyState: AppState = {
   version: 1,
   mode: 'personal',
   name: '',
+  jobTitle: '', taskNames: {}, careerGoal: '', savedRouteIds: [], updatedAt: null,
   roleId: null,
   selections: [],
   customTasks: [],
@@ -68,6 +74,7 @@ export function demoState(): AppState {
 
 let state: AppState = emptyState
 let loaded = false
+let saveStatus: 'saved' | 'error' = 'saved'
 const listeners = new Set<() => void>()
 
 function load() {
@@ -81,7 +88,7 @@ function load() {
   }
 }
 
-function parseStored(raw: string): AppState {
+export function parseStored(raw: string): AppState {
   const parsed = JSON.parse(raw) as Partial<AppState>
   const legacyDemo = !parsed.mode && parsed.name === demoPersona.name && parsed.roleId === demoPersona.roleId
   return {
@@ -151,10 +158,12 @@ function emit() {
 export function setState(next: Partial<AppState> | ((s: AppState) => Partial<AppState>)) {
   load()
   const patch = typeof next === 'function' ? next(state) : next
-  state = { ...state, ...patch }
+  const changedProfile = Object.keys(patch).some((key) => key !== 'recentlyChanged')
+  state = { ...state, ...patch, ...(changedProfile ? { updatedAt: new Date().toISOString() } : {}) }
   try {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
-  } catch {}
+    saveStatus = 'saved'
+  } catch { saveStatus = 'error' }
   emit()
 }
 
@@ -163,7 +172,8 @@ export function replaceState(next: AppState) {
   state = next
   try {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
-  } catch {}
+    saveStatus = 'saved'
+  } catch { saveStatus = 'error' }
   emit()
 }
 
@@ -193,12 +203,13 @@ function subscribe(l: () => void) {
   }
 }
 
-const serverSnapshot = { state: emptyState, hydrated: false }
-let clientSnapshot = { state, hydrated: true }
+interface StoreSnapshot { state: AppState; hydrated: boolean; saveStatus: 'saved' | 'error' }
+const serverSnapshot: StoreSnapshot = { state: emptyState, hydrated: false, saveStatus }
+let clientSnapshot: StoreSnapshot = { state, hydrated: true, saveStatus }
 
 function getSnapshot() {
   load()
-  if (clientSnapshot.state !== state) clientSnapshot = { state, hydrated: true }
+  if (clientSnapshot.state !== state) clientSnapshot = { state, hydrated: true, saveStatus }
   return clientSnapshot
 }
 
@@ -224,10 +235,15 @@ export function useAnalysis(s: AppState) {
 
 export function analyze(s: AppState) {
   const signals = activeSignals(s)
-  const scored = scoreTasks(s.selections, taskLookup(s), s.scenario, signals)
+  const lookup = taskLookup(s)
+  const scored = scoreTasks(s.selections, lookup, s.scenario, signals).map((task) => ({ ...task, name: s.taskNames?.[task.id] || task.name }))
+  const unassessed = s.selections.filter((selection) => lookup[selection.taskId] && !('roleId' in lookup[selection.taskId])).map((selection) => ({ ...selection, name: lookup[selection.taskId].name }))
+  const totalShare = s.selections.reduce((sum, task) => sum + task.share, 0)
+  const assessedShare = s.selections.filter((selection) => lookup[selection.taskId] && 'roleId' in lookup[selection.taskId]).reduce((sum, task) => sum + task.share, 0)
+  const assessmentCoverage = totalShare ? assessedShare / totalShare : 0
   const exposure = roleExposure(scored)
-  const userTaskSkills = [...new Set(scored.flatMap((t) => t.skills))]
-  const routes = s.roleId
+  const userTaskSkills = [...new Set(s.selections.flatMap((selection) => lookup[selection.taskId]?.skills ?? []))]
+  const allRoutes = s.roleId
     ? computeRoutes({
         currentRoleId: s.roleId,
         userTaskSkills,
@@ -235,8 +251,9 @@ export function analyze(s: AppState) {
         scenarioId: s.scenario,
         signals,
         hoursPerWeek: s.hoursPerWeek,
+        limit: 10,
       })
     : []
   const lastUpdated = signals.reduce((a, b) => (b.date > a ? b.date : a), '2000-01-01')
-  return { signals, scored, exposure, routes, userTaskSkills, lastUpdated }
+  return { signals, scored, exposure, routes: allRoutes.slice(0, 3), allRoutes, userTaskSkills, lastUpdated, unassessed, assessmentCoverage }
 }

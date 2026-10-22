@@ -4,15 +4,19 @@ Pivott helps people examine their working week and plan a possible career move. 
 
 ## Type and colour
 
-Use locally hosted IBM Plex Sans for body and display text. The single family keeps the product cohesive; hierarchy comes from size, weight, spacing, and placement. Reserve monospace for numerical or technical content. Avoid decorative uppercase labels and italic or coloured words inserted into headlines.
+Use the native system font stack for body and display text. Hierarchy comes from size, weight, spacing, and placement. Reserve monospace for numerical or technical content. Avoid decorative uppercase labels and italic or coloured words inserted into headlines.
 
-Preserve Pivott’s original palette: light surfaces (#F8FAF9, #FFFFFF), dark ink (#1F2937), teal actions (#0F766E), mint (#E6F7F4), and sky (#EAF4FF). Dark mode preserves its original deep teal surfaces and lighter teal actions. Exposure colours retain their separate data meaning, with written classifications so colour is never the only explanation.
+Preserve Pivott’s original palette: light surfaces (#F8FAF9, #FFFFFF), dark ink (#1F2937), teal actions (#0F766E), mint (#E6F7F4), and sky (#EAF4FF). Dark mode uses deep charcoal surfaces and lighter teal actions. Exposure colours retain their separate data meaning, with written classifications so colour is never the only explanation.
 
 ## Structure and graphics
 
-Preserve the original landing task-map interaction, with its illustrative task values and hover/focus details. Frame it as a task atlas with restrained orbital guides. Keep the complete task mapping workflow and all its existing tools unchanged. The supporting career-route illustration names skills and roles from the existing demo dataset; it does not introduce a new feature.
+Preserve the original landing task-map interaction, with its illustrative task values and hover/focus details. Keep task-map interactions stable. Preserve the existing scenario, signals, API verification, comparison, calendar and passport tools. Put the initial map before skill ratings, then use Work / Routes / Plan navigation.
 
-Use borders and spacing to group content. Keep button corners compact, panels modestly rounded, and shadows quiet. Use restrained mint lighting and contours to support the task atlas, with a route illustration that explains skill transfer. Avoid effects that compete with the task labels. Motion should explain a user action.
+Use borders and spacing to group content. Keep button corners compact, panels modestly rounded, and shadows quiet. Use solid forms and reading surfaces. Restrict glass to navigation, floating actions, small overlays and map details. Provide solid defaults, a backdrop-filter feature fallback and a reduced-transparency override. Avoid decorative glows and gradients. Motion should explain a user action and respect reduced motion.
+
+## Content and uncertainty
+
+Use plain language. Unknown skills stay unknown; custom tasks have no invented assessment. Keep illustrative labels and assessment coverage close to scores. Label partial routes and plans; do not infer readiness, employment outcomes or qualifications. Account saving is optional and explicit, with device/account choices rather than automatic merging.
 
 ## Research basis
 

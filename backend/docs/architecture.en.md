@@ -4,7 +4,7 @@
 
 ## Purpose and boundaries
 
-Pivott maps a job to tasks, calculates task-level AI exposure, ranks adjacent roles by existing skill coverage and target exposure, and schedules learning steps for the gaps. It does not predict unemployment, train or call an LLM, scrape live labour-market data, or implement accounts, hiring, payments, or a database.
+Pivott maps a job to tasks, calculates task-level AI exposure, ranks adjacent roles by existing skill coverage and target exposure, and schedules learning steps for the gaps. It does not predict unemployment, train or call an LLM, scrape live labour-market data, or implement hiring or payments. Optional account persistence is provided separately by Supabase; the scoring API remains stateless.
 
 The browser's TypeScript engine remains the main interactive workflow. Profiles, display names, selected tasks, custom signals, and learning progress are saved in localStorage. Aisyah's demo is kept separately from a personal profile. The backend is stateless and is not required for local scoring.
 
@@ -41,6 +41,8 @@ In the combined Vercel project, the root rewrite sends `/api/*` to FastAPI and e
 
 Seed version `2026.10.2` has a data cut-off of 1 October 2026: 6 roles, 31 tasks, 15 skills, 20 dated signals, 4 SDGs, 25 learning resources, and 2 scenarios. Every skill has a free resource. Aisyah is a Finance Admin; her default browser demo uses Normal and 6 hours/week. API examples also use 8 hours/week explicitly.
 
+Custom tasks remain unassessed, even when legacy input contains numeric assumptions. Role exposure normalizes over assessed reference tasks; analysis also returns assessment coverage and unassessed tasks.
+
 Core formulas, implemented in both engines:
 
 - Recency: `0.5 ** (age_days / 180)`.
@@ -48,9 +50,9 @@ Core formulas, implemented in both engines:
 - Task exposure: `clamp(base_exposure * scenario_multiplier + adjustment, 0, 1)`.
 - Role exposure: sum of normalized time share multiplied by task exposure.
 - Classification: Automate for exposure ≥0.65 and human judgment <0.4; Protect for judgment ≥0.65; otherwise Augment.
-- Coverage: importance-weighted current/required skill levels, capped at 1 per skill.
-- Fit: `100 * (0.8 * coverage + 0.2 * task_similarity)`; coverage alone if similarity is unavailable.
-- Gap hours: missing skill levels multiplied by the seed's hours per level; weeks are the ceiling of total hours divided by weekly hours.
+- Coverage: importance-weighted current/required levels over rated requirements only, capped at 1 per skill. Unrated is distinct from explicit zero.
+- Fit: `100 * (0.8 * coverage + 0.2 * task_similarity)`; coverage alone if similarity is unavailable. With no rated requirements, provisional fit uses task similarity alone.
+- Gap hours: gaps in rated skill levels multiplied by the seed's hours per level; weeks are the ceiling of total hours divided by weekly hours.
 - Route score: `0.7 * fit + 0.3 * 100 * (1 - target_exposure)`.
 
 Normal ranks Operations Coordinator first for the demo. Fast ranks Finance Systems Analyst first. These are scenario outcomes, not promises of a job or a measured risk forecast.
@@ -73,4 +75,4 @@ Never hand-edit the backend seed or golden fixtures. Update `seed.ts`, mirror an
 
 CORS defaults to the deployed site and localhost; override via explicit comma-separated `PIVOTT_CORS_ORIGINS` when necessary. Same-origin requests in the Vercel deployment do not need additional CORS origins. The public deployment exposes `/api/*`, not FastAPI's `/docs`, `/redoc`, `/openapi.json` or `/` routes. Standalone FastAPI offers the documentation locally.
 
-No authentication, database, server-side profile store or application rate limiter exists. Apply hosting-edge abuse controls before wider public use; CORS is not authentication or rate limiting. Do not log request bodies. Custom signals are browser-local and are sent only for the requested verification, not published as a shared feed. Exposure values and role/SDG mappings remain illustrative; verified references support signals, not the editorial base scores themselves.
+The public scoring API has no authentication, persistence or application rate limiter. Optional account profiles use Supabase Auth and owner-only RLS, separate from this API; see [setup](../../supabase/README.md). Apply hosting-edge abuse controls before wider public use; CORS is not authentication or rate limiting. Do not log request bodies. Custom signals are browser-local and are sent only for the requested verification, not published as a shared feed. Exposure values and role/SDG mappings remain illustrative; verified references support signals, not the editorial base scores themselves.

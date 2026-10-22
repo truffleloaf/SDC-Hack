@@ -7,7 +7,7 @@ import { StepCard } from '@/components/pathway/step-card'
 import { LogoMark } from '@/components/pivott/logo'
 import { MobileActionBar } from '@/components/pivott/mobile-action-bar'
 import { PButton, PLink } from '@/components/pivott/p-button'
-import { CountUp, ProgressRing } from '@/components/pivott/progress-ring'
+import { ProgressRing } from '@/components/pivott/progress-ring'
 import { PageIntro } from '@/components/pivott/route-stepper'
 import { NeedsProfile, PageSkeleton } from '@/components/pivott/states'
 import { ValueSlider } from '@/components/pivott/value-slider'
@@ -34,8 +34,9 @@ export default function PathwayPage() {
     freeOnly: state.freeOnly,
   })
   const doneIds = new Set(state.completedSteps.filter((id) => steps.some((s) => s.id === id)))
-  const progress = steps.length ? doneIds.size / steps.length : 1
-  const complete = steps.length > 0 && doneIds.size === steps.length
+  const progress = steps.length ? doneIds.size / steps.length : 0
+  const unknown = role.requirements.filter((requirement) => state.skills[requirement.skillId] === undefined)
+  const complete = unknown.length === 0 && steps.length > 0 && doneIds.size === steps.length
 
   const fill = steps.length ? doneIds.size / steps.length : 0
 
@@ -56,6 +57,7 @@ export default function PathwayPage() {
         Hi {greetingName(state)} — steps are ordered by gap priority, so the skills that matter most for this role come first.
       </PageIntro>
 
+      {unknown.length > 0 && <div className="mt-5 rounded-lg border border-border bg-card p-4 text-sm"><p>Partial plan: rate {unknown.length} more skills to estimate the remaining learning needs. Unrated skills are not treated as gaps or zero ability.</p><PLink href="/skills" variant="link" className="mt-2">Continue skill ratings</PLink></div>}
       <div className="mt-12 grid gap-10 lg:grid-cols-[1fr_340px]">
         <div className="relative">
           <span aria-hidden className="absolute bottom-10 left-5 top-10 border-l-2 border-dotted border-border-strong sm:left-7" />
@@ -86,16 +88,16 @@ export default function PathwayPage() {
                   >
                     <LogoMark animated className="size-14 shrink-0 text-foreground" />
                     <div className="flex flex-col gap-1">
-                      <p className="font-serif text-2xl">You’ve arrived.</p>
+                      <p className="font-serif text-2xl">Plan steps complete.</p>
                       <p className="text-sm leading-relaxed text-muted-foreground">
-                        Every step toward {role.title} is complete. Your Skill Passport is ready.
+                        You’ve marked every estimated learning step complete. Your Skill Passport is a personal summary, not a qualification.
                       </p>
                     </div>
                   </motion.div>
                 ) : (
                   <motion.div key="todo" className="flex flex-col gap-1 py-5">
                     <p className="font-serif text-xl">{role.title}</p>
-                    <p className="text-sm text-muted-foreground">Destination · {steps.length - doneIds.size} steps to go</p>
+                    <p className="text-sm text-muted-foreground">{unknown.length ? `${steps.length - doneIds.size} estimated steps to go · More skills need rating` : steps.length ? `${steps.length - doneIds.size} steps to go` : 'No learning gaps identified from your ratings'}</p>
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -107,14 +109,14 @@ export default function PathwayPage() {
           <div className="card-surface flex flex-col gap-6 p-6">
             <div className="flex items-center gap-4">
               <ProgressRing value={progress} size={76} stroke={6} label="Pathway progress">
-                <span className="font-mono text-sm">{Math.round(progress * 100)}%</span>
+                <span className="font-mono text-sm">{steps.length ? `${Math.round(progress * 100)}%` : '—'}</span>
               </ProgressRing>
               <div className="flex flex-col">
                 <span className="font-serif text-3xl leading-none">
-                  <CountUp value={weeks} /> <span className="font-sans text-sm text-muted-foreground">weeks</span>
+                  {unknown.length && !steps.length ? 'Not estimated' : <>{unknown.length ? '≥ ' : ''}{weeks} <span className="font-sans text-sm text-muted-foreground">weeks</span></>}
                 </span>
                 <span className="mt-1 font-mono text-xs text-muted-foreground">
-                  {totalHours} h · {doneIds.size}/{steps.length} done
+                  {unknown.length ? 'Rated gaps only · ' : ''}{totalHours} h · {doneIds.size}/{steps.length} done
                 </span>
               </div>
             </div>

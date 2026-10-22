@@ -41,10 +41,11 @@ export function WhySheet({
             <SheetHeader className="border-b border-border p-6">
               <p className="font-sans text-xs font-medium text-primary">Why this score?</p>
               <SheetTitle className="font-serif text-3xl font-normal">{route.title}</SheetTitle>
-              <SheetDescription>Every number below is deterministic and reproducible from the stored data.</SheetDescription>
+              <SheetDescription>These are illustrative, deterministic comparisons. Unrated requirements are excluded from skill coverage and learning gaps.</SheetDescription>
             </SheetHeader>
             <div className="flex flex-col gap-6 p-6">
               <Block title="Skill coverage">
+                <p className="text-sm text-muted-foreground">{route.unknownSkillIds.length} required skills remain unrated. Coverage uses only rated requirements; with no ratings, ordering uses task overlap and exposure only.</p>
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
@@ -59,7 +60,7 @@ export function WhySheet({
                       {role.requirements.map((r) => (
                         <tr key={r.skillId} className="border-t border-border">
                           <th scope="row" className="py-2 text-left font-sans text-sm font-normal">{skillById[r.skillId]?.name}</th>
-                          <td className="py-2 text-right">{levels[r.skillId] ?? 0}</td>
+                          <td className="py-2 text-right">{levels[r.skillId] ?? 'Not rated'}</td>
                           <td className="py-2 text-right">{r.requiredLevel}</td>
                           <td className="py-2 text-right">{r.importance}</td>
                         </tr>
@@ -67,7 +68,7 @@ export function WhySheet({
                     </tbody>
                   </table>
                 </div>
-                <Formula>{`skill_coverage = Σ(importance × min(current / required, 1)) / Σ importance\n             = ${f2(route.coverage)}`}</Formula>
+                {route.unknownSkillIds.length < role.requirements.length && <Formula>{`skill_coverage = Σ rated(importance × min(current / required, 1)) / Σ rated importance\n             = ${f2(route.coverage)}`}</Formula>}
               </Block>
 
               <Block title="Task similarity">
@@ -78,8 +79,11 @@ export function WhySheet({
               </Block>
 
               <Block title="Skill match">
+                {route.unknownSkillIds.length === role.requirements.length && <p className="text-sm text-muted-foreground">No skill match is available yet. The ranking uses task similarity, without assigning zero ability to unknown skills.</p>}
                 <Formula>
-                  {route.similarity === null
+                  {route.unknownSkillIds.length === role.requirements.length
+                    ? `provisional fit = 100 × task_similarity = ${route.fit.toFixed(1)}`
+                    : route.similarity === null
                     ? `fit = 100 × skill_coverage = ${route.fit.toFixed(1)}`
                     : `fit = 100 × (0.8 × ${f2(route.coverage)} + 0.2 × ${f2(route.similarity)})\n    = ${route.fit.toFixed(1)}`}
                 </Formula>
@@ -100,6 +104,7 @@ export function WhySheet({
               </Block>
 
               <Block title="Estimated learning duration">
+                {route.unknownSkillIds.length > 0 && <p className="text-sm text-muted-foreground">This includes rated gaps only. It is not a complete preparation estimate while required skills remain unknown.</p>}
                 <Formula>{`weeks = ceil(Σ gap_hours / hours_per_week)\n      = ceil(${route.totalGapHours} / ${hoursPerWeek}) = ${route.weeks}`}</Formula>
               </Block>
 

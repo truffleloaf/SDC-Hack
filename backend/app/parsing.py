@@ -58,13 +58,13 @@ def _parse_custom_inputs(body: dict) -> tuple[list[dict], list[dict]]:
         if not isinstance(task, dict) or not isinstance(task.get("id"), str) or not re.fullmatch(r"custom-[A-Za-z0-9_-]{1,64}", task["id"]) or task["id"] in task_ids:
             raise ProfileError("Invalid or duplicate custom task id")
         name = _text(task.get("name"), 60)
-        if not name or not isinstance(task.get("skills"), list) or not _finite(task.get("baseExposure")) or not _finite(task.get("humanJudgment")):
+        if not name or not isinstance(task.get("skills"), list) or ("baseExposure" in task and not _finite(task["baseExposure"])) or ("humanJudgment" in task and not _finite(task["humanJudgment"])):
             raise ProfileError("Invalid custom task")
         tasks.append({
             "id": task["id"], "name": name,
             "skills": list(dict.fromkeys(skill for skill in task["skills"] if isinstance(skill, str) and skill in SKILL_BY_ID)),
-            "baseExposure": max(0, min(1, task["baseExposure"])),
-            "humanJudgment": max(0, min(1, task["humanJudgment"])),
+            **({"baseExposure": max(0, min(1, task["baseExposure"]))} if "baseExposure" in task else {}),
+            **({"humanJudgment": max(0, min(1, task["humanJudgment"]))} if "humanJudgment" in task else {}),
         })
         task_ids.add(task["id"])
 

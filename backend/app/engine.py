@@ -104,7 +104,7 @@ def score_tasks(
 ) -> list[dict[str, Any]]:
     multiplier = get_scenario(scenario_id)["multiplier"]
     normalized = normalize_shares(
-        [selection for selection in selections if selection["taskId"] in task_lookup]
+        [selection for selection in selections if selection["taskId"] in task_lookup and "roleId" in task_lookup[selection["taskId"]]]
     )
 
     scored: list[dict[str, Any]] = []
@@ -137,15 +137,24 @@ def score_tasks(
     return scored
 
 
+def assessment_summary(selections, lookup):
+    valid = normalize_shares([item for item in selections if item["taskId"] in lookup])
+    return {
+        "assessmentCoverage": sum(item["share"] for item in valid if "roleId" in lookup[item["taskId"]]),
+        "unassessedTasks": [{"id": item["taskId"], "name": lookup[item["taskId"]]["name"], "share": item["share"]} for item in valid if "roleId" not in lookup[item["taskId"]]],
+    }
+
+
 def skill_coverage(role: dict[str, Any], levels: dict[str, float]) -> float:
     """sum(importance × min(current / required, 1)) / sum(importance)"""
-    total_importance = sum(requirement["importance"] for requirement in role["requirements"])
+    rated = [requirement for requirement in role["requirements"] if requirement["skillId"] in levels]
+    total_importance = sum(requirement["importance"] for requirement in rated)
     if not total_importance:
         return 0.0
     covered = sum(
         requirement["importance"]
         * min(float(levels.get(requirement["skillId"], 0)) / requirement["requiredLevel"], 1.0)
-        for requirement in role["requirements"]
+        for requirement in rated
     )
     return covered / total_importance
 
@@ -174,6 +183,8 @@ def skill_gaps(role: dict[str, Any], levels: dict[str, float]) -> list[dict[str,
     """gap = max(0, required - current); priority = gap × importance × demand/100."""
     gaps: list[dict[str, Any]] = []
     for requirement in role["requirements"]:
+        if requirement["skillId"] not in levels:
+            continue
         current = float(levels.get(requirement["skillId"], 0))
         gap = max(0.0, requirement["requiredLevel"] - current)
         if gap <= 0:
@@ -239,7 +250,8 @@ def compute_routes(
             continue
         coverage = skill_coverage(role, levels)
         similarity = task_similarity(user_task_skills, role["id"])
-        fit = role_fit(coverage, similarity)
+        unknown = [requirement["skillId"] for requirement in role["requirements"] if requirement["skillId"] not in levels]
+        fit = 100 * (similarity or 0) if len(unknown) == len(role["requirements"]) else role_fit(coverage, similarity)
         exposure = target_role_exposure(role["id"], scenario_id, signals)
         gaps = skill_gaps(role, levels)
         total_gap_hours = sum(gap["hours"] for gap in gaps)
@@ -258,6 +270,7 @@ def compute_routes(
                 "totalGapHours": total_gap_hours,
                 "weeks": learning_weeks(total_gap_hours, hours_per_week),
                 "sdgs": role["sdgs"],
+                "unknownSkillIds": unknown,
             }
         )
     routes.sort(key=lambda route: (-route["score"], route["title"]))

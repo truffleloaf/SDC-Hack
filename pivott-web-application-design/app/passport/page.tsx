@@ -1,8 +1,7 @@
 'use client'
 
 import { FileDown, ImageDown } from 'lucide-react'
-import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from 'motion/react'
-import { useRef, useState, useSyncExternalStore } from 'react'
+import { useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { PassportCard, type PassportData } from '@/components/passport/passport-card'
 import { deriveSkillGroups } from '@/components/map/skills-panel'
@@ -16,48 +15,32 @@ import { downloadFile } from '@/lib/ics'
 import { NameField } from '@/components/pivott/name-field'
 import { displayName, possessive, useAnalysis, useAppState } from '@/lib/store'
 
-const subscribeHover = (cb: () => void) => {
-  const mq = window.matchMedia('(hover: hover) and (pointer: fine)')
-  mq.addEventListener('change', cb)
-  return () => mq.removeEventListener('change', cb)
-}
-
 export default function PassportPage() {
   const { state, hydrated } = useAppState()
-  const { routes, scored } = useAnalysis(state)
+  const { routes, allRoutes, scored } = useAnalysis(state)
   const cardRef = useRef<HTMLDivElement>(null)
   const [busy, setBusy] = useState<'png' | 'pdf' | null>(null)
-  const reduce = useReducedMotion()
-  const canHover = useSyncExternalStore(
-    subscribeHover,
-    () => window.matchMedia('(hover: hover) and (pointer: fine)').matches,
-    () => false,
-  )
-  const tiltEnabled = canHover && !reduce
-
-  const mx = useMotionValue(0)
-  const my = useMotionValue(0)
-  const rotateY = useSpring(useTransform(mx, [-0.5, 0.5], [-3, 3]), { stiffness: 200, damping: 20 })
-  const rotateX = useSpring(useTransform(my, [-0.5, 0.5], [2.5, -2.5]), { stiffness: 200, damping: 20 })
-
   if (!hydrated) return <PageSkeleton />
   if (!state.roleId) return <NeedsProfile step="job" />
   const targetId = state.targetRoleId ?? routes[0]?.roleId
   if (!targetId) return <NeedsProfile step="route" />
 
   const target = roleById[targetId]
-  const route = routes.find((r) => r.roleId === targetId)
+  const route = allRoutes.find((r) => r.roleId === targetId)
   const { steps, weeks } = buildPathway({ targetRoleId: targetId, levels: state.skills, hoursPerWeek: state.hoursPerWeek, freeOnly: state.freeOnly })
   const { stays } = deriveSkillGroups(scored, state.skills, route)
   const date = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
 
+  const unknown = target.requirements.filter((requirement) => state.skills[requirement.skillId] === undefined).length
+  const rated = target.requirements.length - unknown
   const fit = route?.fit ?? 0
   const data: PassportData = {
     name: displayName(state),
-    currentRole: roleById[state.roleId]?.title ?? '',
+    currentRole: state.jobTitle || roleById[state.roleId]?.title || '',
     destination: target.title,
     destinationFamily: target.family,
     match: fit,
+    ratedSkillCount: rated, unknownSkillCount: unknown,
     weeks,
     skills: stays.length ? stays : Object.entries(state.skills).filter(([, v]) => v >= 3).map(([k]) => k),
     steps,
@@ -66,7 +49,7 @@ export default function PassportPage() {
     code: `PV-${target.id.slice(0, 3).toUpperCase()}-${String(Math.round(fit * 10)).padStart(4, '0')}`,
   }
 
-  const summary = `${possessive(data.name, 'My')} Pivott Skill Passport — ${data.currentRole} → ${data.destination}. ${Math.round(fit)}% skill match, est. ${weeks} weeks at ${state.hoursPerWeek} h/week. Route: ${steps.map((s) => s.title).join(' → ') || 'ready now'}. (Illustrative demo data)`
+  const summary = `${possessive(data.name, 'My')} Pivott Skill Passport — ${data.currentRole} → ${data.destination}. ${rated ? `${Math.round(fit)}% fit based on rated skills` : 'Skills not rated'}${unknown ? ' (incomplete comparison)' : ''}, ${rated ? `${unknown ? 'partial ' : ''}est. ${weeks} weeks at ${state.hoursPerWeek} h/week` : 'learning time not estimated'}. Route: ${steps.map((s) => s.title).join(' → ') || (unknown ? 'rate remaining skills to estimate learning needs' : 'no gaps identified')}. (Illustrative demo data)`
 
   async function renderPng() {
     const { toPng } = await import('html-to-image')
@@ -123,21 +106,9 @@ export default function PassportPage() {
       </div>
 
       <div className="mt-10" style={{ perspective: 1400 }}>
-        <motion.div
-          style={tiltEnabled ? { rotateX, rotateY, transformStyle: 'preserve-3d' } : undefined}
-          onMouseMove={(e) => {
-            if (!tiltEnabled) return
-            const r = e.currentTarget.getBoundingClientRect()
-            mx.set((e.clientX - r.left) / r.width - 0.5)
-            my.set((e.clientY - r.top) / r.height - 0.5)
-          }}
-          onMouseLeave={() => {
-            mx.set(0)
-            my.set(0)
-          }}
-        >
+        <div>
           <PassportCard ref={cardRef} data={data} />
-        </motion.div>
+        </div>
       </div>
 
       <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
