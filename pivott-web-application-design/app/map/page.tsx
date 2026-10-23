@@ -40,6 +40,11 @@ export default function MapPage() {
     return () => clearTimeout(t)
   }, [changeKey])
 
+  function chooseMultiplier(value: number) {
+    if (value === 1 || value === 1.25) { setPreview(undefined); const scenario = value === 1 ? 'normal' : 'fast'; if (state.scenario !== scenario) setState({ scenario }) }
+    else setPreview(value)
+  }
+
   if (!hydrated) return <PageSkeleton />
   if (!state.roleId || state.selections.length === 0) return <NeedsProfile step="job" />
 
@@ -104,11 +109,7 @@ export default function MapPage() {
       <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_300px]">
         <section aria-label="Task visualisation" className="card-surface flex min-w-0 flex-col gap-5 p-4 sm:p-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="flex w-full flex-col gap-3 sm:max-w-sm"><ScenarioSwitch state={state} onPreset={() => setPreview(undefined)} /><AdoptionPreview value={preview ?? getScenario(state.scenario).multiplier} onChange={(value) => {
-              const next = snapPreview(value)
-              if (next === 1 || next === 1.25) { setPreview(undefined); const scenario = next === 1 ? 'normal' : 'fast'; if (state.scenario !== scenario) setState({ scenario }) }
-              else setPreview(next)
-            }} /></div>
+            <div className="flex w-full flex-col gap-3 sm:max-w-sm"><ScenarioSwitch state={state} onPreset={() => setPreview(undefined)} /><AdoptionPreview value={preview ?? getScenario(state.scenario).multiplier} onChange={(value) => chooseMultiplier(value)} onCommit={(value) => chooseMultiplier(snapPreview(value))} /></div>
             <div className="flex items-center gap-2">
               <PButton variant="secondary" size="sm" className="lg:hidden" onClick={() => setSheetOpen(true)}>
                 <Layers aria-hidden />

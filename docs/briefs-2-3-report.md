@@ -171,3 +171,9 @@ The existing dotted state path and checked skill nodes already show progress. Ke
 ## C6: weekly time allocation
 
 Added editable work hours (default 40, separate from study hours), class-hour totals and a segmented bar. It multiplies the existing time shares by work hours; unassessed tasks retain a separate hatched share. The caption explicitly says these are not predicted saved hours. The preference persists/syncs with a validated profile and old profiles default to 40. No scoring formula changes. Files: WorkHours, Map, store/account boundary; also placed the C4 ghost ring above the filled core so it remains visible after increases. Full Part C checks follow.
+
+## Part C verification
+
+Frontend **96 passed**, backend **68 passed**, TypeScript, production build, copy lint and seed/golden freshness passed. The full 48-page matrix and four List views passed. Interactive checks passed at 375/1280px in light/dark: keyboard can leave presets and snaps on completion; temporary previews restrict API verification; skill bars disclose levels/unknowns and actual gap hours; pointer/keyboard divider changes preserve totals and unrelated tasks; signals show the old core and +12-point fixture change; weekly totals include unassessed time.
+
+Corrected the keyboard snap timing during review. Added missing shared tooltip role/description semantics, verified the connection and Axe on open tooltips. Made required/unknown bars visible against both themes. The last synthetic fixture setup was rerun after avoiding a pending-write race; all four variants pass. Part C complete; proceeding to D.

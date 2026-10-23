@@ -1,6 +1,7 @@
 "use client"
 
 import { Tooltip as TooltipPrimitive } from "@base-ui/react/tooltip"
+import { createContext, useContext, useId, useState } from "react"
 import { cn } from "@/lib/utils"
 
 function TooltipProvider({
@@ -16,12 +17,17 @@ function TooltipProvider({
   )
 }
 
-function Tooltip({ ...props }: TooltipPrimitive.Root.Props) {
-  return <TooltipPrimitive.Root data-slot="tooltip" {...props} />
+const TooltipContext = createContext<{ id: string; open: boolean } | null>(null)
+function Tooltip({ onOpenChange, ...props }: TooltipPrimitive.Root.Props) {
+  const id = useId()
+  const [open, setOpen] = useState(props.defaultOpen ?? false)
+  return <TooltipContext.Provider value={{ id, open: props.open ?? open }}><TooltipPrimitive.Root data-slot="tooltip" {...props} onOpenChange={(value, details) => { setOpen(value); onOpenChange?.(value, details) }} /></TooltipContext.Provider>
 }
 
 function TooltipTrigger({ ...props }: TooltipPrimitive.Trigger.Props) {
-  return <TooltipPrimitive.Trigger data-slot="tooltip-trigger" {...props} />
+  const tooltip = useContext(TooltipContext)
+  const describedBy = [props['aria-describedby'], tooltip?.open ? tooltip.id : undefined].filter(Boolean).join(' ') || undefined
+  return <TooltipPrimitive.Trigger data-slot="tooltip-trigger" {...props} aria-describedby={describedBy} />
 }
 
 function TooltipContent({
@@ -37,6 +43,7 @@ function TooltipContent({
     TooltipPrimitive.Positioner.Props,
     "align" | "alignOffset" | "side" | "sideOffset"
   >) {
+  const tooltip = useContext(TooltipContext)
   return (
     <TooltipPrimitive.Portal>
       <TooltipPrimitive.Positioner
@@ -48,6 +55,8 @@ function TooltipContent({
       >
         <TooltipPrimitive.Popup
           data-slot="tooltip-content"
+          role="tooltip"
+          id={tooltip?.id}
           className={cn(
             "z-50 inline-flex w-fit max-w-xs origin-(--transform-origin) items-center gap-1.5 rounded-md bg-foreground px-3 py-1.5 text-xs text-background has-data-[slot=kbd]:pr-1.5 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 **:data-[slot=kbd]:relative **:data-[slot=kbd]:isolate **:data-[slot=kbd]:z-50 **:data-[slot=kbd]:rounded-sm data-[state=delayed-open]:animate-in data-[state=delayed-open]:fade-in-0 data-[state=delayed-open]:zoom-in-95 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
             className
