@@ -15,7 +15,7 @@ import { roleById } from '@/lib/data/seed'
 interface AccountContext {
   user: User | null; configured: boolean; status: string; saved: SavedProfile | null; needsChoice: boolean; syncEnabled: boolean;
   save: () => Promise<void>; load: () => void; refresh: () => Promise<void>; signOut: (local?: boolean) => Promise<void>; deleteAccount: () => Promise<boolean>;
-  setSyncEnabled: (value: boolean) => void; replaceDevice: (profile: AppState) => boolean; undo: () => Promise<void>;
+  setSyncEnabled: (value: boolean) => void; replaceDevice: (profile: AppState, message?: string) => boolean; undo: () => Promise<void>;
 }
 const Context = createContext<AccountContext | null>(null)
 export function useAccount() { const value = useContext(Context); if (!value) throw new Error('AccountProvider is missing'); return value }
@@ -61,8 +61,8 @@ export function AccountProvider({ children }: { children: ReactNode }) {
   function announce(message: string, value?: ProfileBackup) {
     toast.success(message, value ? { duration: 30000, action: { label: 'Undo', onClick: () => { if (readBackup(localStorage, activeUser.current)?.id === value.id) void undoRef.current(); else toast('This backup has expired or been replaced.') } } } : undefined)
   }
-  function replaceDevice(profile: AppState) {
-    try { const previous = backup({ side: 'device', profile: getState() }); replaceState(profile); announce('Loaded your saved plan.', previous); return true }
+  function replaceDevice(profile: AppState, message = 'Loaded your saved plan.') {
+    try { const previous = backup({ side: 'device', profile: getState() }); replaceState(profile); announce(message, previous); return true }
     catch { setStatus('Couldn’t create a device backup. Free some browser storage and retry.'); return false }
   }
   function showCompare() { setReady(false); readyRef.current = false; setNeedsChoice(true); setCompareOpen(true); setStatus('Choose a version to sync') }

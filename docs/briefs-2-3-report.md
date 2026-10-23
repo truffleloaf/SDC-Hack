@@ -99,3 +99,11 @@ Confirmed both time-share and study-hour fields committed numbers on every keyst
 ## A3: touch selection
 
 Confirmed the hero used mouse-enter state as the click toggle input. Split mouse-pointer hover from persistent tap/click pinning; keyboard focus remains a temporary preview and Enter/Space toggles the pin. Escape clears both. File: LivingTaskMap. Chromium touch emulation is included in Part A verification; a physical phone is unavailable here.
+
+## A4: returning visitors stay on the landing page
+
+Confirmed the effect redirected personal profiles to Workspace. Replaced it with a dismissible continue/start-fresh banner. Fresh start uses the recovery backup and pauses signed-in sync before a new plan can autosave. No forced redirect remains; `/?welcome=1` still opens the landing page. Added the requested presentation note. Files: ResumeWork, provider replacement message, root README. Browser verification at the Part A boundary covers landing retention, dismissal, fresh start and Undo.
+
+## A5–A7: already completed in S3
+
+Configured-only sign-in/workspace promotion, compact phone navigation and local session deletion were implemented and verified in S3/S5. No duplicate implementation commit is needed.

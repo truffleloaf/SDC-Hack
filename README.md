@@ -111,3 +111,5 @@ Do not hand-edit the JSON. Formula changes must be mirrored in both engines, fol
 - The passport is a personal planning summary, not a qualification or verifiable credential.
 
 The live address was confirmed by the project owner; direct live-site requests are blocked from the development environment. Automated checks here validate local builds and the combined services router, not the current production deployment.
+
+Presentation: Present in an incognito window, or open `/?welcome=1`. Returning visitors can stay on the landing page and continue their saved plan.
