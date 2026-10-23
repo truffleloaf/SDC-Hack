@@ -95,3 +95,7 @@ Reproduced the inflation before fixing it (Part U result). Both engines now comp
 ## A2: editable number drafts
 
 Confirmed both time-share and study-hour fields committed numbers on every keystroke and rejected an empty draft. Added shared NumberField: clearing is allowed during editing, blur/Enter clamps and commits, invalid input restores the current value. Applied to TaskPicker and Workspace. Files: NumberField and both consumers. Browser coverage at the Part A boundary will clear, replace and clamp both fields.
+
+## A3: touch selection
+
+Confirmed the hero used mouse-enter state as the click toggle input. Split mouse-pointer hover from persistent tap/click pinning; keyboard focus remains a temporary preview and Enter/Space toggles the pin. Escape clears both. File: LivingTaskMap. Chromium touch emulation is included in Part A verification; a physical phone is unavailable here.

@@ -54,7 +54,9 @@ function curve(a: { x: number; y: number }, b: { x: number; y: number }) {
 }
 
 export function LivingTaskMap() {
-  const [active, setActive] = useState<string | null>(null)
+  const [hovered, setHovered] = useState<string | null>(null)
+  const [pinned, setPinned] = useState<string | null>(null)
+  const active = pinned ?? hovered
   const current = nodes.find((n) => n.id === active) ?? null
   const cls: Classification | null = current ? classify(current.exposure, current.judgment) : null
 
@@ -110,19 +112,19 @@ export function LivingTaskMap() {
                 tabIndex={0}
                 role="button"
                 aria-label={`${n.label}: ${Math.round(n.exposure * 100)}% exposure, ${c}`}
-                aria-pressed={isActive}
-                onClick={() => setActive(isActive ? null : n.id)}
+                aria-pressed={pinned === n.id}
+                onClick={() => setPinned((value) => value === n.id ? null : n.id)}
                 onKeyDown={(event) => {
                   if (event.key === 'Enter' || event.key === ' ') {
                     event.preventDefault()
-                    setActive(isActive ? null : n.id)
+                    setPinned((value) => value === n.id ? null : n.id)
                   }
-                  if (event.key === 'Escape') setActive(null)
+                  if (event.key === 'Escape') { setPinned(null); setHovered(null) }
                 }}
-                onMouseEnter={() => setActive(n.id)}
-                onMouseLeave={() => setActive(null)}
-                onFocus={() => setActive(n.id)}
-                onBlur={() => setActive(null)}
+                onPointerEnter={(event) => event.pointerType === 'mouse' && setHovered(n.id)}
+                onPointerLeave={(event) => event.pointerType === 'mouse' && setHovered(null)}
+                onFocus={() => setHovered(n.id)}
+                onBlur={() => setHovered(null)}
                 className="cursor-pointer outline-none transition-opacity duration-300 [&:focus-visible>circle:first-child]:stroke-ring [&:focus-visible>circle:first-child]:stroke-2"
                 opacity={dim ? 0.55 : 1}
               >
