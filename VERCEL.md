@@ -1,87 +1,83 @@
 # Deploy Pivott as one Vercel project
 
-Import `truffleloaf/SDC-Hack` as a single Vercel project with its Root Directory set to the repository root (leave it blank in the dashboard). The root `vercel.json` declares two services, each built from its own directory:
+Import `truffleloaf/SDC-Hack` as a single Vercel project with its Root Directory
+set to the repository root (leave it blank in the dashboard). The root
+`vercel.json` declares **one** Next.js service:
 
 | Service | Framework | Public paths |
 | --- | --- | --- |
-| `backend` | FastAPI; entrypoint `app.main:app` | `/api` and `/api/*` |
-| `pivott-web-application-design` | Next.js | All other paths, including `/`, application pages, and `/_next/*` |
+| `pivott-web-application-design` | Next.js | All paths, including `/` and `/api/*` |
 
-The `entrypoint` must use Vercel's Python `module:attribute` form
-(`app.main:app`, resolved inside the `backend/` service root), not a file path
-such as `app/main.py`. A file path is valid only for Node.js services; with it,
-every `/api/*` request fails before FastAPI runs and the browser sees Vercel's
-generic `{"error":{"code":"500","message":"A server error has occurred"}}`.
+There is no FastAPI service in this deployment. `vercel.json` only has a
+catch-all rewrite to the Next service, so `/api/*` is handled by the Route
+Handlers in `pivott-web-application-design/app/api/*`.
 
-The API rewrite comes first. It preserves the `/api` prefix, which FastAPI already uses for its routers. The frontend catch-all comes last; directing that catch-all to the backend would hide the website. Frameworks and entrypoint are declared per service, with routing at the project level. The Next.js service explicitly uses pnpm 12.3.4 and a frozen lockfile for installation, rather than relying on Vercel’s lockfile-version heuristic to choose pnpm.
+## Live snapshot, not a second backend
 
-## Calls and bindings
+The root layout and every Route Handler call `getCatalog()`. When
+`PIVOTT_API_BASE` is unset (the Vercel case), it applies the committed snapshot:
 
-There are no existing cross-service calls, hardcoded service hostnames, or frontend API base URLs to replace. Pivott's browser workflow computes scores and pathways locally using `lib/engine.ts` and browser state. The opt-in Verify with API control sends task/skill inputs to same-origin `/api/analysis`; under services routing this reaches FastAPI. Next.js also has standalone API handlers; in the combined deployment, public `/api/*` traffic goes to FastAPI instead. Plain `pnpm dev` continues to provide the standalone Next.js API.
-
-No binding is necessary for this topology. Supabase public build variables are optional for account saving and are unrelated to service bindings. Do not add a dummy binding, expose an internal URL with a `NEXT_PUBLIC_*` variable, or set a binding variable manually. If server-side Next.js functions later call an internal backend, declare a service binding on the Next.js service and read its injected URL at request time. Browser-side calls should use same-origin `/api/*` paths.
-
-FastAPI's `/docs`, `/redoc`, `/openapi.json`, and `/` are not publicly routed in this proposal. These paths currently go to Next.js. Exposing API documentation would require explicit rewrites to `backend` before the frontend catch-all.
-
-## Backend storage on Vercel
-
-Vercel Functions get a read-only checkout; only `/tmp` is writable. When the
-backend service has no `PIVOTT_DB` or `DATABASE_URL`, the API now falls back to
-an ephemeral SQLite file under `/tmp` and reseeds the demo catalogue whenever a
-new instance starts. Catalogue, analysis and pathway endpoints work in that
-mode, but saved profiles and user-created signals do not survive an instance.
-
-For persistent data — and for `/api/me/profile`, which stores rows per Supabase
-user — set `DATABASE_URL` on the backend service to the Supabase Session pooler
-string, and run `backend/supabase/schema.sql` plus every file in
-`backend/supabase/migrations/` before deploying. See
-[Supabase setup](backend/supabase/README.md) and
-[backend auth docs](backend/docs/auth.md).
-
-## Local multi-service development
-
-Use Node.js 24, Python 3.12, and the frontend's pinned pnpm version, 12.3.4. Ensure `pnpm --version` reports `12.3.4` in the shell running Vercel; the local runner resolves pnpm from PATH. Install frontend dependencies with `pnpm install --frozen-lockfile` in `pivott-web-application-design`; install `backend/requirements.txt` in a Python virtual environment. Guest mode needs no database or application secrets. For optional account saving, set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` on the Next.js service before building, apply the included Supabase migration, and configure email callback URLs. See [Supabase setup](supabase/README.md). Never expose a service-role key.
-
-From the repository root, run:
-
-```bash
-npx vercel@65.1.0 dev --local
+```text
+pivott-web-application-design/lib/data/live-seed.json
+pivott-web-application-design/lib/data/live-meta.json
 ```
 
-`--local` runs without authentication or creating a Vercel project. To pull project environment variables, omit `--local` and link to your existing project. Use Vercel's secure login flow or environment settings; do not put tokens in source files. `vercel dev` runs both services; starting only `pnpm dev` does not test the root service routing. Stop any existing server using the selected local port first, or pass `--listen 3002`.
+This is the code-only deployment path: no Vercel environment variables, no
+external API host, no database. The snapshot currently has 10 O*NET roles,
+60 tasks, 17 skills, 4 SDGs, 2 scenarios, 0 signals, 0 resources, and 85
+Arbeitnow postings in the metadata.
 
-Run the automated routing check against the printed local origin:
+To refresh it, start the root FastAPI in live mode and run:
 
 ```bash
-python scripts/smoke_vercel.py http://localhost:3000
+node scripts/export-live-seed.mjs http://127.0.0.1:8001
 ```
 
-Use the printed `localhost` hostname for browser checks; Next.js rejects dev-only requests from unconfigured host aliases. The check exercises page/asset routing, FastAPI analysis in both scenarios, query parameters, pathway creation/retrieval, and the FastAPI 404 response. It uses only Python’s standard library. You can also check manually:
+Commit both JSON files and push; Vercel redeploys automatically.
 
-- `/` renders Pivott's landing page.
-- `/_next/*` assets and the retained local font assets load from Next.js.
-- `/api/health` returns `status: "ok"`, seed version `2026.10.1`, and counts including 6 roles and 31 tasks.
-- `/api/analysis` and `/api/pathways` accept the documented payloads in `backend/README.md`.
-- Open the demo and complete map → routes → pathway → passport; verify signals, scenario controls and export tools remain available.
+## Account saving
 
-## Troubleshooting: every `/api/*` returns 500
+`next.config.mjs` contains public fallbacks for
+`NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. The
+publishable/anon key is designed to be public and is protected by RLS; never
+put a service-role key in this repository. The values may be overridden with
+real environment variables if they are ever rotated.
 
-A generic Vercel 500 — `{"error":{"code":"500","message":"A server error has occurred"}}` —
-means the FastAPI service failed before the application could answer, so CORS
-and the `{"error": ...}` envelope never run. Check these in order:
+Magic-link sign-in still needs the Vercel domain in Supabase
+**Authentication → URL Configuration** (Site URL and redirect allow-list);
+that setting is in the Supabase dashboard, not in this repository.
 
-1. `services.backend.entrypoint` is `app.main:app` (`module:attribute`), not a
-   file path like `app/main.py`; a file path is only valid for Node.js.
-2. `services.backend.root` is `backend` and `backend/app/__init__.py` exists,
-   so `app.main` is importable from the service root.
-3. The backend service logs show the startup exception (Vercel → Project →
-   Logs → Functions). Reproduce with `pytest` and `uvicorn app.main:app`.
-4. If `DATABASE_URL` is set, the database is reachable and every migration in
-   `backend/supabase/migrations/` has run. If it is not set, the API uses the
-   ephemeral `/tmp` SQLite database; no further configuration is required.
+## Local development
 
-Independent checks remain `pnpm test` and `pnpm build` in the frontend, `pnpm exec tsc --noEmit --incremental false` for explicit type checking, and `python -m pytest -q` in `backend`.
+Use Node.js 24 and pnpm 12.3.4. From `pivott-web-application-design`:
 
-## Review before deploying
+```bash
+pnpm install --frozen-lockfile
+pnpm dev
+```
 
-Confirm both service names, public path assignments, whether API documentation should be public, and the absence of bindings (no current server-to-server calls). This configuration does not create a Vercel project, link an account, or publish a deployment by itself.
+Standalone `pnpm dev` uses the Next API handlers. To use the root live FastAPI
+instead of the committed snapshot, set `PIVOTT_API_BASE` in `.env.local` (for
+example `http://127.0.0.1:8001`). If the external API is down, `getCatalog()`
+falls back to the committed snapshot.
+
+`backend/` is the legacy stateless demo FastAPI used by older checks; it is not
+part of the Vercel service in `vercel.json`.
+
+## Checks
+
+```bash
+cd pivott-web-application-design
+pnpm test
+pnpm exec tsc --noEmit --incremental false
+pnpm build
+```
+
+Manual checks after deploy:
+
+- `/` and `/start` show the “Live catalogue” banner and O*NET occupations.
+- `/api/health` reports 10 roles / 60 tasks / 17 skills / 0 signals.
+- `/api/seed` has `demoPersona: null`.
+- `/api/roles/bookkeeping-clerk/tasks` returns 200.
+- `/api/analysis` works for a live role.
+- `/signin` shows “Send sign-in link” when the Supabase defaults are active.

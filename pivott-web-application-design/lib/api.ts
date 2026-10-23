@@ -1,4 +1,4 @@
-import { roleById, signals as seedSignals, skills, taskById, type Signal } from './data/seed'
+import { roleById, signals as seedSignals, skillById, taskById, type Signal } from './data/seed'
 import { parseCustomInputs } from './custom-inputs'
 import type { CustomTask, ScenarioId } from './engine'
 
@@ -19,8 +19,6 @@ function finiteNumber(value: unknown) {
   return Number.isFinite(number) ? number : 0
 }
 
-const skillIds = new Set(skills.map((s) => s.id))
-
 export function parseProfile(body: unknown): { ok: true; value: ProfileInput } | { ok: false; error: string } {
   if (!body || typeof body !== 'object' || Array.isArray(body)) return { ok: false, error: 'Body must be a JSON object' }
   const b = body as Record<string, unknown>
@@ -40,7 +38,7 @@ export function parseProfile(body: unknown): { ok: true; value: ProfileInput } |
   const levels: Record<string, number> = {}
   if (b.skills && typeof b.skills === 'object') {
     for (const [k, v] of Object.entries(b.skills as Record<string, unknown>)) {
-      if (skillIds.has(k)) levels[k] = Math.max(0, Math.min(4, Math.round(finiteNumber(v))))
+      if (Object.hasOwn(skillById, k)) levels[k] = Math.max(0, Math.min(4, Math.round(finiteNumber(v))))
     }
   }
 

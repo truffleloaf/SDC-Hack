@@ -1,0 +1,120 @@
+{
+    "dataset":  "live",
+    "imported":  true,
+    "seedVersion":  "onet-31.0+arbeitnow-2026-10-23",
+    "dataAsOf":  "2026-10-23",
+    "counts":  {
+                   "roles":  10,
+                   "tasks":  60,
+                   "skills":  17,
+                   "signals":  0,
+                   "postings":  85
+               },
+    "catalog":  {
+                    "docsUrl":  "https://www.onetcenter.org/dictionary/31.0/text/",
+                    "license":  "CC BY 4.0",
+                    "licenseUrl":  "https://www.onetcenter.org/license_db.html",
+                    "name":  "O*NET 31.0 Database",
+                    "occupations":  [
+                                        {
+                                            "code":  "43-3031.00",
+                                            "slug":  "bookkeeping-clerk",
+                                            "title":  "Bookkeeping, Accounting, and Auditing Clerks"
+                                        },
+                                        {
+                                            "code":  "43-6011.00",
+                                            "slug":  "executive-assistant",
+                                            "title":  "Executive Secretaries and Executive Administrative Assistants"
+                                        },
+                                        {
+                                            "code":  "43-4051.00",
+                                            "slug":  "customer-service-rep",
+                                            "title":  "Customer Service Representatives"
+                                        },
+                                        {
+                                            "code":  "13-2011.00",
+                                            "slug":  "accountant",
+                                            "title":  "Accountants and Auditors"
+                                        },
+                                        {
+                                            "code":  "13-2031.00",
+                                            "slug":  "budget-analyst",
+                                            "title":  "Budget Analysts"
+                                        },
+                                        {
+                                            "code":  "13-1161.00",
+                                            "slug":  "market-research-analyst",
+                                            "title":  "Market Research Analysts and Marketing Specialists"
+                                        },
+                                        {
+                                            "code":  "15-2051.01",
+                                            "slug":  "bi-analyst",
+                                            "title":  "Business Intelligence Analysts"
+                                        },
+                                        {
+                                            "code":  "15-2051.00",
+                                            "slug":  "data-scientist",
+                                            "title":  "Data Scientists"
+                                        },
+                                        {
+                                            "code":  "13-1082.00",
+                                            "slug":  "project-manager",
+                                            "title":  "Project Management Specialists"
+                                        },
+                                        {
+                                            "code":  "11-1021.00",
+                                            "slug":  "operations-manager",
+                                            "title":  "General and Operations Managers"
+                                        }
+                                    ],
+                    "publisher":  "U.S. Department of Labor, Employment and Training Administration",
+                    "release":  "2026-08",
+                    "skipped":  [
+
+                                ],
+                    "url":  "https://www.onetcenter.org/database.html",
+                    "version":  "31.0"
+                },
+    "demand":  {
+                   "counts":  {
+                                  "accountant":  9,
+                                  "bi-analyst":  35,
+                                  "bookkeeping-clerk":  6,
+                                  "budget-analyst":  8,
+                                  "customer-service-rep":  35,
+                                  "data-scientist":  57,
+                                  "executive-assistant":  2,
+                                  "market-research-analyst":  10,
+                                  "operations-manager":  15,
+                                  "project-manager":  11
+                              },
+                   "demand":  {
+                                  "accountant":  16,
+                                  "bi-analyst":  61,
+                                  "bookkeeping-clerk":  11,
+                                  "budget-analyst":  14,
+                                  "customer-service-rep":  61,
+                                  "data-scientist":  100,
+                                  "executive-assistant":  4,
+                                  "market-research-analyst":  18,
+                                  "operations-manager":  26,
+                                  "project-manager":  19
+                              },
+                   "fetchedAt":  "2026-10-22T16:24:19+00:00",
+                   "matched":  188,
+                   "method":  "longest reported O*NET job title or alias in the posting title/tags",
+                   "name":  "Arbeitnow job board",
+                   "pages":  5,
+                   "postings":  1481,
+                   "status":  "live",
+                   "unmatched":  1293,
+                   "url":  "https://www.arbeitnow.com/api/job-board-api"
+               },
+    "model":  {
+                  "defaultShare":  "O*NET task importance, normalised to 100 per role",
+                  "demand":  "share of matched live postings, 0-100 relative to the top role",
+                  "exposure":  "pivott-onet-cues-v1",
+                  "roleRequirements":  "O*NET essential/transferable skill importance and level; level/7 scaled to 1-4, importance rescaled from O*NET\u0027s compressed 1-5 range to 1-5",
+                  "taskSkills":  "O*NET crosswalk task -\u003e detailed work activity -\u003e generalized work activity -\u003e essential skill (top 3)"
+              }
+}

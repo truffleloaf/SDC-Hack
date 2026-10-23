@@ -4,10 +4,16 @@ import type { Metadata, Viewport } from 'next'
 import { ThemeProvider } from 'next-themes'
 import { Toaster } from 'sonner'
 import { SiteHeader } from '@/components/pivott/site-header'
+import { CatalogBoot } from '@/components/pivott/catalog-boot'
 import { DemoBanner } from '@/components/pivott/demo-banner'
 import { RouteStepper } from '@/components/pivott/route-stepper'
 import { TooltipProvider } from '@/components/ui/tooltip'
+import { getCatalog } from '@/lib/catalog'
 import './globals.css'
+
+// The catalogue is fetched per request from the FastAPI backend, so the root
+// layout must not be baked into a static page at build time.
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Pivott — Map the tasks. Route the skills.',
@@ -24,7 +30,10 @@ export const viewport: Viewport = {
   ],
 }
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  // External live API when configured; otherwise the committed live snapshot.
+  const catalog = await getCatalog()
+
   return (
     <html
       lang="en"
@@ -32,26 +41,28 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       className="bg-background"
     >
       <body className="min-h-dvh font-sans antialiased">
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem storageKey="pivott:theme">
-          <AccountProvider><TooltipProvider delay={150}>
-            <a
-              href="#main"
-              className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-card focus:px-3 focus:py-2"
-            >
-              Skip to content
-            </a>
-            <SiteHeader />
-            <DemoBanner />
-            <RouteStepper />
-            <main id="main">{children}</main>
-            <Toaster
-              position="bottom-center"
-              toastOptions={{
-                className: '!rounded-2xl !border-border !bg-card !text-foreground !shadow-lift !font-sans',
-              }}
-            />
-          </TooltipProvider></AccountProvider>
-        </ThemeProvider>
+        <CatalogBoot payload={catalog}>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem storageKey="pivott:theme">
+            <AccountProvider><TooltipProvider delay={150}>
+              <a
+                href="#main"
+                className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-card focus:px-3 focus:py-2"
+              >
+                Skip to content
+              </a>
+              <SiteHeader />
+              <DemoBanner />
+              <RouteStepper />
+              <main id="main">{children}</main>
+              <Toaster
+                position="bottom-center"
+                toastOptions={{
+                  className: '!rounded-2xl !border-border !bg-card !text-foreground !shadow-lift !font-sans',
+                }}
+              />
+            </TooltipProvider></AccountProvider>
+          </ThemeProvider>
+        </CatalogBoot>
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>

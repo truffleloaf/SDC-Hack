@@ -2,7 +2,7 @@
 
 import { useMemo, useSyncExternalStore } from 'react'
 import { DEMO_HOURS_PER_WEEK, DEMO_SCENARIO } from './demo'
-import { demoPersona, skills as catalogueSkills, signals as seedSignals, tasksForRole, taskById, type Signal } from './data/seed'
+import { demoPersona, hasDemoPersona, roleById, skills as catalogueSkills, signals as seedSignals, tasksForRole, taskById, type Signal } from './data/seed'
 import {
   computeRoutes,
   roleExposure,
@@ -62,6 +62,8 @@ export const emptyState: AppState = {
 }
 
 export function demoState(): AppState {
+  // The live catalogue has no demo persona; keep the app on the personal flow.
+  if (!hasDemoPersona) return { ...emptyState }
   return {
     ...emptyState,
     mode: 'demo',
@@ -92,11 +94,19 @@ function load() {
 
 export function parseStored(raw: string): AppState {
   const parsed = JSON.parse(raw) as Partial<AppState>
-  const legacyDemo = !parsed.mode && parsed.name === demoPersona.name && parsed.roleId === demoPersona.roleId
+  // A profile saved against the demo seed can point at roles/tasks that do not
+  // exist in the live catalogue; start clean instead of crashing on lookup.
+  if (parsed.roleId && !Object.hasOwn(roleById, parsed.roleId)) return { ...emptyState }
+  const legacyDemo =
+    hasDemoPersona &&
+    !parsed.mode &&
+    parsed.name === demoPersona.name &&
+    parsed.roleId === demoPersona.roleId
+  const demoMode = (parsed.mode === 'demo' || legacyDemo) && hasDemoPersona
   return {
     ...emptyState,
     ...parsed,
-    mode: parsed.mode === 'demo' || legacyDemo ? 'demo' : 'personal',
+    mode: demoMode ? 'demo' : 'personal',
     name: sanitizeName(typeof parsed.name === 'string' ? parsed.name : ''),
     resumeSkillIds: Array.isArray(parsed.resumeSkillIds) ? [...new Set(parsed.resumeSkillIds)].filter((id) => catalogueSkills.some((skill) => skill.id === id)) : [],
   }
@@ -136,6 +146,7 @@ export function getState() {
 /** Loads the demo persona, stashing the personal profile so it can be restored untouched. */
 export function enterDemo() {
   load()
+  if (!hasDemoPersona) return
   if (state.mode !== 'demo') {
     try {
       window.localStorage.setItem(PERSONAL_KEY, JSON.stringify(state))

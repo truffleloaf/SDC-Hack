@@ -25,10 +25,36 @@ pnpm dev        # http://localhost:3000
 
 Guest mode needs no environment variables or database. Optional Supabase email-link sign-in and account saving require [the migration and configuration](../supabase/README.md).
 
+## Live catalogue
+
+The root layout and every Route Handler under `app/api/*` call `getCatalog()` (`lib/catalog.ts`) once per request group, so pages and API routes use the same catalogue.
+
+- **Vercel / no env**: it applies the committed `lib/data/live-seed.json` snapshot (10 roles / 60 tasks / 17 skills). No second service, API base or database is needed.
+- **Local dev**: if `PIVOTT_API_BASE` or `NEXT_PUBLIC_API_BASE` is set (e.g. `http://127.0.0.1:8001`), it fetches the root live FastAPI instead. If that API is down, it falls back to the committed snapshot.
+- The demo seed is only used when the snapshot cannot be applied. The demo keeps Aisyah and the “View an example” flow; the live catalogue has no demo persona, so the landing page shows a live occupation preview and demo actions are hidden.
+- In live mode `GET /api/seed` returns the live payload and `POST /api/seed` returns 403; `/api/live/status` returns the O*NET/Arbeitnow source details.
+- Snapshot source: O*NET 31.0 (CC BY 4.0) plus the Arbeitnow job board (85 matched postings in `live-meta.json`). Scores remain the deterministic Pivott model, not labour-market statistics.
+- Account saving is independent of the catalogue: signed-in users go directly to Supabase `user_profiles`; the Supabase public defaults live in `next.config.mjs`.
+
+Refresh the committed snapshot from the root live FastAPI:
+
+```bash
+# repository root
+$env:PIVOTT_DATASET='live'
+$env:PIVOTT_DB='sqlite:///./pivott-live.db'
+.venv/bin/python -m uvicorn app.main:app --port 8001
+
+# frontend checkout
+node scripts/export-live-seed.mjs http://127.0.0.1:8001
+```
+
+Commit both `lib/data/live-seed.json` and `lib/data/live-meta.json`; Vercel redeploys automatically.
+
+
 ## Seed data and reset
 
-- Seed data lives in `lib/data/seed.ts`: 6 roles, 31 tasks, 15 skills, 20 dated signals, 2 scenarios, 4 SDGs, 25 learning resources (at least one free option for each skill), and the demo persona **Aisyah (Finance Admin)**.
-- `GET /api/seed` returns the seed version and counts. `POST /api/seed` returns the demo persona for a stateless reset; it does not store or clear browser-local custom signals.
+- Seed data lives in `lib/data/seed.ts`: 6 roles, 31 tasks, 15 skills, 20 dated signals, 2 scenarios, 4 SDGs, 25 learning resources (at least one free option for each skill), and the demo persona **Aisyah (Finance Admin)**. In the Vercel deployment, `lib/data/live-seed.json` replaces the same exports at request time with 10 live roles / 60 tasks / 17 skills (O*NET 31.0).
+- `GET /api/seed` returns the active catalogue (live snapshot in Vercel, demo snapshot locally). `POST /api/seed` returns the demo persona for a stateless reset in demo mode and 403 in live mode; it does not store or clear browser-local custom signals.
 - In the browser, **⋯ menu → Delete my data** clears your locally stored profile and progress (`pivott:v1` and `pivott:v1:personal` in localStorage).
 
 ## API
@@ -42,6 +68,8 @@ Guest mode needs no environment variables or database. Optional Supabase email-l
 | GET | `/api/roles/{id}/tasks?scenario=normal\|fast` | Scored tasks for a role |
 | GET | `/api/signals` | Dated signals with sources |
 | GET | `/api/sdgs` | Sustainable Development Goal references |
+| GET | `/api/seed` | Full active catalogue (live snapshot or demo) |
+| GET | `/api/live/status` | O*NET/Arbeitnow source details for the live snapshot |
 | GET | `/api/health` | Health and seed version |
 
 ## Formulas (`lib/engine.ts`)
@@ -72,6 +100,7 @@ pnpm test
 ```
 
 - `lib/engine.test.ts` covers each formula, the classification thresholds, scenario recalculation, and ranking changes between Normal and Fast.
+- `lib/catalog.test.ts` covers applying and resetting a live payload, deduplication, and the unit-test guard that keeps tests on the demo seed.
 - `lib/workflow.test.ts` covers the main workflows: share normalisation while adding, adjusting, and removing tasks; demo persona → map → routes → pathway; free-only resources; hours/week vs. duration; `.ics` export validity; and display-name sanitisation and fallbacks.
 
 ## Demo script (about 2 minutes)

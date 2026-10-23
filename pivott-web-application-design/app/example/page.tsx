@@ -4,10 +4,15 @@ import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import { LogoMark } from '@/components/pivott/logo'
 import { enterDemo } from '@/lib/store'
+import { hasDemoPersona } from '@/lib/data/seed'
 
 export default function ExamplePage() {
   const router = useRouter()
   useEffect(() => {
+    if (!hasDemoPersona) {
+      router.replace('/start')
+      return
+    }
     enterDemo()
     const t = setTimeout(() => router.replace('/map'), 700)
     return () => clearTimeout(t)
