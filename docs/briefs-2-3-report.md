@@ -163,3 +163,7 @@ Added 44px draggable divider targets, pointer capture, left/right keyboard chang
 ## C4: signal before/after
 
 Map now retains a dashed ring at each changed task's previous filled-core size, morphs to the new value and labels the point difference. The SVG's accessible label includes the change. Feedback clears after seven seconds, with the timer reset by actual change content. Reduced motion updates immediately. Imported account/JSON profiles discard this temporary presentation state. Files: task canvas, Map and account boundary. A9 already removed the fake delay. Browser checks follow at the Part C boundary.
+
+## C5: plan progress only
+
+The existing dotted state path and checked skill nodes already show progress. Kept those, explicitly respected reduced motion and removed the animated logo flourish on completion. No arrival burst, passport stamp or extra travel terminology was added, following Brief 3. Files: pathway and step card. Progress/rating browser checks are included in S5 and the final regression run.

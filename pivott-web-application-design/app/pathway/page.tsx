@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { SyncNote } from '@/components/account/sync-note'
 import { ArrowRight, CalendarPlus } from 'lucide-react'
-import { AnimatePresence, motion } from 'motion/react'
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { toast } from 'sonner'
 import { StepCard } from '@/components/pathway/step-card'
 import { LogoMark } from '@/components/pivott/logo'
@@ -21,6 +21,7 @@ import { setState, taskLookup, useAnalysis, useAppState } from '@/lib/store'
 
 export default function PathwayPage() {
   const { state, hydrated } = useAppState()
+  const reduce = useReducedMotion()
   const [ratingOffer, setRatingOffer] = useState<{ skillId: string; from: number; to: number; stepId: string } | null>(null)
   const { routes } = useAnalysis(state)
 
@@ -74,7 +75,7 @@ export default function PathwayPage() {
             className="absolute left-5 top-10 border-l-2 border-dotted border-teal sm:left-7"
             initial={false}
             animate={{ height: `calc(${fill * 100}% - ${fill * 80}px)` }}
-            transition={{ duration: 0.45, ease: [0.2, 0.7, 0.2, 1] }}
+            transition={{ duration: reduce ? 0 : 0.45, ease: [0.2, 0.7, 0.2, 1] }}
           />
           <ol className="flex flex-col gap-5" aria-label="Learning steps">
             {steps.map((s) => (
@@ -90,11 +91,11 @@ export default function PathwayPage() {
                 {complete ? (
                   <motion.div
                     key="done"
-                    initial={{ opacity: 0, y: 8 }}
+                    initial={reduce ? false : { opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="flex items-center gap-5 rounded-xl border border-teal/30 bg-mint p-6"
                   >
-                    <LogoMark animated className="size-14 shrink-0 text-foreground" />
+                    <LogoMark className="size-14 shrink-0 text-foreground" />
                     <div className="flex flex-col gap-1">
                       <p className="font-serif text-2xl">All steps done.</p>
                       <p className="text-sm leading-relaxed text-muted-foreground">

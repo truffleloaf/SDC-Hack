@@ -1,7 +1,7 @@
 'use client'
 
 import { Clock, ExternalLink, FileCheck2 } from 'lucide-react'
-import { motion } from 'motion/react'
+import { motion, useReducedMotion } from 'motion/react'
 import { SkillChip } from '@/components/pivott/badges'
 import type { PathwayStep } from '@/lib/engine'
 import { cn } from '@/lib/utils'
@@ -19,6 +19,7 @@ export function StepCard({
   taskNames: string[]
   roleTitle: string
 }) {
+  const reduce = useReducedMotion()
   const weeks = step.startWeek === step.endWeek ? `Week ${step.startWeek}` : `Weeks ${step.startWeek}–${step.endWeek}`
   return (
     <li className="relative grid grid-cols-[40px_1fr] gap-4 sm:grid-cols-[56px_1fr]">
@@ -39,7 +40,7 @@ export function StepCard({
               d="M5 12.5l4.5 4.5L19 7.5"
               initial={false}
               animate={{ pathLength: done ? 1 : 0, opacity: done ? 1 : 0 }}
-              transition={{ duration: 0.28, ease: 'easeOut' }}
+              transition={{ duration: reduce ? 0 : 0.28, ease: 'easeOut' }}
             />
           </svg>
         </button>
