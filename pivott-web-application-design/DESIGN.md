@@ -34,3 +34,9 @@ Cards and sheets use 12px corners; inputs, buttons, menus and small labels use 8
 The shared UI primitives use Pivott palette tokens, an 8px control radius, soft neutral shadows, a 2px teal focus outline and solid popovers. Dialog and sheet overlays are opaque black tints without blur; bottom sheets use the 12px panel radius. Tooltip arrow geometry is exempt from panel corners. The passport's white export surface remains scoped for readable image/PDF exports. Fake QR graphics were already absent; the remaining reference number was removed because it implied verification.
 
 No decorative gradients, glows, blur or icon-on-top card grids. The dot grid belongs only inside the working map canvas. Hero nodes may enter once as data appears; route cards may move when their rank changes.
+
+## Copy rules
+
+Write what the tool does in short, specific sentences. Avoid parallel “not X, Y” lines, rhetorical questions as headings, slogans and promotional claims. State the exposure disclaimer once on Map and link to Method for detail. Use names only where they help identify the person or their exported summary. Unknown ratings, coverage limits and evidence badges describe actual inputs and remain visible where needed.
+
+Run `node scripts/lint-copy.mjs` from the repository root. The checker excludes styleguide examples, permits a lone empty-value dash and ignores developer comments. Deliberate exceptions need a preceding or same-line `// copy-lint-ok: reason`; do not use exceptions for routine marketing prose. Run its `--self-test` when changing the rules.

@@ -79,3 +79,7 @@ DESIGN now explicitly limits motion to state changes, attention and data, with r
 ## U2: enforced copy checks
 
 Added a TypeScript-AST copy checker for app/components (excluding styleguide), covering prose em dashes, banned phrases and native browser prompts. A preceding/same-line `// copy-lint-ok: reason` permits deliberate exceptions. CI runs both its positive/negative self-test and the repository scan; both passed. Workflow path filters include the checker. Files: script and frontend workflow.
+
+## U3: copy guidance
+
+Added the Copy rules section to DESIGN, including concrete sentences, no rhetorical headings/negative parallels, one linked disclaimer and meaningful use of names. Documents the checker and reasoned exceptions. Documentation-only; required Part U checks follow.
