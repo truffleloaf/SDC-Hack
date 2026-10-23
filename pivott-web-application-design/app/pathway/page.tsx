@@ -15,6 +15,7 @@ import { NeedsProfile, PageSkeleton } from '@/components/pivott/states'
 import { ValueSlider } from '@/components/pivott/value-slider'
 import { Switch } from '@/components/ui/switch'
 import { roleById, skillById } from '@/lib/data/seed'
+import { planProgress } from '@/lib/plan-progress'
 import { buildPathway } from '@/lib/engine'
 import { buildIcs, downloadFile } from '@/lib/ics'
 import { setState, taskLookup, useAnalysis, useAppState } from '@/lib/store'
@@ -38,11 +39,12 @@ export default function PathwayPage() {
     freeOnly: state.freeOnly,
   })
   const doneIds = new Set(state.completedSteps.filter((id) => steps.some((s) => s.id === id)))
-  const progress = steps.length ? doneIds.size / steps.length : 0
+  const summary = planProgress(role, steps, state.completedSteps, state.skills)
+  const progress = summary.progress
   const unknown = role.requirements.filter((requirement) => state.skills[requirement.skillId] === undefined)
-  const complete = unknown.length === 0 && steps.length > 0 && doneIds.size === steps.length
+  const complete = summary.complete
 
-  const fill = steps.length ? doneIds.size / steps.length : 0
+  const fill = progress
 
   function toggle(id: string) {
     const step = steps.find((item) => item.id === id)
@@ -97,9 +99,9 @@ export default function PathwayPage() {
                   >
                     <LogoMark className="size-14 shrink-0 text-foreground" />
                     <div className="flex flex-col gap-1">
-                      <p className="font-serif text-2xl">All steps done.</p>
+                      <p className="font-serif text-2xl">{summary.doneCount ? 'All steps done.' : 'No rated gaps remain.'}</p>
                       <p className="text-sm leading-relaxed text-muted-foreground">
-                        You’ve marked every learning step complete. Review your skill ratings to update the comparison.
+                        {summary.doneCount ? 'You’ve marked every learning step complete. Review your skill ratings to update the comparison.' : 'Your ratings meet the stored requirements. Review them when your experience changes.'}
                       </p>
                     </div>
                   </motion.div>
@@ -118,14 +120,14 @@ export default function PathwayPage() {
           <div className="card-surface flex flex-col gap-6 p-6">
             <div className="flex items-center gap-4">
               <ProgressRing value={progress} size={76} stroke={6} label="Pathway progress">
-                <span className="font-mono text-sm">{steps.length ? `${Math.round(progress * 100)}%` : '—'}</span>
+                <span className="font-mono text-sm">{unknown.length ? `${summary.doneCount} done` : `${Math.round(progress * 100)}%`}</span>
               </ProgressRing>
               <div className="flex flex-col">
                 <span className="font-serif text-3xl leading-none">
                   {unknown.length && !steps.length ? 'Not estimated' : <>{unknown.length ? '≥ ' : ''}{weeks} <span className="font-sans text-sm text-muted-foreground">weeks</span></>}
                 </span>
                 <span className="mt-1 font-mono text-xs text-muted-foreground">
-                  {unknown.length ? 'Rated gaps only · ' : ''}{totalHours} h · {doneIds.size}/{steps.length} done
+                  {unknown.length ? 'Rated gaps only · ' : ''}{totalHours} h · {summary.doneCount}/{summary.totalCount} recorded done
                 </span>
               </div>
             </div>

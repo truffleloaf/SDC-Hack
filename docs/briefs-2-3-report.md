@@ -181,3 +181,7 @@ Corrected the keyboard snap timing during review. Added missing shared tooltip r
 ## D1: skill rating controls
 
 Replaced selects with native radio groups for levels 0–4 and Not sure, all with 44px labels and visible focus. The chosen level includes its independence description. Start from my tasks changes the suggested skill set without assigning ability; other skills remain available (automatically expanded if there are no suggestions). Files: SkillCard and skills page. Browser/keyboard/Axe verification follows at the Part D boundary.
+
+## D2: navigation progress
+
+Added Work completion, Skills rated n/15 and Plan progress/partial state, completion ticks and a shared underline that moves between sections. Reduced motion updates immediately. A shared UI progress helper retains a recorded completed step when accepting its skill increase removes the current gap, preventing progress from dropping back to zero. Unknown requirements prevent a complete-plan claim. Pathway and Workspace use the same recorded counts; tests cover rating increases and unestimated plans. Files: stepper, progress helper/tests, pathway/workspace. No scoring formula changed. Full Part D verification follows.
