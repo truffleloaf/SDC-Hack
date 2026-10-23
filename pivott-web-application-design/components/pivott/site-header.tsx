@@ -23,6 +23,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { clearAllData, displayName, enterDemo, exitDemo, useAppState } from '@/lib/store'
+import { hasDemoPersona } from '@/lib/data/seed'
 import { cn } from '@/lib/utils'
 import { Logo } from './logo'
 import { NameField } from './name-field'
@@ -118,7 +119,7 @@ export function SiteHeader() {
                   <PenLine aria-hidden />
                   Edit display name
                 </DropdownMenuItem>
-                {state.mode === 'demo' ? (
+                {hasDemoPersona && (state.mode === 'demo' ? (
                   <DropdownMenuItem
                     onClick={() => {
                       exitDemo()
@@ -140,17 +141,19 @@ export function SiteHeader() {
                     <UserRound aria-hidden />
                     Load demo profile
                   </DropdownMenuItem>
+                ))}
+                {hasDemoPersona && (
+                  <DropdownMenuItem
+                    onClick={() => {
+                      enterDemo()
+                      toast('Demo profile reset. Your personal work is kept.')
+                      router.push('/map')
+                    }}
+                  >
+                    <RotateCcw aria-hidden />
+                    Reset demo
+                  </DropdownMenuItem>
                 )}
-                <DropdownMenuItem
-                  onClick={() => {
-                    enterDemo()
-                    toast('Demo profile reset. Your personal work is kept.')
-                    router.push('/map')
-                  }}
-                >
-                  <RotateCcw aria-hidden />
-                  Reset demo
-                </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem variant="destructive" onClick={() => setConfirmOpen(true)}>
                   <Trash2 aria-hidden />

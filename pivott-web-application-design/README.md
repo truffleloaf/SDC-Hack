@@ -25,9 +25,31 @@ pnpm dev        # http://localhost:3000
 
 Guest mode needs no environment variables or database. Optional Supabase email-link sign-in and account saving require [the migration and configuration](../supabase/README.md).
 
+## Live catalogue
+
+The root layout and every Route Handler under `app/api/*` call `getCatalog()` (`lib/catalog.ts`) once per request group. It fetches `GET /api/seed` from the FastAPI service and applies the payload in place, so pages and API routes use the same catalogue.
+
+- Default API base: `http://127.0.0.1:8001` (live dataset). Override with `PIVOTT_API_BASE` (server-only) or `NEXT_PUBLIC_API_BASE`; see `.env.local`.
+- If the API is unreachable or returns an invalid payload, the app falls back to the built-in demo seed. The demo keeps Aisyah and the “View an example” flow; the live catalogue has no demo persona, so the landing page shows a live occupation preview and demo actions are hidden.
+- In live mode `GET /api/seed` returns the live payload and `POST /api/seed` returns 403; the route handlers and the FastAPI service agree on `GET /api/health`, roles, tasks, signals, SDGs and analysis results.
+- Account saving is independent of the catalogue: signed-in users still go directly to Supabase `user_profiles`; FastAPI is only the catalogue/analysis service here.
+
+Run the live API before the frontend (or let it fall back to demo):
+
+```bash
+# repository root
+$env:PIVOTT_DATASET='live'
+$env:PIVOTT_DB='sqlite:///./pivott-live.db'
+.venv/bin/python -m uvicorn app.main:app --port 8001
+
+# frontend
+NEXT_PUBLIC_API_BASE=http://127.0.0.1:8001 pnpm dev
+```
+
+
 ## Seed data and reset
 
-- Seed data lives in `lib/data/seed.ts`: 6 roles, 31 tasks, 15 skills, 20 dated signals, 2 scenarios, 4 SDGs, 25 learning resources (at least one free option for each skill), and the demo persona **Aisyah (Finance Admin)**.
+- Seed data lives in `lib/data/seed.ts`: 6 roles, 31 tasks, 15 skills, 20 dated signals, 2 scenarios, 4 SDGs, 25 learning resources (at least one free option for each skill), and the demo persona **Aisyah (Finance Admin)**. With `PIVOTT_API_BASE` set to a live API, the same exports are replaced at request time by 10 live roles / 60 tasks / 17 skills (O*NET 31.0).
 - `GET /api/seed` returns the seed version and counts. `POST /api/seed` returns the demo persona for a stateless reset; it does not store or clear browser-local custom signals.
 - In the browser, **⋯ menu → Delete my data** clears your locally stored profile and progress (`pivott:v1` and `pivott:v1:personal` in localStorage).
 
@@ -72,6 +94,7 @@ pnpm test
 ```
 
 - `lib/engine.test.ts` covers each formula, the classification thresholds, scenario recalculation, and ranking changes between Normal and Fast.
+- `lib/catalog.test.ts` covers applying and resetting a live payload, deduplication, and the unit-test guard that keeps tests on the demo seed.
 - `lib/workflow.test.ts` covers the main workflows: share normalisation while adding, adjusting, and removing tasks; demo persona → map → routes → pathway; free-only resources; hours/week vs. duration; `.ics` export validity; and display-name sanitisation and fallbacks.
 
 ## Demo script (about 2 minutes)

@@ -4,12 +4,36 @@ import { LivingTaskMap } from '@/components/landing/living-task-map'
 import { ResumeWork } from '@/components/pivott/resume-work'
 import { LogoMark } from '@/components/pivott/logo'
 import { PLink } from '@/components/pivott/p-button'
+import { hasDemoPersona, roles, SEED_VERSION } from '@/lib/data/seed'
 
 const steps = [
   { title: 'Pick your job', body: 'Start with the tasks you actually perform.' },
   { title: 'See your tasks', body: 'Understand which tasks AI may automate, augment, or leave to human judgment.' },
   { title: 'Find your route', body: 'Discover adjacent roles and the skills needed to move forward.' },
 ]
+
+function LiveCatalogueCard() {
+  const preview = roles.slice(0, 4)
+  return (
+    <div className="rounded-[28px] border border-border bg-card p-6 shadow-soft sm:p-8">
+      <p className="text-xs font-medium uppercase tracking-[0.18em] text-primary">Live catalogue</p>
+      <h2 className="mt-3 font-serif text-3xl font-normal">Real occupations, mapped by task.</h2>
+      <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+        {SEED_VERSION} · O*NET 31.0 tasks and skills, ranked with live job-board demand. Pick a role to see its task map.
+      </p>
+      <ul className="mt-5 flex flex-col gap-2">
+        {preview.map((role) => (
+          <li key={role.id} className="flex items-center justify-between gap-3 rounded-xl border border-border bg-subtle px-3 py-2 text-sm">
+            <span className="truncate">{role.title}</span>
+            <span className="shrink-0 font-mono text-xs text-muted-foreground">demand {role.demand}</span>
+          </li>
+        ))}
+      </ul>
+      <PLink href="/start" className="mt-6" variant="secondary">Choose a live role</PLink>
+    </div>
+  )
+}
+
 
 export default function LandingPage() {
   return (
@@ -28,14 +52,20 @@ export default function LandingPage() {
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
               <PLink href="/start" size="lg">Map my work<ArrowRight aria-hidden /></PLink>
-              <Link href="/example" className="group inline-flex min-h-11 items-center gap-2.5 rounded-lg text-sm font-medium text-foreground underline-offset-4 hover:underline">
-                <span className="grid size-8 place-items-center rounded-full border border-border-strong bg-card transition-colors group-hover:border-primary"><span className="ml-0.5 size-0 border-y-[4px] border-l-[6px] border-y-transparent border-l-primary" aria-hidden /></span>
-                View an example
-              </Link>
+              {hasDemoPersona ? (
+                <Link href="/example" className="group inline-flex min-h-11 items-center gap-2.5 rounded-lg text-sm font-medium text-foreground underline-offset-4 hover:underline">
+                  <span className="grid size-8 place-items-center rounded-full border border-border-strong bg-card transition-colors group-hover:border-primary"><span className="ml-0.5 size-0 border-y-[4px] border-l-[6px] border-y-transparent border-l-primary" aria-hidden /></span>
+                  View an example
+                </Link>
+              ) : (
+                <Link href="/start" className="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-foreground underline-offset-4 hover:underline">
+                  Browse live occupations <ArrowRight className="size-4" aria-hidden />
+                </Link>
+              )}
             </div>
             <p className="mt-6 flex items-center gap-2 text-xs text-muted-foreground"><Lock className="size-3.5" aria-hidden />No account needed to start.</p>
           </div>
-          <LivingTaskMap />
+          {hasDemoPersona ? <LivingTaskMap /> : <LiveCatalogueCard />}
         </div>
       </section>
 
@@ -57,7 +87,7 @@ export default function LandingPage() {
 
       <footer className="mx-auto flex w-full max-w-[1240px] flex-col justify-between gap-5 border-t border-border px-5 py-8 text-sm text-muted-foreground sm:flex-row sm:px-8">
         <span className="flex items-center gap-2 self-start"><LogoMark className="size-6 text-primary" title="" /><span className="text-base font-semibold text-foreground">Pivott</span></span>
-        <p className="flex max-w-xl items-start gap-3 text-xs leading-relaxed"><Scale className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden />Task exposure describes work AI could potentially handle. It does not predict whether anyone will lose their job. Illustrative demo data; scores are deterministic.</p>
+        <p className="flex max-w-xl items-start gap-3 text-xs leading-relaxed"><Scale className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden />Task exposure describes work AI could potentially handle. It does not predict whether anyone will lose their job. {hasDemoPersona ? 'Illustrative demo data; scores are deterministic.' : 'Live catalogue data; scores are deterministic.'}</p>
       </footer>
     </>
   )
