@@ -1,3 +1,4 @@
+import { MotionProvider } from '@/components/pivott/motion-provider'
 import { AccountProvider } from '@/components/account/account-provider'
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
@@ -44,7 +45,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     >
       <body className="min-h-dvh font-sans antialiased">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem storageKey="pivott:theme">
-          <AccountProvider><TooltipProvider delay={150}>
+          <MotionProvider><AccountProvider><TooltipProvider delay={150}>
             <a
               href="#main"
               className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-card focus:px-3 focus:py-2"
@@ -62,7 +63,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                 className: '!rounded-2xl !border-border !bg-card !text-foreground !shadow-lift !font-sans',
               }}
             />
-          </TooltipProvider></AccountProvider>
+          </TooltipProvider></AccountProvider></MotionProvider>
         </ThemeProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>

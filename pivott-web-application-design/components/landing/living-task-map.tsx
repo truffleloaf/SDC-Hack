@@ -1,6 +1,6 @@
 'use client'
 
-import { AnimatePresence, motion } from 'motion/react'
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { useState } from 'react'
 import { classify, exposureColor, scoreTasks, type Classification } from '@/lib/engine'
 import { signals, taskById, tasksForRole } from '@/lib/data/seed'
@@ -54,6 +54,7 @@ function curve(a: { x: number; y: number }, b: { x: number; y: number }) {
 }
 
 export function LivingTaskMap() {
+  const reduce = useReducedMotion()
   const [hovered, setHovered] = useState<string | null>(null)
   const [pinned, setPinned] = useState<string | null>(null)
   const active = pinned ?? hovered
@@ -70,11 +71,6 @@ export function LivingTaskMap() {
       <svg viewBox={`0 0 ${W} ${H}`} className="absolute inset-0 size-full touch-manipulation overflow-visible" aria-labelledby="ltm-title ltm-desc" role="group">
         <title id="ltm-title">Living task map</title>
         <desc id="ltm-desc">An example map of a Finance Admin’s tasks, sized by time and coloured by AI exposure.</desc>
-        <g aria-hidden="true" fill="none" stroke="var(--border-strong)">
-          <ellipse cx="282" cy="246" rx="212" ry="188" strokeDasharray="3 8" opacity="0.45" />
-          <ellipse cx="282" cy="246" rx="138" ry="122" opacity="0.35" />
-          <path d="M282 34V46 M282 446V458 M44 246H56 M508 246H520" strokeWidth="1.5" />
-        </g>
 
         <g aria-hidden>
           {nodes.map((n) => (
@@ -100,13 +96,15 @@ export function LivingTaskMap() {
           ))}
         </g>
 
-        {nodes.map((n) => {
+        {nodes.map((n, index) => {
           const isActive = active === n.id
           const dim = active !== null && !isActive
           const c = classify(n.exposure, n.judgment)
           return (
-            <g
-              key={n.id}
+            <motion.g key={n.id}
+              initial={reduce ? false : { opacity: 0, x: CENTER.x - n.x, y: CENTER.y - n.y }}
+              whileInView={{ opacity: 1, x: 0, y: 0 }} viewport={{ once: true }}
+              transition={reduce ? { duration: 0 } : { type: 'spring', stiffness: 220, damping: 25, delay: index * 0.06 }}
             >
               <g
                 tabIndex={0}
@@ -155,7 +153,7 @@ export function LivingTaskMap() {
                   </text>
                 )}
               </g>
-            </g>
+            </motion.g>
           )
         })}
 
@@ -171,10 +169,10 @@ export function LivingTaskMap() {
           <motion.div
             key={current.id}
             role="tooltip"
-            initial={{ opacity: 0, y: 4, scale: 0.98 }}
+            initial={reduce ? false : { opacity: 0, y: 4, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 4 }}
-            transition={{ duration: 0.16 }}
+            transition={{ duration: reduce ? 0 : 0.16 }}
             className={cn(
               'surface-panel pointer-events-none absolute z-10 w-48 -translate-x-1/2 rounded-xl p-3',
             )}
