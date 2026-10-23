@@ -1,7 +1,7 @@
 'use client'
 
 import { ArrowRight } from 'lucide-react'
-import { motion } from 'motion/react'
+import { motion, useReducedMotion } from 'motion/react'
 import { PButton } from '@/components/pivott/p-button'
 import { exposureColor, fitLabel, type RouteResult } from '@/lib/engine'
 import { roleById, skillById, tasksForRole } from '@/lib/data/seed'
@@ -31,18 +31,20 @@ export function ExposureCompare({ current, target }: { current: number | null; t
   )
 }
 
-export function RouteCard({ route, rank, currentExposure, selected, onSelect, onWhy, onBuild, hoursPerWeek = 6, levels = {}, saved, onSave }: {
+export function RouteCard({ route, rank, currentExposure, selected, onSelect, onWhy, onBuild, hoursPerWeek = 6, levels = {}, saved, onSave, moved }: {
   route: RouteResult; rank: number; currentExposure: number | null; selected: boolean;
   onSelect: () => void; onWhy: () => void; onBuild: () => void; hoursPerWeek?: number;
-  levels?: Record<string, number>; saved?: boolean; onSave?: () => void;
+  levels?: Record<string, number>; saved?: boolean; onSave?: () => void; moved?: 'up' | 'down';
 }) {
+  const reduce = useReducedMotion()
   const role = roleById[route.roleId]
   const unknown = route.unknownSkillIds.length
   const rated = role.requirements.length - unknown
   const transfers = role.requirements.filter((requirement) => levels[requirement.skillId] >= requirement.requiredLevel).map((requirement) => skillById[requirement.skillId].name)
   return (
-    <article aria-labelledby={`route-${route.roleId}`} className={cn('card-surface flex flex-col gap-5 p-5', selected && 'border-primary')}>
+    <motion.article layout={reduce ? false : "position"} transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 240, damping: 30 }} aria-labelledby={`route-${route.roleId}`} className={cn('card-surface flex flex-col gap-5 p-5', selected && 'border-primary')}>
       <div>
+        {moved && <p role="status" className="mb-2 w-fit rounded-full border border-border px-2 py-1 text-xs text-muted-foreground">{moved === 'up' ? '↑ moved up' : '↓ moved down'}</p>}
         {rank === 0 && <p className="mb-2 text-xs font-medium text-primary">{unknown ? 'First suggested route' : 'Closest match in this dataset'}</p>}
         <h2 id={`route-${route.roleId}`} className="text-xl font-semibold">{route.title}</h2>
         <p className="mt-2 text-sm leading-relaxed text-muted-foreground">Work includes {tasksForRole(route.roleId).slice(0, 2).map((task) => task.name.toLowerCase()).join(' and ')}.</p>
@@ -57,6 +59,6 @@ export function RouteCard({ route, rank, currentExposure, selected, onSelect, on
         <PButton onClick={selected ? onBuild : onSelect}>{selected ? 'Build my plan' : 'Choose this route'}<ArrowRight aria-hidden /></PButton>
         {onSave && <button type="button" onClick={onSave} aria-pressed={saved} className="min-h-10 text-sm text-primary">{saved ? 'Saved · Remove' : 'Save for comparison'}</button>}
       </div>
-    </article>
+    </motion.article>
   )
 }

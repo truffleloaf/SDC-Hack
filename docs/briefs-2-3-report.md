@@ -135,3 +135,11 @@ Hero nodes enter once from the centre with a short stagger and spring; reduced m
 ## B2: exposure count-up
 
 The Map headline animates changes through CountUp; initial values and reduced motion render immediately. A separate polite live region receives only the target value, not animation frames. Interrupted animations continue from the displayed value. Files: Map and progress-ring. Full Part B checks follow.
+
+## B3: route reordering
+
+Restored motion.article layout-position springs using stable role keys. Rank changes show a short moved-up/down status for three seconds, based on the prior full order. Reduced motion updates order immediately. Files: route card and routes page. Scenario reordering and reduced-motion browser checks follow at the Part B boundary.
+
+## B4/B5: overlap and amendments
+
+B4 was completed in T2 (local Plex and tabular figures). B5 is explicitly dropped by Brief 3; no global page fade was added.

@@ -4,7 +4,7 @@ import { SyncNote } from '@/components/account/sync-note'
 import { Columns3, LayoutGrid } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { AnimatePresence, motion } from 'motion/react'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { SdgBadge } from '@/components/pivott/badges'
 import { PButton } from '@/components/pivott/p-button'
@@ -22,9 +22,25 @@ import { cn } from '@/lib/utils'
 export default function RoutesPage() {
   const router = useRouter()
   const { state, hydrated } = useAppState()
-  const { routes, exposure, scored, assessmentCoverage } = useAnalysis(state)
+  const { routes, allRoutes, exposure, scored, assessmentCoverage } = useAnalysis(state)
   const [mode, setMode] = useState<'cards' | 'compare'>('cards')
   const [whyId, setWhyId] = useState<string | null>(null)
+  const previousOrder = useRef<string[]>([])
+  const [moves, setMoves] = useState<Record<string, 'up' | 'down'>>({})
+  const orderKey = allRoutes.map((route) => route.roleId).join('|')
+  useEffect(() => {
+    const order = orderKey ? orderKey.split('|') : []
+    const previous = previousOrder.current
+    previousOrder.current = order
+    if (!previous.length) return
+    setMoves(Object.fromEntries(order.flatMap((id, index) => {
+      const old = previous.indexOf(id)
+      return old >= 0 && old !== index ? [[id, index < old ? 'up' : 'down']] : []
+    })))
+    const timer = setTimeout(() => setMoves({}), 3000)
+    return () => clearTimeout(timer)
+  }, [orderKey])
+
 
   if (!hydrated) return <PageSkeleton />
   if (!state.roleId || state.selections.length === 0) return <NeedsProfile step="job" />
@@ -76,6 +92,7 @@ export default function RoutesPage() {
                 key={r.roleId}
                 route={r}
                 rank={i}
+                moved={moves[r.roleId]}
                 hoursPerWeek={state.hoursPerWeek}
                 levels={state.skills}
                 saved={state.savedRouteIds.includes(r.roleId)}
