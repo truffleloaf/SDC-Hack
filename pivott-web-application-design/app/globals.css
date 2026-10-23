@@ -5,8 +5,8 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-sans: var(--font-plex), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-plex), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-mono: ui-monospace, monospace;
 
   --color-ring: var(--ring);
@@ -60,7 +60,7 @@
   --secondary-foreground: #1f2937;
   --muted: #f1f6f4;
   --muted-foreground: #64748b;
-  --faint: #94a3b8;
+  --faint: #62716d;
   --accent: #e6f7f4;
   --accent-foreground: #0f766e;
   --destructive: #c2410c;
@@ -82,9 +82,9 @@
 
 .dark {
   color-scheme: dark;
-  --background: #0e1a1c;
+  --background: #171c1d;
   --foreground: #e8f1ef;
-  --card: #142427;
+  --card: #202729;
   --card-foreground: #e8f1ef;
   --popover: #142427;
   --popover-foreground: #e8f1ef;
@@ -94,7 +94,7 @@
   --secondary-foreground: #e8f1ef;
   --muted: #11201f;
   --muted-foreground: #8fa5a3;
-  --faint: #6b8381;
+  --faint: #9aacaa;
   --accent: #12302f;
   --accent-foreground: #5eead4;
   --destructive: #fdba74;
@@ -115,7 +115,7 @@
   --foreground: #1f2937;
   --card: #ffffff;
   --muted-foreground: #64748b;
-  --faint: #94a3b8;
+  --faint: #62716d;
   --accent-foreground: #0f766e;
   --primary: #0f766e;
   --border: #e3eae8;
@@ -139,6 +139,7 @@
       background-color 300ms ease,
       color 300ms ease;
   }
+  h1, h2, h3 { overflow-wrap: anywhere; }
   ::selection {
     background: color-mix(in srgb, var(--teal) 25%, transparent);
   }
@@ -232,7 +233,7 @@
 
 /* The landing illustration borrows its colours from Pivott's exposure map. */
 .landing-hero {
-  background: linear-gradient(115deg, var(--background) 42%, var(--mint) 145%);
+  background: var(--background);
   border-bottom: 1px solid var(--border);
 }
 .hero-contour::before,
@@ -250,5 +251,31 @@
   box-shadow: 0 24px 64px -32px color-mix(in srgb, var(--primary) 28%, transparent);
 }
 .task-atlas > div:nth-child(2) {
-  background: radial-gradient(ellipse at center, var(--mint), var(--card) 72%);
+  background: var(--card);
+}
+
+@utility pivott-input {
+  min-height: 44px;
+  width: 100%;
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--foreground);
+  padding: 0.6rem 0.75rem;
+  font-size: 1rem;
+}
+@utility glass-panel {
+  background: var(--card);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-soft);
+}
+@supports (backdrop-filter: blur(12px)) {
+  .glass-panel {
+    background: color-mix(in srgb, var(--card) 94%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .glass-panel { background: var(--card); backdrop-filter: none; -webkit-backdrop-filter: none; }
 }

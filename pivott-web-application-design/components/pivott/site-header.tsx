@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { useAccount } from '@/components/account/account-provider'
 import { usePathname, useRouter } from 'next/navigation'
 import { useTheme } from 'next-themes'
 import { LogOut, Moon, MoreHorizontal, PenLine, RotateCcw, Sun, Trash2, UserRound } from 'lucide-react'
@@ -68,6 +69,7 @@ function ProfileButton({ onClick }: { onClick: () => void }) {
 
 export function SiteHeader() {
   const pathname = usePathname()
+  const account = useAccount()
   const router = useRouter()
   const [confirmOpen, setConfirmOpen] = useState(false)
   const [nameOpen, setNameOpen] = useState(false)
@@ -82,15 +84,17 @@ export function SiteHeader() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 border-b border-border bg-card px-5">
+      <header className="sticky top-0 z-40 glass-panel border-x-0 border-t-0 px-3 sm:px-5">
         <nav
           aria-label="Main"
-          className="mx-auto flex h-18 w-full max-w-[1200px] items-center justify-between"
+          className="mx-auto flex min-h-18 w-full max-w-[1200px] flex-wrap items-center justify-between gap-x-3 gap-y-1 py-2"
         >
-          <Link href="/" className="rounded-lg" aria-label="Pivott home">
+          <Link href="/?welcome=1" className="rounded-lg" aria-label="Pivott home">
             <Logo />
           </Link>
-          <div className="flex items-center gap-1">
+          <div className="ml-auto flex min-w-0 flex-wrap items-center justify-end gap-1">
+            <Link href="/workspace" className={cn(pButton({ variant: 'ghost', size: 'sm' }), 'hidden sm:inline-flex')}>Your work</Link>
+            {account.user ? <DropdownMenu><DropdownMenuTrigger className={pButton({ variant: 'ghost', size: 'sm' })}>Account</DropdownMenuTrigger><DropdownMenuContent align="end"><DropdownMenuItem onClick={() => router.push('/account')}>Account settings</DropdownMenuItem><DropdownMenuItem onClick={() => router.push('/workspace')}>Your plan</DropdownMenuItem><DropdownMenuItem onClick={() => void account.signOut()}>Sign out · Keep device work</DropdownMenuItem></DropdownMenuContent></DropdownMenu> : <Link href={`/signin?next=${encodeURIComponent(pathname)}`} className={pButton({ variant: 'ghost', size: 'sm' })}>Sign in</Link>}
             <Link
               href="/signals"
               className={cn(
@@ -100,7 +104,7 @@ export function SiteHeader() {
             >
               Signals
             </Link>
-            <ProfileButton onClick={() => setNameOpen(true)} />
+            <span className="hidden sm:contents"><ProfileButton onClick={() => setNameOpen(true)} /></span>
             <ThemeToggle />
             <DropdownMenu>
               <DropdownMenuTrigger
@@ -139,9 +143,9 @@ export function SiteHeader() {
                 )}
                 <DropdownMenuItem
                   onClick={() => {
-                    clearAllData()
-                    toast('Demo reset to a fresh start')
-                    router.push('/start')
+                    enterDemo()
+                    toast('Demo profile reset. Your personal work is kept.')
+                    router.push('/map')
                   }}
                 >
                   <RotateCcw aria-hidden />
@@ -163,7 +167,7 @@ export function SiteHeader() {
           <DialogHeader>
             <DialogTitle className="font-serif text-2xl font-normal">What should we call you?</DialogTitle>
             <DialogDescription className="leading-relaxed">
-              Your name personalises your map, pathway, and Skill Passport. It never leaves this browser.
+              Your name personalises your map and passport. It stays on this device unless you explicitly save the profile to your account.
             </DialogDescription>
           </DialogHeader>
           <form
@@ -185,7 +189,7 @@ export function SiteHeader() {
           <DialogHeader>
             <DialogTitle className="font-serif text-2xl font-normal">Delete your data?</DialogTitle>
             <DialogDescription className="leading-relaxed">
-              This clears your job, tasks, skills, pathway progress, and any signals you added from this browser. Nothing is stored on a server.
+              This clears your profile and progress from this browser. A saved account copy remains. To remove that copy and your account, use Delete account in account settings.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="bg-subtle">

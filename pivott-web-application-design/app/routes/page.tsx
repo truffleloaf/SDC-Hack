@@ -4,6 +4,7 @@ import { Columns3, LayoutGrid } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { AnimatePresence, motion } from 'motion/react'
 import { useState } from 'react'
+import { toast } from 'sonner'
 import { SdgBadge } from '@/components/pivott/badges'
 import { PButton } from '@/components/pivott/p-button'
 import { PageIntro } from '@/components/pivott/route-stepper'
@@ -19,7 +20,7 @@ import { cn } from '@/lib/utils'
 export default function RoutesPage() {
   const router = useRouter()
   const { state, hydrated } = useAppState()
-  const { routes, exposure } = useAnalysis(state)
+  const { routes, exposure, scored, assessmentCoverage } = useAnalysis(state)
   const [mode, setMode] = useState<'cards' | 'compare'>('cards')
   const [whyId, setWhyId] = useState<string | null>(null)
 
@@ -36,8 +37,8 @@ export default function RoutesPage() {
   return (
     <div className="mx-auto w-full max-w-[1200px] px-5 pb-20 pt-10">
       <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
-        <PageIntro eyebrow="Step 4 · Career routes" title="Your next move isn’t as far as you think.">
-          Lower-risk adjacent roles ranked by skill match and task exposure.
+        <PageIntro eyebrow="Routes" title="Compare possible roles.">
+          Routes combine rated skill coverage, overlap with the skills used in your tasks, and estimated exposure in the target role. Incomplete ratings make the ordering provisional.
         </PageIntro>
         <div className="flex flex-wrap items-center gap-2">
           <ScenarioSwitch state={state} context="routes" />
@@ -54,6 +55,8 @@ export default function RoutesPage() {
         </div>
       </div>
 
+      <p className="mt-5 text-sm text-muted-foreground">You can save up to three routes. <a href="/skills" className="text-primary underline">Edit skill ratings</a></p>
+      {assessmentCoverage < 1 && <p className="mt-2 text-sm text-muted-foreground">Current exposure covers assessed reference tasks only ({Math.round(assessmentCoverage * 100)}% of selected time). Custom tasks have no estimate.</p>}
       <RouteFan current={roleById[state.roleId]?.title ?? 'Current role'} count={routes.length} />
 
       <AnimatePresence mode="wait">
@@ -70,7 +73,14 @@ export default function RoutesPage() {
                 key={r.roleId}
                 route={r}
                 rank={i}
-                currentExposure={exposure}
+                hoursPerWeek={state.hoursPerWeek}
+                levels={state.skills}
+                saved={state.savedRouteIds.includes(r.roleId)}
+                onSave={() => {
+                  if (!state.savedRouteIds.includes(r.roleId) && state.savedRouteIds.length >= 3) { toast('Three routes are saved. Remove one before saving another.'); return }
+                  setState({ savedRouteIds: state.savedRouteIds.includes(r.roleId) ? state.savedRouteIds.filter((id) => id !== r.roleId) : [...state.savedRouteIds, r.roleId] })
+                }}
+                currentExposure={scored.length ? exposure : null}
                 selected={r.roleId === selectedId}
                 onSelect={() => setState({ targetRoleId: r.roleId })}
                 onWhy={() => setWhyId(r.roleId)}
@@ -88,7 +98,7 @@ export default function RoutesPage() {
                     <td className="w-40" />
                     {routes.map((r, i) => (
                       <th key={r.roleId} scope="col" className={cn('p-4 text-left align-bottom font-normal', r.roleId === selectedId && 'bg-mint/60 rounded-t-xl')}>
-                        {i === 0 && <span className="mb-2 block font-sans text-xs font-medium text-primary">Closest match</span>}
+                        {i === 0 && <span className="mb-2 block font-sans text-xs font-medium text-primary">{r.unknownSkillIds.length ? 'First suggested · Incomplete ratings' : 'Closest match'}</span>}
                         <span className="font-serif text-xl">{r.title}</span>
                       </th>
                     ))}
@@ -96,8 +106,8 @@ export default function RoutesPage() {
                 </thead>
                 <tbody className="font-mono text-sm">
                   {[
-                    { label: 'Skill match', get: (r: (typeof routes)[number]) => `${Math.round(r.fit)}%` },
-                    { label: 'Weeks to prepare', get: (r: (typeof routes)[number]) => r.weeks },
+                    { label: 'Skill match', get: (r: (typeof routes)[number]) => r.unknownSkillIds.length === roleById[r.roleId].requirements.length ? 'Not rated' : `${Math.round(r.fit)}%${r.unknownSkillIds.length ? ' · Partial' : ''}` },
+                    { label: 'Weeks to prepare', get: (r: (typeof routes)[number]) => r.unknownSkillIds.length === roleById[r.roleId].requirements.length ? 'Not estimated' : `${r.unknownSkillIds.length ? 'At least ' : ''}${r.weeks}` },
                     { label: 'Skill gaps', get: (r: (typeof routes)[number]) => r.gaps.length },
                     { label: 'Target exposure', get: (r: (typeof routes)[number]) => `${Math.round(r.targetExposure * 100)}%` },
                     { label: 'Role demand', get: (r: (typeof routes)[number]) => r.demand },

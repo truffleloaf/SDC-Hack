@@ -48,7 +48,7 @@ export function SkillsPanel({ stays, reinforce }: { stays: string[]; reinforce: 
           {reinforce.length ? (
             reinforce.map((s) => <SkillChip key={s} label={skillById[s]?.name} tone="peach" />)
           ) : (
-            <span className="text-sm text-muted-foreground">No gaps for your closest route.</span>
+            <span className="text-sm text-muted-foreground">No rated gaps identified. Unknown skills still need a rating.</span>
           )}
         </div>
       </section>

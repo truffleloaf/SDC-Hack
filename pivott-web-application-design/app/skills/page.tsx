@@ -7,10 +7,8 @@ import { ProgressRing } from '@/components/pivott/progress-ring'
 import { PageIntro } from '@/components/pivott/route-stepper'
 import { NeedsProfile, PageSkeleton } from '@/components/pivott/states'
 import { SkillCard } from '@/components/skills/skill-card'
-import { roleById, skills, type SkillCategory } from '@/lib/data/seed'
+import { roleById, skills } from '@/lib/data/seed'
 import { setState, taskLookup, useAppState } from '@/lib/store'
-
-const categories: SkillCategory[] = ['Technical', 'Analytical', 'Communication', 'Operational']
 
 export default function SkillsPage() {
   const { state, hydrated } = useAppState()
@@ -27,7 +25,7 @@ export default function SkillsPage() {
   return (
     <div className="mx-auto w-full max-w-[1200px] px-5 pb-32 pt-10 lg:pb-20">
       <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
-        <PageIntro eyebrow="Step 2 · Your skills" title="What skills do you bring?">
+        <PageIntro eyebrow="Routes · Skill ratings" title="What skills do you bring?">
           Rate what you know today. Rough is fine — you can change it any time.
         </PageIntro>
         <div className="flex items-center gap-4">
@@ -38,49 +36,32 @@ export default function SkillsPage() {
             <span className="text-sm font-medium">
               {rated} of {skills.length} skills rated
             </span>
-            <span className="text-xs text-muted-foreground">Unrated skills count as 0</span>
+            <span className="text-xs text-muted-foreground">Unrated skills stay unknown</span>
           </div>
-          <PLink href="/map" className="ml-4 hidden lg:inline-flex">
-            Reveal my map
+          <PLink href="/routes" className="ml-4 hidden lg:inline-flex">
+            Compare possible roles
             <ArrowRight aria-hidden />
           </PLink>
         </div>
       </div>
 
-      <div className="mt-12 flex flex-col gap-12">
-        {categories.map((cat) => (
-          <section key={cat} aria-labelledby={`cat-${cat}`} className="flex flex-col gap-4">
-            <h2 id={`cat-${cat}`} className="flex items-center gap-3 font-serif text-2xl">
-              {cat}
-              <span aria-hidden className="h-px flex-1 border-t border-dotted border-border-strong" />
-            </h2>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {skills
-                .filter((s) => s.category === cat)
-                .map((s) => (
-                  <SkillCard
-                    key={s.id}
-                    skill={s}
-                    level={state.skills[s.id]}
-                    suggested={suggested.has(s.id)}
-                    onChange={(v) => setState((st) => ({ skills: { ...st.skills, [s.id]: v } }))}
-                  />
-                ))}
-            </div>
-          </section>
-        ))}
-      </div>
+      <section className="mt-8"><h2 className="text-xl font-semibold">Skills connected to your work</h2>
+        <div className="grid gap-x-8 sm:grid-cols-2 lg:grid-cols-3">{skills.filter((skill) => suggested.has(skill.id)).map((skill) => <SkillCard key={skill.id} skill={skill} level={state.skills[skill.id]} suggested onChange={(value) => setState((current) => { const next = { ...current.skills }; if (value === undefined) delete next[skill.id]; else next[skill.id] = value; return { skills: next } })} />)}</div>
+      </section>
+      <details className="mt-8"><summary className="cursor-pointer font-medium">Other skills</summary>
+        <div className="grid gap-x-8 sm:grid-cols-2 lg:grid-cols-3">{skills.filter((skill) => !suggested.has(skill.id)).map((skill) => <SkillCard key={skill.id} skill={skill} level={state.skills[skill.id]} suggested={false} onChange={(value) => setState((current) => { const next = { ...current.skills }; if (value === undefined) delete next[skill.id]; else next[skill.id] = value; return { skills: next } })} />)}</div>
+      </details>
 
       <div className="mt-12 hidden justify-end lg:flex">
-        <PLink href="/map" size="lg">
-          Reveal my map
+        <PLink href="/routes" size="lg">
+          Compare possible roles
           <ArrowRight aria-hidden />
         </PLink>
       </div>
 
       <MobileActionBar>
-        <PLink href="/map" className="w-full">
-          Reveal my map
+        <PLink href="/routes" className="w-full">
+          Compare possible roles
           <ArrowRight aria-hidden />
         </PLink>
       </MobileActionBar>

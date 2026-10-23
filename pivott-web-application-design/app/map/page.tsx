@@ -10,7 +10,6 @@ import { TaskMapCanvas } from '@/components/map/task-map-canvas'
 import { DemoLabel } from '@/components/pivott/badges'
 import { MobileActionBar } from '@/components/pivott/mobile-action-bar'
 import { PButton, PLink } from '@/components/pivott/p-button'
-import { CountUp } from '@/components/pivott/progress-ring'
 import { ScenarioSwitch } from '@/components/pivott/scenario-switch'
 import { SegmentedControl } from '@/components/pivott/segmented-control'
 import { NeedsProfile, PageSkeleton } from '@/components/pivott/states'
@@ -18,7 +17,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sh
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { roleById } from '@/lib/data/seed'
 import { confidence } from '@/lib/engine'
-import { displayName, possessive, setState, useAnalysis, useAppState } from '@/lib/store'
+import { setState, useAnalysis, useAppState } from '@/lib/store'
 
 const fmtDate = (d: string) => new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
 
@@ -39,7 +38,7 @@ export default function MapPage() {
   if (!state.roleId || state.selections.length === 0) return <NeedsProfile step="job" />
 
   const role = roleById[state.roleId]
-  const { scored, exposure, routes, lastUpdated, signals } = analysis
+  const { scored, exposure, routes, lastUpdated, signals, unassessed, assessmentCoverage } = analysis
   const conf = confidence(scored, signals)
   const { stays, reinforce } = deriveSkillGroups(scored, state.skills, routes[0])
   const counts = {
@@ -53,11 +52,11 @@ export default function MapPage() {
       <section aria-labelledby="summary-title" className="grid gap-8 md:grid-cols-[auto_1fr] md:items-end md:gap-14">
         <div className="flex flex-col gap-2">
           <p className="font-sans text-sm font-medium text-primary">
-            Step 3 · {possessive(displayName(state))} task map · {role?.title}
+            {Object.keys(state.skills).length ? 'Work' : 'Your initial map · Step 3 of 3'} · {state.jobTitle || role?.title}
           </p>
           <h1 id="summary-title" className="flex items-baseline gap-3 font-serif tracking-[-0.03em]">
-            <CountUp value={exposure * 100} format={(n) => `${Math.round(n)}%`} className="text-7xl leading-none md:text-8xl" />
-            <span className="text-2xl text-muted-foreground md:text-3xl">task exposure</span>
+            <span className="text-5xl font-semibold leading-none md:text-6xl">{scored.length ? `${Math.round(exposure * 100)}%` : 'Not assessed'}</span>
+            <span className="text-2xl text-muted-foreground md:text-3xl">estimated task exposure</span>
           </h1>
           <DemoLabel className="w-fit" />
         </div>
@@ -95,7 +94,9 @@ export default function MapPage() {
         </div>
       </section>
 
-      <div className="mt-10 grid gap-6 lg:grid-cols-[1fr_300px]">
+      <p className="mt-5 max-w-2xl text-sm leading-relaxed text-muted-foreground">{scored.length > 0 && `The largest contributions come from ${[...scored].sort((a, b) => b.share * b.exposure - a.share * a.exposure).slice(0, 2).map((task) => task.name.toLowerCase()).join(' and ')}.`} {unassessed.length > 0 && `Only ${Math.round(assessmentCoverage * 100)}% of your selected time is assessed. The percentage above describes assessed tasks only.`}</p>
+      <div className="mt-5 flex flex-wrap gap-3"><PLink href="/start" variant="secondary" size="sm">Edit tasks</PLink><PLink href="/skills" variant="secondary" size="sm">Rate skills for routes</PLink></div>
+      <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_300px]">
         <section aria-label="Task visualisation" className="card-surface flex flex-col gap-5 p-4 sm:p-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <ScenarioSwitch state={state} />
@@ -116,6 +117,7 @@ export default function MapPage() {
               />
             </div>
           </div>
+          <p className="text-sm text-muted-foreground">Bubble size shows time spent within assessed tasks. Color shows estimated AI exposure.</p>
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={view}
@@ -131,14 +133,15 @@ export default function MapPage() {
               )}
             </motion.div>
           </AnimatePresence>
+          {unassessed.length > 0 && <section className="border-t border-border pt-4"><h2 className="text-sm font-medium">Not assessed yet</h2><ul className="mt-2 space-y-2">{unassessed.map((task) => <li key={task.taskId} className="flex justify-between gap-3 text-sm"><span>{state.taskNames[task.taskId] || task.name}</span><span className="text-muted-foreground">{Math.round(task.share)}% of your time · No estimate</span></li>)}</ul></section>}
           <VerifyAnalysis state={state} />
         </section>
 
         <aside className="hidden lg:block">
           <div className="card-surface sticky top-24 flex flex-col gap-8 p-6">
             <SkillsPanel stays={stays} reinforce={reinforce} />
-            <PLink href="/routes" className="w-full">
-              Show my routes
+            <PLink href={Object.keys(state.skills).length ? "/routes" : "/skills"} className="w-full">
+              {Object.keys(state.skills).length ? "Show my routes" : "Personalize routes"}
               <ArrowRight aria-hidden />
             </PLink>
           </div>
@@ -155,8 +158,8 @@ export default function MapPage() {
       </Sheet>
 
       <MobileActionBar>
-        <PLink href="/routes" className="w-full">
-          Show my routes
+        <PLink href={Object.keys(state.skills).length ? "/routes" : "/skills"} className="w-full">
+          {Object.keys(state.skills).length ? "Show my routes" : "Personalize routes"}
           <ArrowRight aria-hidden />
         </PLink>
       </MobileActionBar>

@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { ShieldCheck } from 'lucide-react'
 import { PButton } from '@/components/pivott/p-button'
 import { analysisRequest, compareAnalysis, fetchAnalysis } from '@/lib/remote'
-import type { AppState } from '@/lib/store'
+import { analyze, type AppState } from '@/lib/store'
 
 export function VerifyAnalysis({ state }: { state: AppState }) {
   const inputKey = JSON.stringify(analysisRequest(state))
@@ -26,7 +26,7 @@ export function VerifyAnalysis({ state }: { state: AppState }) {
       if (request.signal.aborted) return
       const compared = compareAnalysis(state, remote)
       const message = compared.matches
-        ? `Matches API: ${compared.matchedTasks}/${compared.totalTasks} tasks, role exposure matches, route order identical.`
+        ? `Matches API: ${compared.matchedTasks}/${compared.totalTasks} assessed tasks, role exposure matches, route order identical.`
         : `API differs: ${compared.matchedTasks}/${compared.totalTasks} task exposures match; role exposure ${compared.roleExposureMatches ? 'matches' : 'differs'}; route order ${compared.routeOrderMatches ? 'matches' : 'differs'}.`
       setResult({ inputKey, message })
     } catch {
@@ -41,10 +41,10 @@ export function VerifyAnalysis({ state }: { state: AppState }) {
 
   return (
     <div className="flex flex-col items-start gap-2 border-t border-border pt-4">
-      <PButton variant="secondary" size="sm" loading={pendingKey === inputKey} onClick={verify}>
+      <PButton variant="secondary" size="sm" loading={pendingKey === inputKey} disabled={!analyze(state).scored.length} onClick={verify}>
         <ShieldCheck aria-hidden />Verify with API
       </PButton>
-      <p className="text-xs leading-relaxed text-muted-foreground">This check sends task and skill inputs to the API. Your name and progress stay in this browser.</p>
+      <p className="text-xs leading-relaxed text-muted-foreground">This check sends task and skill inputs only. It does not send your display name or progress. Custom tasks without estimates are excluded from exposure verification.</p>
       <p role="status" aria-live="polite" className="text-sm leading-relaxed text-foreground">{result?.inputKey === inputKey ? result.message : ''}</p>
     </div>
   )

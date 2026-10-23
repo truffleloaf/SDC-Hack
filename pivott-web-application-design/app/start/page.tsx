@@ -11,7 +11,7 @@ import { TaskPicker } from '@/components/start/task-picker'
 import { TimePanel } from '@/components/start/time-panel'
 import { roleById, tasksForRole } from '@/lib/data/seed'
 import { NameField } from '@/components/pivott/name-field'
-import { greetingName, setState, useAppState } from '@/lib/store'
+import { setState, useAppState } from '@/lib/store'
 
 export default function StartPage() {
   const { state, hydrated } = useAppState()
@@ -22,7 +22,7 @@ export default function StartPage() {
     setState({
       roleId: id,
       selections: tasksForRole(id).map((t) => ({ taskId: t.id, share: t.defaultShare })),
-      customTasks: [],
+      taskNames: {},
       targetRoleId: null,
       completedSteps: [],
     })
@@ -33,7 +33,7 @@ export default function StartPage() {
   return (
     <div className="mx-auto w-full max-w-[1200px] px-5 pb-32 pt-10 lg:pb-20">
       <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
-        <PageIntro eyebrow={`Step 1 · Hi ${greetingName(state)}`} title="Let’s start with your work.">
+        <PageIntro eyebrow={role ? "Choose your tasks · Step 2 of 3" : "Choose a reference role · Step 1 of 3"} title="Let’s start with your work.">
           Choose the role closest to yours, then tune the tasks you actually do.
         </PageIntro>
         <NameField className="md:max-w-xs" />
@@ -41,6 +41,10 @@ export default function StartPage() {
 
         <div className="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_380px]">
           <div className="flex min-w-0 flex-col gap-8">
+          <label className="flex flex-col gap-2 text-sm font-medium">Your job title (optional)
+            <input className="pivott-input" value={state.jobTitle} maxLength={60} placeholder="e.g. Accounts Executive" onChange={(event) => setState({ jobTitle: event.target.value.slice(0, 60) })} />
+          </label>
+          <p className="text-sm text-muted-foreground">{state.jobTitle ? `Your title: ${state.jobTitle}. ` : ''}{role ? `Task template: ${role.title}.` : 'Choose the closest task template. It does not change your personal job title.'}</p>
           <RoleSelector value={state.roleId} onSelect={selectRole} />
 
           <AnimatePresence mode="wait">
@@ -75,8 +79,8 @@ export default function StartPage() {
 
       {role && (
         <MobileActionBar>
-          <PLink href="/skills" className="w-full">
-            Continue to skills
+          <PLink href="/map" className="w-full">
+            View my task map
             <ArrowRight aria-hidden />
           </PLink>
         </MobileActionBar>

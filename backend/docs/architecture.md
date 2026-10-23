@@ -15,7 +15,7 @@ Pivott 回答四个问题：
 
 - 不训练 LLM，不用 LLM 打分。
 - 不实时爬取招聘网站或新闻。
-- 不做账号体系、支付、真实招聘。
+- 评分 API 不做账号体系、支付或真实招聘。可选账号与资料保存由独立的 Supabase 提供。
 - 不输出“失业概率”；`roleExposure` 是时长加权暴露度。
 
 ## 2. 组件
@@ -119,7 +119,7 @@ role_exposure     = sum(time_share × exposure)
 classification    = Automate if exposure >= 0.65 and human_judgment < 0.4
                     Protect  if human_judgment >= 0.65
                     Augment  otherwise
-skill_coverage    = sum(importance × min(current / required, 1)) / sum(importance)
+skill_coverage    = sum_rated(importance × min(current / required, 1)) / sum_rated(importance)
 fit               = 100 × (0.8 × coverage + 0.2 × task_similarity)  (falls back to coverage)
 gap               = max(0, required - current)
 gap_priority      = gap × importance × (role_demand / 100)
@@ -149,9 +149,13 @@ route_score       = 0.7 × fit + 0.3 × 100 × (1 - target_exposure)
 
 ## 9. 已知限制
 
-- 没有数据库持久化；pathway 进度只在客户端。
+- 评分 API 不持久化请求；访客进度在客户端，可选账号支持明确保存到 Supabase。
 - 没有 auth / rate limit。
 - 没有 admin 加信号 + recompute diff 端点（repo 前端目前也没有这个 API）。
 - 根目录已有 `.github/workflows/backend-tests.yml` 和 `.github/workflows/frontend.yml`，分别验证后端与前端。
 
 英文版本：[architecture.en.md](architecture.en.md)。自定义任务与已应用信号只在用户点击验证时发送；服务端校验、clamp 并始终标为 `user`，不持久化。
+
+## Personal profiles and unknown inputs
+
+Unrated requirements remain unknown, distinct from explicit level 0, and are excluded from coverage and learning gaps. With no rated requirements, provisional fit uses task similarity only. Custom tasks remain unassessed; exposure is normalized over reference tasks, with assessment coverage returned separately. Optional Supabase accounts are independent of the stateless scoring API; see [account setup](../../supabase/README.md).

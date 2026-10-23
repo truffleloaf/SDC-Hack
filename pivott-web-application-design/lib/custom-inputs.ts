@@ -19,11 +19,12 @@ export function parseCustomInputs(body: Record<string, unknown>) {
   for (const task of (body.customTasks ?? []) as unknown[]) {
     if (!object(task) || typeof task.id !== 'string' || !/^custom-[A-Za-z0-9_-]{1,64}$/.test(task.id) || taskIds.has(task.id)) return fail('Invalid or duplicate custom task id')
     const name = text(task.name, 60)
-    if (!name || !Array.isArray(task.skills) || !finite(task.baseExposure) || !finite(task.humanJudgment)) return fail('Invalid custom task')
+    if (!name || !Array.isArray(task.skills) || (task.baseExposure !== undefined && !finite(task.baseExposure)) || (task.humanJudgment !== undefined && !finite(task.humanJudgment))) return fail('Invalid custom task')
     customTasks.push({
       id: task.id, name,
       skills: [...new Set(task.skills.filter((id): id is string => typeof id === 'string' && skillIds.has(id)))],
-      baseExposure: clamp(task.baseExposure, 0, 1), humanJudgment: clamp(task.humanJudgment, 0, 1),
+      ...(finite(task.baseExposure) ? { baseExposure: clamp(task.baseExposure, 0, 1) } : {}),
+      ...(finite(task.humanJudgment) ? { humanJudgment: clamp(task.humanJudgment, 0, 1) } : {}),
     })
     taskIds.add(task.id)
   }
