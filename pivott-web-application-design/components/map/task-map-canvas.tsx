@@ -178,8 +178,8 @@ export function TaskMapCanvas({
                     aria-pressed={pinned === t.id}
                     aria-label={`${t.name}: ${Math.round(t.exposure * 100)}% exposure, ${t.classification}, ${Math.round(t.share * 100)}% of your time${change ? `, ${delta >= 0 ? 'up' : 'down'} ${Math.abs(delta)} points after signal application` : ''}`}
                     className="cursor-pointer outline-none [&:focus-visible_.ring]:opacity-100"
-                    onMouseEnter={() => setHovered(t.id)}
-                    onMouseLeave={() => setHovered(null)}
+                    onPointerEnter={(event) => event.pointerType === 'mouse' && setHovered(t.id)}
+                    onPointerLeave={(event) => event.pointerType === 'mouse' && setHovered(null)}
                     onFocus={() => setHovered(t.id)}
                     onBlur={() => setHovered(null)}
                     onClick={(e) => {
@@ -193,6 +193,7 @@ export function TaskMapCanvas({
                       }
                     }}
                   >
+                    <circle data-tap-target r={Math.max(22, p.r)} fill="transparent" />
                     {highlighted && !change && (
                       <motion.circle
                         r={p.r + 8}
@@ -261,7 +262,7 @@ export function TaskMapCanvas({
               className="absolute z-10"
               style={{ left: cardX, top: cardY, width: cardW }}
               onMouseEnter={() => setHovered(active.id)}
-              onMouseLeave={() => setHovered(null)}
+              onPointerLeave={(event) => event.pointerType === 'mouse' && setHovered(null)}
             >
               <TaskDetailCard task={active} pinned={pinned === active.id} onClose={() => setPinned(null)} />
             </motion.div>
@@ -291,7 +292,7 @@ export function TaskDetailCard({ task, pinned, onClose, surface = 'panel' }: { t
       <div className="flex items-start justify-between gap-2">
         <h3 className="font-serif text-xl leading-tight">{task.name}</h3>
         {pinned && (
-          <button type="button" onClick={onClose} aria-label="Close details" className="-mr-2 -mt-1 grid size-9 place-items-center rounded-lg text-faint hover:bg-subtle hover:text-foreground">
+          <button type="button" onClick={onClose} aria-label="Close details" className="-mr-2 -mt-1 grid size-11 place-items-center rounded-lg text-faint hover:bg-subtle hover:text-foreground">
             <X className="size-4" aria-hidden />
           </button>
         )}

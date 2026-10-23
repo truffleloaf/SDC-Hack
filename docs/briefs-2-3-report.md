@@ -189,3 +189,7 @@ Added Work completion, Skills rated n/15 and Plan progress/partial state, comple
 ## D3: map classification filters
 
 Added clickable All/Automate/Augment/Protect legend controls with counts and pressed state. They filter the map and list while keeping the full assessment and hour allocation. Empty filters provide an exact reset action; hidden task details close. Custom-only profiles keep an explicit unassessed state. Files: ClassificationFilter, Map and task canvas. Full Part D checks follow.
+
+## D4: mobile details and targets
+
+The mobile detail sheet was already present, so it was retained rather than rebuilt. Added invisible hit circles guaranteeing at least 44px for map bubbles; hero targets are also enlarged at phone widths. Pointer-only hover avoids synthetic touch hover. Detail close and learning-step controls now have 44px boxes. Files: task canvas, hero, step card and decorative stepper-tick semantics. Browser checks follow at the Part D boundary.

@@ -31,7 +31,7 @@ export function StepCard({
           aria-label={`Mark “${step.title}” as ${done ? 'not done' : 'done'}`}
           onClick={onToggle}
           className={cn(
-            'relative grid size-9 place-items-center rounded-full border-2 bg-background transition-colors duration-200 after:absolute after:-inset-1.5',
+            'relative grid size-11 place-items-center rounded-full border-2 bg-background transition-colors duration-200 after:absolute after:-inset-1.5',
             done ? 'border-teal bg-teal text-card' : 'border-border-strong hover:border-teal',
           )}
         >

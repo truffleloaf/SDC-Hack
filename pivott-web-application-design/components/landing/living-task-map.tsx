@@ -126,6 +126,7 @@ export function LivingTaskMap() {
                 className="cursor-pointer outline-none transition-opacity duration-300 [&:focus-visible>circle:first-child]:stroke-ring [&:focus-visible>circle:first-child]:stroke-2"
                 opacity={dim ? 0.55 : 1}
               >
+                <circle cx={n.x} cy={n.y} r={Math.max(44, n.r)} fill="transparent" data-tap-target />
                 <circle
                   cx={n.x}
                   cy={n.y}

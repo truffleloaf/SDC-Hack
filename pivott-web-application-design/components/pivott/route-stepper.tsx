@@ -37,7 +37,7 @@ export function RouteStepper() {
   if (!groups.some((group) => group.paths.includes(pathname))) return null
   return <nav aria-label="Workspace" className="mx-auto flex max-w-[1200px] gap-4 border-b border-border px-5 pt-4">{groups.map((group, index) => {
     const active = group.paths.includes(pathname)
-    return <Link key={group.href} href={group.href} aria-current={active ? 'page' : undefined} className={cn('relative flex min-h-14 min-w-0 flex-1 flex-col gap-1 pb-3 sm:flex-initial sm:pr-6', active ? 'font-medium text-primary' : 'text-muted-foreground')}><span className="flex items-center gap-1.5 text-sm">{group.label}{complete[index] && <Check className="size-3.5" aria-label="Complete" />}</span><span className="text-[11px] font-normal text-muted-foreground">{summaries[index]}</span>{active && <motion.span layoutId="workspace-active-step" className="absolute inset-x-0 bottom-0 h-0.5 bg-primary" transition={reduce ? { duration: 0 } : { type:'spring',stiffness:400,damping:35 }} />}</Link>
+    return <Link key={group.href} href={group.href} aria-current={active ? 'page' : undefined} className={cn('relative flex min-h-14 min-w-0 flex-1 flex-col gap-1 pb-3 sm:flex-initial sm:pr-6', active ? 'font-medium text-primary' : 'text-muted-foreground')}><span className="flex items-center gap-1.5 text-sm">{group.label}{complete[index] && <Check className="size-3.5" aria-hidden />}</span><span className="text-[11px] font-normal text-muted-foreground">{summaries[index]}</span>{active && <motion.span layoutId="workspace-active-step" className="absolute inset-x-0 bottom-0 h-0.5 bg-primary" transition={reduce ? { duration: 0 } : { type:'spring',stiffness:400,damping:35 }} />}</Link>
   })}</nav>
 }
 
