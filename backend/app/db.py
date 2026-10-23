@@ -11,7 +11,9 @@ with StaticPool so every request shares the same connection.
 
 from __future__ import annotations
 
+import logging
 import os
+import tempfile
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -22,6 +24,38 @@ from sqlmodel import Session, SQLModel, create_engine
 from app.config import is_demo
 
 load_dotenv(Path(__file__).resolve().parents[1] / ".env")
+
+logger = logging.getLogger("pivott.db")
+
+
+def _serverless() -> bool:
+    """Whether this process runs where the repository checkout is read-only.
+
+    Vercel sets ``VERCEL`` and only mounts ``/tmp`` writable; AWS Lambda uses
+    ``AWS_LAMBDA_FUNCTION_NAME``. Both rebuild a function instance from scratch,
+    so a file beside the code cannot survive (or even be created).
+    """
+    return bool(os.getenv("VERCEL") or os.getenv("AWS_LAMBDA_FUNCTION_NAME"))
+
+
+def _demo_database_url() -> str:
+    """SQLite fallback for a demo process with no configured database.
+
+    Locally that is the repository file used by the README. On a serverless
+    host the checkout is read-only, so the demo catalogue lives in an ephemeral
+    file under the temp directory and is reseeded whenever a new instance
+    starts. Set ``PIVOTT_DB`` or ``DATABASE_URL`` to persist user data.
+    """
+    if not _serverless():
+        return "sqlite:///./pivott.db"
+
+    path = Path(tempfile.gettempdir(), "pivott.db")
+    logger.warning(
+        "no database configured; using ephemeral SQLite at %s "
+        "(saved profiles and user signals are lost when the instance stops)",
+        path,
+    )
+    return f"sqlite:///{path.as_posix()}"
 
 
 def resolve_database_url() -> str:
@@ -40,7 +74,7 @@ def resolve_database_url() -> str:
     if explicit:
         return explicit
     if is_demo():
-        return "sqlite:///./pivott.db"
+        return _demo_database_url()
     raise RuntimeError(
         "PIVOTT_DATASET=live requires PIVOTT_DB or DATABASE_URL; "
         "a live process never falls back to the demo database."

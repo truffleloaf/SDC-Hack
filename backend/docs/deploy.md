@@ -70,6 +70,12 @@ docker run --rm -p 8000:8000 `
 
 `/data` 必须挂持久卷；容器重建后数据还在。只跑一个实例。
 
+### 2.3 Serverless（Vercel / Lambda）
+
+函数进程的代码目录是只读的，只有 `/tmp` 可写。没有 `PIVOTT_DB` / `DATABASE_URL` 时，demo 进程会在 `/tmp/pivott.db` 建一个临时 SQLite 库，并在每个新实例启动时重新 seed：目录、`/api/analysis`、`/api/pathways` 都可用；`profiles` 和用户新增的信号只活在当前实例。
+
+要持久化登录用户数据，仍然必须给 `DATABASE_URL`（Supabase），并先执行 `schema.sql` + migrations。Vercel Services 里 FastAPI 的 `entrypoint` 必须写成 `app.main:app`（`module:attribute`）；写成文件路径 `app/main.py` 会让所有 `/api/*` 在进入应用之前就返回 500。
+
 ## 3. Live 部署
 
 1. **新建一个 Supabase 项目**（或独立 PostgreSQL），不要复用 demo 项目。
