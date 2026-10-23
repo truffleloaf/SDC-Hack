@@ -1,41 +1,91 @@
-from fastapi import APIRouter, Request
-from fastapi.responses import JSONResponse
+"""Analysis endpoints: task map + routes, plus the demo recompute diff."""
 
-from app.engine import assessment_summary, compute_routes, confidence, role_exposure, score_tasks
-from app.parsing import ProfileError, parse_profile, read_json
-from app.seed import SIGNALS, TASK_BY_ID
+from __future__ import annotations
 
-router = APIRouter()
+from fastapi import APIRouter, Depends
+from sqlmodel import Session
+
+from app.db import get_session
+from app.schemas import (
+    AnalysisResponse,
+    ChangedTask,
+    ProfileInput,
+    RecomputeRequest,
+    RecomputeResponse,
+    RecomputeSide,
+)
+from app.services.exposure import load_signals, role_exposure, score_tasks
+from app.services.matching import analyze
+from app.services.profile import normalize_profile
+
+router = APIRouter(prefix="/api/analysis", tags=["analysis"])
 
 
-@router.post("/analysis")
-async def analyze(request: Request):
-    body = await read_json(request)
-    try:
-        profile = parse_profile(body)
-    except ProfileError as error:
-        return JSONResponse(status_code=400, content={"error": str(error)})
+@router.post("", response_model=AnalysisResponse)
+def run_analysis(
+    payload: ProfileInput,
+    session: Session = Depends(get_session),
+) -> AnalysisResponse:
+    profile = normalize_profile(session, payload)
 
-    signals = [*SIGNALS, *profile.get("customSignals", [])]
-    lookup = {**TASK_BY_ID, **{task["id"]: task for task in profile.get("customTasks", [])}}
-    tasks = score_tasks(profile["selections"], lookup, profile["scenario"], signals)
-    user_task_skills = list(dict.fromkeys(skill for selection in profile["selections"] for skill in lookup[selection["taskId"]]["skills"]))
-
-    routes = compute_routes(
-        current_role_id=profile["roleId"],
-        user_task_skills=user_task_skills,
-        levels=profile["skills"],
-        scenario_id=profile["scenario"],
+    signals = load_signals(session)
+    return analyze(
+        session,
+        role_id=profile.roleId,
+        selections=profile.selections,
+        levels=profile.skills,
+        scenario_id=profile.scenario,
         signals=signals,
-        hours_per_week=profile["hoursPerWeek"],
+        hours_per_week=profile.hoursPerWeek,
     )
 
-    return {
-        **assessment_summary(profile["selections"], lookup),
-        "scenario": profile["scenario"],
-        "roleExposure": role_exposure(tasks),
-        "confidence": confidence(tasks, signals),
-        "tasks": tasks,
-        "routes": routes,
-        "illustrative": True,
-    }
+
+@router.post("/recompute", response_model=RecomputeResponse)
+def recompute(
+    payload: RecomputeRequest,
+    session: Session = Depends(get_session),
+) -> RecomputeResponse:
+    """Apply pending signals to a profile and return the before/after diff.
+
+    ``POST /api/analysis`` intentionally uses only the 20 seed signals, matching
+    the demo where a new signal stays pending until the Recompute button.
+    """
+    profile = normalize_profile(session, payload.profile)
+
+    base_signals = load_signals(session)
+    pending = load_signals(session, payload.pendingSignalIds)
+    combined = {row.signal.id: row for row in base_signals}
+    for row in pending:
+        combined[row.signal.id] = row
+    after_signals = list(combined.values())
+
+    before_tasks = score_tasks(session, profile.selections, profile.scenario, base_signals)
+    after_tasks = score_tasks(session, profile.selections, profile.scenario, after_signals)
+
+    before_exposure = role_exposure(before_tasks)
+    after_exposure = role_exposure(after_tasks)
+    before_by_id = {task.id: task for task in before_tasks}
+    changed = [
+        ChangedTask(
+            taskId=task.id,
+            name=task.name,
+            before=before_by_id[task.id].exposure,
+            after=task.exposure,
+        )
+        for task in after_tasks
+        if task.id in before_by_id
+        and abs(task.exposure - before_by_id[task.id].exposure) > 0.0005
+    ]
+
+    return RecomputeResponse(
+        before=RecomputeSide(
+            roleExposure=round(before_exposure, 6),
+            tasks=before_tasks,
+        ),
+        after=RecomputeSide(
+            roleExposure=round(after_exposure, 6),
+            tasks=after_tasks,
+        ),
+        delta=round(after_exposure - before_exposure, 6),
+        changed=changed,
+    )

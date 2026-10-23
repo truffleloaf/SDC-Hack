@@ -5,7 +5,10 @@ __pycache__/
 .tmp/
 task_shift.db
 test_task_shift.db
+pivott.db
+*.db
 .env
+.cache/
 
 # local tooling and pip scratch directories
 .tools/

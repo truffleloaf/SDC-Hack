@@ -1,0 +1,16 @@
+.venv
+.git
+.github
+.tools
+.tmp
+.pytest_cache
+__pycache__
+*.py[cod]
+*.db
+tests
+docs
+supabase
+.env
+.env.example
+README.md
+PROJECTS.md
