@@ -155,3 +155,7 @@ Added a 1.00–1.50 multiplier slider with two-decimal values and 0.02 preset sn
 ## C2: skill bridge bars
 
 Route cards compare your level and the required level for the three most important requirements. Bars enter once on view; reduced motion is immediate. Unknown ratings use a labelled hatch, never an empty zero bar. Focus/hover reveals the actual level gap and catalogue hours, or asks for a rating. Existing gap and learning details remain. Files: SkillBridge, route card and DESIGN's data-pattern exception. Browser/theme/Axe checks follow at the Part C boundary.
+
+## C3: direct time editing
+
+Added 44px draggable divider targets, pointer capture, left/right keyboard changes (1%, or 5% with Shift) and separator value labels. Only the neighbouring pair changes; other task shares and the total remain fixed. Number fields and sliders remain available. The existing setShare rescales every other task, so a tested adjacent-pair helper is needed for this specific interaction. Files: ShareBar, TimePanel, shares helper and workflow test. Part C browser checks cover drag and keyboard invariants.
