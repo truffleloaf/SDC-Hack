@@ -1,0 +1,35 @@
+# yaml-language-server: $schema=https://render.com/schema/render.yaml.json
+#
+# Render Blueprint for the Pivott API.
+#
+# The frontend stays on Vercel; this file deploys only the FastAPI service.
+# Create it with: Render Dashboard -> New -> Blueprint -> this repository ->
+# Blueprint Path: backend/render.yaml (or move this file to the repo root).
+#
+# DATABASE_URL and SUPABASE_ANON_KEY are marked `sync: false`: Render asks for
+# them once and stores them as secrets. Never commit real values.
+
+services:
+  - type: web
+    name: pivott-api
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.6
+      - key: PIVOTT_DATASET
+        value: demo
+      - key: ALLOW_DEMO_RESET
+        value: "false"
+      - key: CORS_ORIGINS
+        value: https://pivott.studio,https://www.pivott.studio
+      - key: SUPABASE_URL
+        value: https://hgqspcvuoggnqqxfimpn.supabase.co
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: DATABASE_URL
+        sync: false
