@@ -177,3 +177,7 @@ Added editable work hours (default 40, separate from study hours), class-hour to
 Frontend **96 passed**, backend **68 passed**, TypeScript, production build, copy lint and seed/golden freshness passed. The full 48-page matrix and four List views passed. Interactive checks passed at 375/1280px in light/dark: keyboard can leave presets and snaps on completion; temporary previews restrict API verification; skill bars disclose levels/unknowns and actual gap hours; pointer/keyboard divider changes preserve totals and unrelated tasks; signals show the old core and +12-point fixture change; weekly totals include unassessed time.
 
 Corrected the keyboard snap timing during review. Added missing shared tooltip role/description semantics, verified the connection and Axe on open tooltips. Made required/unknown bars visible against both themes. The last synthetic fixture setup was rerun after avoiding a pending-write race; all four variants pass. Part C complete; proceeding to D.
+
+## D1: skill rating controls
+
+Replaced selects with native radio groups for levels 0–4 and Not sure, all with 44px labels and visible focus. The chosen level includes its independence description. Start from my tasks changes the suggested skill set without assigning ability; other skills remain available (automatically expanded if there are no suggestions). Files: SkillCard and skills page. Browser/keyboard/Axe verification follows at the Part D boundary.
