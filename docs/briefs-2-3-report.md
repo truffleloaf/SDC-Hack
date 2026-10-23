@@ -75,3 +75,7 @@ Frontend **89 passed**, backend **66 passed**, TypeScript and production build p
 ## U1: design rules
 
 DESIGN now explicitly limits motion to state changes, attention and data, with reduced motion support. It prohibits decorative gradients/glows/blur/icon grids and clarifies graph exceptions. T2 already recorded fonts, radii and accent rules. Documentation-only; part verification follows U3.
+
+## U2: enforced copy checks
+
+Added a TypeScript-AST copy checker for app/components (excluding styleguide), covering prose em dashes, banned phrases and native browser prompts. A preceding/same-line `// copy-lint-ok: reason` permits deliberate exceptions. CI runs both its positive/negative self-test and the repository scan; both passed. Workflow path filters include the checker. Files: script and frontend workflow.

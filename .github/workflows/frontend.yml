@@ -6,11 +6,13 @@ on:
     paths:
       - "pivott-web-application-design/**"
       - "backend/tests/golden.json"
+      - "scripts/lint-copy.mjs"
       - ".github/workflows/frontend.yml"
   pull_request:
     paths:
       - "pivott-web-application-design/**"
       - "backend/tests/golden.json"
+      - "scripts/lint-copy.mjs"
       - ".github/workflows/frontend.yml"
 
 permissions:
@@ -32,6 +34,8 @@ jobs:
           version: 12.3.4
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+      - name: Copy rules
+        run: node ../scripts/lint-copy.mjs --self-test && node ../scripts/lint-copy.mjs
       - name: Test
         run: pnpm test
       - name: Type check
