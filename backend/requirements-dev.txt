@@ -1,0 +1,5 @@
+-r requirements.txt
+
+# Local PostgreSQL for `python scripts/verify_pg.py` (embedded server, no Docker).
+# CI uses the `postgres` service instead and does not install this.
+pgserver>=0.1.4,<0.2
