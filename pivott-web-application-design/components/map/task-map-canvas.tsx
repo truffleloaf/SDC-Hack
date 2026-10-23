@@ -89,7 +89,7 @@ export function TaskMapCanvas({
     const result = layout(tasks, W, H, prevRef.current)
     prevRef.current = new Map([...result].map(([id, p]) => [id, { x: p.x, y: p.y }]))
     return result
-    // Layout depends only on ids, shares, and canvas size — not on exposure.
+    // Layout depends only on ids, shares, and canvas size, not on exposure.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [shareKey, W, H])
 

@@ -34,7 +34,7 @@ export default function StartPage() {
   return (
     <div className="mx-auto w-full max-w-[1200px] px-5 pb-32 pt-10 lg:pb-20">
       <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
-        <PageIntro eyebrow={role ? "Choose your tasks · Step 2 of 3" : "Choose a reference role · Step 1 of 3"} title="Let’s start with your work.">
+        <PageIntro eyebrow={role ? "Step 2 of 3" : "Step 1 of 3"} title="Pick your role and your tasks">
           Choose the role closest to yours, then tune the tasks you actually do.
         </PageIntro>
         <NameField className="md:max-w-xs" />

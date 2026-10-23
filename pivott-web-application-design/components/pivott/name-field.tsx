@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils'
 
 export function NameField({
   label = 'Your name',
-  hint = 'Optional · saved on this device; included if you save to an account',
+  hint = 'Optional. Saved on this device and synced when account sync is on.',
   className,
   autoFocus,
 }: {

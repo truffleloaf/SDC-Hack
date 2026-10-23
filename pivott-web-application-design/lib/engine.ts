@@ -222,7 +222,7 @@ export function targetRoleExposure(roleId: string, scenarioId: ScenarioId, signa
   return roleExposure(scored)
 }
 
-/** route_score = 0.7 × fit + 0.3 × 100 × (1 − target_exposure) — ranks lower-risk adjacent roles. */
+/** route_score = 0.7 × fit + 0.3 × 100 × (1 − target_exposure). Ranks lower-risk adjacent roles. */
 export function routeScore(fit: number, targetExposure: number) {
   return 0.7 * fit + 0.3 * 100 * (1 - targetExposure)
 }

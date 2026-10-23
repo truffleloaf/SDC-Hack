@@ -49,7 +49,7 @@ export default function PassportPage() {
     code: `PV-${target.id.slice(0, 3).toUpperCase()}-${String(Math.round(fit * 10)).padStart(4, '0')}`,
   }
 
-  const summary = `${possessive(data.name, 'My')} Pivott Skill Passport — ${data.currentRole} → ${data.destination}. ${rated ? `${Math.round(fit)}% fit based on rated skills` : 'Skills not rated'}${unknown ? ' (incomplete comparison)' : ''}, ${rated ? `${unknown ? 'partial ' : ''}est. ${weeks} weeks at ${state.hoursPerWeek} h/week` : 'learning time not estimated'}. Route: ${steps.map((s) => s.title).join(' → ') || (unknown ? 'rate remaining skills to estimate learning needs' : 'no gaps identified')}. (Illustrative demo data)`
+  const summary = `${possessive(data.name, 'My')} Pivott Skill Passport: ${data.currentRole} → ${data.destination}. ${rated ? `${Math.round(fit)}% fit based on rated skills` : 'Skills not rated'}${unknown ? ' (incomplete comparison)' : ''}, ${rated ? `${unknown ? 'partial ' : ''}est. ${weeks} weeks at ${state.hoursPerWeek} h/week` : 'learning time not estimated'}. Route: ${steps.map((s) => s.title).join(' → ') || (unknown ? 'rate remaining skills to estimate learning needs' : 'no gaps identified')}. (Illustrative demo data)`
 
   async function renderPng() {
     const { toPng } = await import('html-to-image')
@@ -101,7 +101,7 @@ export default function PassportPage() {
   return (
     <div className="mx-auto w-full max-w-[1200px] px-5 pb-20 pt-10">
       <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
-        <PageIntro eyebrow="Step 6 · Skill Passport" title="Your route, ready to share." />
+        <PageIntro eyebrow="Summary" title="Skill Passport">A one-page summary of your target role, skill match and plan.</PageIntro>
         <NameField label="Name on passport" className="md:max-w-xs" />
       </div>
 

@@ -51,3 +51,7 @@ Both engines use a fixed assumption weight equal to the previous strength × cut
 Loaded four local IBM Plex Sans weights with `next/font/local`; tabular numerals align data. Removed the hero eyebrow, split-colour headline, rings, glow and numbered card grid. Added a plain tools list and privacy sentence. Solid surfaces replace glass everywhere. Cards use 12px corners, controls 8px; data circles and status/filter pills retain their meaning. Empty states are left-aligned without icon ornaments. Shared primitive tokens/shadows and the font example were updated; DESIGN records the decisions. Fake QR was already absent; removed the remaining reference number. The passport light scope is still required for exports.
 
 Files: root layout/CSS/landing, states, shared primitives, panel/control consumers, passport and styleguide. Type checking passed before the final shadow-token substitutions. Responsive/theme and full checks run at the Part T boundary.
+
+## T3: specific copy
+
+Rewrote the hero, metadata, start, skills, signals, plan, passport, time panel and error/empty state copy. Removed name greetings and prose em dashes; table placeholders remain. Classification definitions now use a definition list. Account name help describes autosync accurately. The skills sentence explicitly says unknown ratings are excluded from learning gaps; the fit-range implementation in A1 will bound their possible contribution instead of claiming they never affect comparisons. Files: the corresponding pages/components and comments. Full validation follows at the Part T boundary.

@@ -17,7 +17,7 @@ import { Switch } from '@/components/ui/switch'
 import { roleById, skillById } from '@/lib/data/seed'
 import { buildPathway } from '@/lib/engine'
 import { buildIcs, downloadFile } from '@/lib/ics'
-import { displayName, greetingName, possessive, setState, useAnalysis, useAppState } from '@/lib/store'
+import { setState, useAnalysis, useAppState } from '@/lib/store'
 
 export default function PathwayPage() {
   const { state, hydrated } = useAppState()
@@ -59,8 +59,8 @@ export default function PathwayPage() {
 
   return (
     <div className="mx-auto w-full max-w-[1200px] px-5 pb-32 pt-10 lg:pb-20">
-      <PageIntro eyebrow={`Step 5 · ${possessive(displayName(state))} route to ${role.title}`} title="Your route, one step at a time.">
-        Hi {greetingName(state)} — steps are ordered by gap priority, so the skills that matter most for this role come first.
+      <PageIntro eyebrow="Learning plan" title={`Plan for ${role.title}`}>
+        Steps are ordered by how much each skill matters for this role and the size of your rated gap.
       </PageIntro>
 
       <SyncNote eligible={state.mode === 'personal'} />
@@ -96,9 +96,9 @@ export default function PathwayPage() {
                   >
                     <LogoMark animated className="size-14 shrink-0 text-foreground" />
                     <div className="flex flex-col gap-1">
-                      <p className="font-serif text-2xl">Plan steps complete.</p>
+                      <p className="font-serif text-2xl">All steps done.</p>
                       <p className="text-sm leading-relaxed text-muted-foreground">
-                        You’ve marked every estimated learning step complete. Your Skill Passport is a personal summary, not a qualification.
+                        You’ve marked every learning step complete. Review your skill ratings to update the comparison.
                       </p>
                     </div>
                   </motion.div>

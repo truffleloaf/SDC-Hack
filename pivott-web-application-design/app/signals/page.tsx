@@ -57,7 +57,7 @@ export default function SignalsPage() {
     toast.success('Task map recomputed', {
       description: changed.length
         ? `${changed.length} of your tasks changed. Overall exposure ${Math.round(b * 100)}% → ${Math.round(a * 100)}%.`
-        : 'No change for your tasks — they’re not referenced, or already at the 0–100% bounds in this scenario.',
+        : 'None of your tasks changed. No signal refers to them, or they are already at 0% or 100%.',
     })
   }
 
@@ -74,8 +74,8 @@ export default function SignalsPage() {
   return (
     <div className="mx-auto w-full max-w-[1200px] px-5 pb-20 pt-10">
       <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
-        <PageIntro eyebrow="Signals" title="What’s changing around your work?">
-          Dated evidence that nudges task exposure up or down. Older signals fade with a 180-day half-life.
+        <PageIntro eyebrow="Signals" title="Evidence behind the scores">
+          Each dated item moves task exposure up or down. Older items count for less (half-life 180 days).
         </PageIntro>
         <PButton variant="secondary" onClick={() => setAdminOpen(true)}>
           <ShieldPlus aria-hidden />

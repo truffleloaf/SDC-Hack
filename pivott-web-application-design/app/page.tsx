@@ -16,7 +16,7 @@ export default function LandingPage() {
               See which parts of your job AI could take on.
             </h1>
             <p className="mt-7 max-w-md text-lg leading-relaxed text-muted-foreground text-pretty">
-              See where AI could change your daily work, which skills carry into other roles, and what you could learn next.
+              Pick your role and the tasks you do. Pivott scores how exposed each task is, then lists nearby roles that reuse your skills, with a study plan.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
               <PLink href="/start" size="lg">Map my work<ArrowRight aria-hidden /></PLink>

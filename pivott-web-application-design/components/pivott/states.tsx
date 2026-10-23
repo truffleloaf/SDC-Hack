@@ -40,11 +40,11 @@ export function EmptyState({
   )
 }
 
-export function ErrorState({ title = 'Something went off route', onRetry }: { title?: string; onRetry?: () => void }) {
+export function ErrorState({ title = 'This page didn’t load', onRetry }: { title?: string; onRetry?: () => void }) {
   return (
     <EmptyState
       title={title}
-      description="Nothing is lost. Your profile is still saved in this browser."
+      description="Your saved work is still in this browser."
       action={onRetry && <PButton variant="secondary" onClick={onRetry}>Try again</PButton>}
     />
   )
@@ -52,9 +52,9 @@ export function ErrorState({ title = 'Something went off route', onRetry }: { ti
 
 export function NeedsProfile({ step = 'job' }: { step?: 'job' | 'skills' | 'route' }) {
   const map = {
-    job: { title: 'Start with your work', description: 'Pick your job and tasks first — it takes about a minute.', href: '/start', cta: 'Map my job' },
+    job: { title: 'Start with your work', description: 'Pick your role and tasks first. It takes about a minute.', href: '/start', cta: 'Map my job' },
     skills: { title: 'Rate a few skills first', description: 'Your routes depend on the skills you already bring.', href: '/skills', cta: 'Rate my skills' },
-    route: { title: 'Choose a route first', description: 'Pick a destination role to build a learning plan.', href: '/routes', cta: 'See my routes' },
+    route: { title: 'Choose a route first', description: 'Pick a target role to build a learning plan.', href: '/routes', cta: 'See my routes' },
   }[step]
   return (
     <div className="mx-auto w-full max-w-xl px-5 py-20">

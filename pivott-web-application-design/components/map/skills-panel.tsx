@@ -1,4 +1,3 @@
-import { Bot, ShieldCheck, Sparkles } from 'lucide-react'
 import { SkillChip } from '@/components/pivott/badges'
 import { skillById } from '@/lib/data/seed'
 import type { RouteResult, ScoredTask } from '@/lib/engine'
@@ -71,20 +70,11 @@ export function SkillsPanel({ stays, reinforce }: { stays: string[]; reinforce: 
             Higher <span className="ml-auto font-mono text-xs text-faint">{'≥ 65%'}</span>
           </li>
         </ul>
-        <ul className="mt-2 flex flex-col gap-2 text-xs leading-relaxed text-muted-foreground">
-          <li className="flex gap-2">
-            <Bot className="mt-0.5 size-3.5 shrink-0 text-foreground" aria-hidden />
-            <span><strong className="font-medium text-foreground">Automate</strong> — exposure ≥ 65% and judgment {'<'} 40%</span>
-          </li>
-          <li className="flex gap-2">
-            <Sparkles className="mt-0.5 size-3.5 shrink-0 text-foreground" aria-hidden />
-            <span><strong className="font-medium text-foreground">Augment</strong> — AI assists, you decide</span>
-          </li>
-          <li className="flex gap-2">
-            <ShieldCheck className="mt-0.5 size-3.5 shrink-0 text-foreground" aria-hidden />
-            <span><strong className="font-medium text-foreground">Protect</strong> — human judgment ≥ 65%</span>
-          </li>
-        </ul>
+        <dl className="mt-2 space-y-3 text-xs leading-relaxed text-muted-foreground">
+          <div><dt className="text-foreground">Automate</dt><dd>Exposure ≥ 65% and judgment {'<'} 40%</dd></div>
+          <div><dt className="text-foreground">Augment</dt><dd>AI assists and you decide</dd></div>
+          <div><dt className="text-foreground">Protect</dt><dd>Human judgment ≥ 65%</dd></div>
+        </dl>
       </section>
     </div>
   )

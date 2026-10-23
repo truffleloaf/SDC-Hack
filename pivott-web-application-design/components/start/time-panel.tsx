@@ -14,7 +14,7 @@ export function TimePanel({ state }: { state: AppState }) {
     <section aria-labelledby="time-title" className="card-surface flex flex-col gap-5 p-6">
       <div className="flex items-baseline justify-between">
         <h2 id="time-title" className="font-serif text-2xl">
-          Your time, your way
+          Time by task
         </h2>
         <span className="font-mono text-xs text-muted-foreground">{items.length} tasks</span>
       </div>

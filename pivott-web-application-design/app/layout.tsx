@@ -21,9 +21,9 @@ const plex = localFont({
 })
 
 export const metadata: Metadata = {
-  title: 'Pivott — Map the tasks. Route the skills.',
+  title: 'Pivott: see which parts of your job AI could take on',
   description:
-    'Explore illustrative task exposure, compare possible roles, and build a learning plan. Guest use is available; optional account saving is explicit.',
+    'Map your tasks, compare nearby roles and make a study plan. Start on this device or sign in to sync your plan.',
   icons: { icon: '/icon.svg' },
 }
 

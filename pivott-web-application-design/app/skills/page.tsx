@@ -27,7 +27,7 @@ export default function SkillsPage() {
     <div className="mx-auto w-full max-w-[1200px] px-5 pb-32 pt-10 lg:pb-20">
       <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
         <PageIntro eyebrow="Routes · Skill ratings" title="What skills do you bring?">
-          Rate what you know today. Rough is fine — you can change it any time.
+          Rate the skills you know. Skip any you are unsure about; they stay unknown and are left out of learning gaps.
         </PageIntro>
         <div className="flex items-center gap-4">
           <ProgressRing value={rated / skills.length} size={52} label="Skills rated">
