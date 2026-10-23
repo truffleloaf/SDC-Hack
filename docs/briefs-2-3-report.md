@@ -33,3 +33,9 @@ Added a dismissible sync note on chosen routes and plans, suppressed for example
 Added 86 frontend tests in total, including auth state transitions, recovery expiry, reconciliation and backup boundaries. Expanded the browser script for actual SDK requests against synthetic endpoints: code errors/resend/keyboard, Google handoff/return, first sync, conflicts, rollback, JSON import/export, optional rating changes, offline retry and local session deletion. Axe passed at 375px and 1280px in light and dark. Removed header and dialog/sheet backdrop blur early from T2 because software-rendered browser checks stalled on it; the solid surfaces also match the requested design.
 
 Files: auth/sync helpers and tests, provider/dialog guards, header/dialog/sheet surfaces, browser script/helper. Verification: frontend **86 passed**; TypeScript passed; production build passed; backend **66 passed**; all eight browser groups passed. These are synthetic auth checks, not proof of live SMTP or Google configuration. Supabase sometimes combines invalid/expired OTP errors, so the UI gives a combined next action when the server cannot distinguish them.
+
+## S6: owner configuration checklist and Part S result
+
+Updated root/frontend READMEs and `supabase/README.md` for the code flow, autosave and recovery. All eight external setup checks remain **owner-unverified**: custom SMTP/non-team delivery; token email template; 600-second OTP expiry; Google credentials/consent; redirect allowlist/Site URL; Vercel public build variables/redeploy; SQL migration application; real phone/incognito verification. Verify the migration's applied state before running it again. No project credentials are available here, and no live-provider success is claimed.
+
+Part S is implemented and its required checks passed (S5). Remaining work: T1–T6, U, then A/B/C/D items not already covered. No features were removed. Résumé import remains local and available.

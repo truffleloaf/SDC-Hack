@@ -23,7 +23,7 @@ pnpm install
 pnpm dev        # http://localhost:3000
 ```
 
-Guest mode needs no environment variables or database. Optional Supabase email-link sign-in and account saving require [the migration and configuration](../supabase/README.md).
+Guest mode needs no environment variables or database. Optional Supabase email-code/Google sign-in and account sync require [the migration and configuration](../supabase/README.md).
 
 ## Seed data and reset
 
@@ -90,7 +90,7 @@ Your name is optional and stays in localStorage unless you explicitly save the p
 
 ## Privacy
 
-Guest profiles and progress stay in your browser. Optional Supabase accounts use email links, owner-only database policies, explicit saves and revision conflict checks. Signing in does not automatically upload or overwrite work. Use `/account` for account settings and deletion; deleting device data does not delete an account copy. Clicking **Verify with API** on the task map sends task selections, skill levels, custom tasks, and applied custom signals for a stateless comparison. It omits your display name, completion history, cookies, and pending signals. No check runs automatically; local results remain usable if the API is offline.
+Guest profiles and progress stay in your browser. Optional Supabase accounts use email codes or Google, owner-only database policies, autosave and revision conflict checks. Signing in syncs the plan. Different versions require a choice and replacements have a 30-second backup/undo. Use `/account` for account settings and deletion; deleting device data does not delete an account copy. Clicking **Verify with API** on the task map sends task selections, skill levels, custom tasks, and applied custom signals for a stateless comparison. It omits your display name, completion history, cookies, and pending signals. No check runs automatically; local results remain usable if the API is offline.
 
 ## Styleguide
 

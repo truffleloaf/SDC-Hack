@@ -2,7 +2,7 @@
 
 **Don't predict the job. Map the tasks. Route the skills.**
 
-Pivott helps people examine how AI could affect the tasks in their working week, identify adjacent roles that reuse their skills, and build a practical learning pathway. It uses deterministic formulas and a versioned illustrative dataset—no LLM scoring. Guest profiles and progress stay in your browser. Optional Supabase email-link sign-in enables explicit account saving; it requires project configuration and the included database migration. An optional **Verify with API** check compares local results with a stateless backend using task/skill inputs, without sending your display name or progress.
+Pivott helps people examine how AI could affect the tasks in their working week, identify adjacent roles that reuse their skills, and build a practical learning pathway. It uses deterministic formulas and a versioned illustrative dataset—no LLM scoring. Guest profiles and progress stay in your browser. Optional Supabase email-code or Google sign-in enables account sync; it requires project configuration and the included database migration. An optional **Verify with API** check compares local results with a stateless backend using task/skill inputs, without sending your display name or progress.
 
 **[Live demo](https://pivottstudio.vercel.app)** · [Design direction](pivott-web-application-design/DESIGN.md) · [Vercel setup](VERCEL.md) · [English demo script](backend/docs/demo-script.en.md)
 
@@ -87,7 +87,7 @@ Choose a reference role, confirm its tasks, then view the initial map before rat
 
 **Not sure** is distinct from level 0 (**No experience**). Unanswered skills are excluded from coverage and learning gaps. With no rated requirements, provisional ranking uses task similarity and target exposure; partial ratings and learning estimates are labeled. Users can save up to three routes and resume one active profile/plan at `/workspace`.
 
-Accounts are optional. Follow [Supabase setup](supabase/README.md) to apply owner-only RLS and configure public build variables and email callbacks. Saving is explicit, conflicts require a choice, and stale revisions cannot overwrite another device silently. Account settings live at `/account`. No service-role key is used by the frontend.
+Accounts are optional. Follow [Supabase setup](supabase/README.md) for owner-only RLS, public build variables, SMTP/OTP and Google settings. Signing in starts sync; different versions require a choice, replacements have a 30-second backup/undo, and stale revisions cannot overwrite another device silently. Account settings live at `/account`. No service-role key is used by the frontend.
 
 ## Data and maintenance
 
@@ -106,7 +106,7 @@ Do not hand-edit the JSON. Formula changes must be mirrored in both engines, fol
 - Exposure measures potential task assistance or automation; it is **not a probability of job loss**. Base scores and role mappings are illustrative editorial inputs, not measured labour-market forecasts.
 - The six roles are a small demo catalogue. Published signal references do not independently validate the assigned task scores. No live job/news feed or LLM is used.
 - Learning durations are estimates; course availability, pricing, and external links can change.
-- Guest work stays in this browser. With configured Supabase, **Save to account** explicitly uploads the profile, skills, selected tasks, saved routes, signals and plan progress. Signing in never automatically replaces or merges guest ratings. See [account setup and policies](supabase/README.md). Verification sends inputs only when clicked. Local calculation keeps working if verification fails; offline page reloads are not guaranteed because this is not a PWA.
+- Guest work stays in this browser. With configured Supabase, signing in syncs profile fields, ratings, selected tasks, saved routes, signals and plan progress. Different device/account versions require a choice; ratings are never merged automatically. See [account setup and policies](supabase/README.md). Verification sends inputs only when clicked. Local calculation keeps working if verification fails; offline page reloads are not guaranteed because this is not a PWA.
 - The public API has no authentication or application rate limiter. Apply hosting-edge abuse controls before wider use. CORS is restricted to explicit origins and is not an authentication or rate-limit mechanism.
 - The passport is a personal planning summary, not a qualification or verifiable credential.
 
