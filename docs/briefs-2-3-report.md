@@ -131,3 +131,7 @@ The new interaction script passed editable drafts/clamps, touch pin/unpin, retai
 ## B1: hero data entry, without loops
 
 Hero nodes enter once from the centre with a short stagger and spring; reduced motion renders the final state immediately. Removed the remaining decorative SVG rings. Added a shared MotionConfig respecting the user preference. No floating bubbles, auto-highlight, looping dashes or global page fade was added, following Brief 3. Static connections remain; directional dash animation is optional and was omitted. Files: hero, motion provider/layout; also made OG subcopy a single specific sentence. Full Part B checks follow.
+
+## B2: exposure count-up
+
+The Map headline animates changes through CountUp; initial values and reduced motion render immediately. A separate polite live region receives only the target value, not animation frames. Interrupted animations continue from the displayed value. Files: Map and progress-ring. Full Part B checks follow.

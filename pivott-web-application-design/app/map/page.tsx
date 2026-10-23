@@ -7,6 +7,7 @@ import { VerifyAnalysis } from '@/components/map/verify-analysis'
 import { SkillsPanel, deriveSkillGroups } from '@/components/map/skills-panel'
 import { TaskListTable } from '@/components/map/task-list-table'
 import { TaskMapCanvas } from '@/components/map/task-map-canvas'
+import { CountUp } from '@/components/pivott/progress-ring'
 import { MobileActionBar } from '@/components/pivott/mobile-action-bar'
 import { PButton, PLink } from '@/components/pivott/p-button'
 import { ScenarioSwitch } from '@/components/pivott/scenario-switch'
@@ -54,7 +55,7 @@ export default function MapPage() {
             {Object.keys(state.skills).length ? 'Work' : 'Your initial map · Step 3 of 3'} · {state.jobTitle || role?.title}
           </p>
           <h1 id="summary-title" className="flex items-baseline gap-3 font-serif tracking-[-0.03em]">
-            <span className="shrink-0 whitespace-nowrap text-5xl font-semibold leading-none md:text-6xl">{scored.length ? `${Math.round(exposure * 100)}%` : 'Not assessed'}</span>
+            <span className="shrink-0 whitespace-nowrap text-5xl font-semibold leading-none md:text-6xl">{scored.length ? <><span aria-hidden><CountUp value={exposure * 100} duration={0.45} format={(value) => `${Math.round(value)}%`} /></span><span className="sr-only" role="status" aria-live="polite">{Math.round(exposure * 100)}%</span></> : 'Not assessed'}</span>
             <span className="text-2xl text-muted-foreground md:text-3xl">estimated task exposure</span>
           </h1>
         </div>
