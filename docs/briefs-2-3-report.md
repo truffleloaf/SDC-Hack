@@ -67,3 +67,7 @@ Removed every skill `why` claim and replaced pathway `why` with numeric current/
 ## T6: unused assets and motion cleanup
 
 Deleted placeholder images and unused legacy app icons; retained the referenced SVG icon and all four now-used Plex files/license. Removed disabled float/dash keyframes, unused dot-grid fade and route-flow classes. No floating loop, auto-cycle, global page fade or celebration was added. The passport light scope remains in use by exports and is not dead code. Banned-word search found only a PDF orientation enum (`landscape`), test fixtures and a developer comment, with no promotional UI prose. Files: public assets, CSS, graph class/prop names. Full Part T verification follows.
+
+## Part T verification
+
+Frontend **89 passed**, backend **66 passed**, TypeScript and production build passed, seed/golden freshness passed. New `scripts/check-briefs-browser.cjs` checks ten affected pages at 375/1280px in light/dark with Axe, overflow checks, screenshots and browser-error collection: **all 40 page/theme/width combinations passed**. Manual screenshot review caught a wrapping percentage; made it non-wrapping. Axe caught low contrast on mint/subtle surfaces; darkened the existing slate text token slightly to meet 4.5:1. Rebuilt and reran the full browser matrix after those fixes. No new source claims, decorative motion or credential graphics were added. Part T complete; proceeding to U.

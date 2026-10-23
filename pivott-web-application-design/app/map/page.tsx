@@ -54,7 +54,7 @@ export default function MapPage() {
             {Object.keys(state.skills).length ? 'Work' : 'Your initial map · Step 3 of 3'} · {state.jobTitle || role?.title}
           </p>
           <h1 id="summary-title" className="flex items-baseline gap-3 font-serif tracking-[-0.03em]">
-            <span className="text-5xl font-semibold leading-none md:text-6xl">{scored.length ? `${Math.round(exposure * 100)}%` : 'Not assessed'}</span>
+            <span className="shrink-0 whitespace-nowrap text-5xl font-semibold leading-none md:text-6xl">{scored.length ? `${Math.round(exposure * 100)}%` : 'Not assessed'}</span>
             <span className="text-2xl text-muted-foreground md:text-3xl">estimated task exposure</span>
           </h1>
         </div>
