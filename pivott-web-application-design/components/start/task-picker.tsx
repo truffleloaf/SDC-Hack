@@ -1,5 +1,6 @@
 'use client'
 
+import { NumberField } from '@/components/pivott/number-field'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { ConfirmDialog } from '@/components/pivott/confirm-dialog'
@@ -49,7 +50,7 @@ export function TaskPicker({ state }: { state: AppState }) {
                 <p className="text-xs text-muted-foreground">Skills: {task.skills.map((id) => skills.find((skill) => skill.id === id)?.name).join(', ') || 'Not specified'}</p>
                 {selected ? <>
                   <label className="flex items-center justify-between gap-3 text-sm">Time spent (%)
-                    <input className="pivott-input w-24" type="number" min={1} max={100} value={Math.round(selected.share)} aria-label={`Time percentage for ${title}`} onChange={(event) => { const value = event.target.valueAsNumber; if (Number.isFinite(value)) setState({ selections: setShare(state.selections, task.id, Math.min(100, Math.max(1, value))) }) }} />
+                    <NumberField className="w-24" min={1} max={100} value={Math.round(selected.share)} aria-label={`Time percentage for ${title}`} onCommit={(value) => setState({ selections: setShare(getState().selections, task.id, value) })} />
                   </label>
                   <ValueSlider label={`Time share for ${title}`} min={1} max={100} value={selected.share} onChange={(value) => setState({ selections: setShare(state.selections, task.id, value) })} />
                   <PButton size="sm" variant="ghost" className="self-start" onClick={() => remove(task.id)}>Remove task</PButton>

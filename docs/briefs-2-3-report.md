@@ -91,3 +91,7 @@ Checker self-test and UI scan passed. Frontend **89 passed**, backend **66 passe
 ## A1: conservative partial fit
 
 Reproduced the inflation before fixing it (Part U result). Both engines now compute fitLow/fitHigh and importance-weighted ratedShare; fit remains a compatibility alias for fitLow, which drives ranking. Cards, comparison, formula sheet and passport show ranges until all required skills are rated. Unknown ratings remain absent from learning gaps. Added the Excel-only regression in both languages and the fully rated collapsed-range check; regenerated goldens. Remote verification reads route IDs only, so its response parser needs no change. Updated Method to explain bounds. Backend **67 passed**; frontend checks follow the old coverage-test expectation update and Part A boundary. No fully rated demo scores change.
+
+## A2: editable number drafts
+
+Confirmed both time-share and study-hour fields committed numbers on every keystroke and rejected an empty draft. Added shared NumberField: clearing is allowed during editing, blur/Enter clamps and commits, invalid input restores the current value. Applied to TaskPicker and Workspace. Files: NumberField and both consumers. Browser coverage at the Part A boundary will clear, replace and clamp both fields.
