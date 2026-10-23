@@ -33,6 +33,7 @@ The root layout and every Route Handler under `app/api/*` call `getCatalog()` (`
 - **Local dev**: if `PIVOTT_API_BASE` or `NEXT_PUBLIC_API_BASE` is set (e.g. `http://127.0.0.1:8001`), it fetches the root live FastAPI instead. If that API is down, it falls back to the committed snapshot.
 - The demo seed is only used when the snapshot cannot be applied. The demo keeps Aisyah and the “View an example” flow; the live catalogue has no demo persona, so the landing page shows a live occupation preview and demo actions are hidden.
 - In live mode `GET /api/seed` returns the live payload and `POST /api/seed` returns 403; `/api/live/status` returns the O*NET/Arbeitnow source details.
+- Snapshot source: O*NET 31.0 (CC BY 4.0) plus the Arbeitnow job board (85 matched postings in `live-meta.json`). Scores remain the deterministic Pivott model, not labour-market statistics.
 - Account saving is independent of the catalogue: signed-in users go directly to Supabase `user_profiles`; the Supabase public defaults live in `next.config.mjs`.
 
 Refresh the committed snapshot from the root live FastAPI:

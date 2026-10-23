@@ -15,7 +15,10 @@ import {
  */
 export const API_BASE = (
   process.env.PIVOTT_API_BASE ||
-  process.env.NEXT_PUBLIC_API_BASE ||
+  // On Vercel, prefer the committed snapshot unless a server-only API base is
+  // explicitly configured. This keeps a stale public env var from silently
+  // reintroducing the old two-service topology.
+  (process.env.VERCEL ? '' : process.env.NEXT_PUBLIC_API_BASE) ||
   ''
 ).replace(/\/+$/, '')
 
