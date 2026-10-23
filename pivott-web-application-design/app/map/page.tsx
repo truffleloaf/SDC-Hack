@@ -1,8 +1,10 @@
 'use client'
 
 import { ArrowRight, Info, Layers, List, Map as MapIcon } from 'lucide-react'
-import { AnimatePresence, motion } from 'motion/react'
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { useEffect, useState } from 'react'
+import { AdoptionPreview } from '@/components/map/adoption-preview'
+import { snapPreview } from '@/lib/preview'
 import { VerifyAnalysis } from '@/components/map/verify-analysis'
 import { SkillsPanel, deriveSkillGroups } from '@/components/map/skills-panel'
 import { TaskListTable } from '@/components/map/task-list-table'
@@ -16,14 +18,16 @@ import { NeedsProfile, PageSkeleton } from '@/components/pivott/states'
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { roleById } from '@/lib/data/seed'
-import { confidence } from '@/lib/engine'
+import { confidence, fitLabel, getScenario } from '@/lib/engine'
 import { setState, useAnalysis, useAppState } from '@/lib/store'
 
 const fmtDate = (d: string) => new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
 
 export default function MapPage() {
   const { state, hydrated } = useAppState()
-  const analysis = useAnalysis(state)
+  const [preview, setPreview] = useState<number | undefined>(undefined)
+  const reduce = useReducedMotion()
+  const analysis = useAnalysis(state, preview)
   const [view, setView] = useState<'map' | 'list'>('map')
   const [sheetOpen, setSheetOpen] = useState(false)
 
@@ -98,7 +102,11 @@ export default function MapPage() {
       <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_300px]">
         <section aria-label="Task visualisation" className="card-surface flex min-w-0 flex-col gap-5 p-4 sm:p-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <ScenarioSwitch state={state} />
+            <div className="flex w-full flex-col gap-3 sm:max-w-sm"><ScenarioSwitch state={state} onPreset={() => setPreview(undefined)} /><AdoptionPreview value={preview ?? getScenario(state.scenario).multiplier} onChange={(value) => {
+              const next = snapPreview(value)
+              if (next === 1 || next === 1.25) { setPreview(undefined); const scenario = next === 1 ? 'normal' : 'fast'; if (state.scenario !== scenario) setState({ scenario }) }
+              else setPreview(next)
+            }} /></div>
             <div className="flex items-center gap-2">
               <PButton variant="secondary" size="sm" className="lg:hidden" onClick={() => setSheetOpen(true)}>
                 <Layers aria-hidden />
@@ -133,7 +141,7 @@ export default function MapPage() {
             </motion.div>
           </AnimatePresence>
           {unassessed.length > 0 && <section className="border-t border-border pt-4"><h2 className="text-sm font-medium">Not assessed yet</h2><ul className="mt-2 space-y-2">{unassessed.map((task) => <li key={task.taskId} className="flex justify-between gap-3 text-sm"><span>{state.taskNames[task.taskId] || task.name}</span><span className="text-muted-foreground">{Math.round(task.share)}% of your time · No estimate</span></li>)}</ul></section>}
-          <VerifyAnalysis state={state} analysis={analysis} />
+          {preview === undefined ? <VerifyAnalysis state={state} analysis={analysis} /> : <p className="border-t border-border pt-4 text-xs text-muted-foreground">Preview runs on this device. Choose Normal or Fast to verify a preset with the API.</p>}
         </section>
 
         <aside className="hidden lg:block">
@@ -146,6 +154,8 @@ export default function MapPage() {
           </div>
         </aside>
       </div>
+
+      <section className="mt-10" aria-labelledby="nearby-title"><h2 id="nearby-title" className="text-xl font-semibold">Nearby roles{preview !== undefined ? ' · Preview' : ''}</h2><p className="mt-2 text-sm text-muted-foreground">Ranked with the current adoption multiplier.</p><ol className="mt-4 divide-y divide-border">{routes.map((route) => <motion.li key={route.roleId} layout={reduce ? false : 'position'} transition={{ type: 'spring', stiffness: 240, damping: 30 }} className="flex flex-wrap justify-between gap-2 py-4"><span className="font-medium">{route.title}</span><span className="text-sm text-muted-foreground">Fit {fitLabel(route)} · Target exposure {Math.round(route.targetExposure * 100)}%</span></motion.li>)}</ol><PLink href="/routes" variant="link">Compare {preview !== undefined ? 'preset ' : ''}routes</PLink></section>
 
       <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
         <SheetContent side="bottom" className="max-h-[85dvh] overflow-y-auto rounded-t-xl px-5 pb-8">

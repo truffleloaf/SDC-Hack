@@ -42,8 +42,8 @@ SELECTIONS = [
 ]
 
 
-def analysis(scenario: str) -> dict:
-    tasks = score_tasks(SELECTIONS, TASK_BY_ID, scenario, SIGNALS)
+def analysis(scenario: str, preview_multiplier=None) -> dict:
+    tasks = score_tasks(SELECTIONS, TASK_BY_ID, scenario, SIGNALS, preview_multiplier)
     user_skills = list(dict.fromkeys(skill for task in tasks for skill in task["skills"]))
     return {
         **assessment_summary(SELECTIONS, TASK_BY_ID),
@@ -58,6 +58,7 @@ def analysis(scenario: str) -> dict:
             scenario_id=scenario,
             signals=SIGNALS,
             hours_per_week=8,
+            preview_multiplier=preview_multiplier,
         ),
     }
 
@@ -253,3 +254,7 @@ def test_one_rating_cannot_exceed_fully_rated_demo_fit():
     for route in full.values():
         assert route["fitHigh"] == pytest.approx(route["fitLow"])
         assert route["ratedShare"] == 1
+
+
+def test_preview_matches_typescript_golden():
+    assert_close(analysis("normal", 1.4), GOLDEN["analysisPreview"])

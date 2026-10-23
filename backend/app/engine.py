@@ -106,8 +106,9 @@ def score_tasks(
     task_lookup: dict[str, dict[str, Any]],
     scenario_id: str,
     signals: Sequence[dict[str, Any]] = SIGNALS,
+    preview_multiplier: float | None = None,
 ) -> list[dict[str, Any]]:
-    multiplier = get_scenario(scenario_id)["multiplier"]
+    multiplier = get_scenario(scenario_id)["multiplier"] if preview_multiplier is None else clamp(preview_multiplier, 1, 1.5)
     normalized = normalize_shares(
         [selection for selection in selections if selection["taskId"] in task_lookup and "roleId" in task_lookup[selection["taskId"]]]
     )
@@ -222,6 +223,7 @@ def target_role_exposure(
     role_id: str,
     scenario_id: str,
     signals: Sequence[dict[str, Any]] = SIGNALS,
+    preview_multiplier: float | None = None,
 ) -> float:
     tasks = TASKS_BY_ROLE.get(role_id, [])
     lookup = {task["id"]: task for task in tasks}
@@ -230,6 +232,7 @@ def target_role_exposure(
         lookup,
         scenario_id,
         signals,
+        preview_multiplier,
     )
     return role_exposure(scored)
 
@@ -248,6 +251,7 @@ def compute_routes(
     signals: Sequence[dict[str, Any]] = SIGNALS,
     hours_per_week: float,
     limit: int = 3,
+    preview_multiplier: float | None = None,
 ) -> list[dict[str, Any]]:
     routes: list[dict[str, Any]] = []
     for role in ROLES:
@@ -261,7 +265,7 @@ def compute_routes(
         fit_low = role_fit(coverage, similarity)
         fit_high = role_fit(min(1, coverage + 1 - rated_share), similarity)
         fit = fit_low
-        exposure = target_role_exposure(role["id"], scenario_id, signals)
+        exposure = target_role_exposure(role["id"], scenario_id, signals, preview_multiplier)
         gaps = skill_gaps(role, levels)
         total_gap_hours = sum(gap["hours"] for gap in gaps)
         routes.append(

@@ -244,14 +244,14 @@ export function computeScored(s: AppState, scenario: ScenarioId = s.scenario, si
   return scoreTasks(s.selections, taskLookup(s), scenario, signals)
 }
 
-export function useAnalysis(s: AppState) {
-  return useMemo(() => analyze(s), [s])
+export function useAnalysis(s: AppState, previewMultiplier?: number) {
+  return useMemo(() => analyze(s, previewMultiplier), [s, previewMultiplier])
 }
 
-export function analyze(s: AppState) {
+export function analyze(s: AppState, previewMultiplier?: number) {
   const signals = activeSignals(s)
   const lookup = taskLookup(s)
-  const scored = scoreTasks(s.selections, lookup, s.scenario, signals).map((task) => ({ ...task, name: s.taskNames?.[task.id] || task.name }))
+  const scored = scoreTasks(s.selections, lookup, s.scenario, signals, previewMultiplier).map((task) => ({ ...task, name: s.taskNames?.[task.id] || task.name }))
   const unassessed = s.selections.filter((selection) => lookup[selection.taskId] && !('roleId' in lookup[selection.taskId])).map((selection) => ({ ...selection, name: lookup[selection.taskId].name }))
   const totalShare = s.selections.reduce((sum, task) => sum + task.share, 0)
   const assessedShare = s.selections.filter((selection) => lookup[selection.taskId] && 'roleId' in lookup[selection.taskId]).reduce((sum, task) => sum + task.share, 0)
@@ -267,6 +267,7 @@ export function analyze(s: AppState) {
         signals,
         hoursPerWeek: s.hoursPerWeek,
         limit: 10,
+        previewMultiplier,
       })
     : []
   const lastUpdated = signals.reduce((a, b) => (b.date && b.date > a ? b.date : a), '2000-01-01')

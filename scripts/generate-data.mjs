@@ -5,10 +5,10 @@ import { loadFrontendModules } from './frontend-modules.mjs'
 
 const { seed, engine } = loadFrontendModules()
 const selections = seed.tasksForRole('finance-admin').map((task) => ({ taskId: task.id, share: task.defaultShare }))
-function analysis(scenario, profile = {}) {
+function analysis(scenario, profile = {}, previewMultiplier) {
   const signals = [...seed.signals, ...(profile.customSignals ?? [])]
   const lookup = { ...seed.taskById, ...Object.fromEntries((profile.customTasks ?? []).map((task) => [task.id, task])) }
-  const tasks = engine.scoreTasks(profile.selections ?? selections, lookup, scenario, signals)
+  const tasks = engine.scoreTasks(profile.selections ?? selections, lookup, scenario, signals, previewMultiplier)
   return {
     ...engine.assessmentSummary(profile.selections ?? selections, lookup),
     scenario,
@@ -17,7 +17,7 @@ function analysis(scenario, profile = {}) {
     tasks,
     routes: engine.computeRoutes({
       currentRoleId: 'finance-admin', userTaskSkills: [...new Set((profile.selections ?? selections).flatMap((selection) => lookup[selection.taskId].skills))],
-      levels: seed.demoPersona.skills, scenarioId: scenario, signals, hoursPerWeek: 8,
+      levels: seed.demoPersona.skills, scenarioId: scenario, signals, hoursPerWeek: 8, previewMultiplier,
     }),
   }
 }
@@ -36,6 +36,7 @@ const customProfile = {
 const golden = {
   analysisNormal: normal,
   analysisFast: analysis('fast'),
+  analysisPreview: analysis('normal', {}, 1.4),
   customProfile,
   analysisCustomNormal: analysis('normal', customProfile),
   analysisCustomFast: analysis('fast', customProfile),

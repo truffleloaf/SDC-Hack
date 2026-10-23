@@ -147,3 +147,7 @@ B4 was completed in T2 (local Plex and tabular figures). B5 is explicitly droppe
 ## Part B verification
 
 Frontend **93 passed**, backend **67 passed**, TypeScript, production build and copy lint passed. Responsive/theme/Axe checks passed across 48 page combinations plus four List views. New motion browser checks passed at 375px/dark/reduced motion and 1280px/light/normal motion: hero selection, final exposure announcement/display, Normal/Fast order change and three-second movement-label expiry. Also made existing exposure/progress bars use zero-duration transitions under reduced motion. No decorative loops or page transitions were added. Part B complete; proceeding to C.
+
+## C1: adoption preview
+
+Added a 1.00–1.50 multiplier slider with two-decimal values and 0.02 preset snapping. Map exposure, filled cores, classifications and the nearby-role order recompute live; non-preset previews remain temporary and hide API verification until a preset is chosen. Normal/Fast retain their verified path. Both engines accept the same optional bounded preview multiplier without changing the existing formula or public API. Added snap, ranking/exposure and cross-language preview golden coverage; fixtures regenerated. Files: preview helper/control, Map/store, both engines, scenario switch, Method, generator/tests. Unit/type/browser results are consolidated at the Part C boundary.

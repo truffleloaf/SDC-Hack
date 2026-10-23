@@ -105,8 +105,9 @@ export function scoreTasks(
   taskLookup: Record<string, Task | CustomTask>,
   scenarioId: ScenarioId,
   signals: Signal[],
+  previewMultiplier?: number,
 ): ScoredTask[] {
-  const { multiplier } = getScenario(scenarioId)
+  const multiplier = previewMultiplier === undefined ? getScenario(scenarioId).multiplier : clamp(previewMultiplier, 1, 1.5)
   const normalized = normalizeShares(selections.filter((s) => taskLookup[s.taskId] && 'roleId' in taskLookup[s.taskId]))
   return normalized.map(({ taskId, share }) => {
     const t = taskLookup[taskId]
@@ -210,7 +211,7 @@ export function learningWeeks(totalHours: number, hoursPerWeek: number) {
 }
 
 /** Default-time-share exposure for a role under a scenario. */
-export function targetRoleExposure(roleId: string, scenarioId: ScenarioId, signals: Signal[]) {
+export function targetRoleExposure(roleId: string, scenarioId: ScenarioId, signals: Signal[], previewMultiplier?: number) {
   const list = tasksForRole(roleId)
   const lookup = Object.fromEntries(list.map((t) => [t.id, t]))
   const scored = scoreTasks(
@@ -218,6 +219,7 @@ export function targetRoleExposure(roleId: string, scenarioId: ScenarioId, signa
     lookup,
     scenarioId,
     signals,
+    previewMultiplier,
   )
   return roleExposure(scored)
 }
@@ -255,8 +257,9 @@ export function computeRoutes(params: {
   signals: Signal[]
   hoursPerWeek: number
   limit?: number
+  previewMultiplier?: number
 }): RouteResult[] {
-  const { currentRoleId, userTaskSkills, levels, scenarioId, signals, hoursPerWeek, limit = 3 } = params
+  const { currentRoleId, userTaskSkills, levels, scenarioId, signals, hoursPerWeek, limit = 3, previewMultiplier } = params
   return roles
     .filter((r) => r.id !== currentRoleId)
     .map((role) => {
@@ -268,7 +271,7 @@ export function computeRoutes(params: {
       const fitLow = roleFit(coverage, similarity)
       const fitHigh = roleFit(Math.min(1, coverage + 1 - ratedShare), similarity)
       const fit = fitLow
-      const exposure = targetRoleExposure(role.id, scenarioId, signals)
+      const exposure = targetRoleExposure(role.id, scenarioId, signals, previewMultiplier)
       const gaps = skillGaps(role, levels)
       const totalGapHours = gaps.reduce((a, g) => a + g.hours, 0)
       return {

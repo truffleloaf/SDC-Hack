@@ -160,3 +160,14 @@ describe('partial fit bounds', () => {
     for (const route of computeRoutes({ ...base, levels: {} })) { expect(route.ratedShare).toBe(0); expect(route.fitHigh).toBeGreaterThan(route.fitLow); expect(route.gaps).toEqual([]) }
   })
 })
+
+
+describe('preview multiplier', () => {
+  it('updates task exposure and route ordering without changing fit', () => {
+    const base = { currentRoleId: 'finance-admin', userTaskSkills: taskSkills, levels: demoPersona.skills, signals, hoursPerWeek: 6, scenarioId: 'normal' as const }
+    const normal = computeRoutes(base), preview = computeRoutes({ ...base, previewMultiplier: 1.4 })
+    expect(preview[0].roleId).not.toBe(normal[0].roleId)
+    for (const route of preview) { const old = normal.find((r) => r.roleId === route.roleId); if (old) { expect(route.fit).toBe(old.fit); expect(route.targetExposure).toBeGreaterThanOrEqual(old.targetExposure) } }
+    expect(roleExposure(scoreTasks(selections, lookup, 'normal', signals, 1.4))).toBeGreaterThan(roleExposure(scoreTasks(selections, lookup, 'normal', signals)))
+  })
+})

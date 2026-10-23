@@ -649,6 +649,331 @@
       }
     ]
   },
+  "analysisPreview": {
+    "assessmentCoverage": 1,
+    "unassessedTasks": [],
+    "scenario": "normal",
+    "roleExposure": 0.8188809198931332,
+    "confidence": "Medium",
+    "tasks": [
+      {
+        "id": "fa-invoice",
+        "name": "Invoice entry",
+        "description": "Capture supplier invoices and code them to the ledger.",
+        "share": 0.3,
+        "baseExposure": 0.78,
+        "adjustment": 0.04183436982796657,
+        "exposure": 1,
+        "humanJudgment": 0.15,
+        "classification": "Automate",
+        "skills": [
+          "erp",
+          "excel"
+        ],
+        "tryThisWeek": "Batch ten invoices through your ERP’s capture feature and log every field you had to correct.",
+        "custom": false
+      },
+      {
+        "id": "fa-recon",
+        "name": "Bank reconciliation",
+        "description": "Match bank lines to ledger entries and clear differences.",
+        "share": 0.2,
+        "baseExposure": 0.66,
+        "adjustment": 0.030009838925370354,
+        "exposure": 0.9540098389253703,
+        "humanJudgment": 0.3,
+        "classification": "Automate",
+        "skills": [
+          "excel",
+          "controls",
+          "erp"
+        ],
+        "tryThisWeek": "Write matching rules for your three most common transaction types and test them on last month.",
+        "custom": false
+      },
+      {
+        "id": "fa-exception",
+        "name": "Exception handling",
+        "description": "Investigate mismatches, duplicates, and policy breaches.",
+        "share": 0.15,
+        "baseExposure": 0.4,
+        "adjustment": -0.040265342383718504,
+        "exposure": 0.5197346576162815,
+        "humanJudgment": 0.68,
+        "classification": "Protect",
+        "skills": [
+          "controls",
+          "stakeholder",
+          "analysis"
+        ],
+        "tryThisWeek": "Keep a short log of each exception and the judgment call you made. Patterns become playbooks.",
+        "custom": false
+      },
+      {
+        "id": "fa-reporting",
+        "name": "Month-end reporting",
+        "description": "Prepare month-end packs and variance commentary.",
+        "share": 0.15,
+        "baseExposure": 0.56,
+        "adjustment": 0.0307792540251913,
+        "exposure": 0.8147792540251914,
+        "humanJudgment": 0.42,
+        "classification": "Augment",
+        "skills": [
+          "excel",
+          "analysis",
+          "writing"
+        ],
+        "tryThisWeek": "Ask an AI assistant to draft variance commentary, then edit it and note what it missed.",
+        "custom": false
+      },
+      {
+        "id": "fa-comms",
+        "name": "Client communication",
+        "description": "Resolve payment queries with vendors and internal teams.",
+        "share": 0.1,
+        "baseExposure": 0.28,
+        "adjustment": -0.02013528295209619,
+        "exposure": 0.3718647170479038,
+        "humanJudgment": 0.72,
+        "classification": "Protect",
+        "skills": [
+          "stakeholder",
+          "writing",
+          "empathy"
+        ],
+        "tryThisWeek": "Draft three reusable reply templates for common payment queries and personalise each one.",
+        "custom": false
+      },
+      {
+        "id": "fa-expense",
+        "name": "Expense claim review",
+        "description": "Check claims against policy and approve or return them.",
+        "share": 0.1,
+        "baseExposure": 0.62,
+        "adjustment": 0.039153936570477034,
+        "exposure": 0.907153936570477,
+        "humanJudgment": 0.38,
+        "classification": "Automate",
+        "skills": [
+          "controls",
+          "ai"
+        ],
+        "tryThisWeek": "Turn your expense policy into a checklist an AI tool can pre-screen against, then spot-check results.",
+        "custom": false
+      }
+    ],
+    "routes": [
+      {
+        "roleId": "finance-systems-analyst",
+        "title": "Finance Systems Analyst",
+        "family": "Finance & Technology",
+        "demand": 78,
+        "coverage": 0.5868055555555556,
+        "similarity": 0.45454545454545453,
+        "fit": 56.035353535353536,
+        "fitLow": 56.035353535353536,
+        "fitHigh": 56.035353535353536,
+        "ratedShare": 1,
+        "targetExposure": 0.5133968811190244,
+        "score": 53.822841041176744,
+        "gaps": [
+          {
+            "skillId": "automation",
+            "name": "Process automation",
+            "current": 1,
+            "required": 3,
+            "gap": 2,
+            "importance": 4,
+            "priority": 6.24,
+            "hours": 24
+          },
+          {
+            "skillId": "process",
+            "name": "Process design",
+            "current": 1,
+            "required": 3,
+            "gap": 2,
+            "importance": 3,
+            "priority": 4.68,
+            "hours": 20
+          },
+          {
+            "skillId": "sql",
+            "name": "SQL",
+            "current": 0,
+            "required": 2,
+            "gap": 2,
+            "importance": 3,
+            "priority": 4.68,
+            "hours": 24
+          },
+          {
+            "skillId": "erp",
+            "name": "ERP systems",
+            "current": 3,
+            "required": 4,
+            "gap": 1,
+            "importance": 5,
+            "priority": 3.9000000000000004,
+            "hours": 14
+          },
+          {
+            "skillId": "stakeholder",
+            "name": "Stakeholder communication",
+            "current": 2,
+            "required": 3,
+            "gap": 1,
+            "importance": 3,
+            "priority": 2.34,
+            "hours": 8
+          }
+        ],
+        "totalGapHours": 90,
+        "weeks": 12,
+        "sdgs": [
+          8,
+          9
+        ],
+        "unknownSkillIds": []
+      },
+      {
+        "roleId": "operations-coordinator",
+        "title": "Operations Coordinator",
+        "family": "Operations",
+        "demand": 68,
+        "coverage": 0.6842105263157895,
+        "similarity": 0.36363636363636365,
+        "fit": 62.00956937799044,
+        "fitLow": 62.00956937799044,
+        "fitHigh": 62.009569377990424,
+        "ratedShare": 1,
+        "targetExposure": 0.681652637658325,
+        "score": 52.957119434843555,
+        "gaps": [
+          {
+            "skillId": "process",
+            "name": "Process design",
+            "current": 1,
+            "required": 3,
+            "gap": 2,
+            "importance": 3,
+            "priority": 4.08,
+            "hours": 20
+          },
+          {
+            "skillId": "coordination",
+            "name": "Project coordination",
+            "current": 2,
+            "required": 3,
+            "gap": 1,
+            "importance": 5,
+            "priority": 3.4000000000000004,
+            "hours": 8
+          },
+          {
+            "skillId": "stakeholder",
+            "name": "Stakeholder communication",
+            "current": 2,
+            "required": 3,
+            "gap": 1,
+            "importance": 4,
+            "priority": 2.72,
+            "hours": 8
+          },
+          {
+            "skillId": "automation",
+            "name": "Process automation",
+            "current": 1,
+            "required": 2,
+            "gap": 1,
+            "importance": 2,
+            "priority": 1.36,
+            "hours": 12
+          }
+        ],
+        "totalGapHours": 48,
+        "weeks": 6,
+        "sdgs": [
+          8,
+          9
+        ],
+        "unknownSkillIds": []
+      },
+      {
+        "roleId": "marketing-executive",
+        "title": "Marketing Executive",
+        "family": "Marketing",
+        "demand": 60,
+        "coverage": 0.5952380952380952,
+        "similarity": 0.5,
+        "fit": 57.61904761904763,
+        "fitLow": 57.61904761904763,
+        "fitHigh": 57.61904761904763,
+        "ratedShare": 1,
+        "targetExposure": 0.8012983485134006,
+        "score": 46.29438287793131,
+        "gaps": [
+          {
+            "skillId": "writing",
+            "name": "Writing & storytelling",
+            "current": 2,
+            "required": 4,
+            "gap": 2,
+            "importance": 5,
+            "priority": 6,
+            "hours": 16
+          },
+          {
+            "skillId": "ai",
+            "name": "AI tool fluency",
+            "current": 1,
+            "required": 3,
+            "gap": 2,
+            "importance": 4,
+            "priority": 4.8,
+            "hours": 12
+          },
+          {
+            "skillId": "stakeholder",
+            "name": "Stakeholder communication",
+            "current": 2,
+            "required": 3,
+            "gap": 1,
+            "importance": 4,
+            "priority": 2.4,
+            "hours": 8
+          },
+          {
+            "skillId": "empathy",
+            "name": "Customer empathy",
+            "current": 2,
+            "required": 3,
+            "gap": 1,
+            "importance": 3,
+            "priority": 1.7999999999999998,
+            "hours": 6
+          },
+          {
+            "skillId": "bi",
+            "name": "BI dashboards",
+            "current": 1,
+            "required": 2,
+            "gap": 1,
+            "importance": 2,
+            "priority": 1.2,
+            "hours": 10
+          }
+        ],
+        "totalGapHours": 52,
+        "weeks": 7,
+        "sdgs": [
+          8
+        ],
+        "unknownSkillIds": []
+      }
+    ]
+  },
   "customProfile": {
     "roleId": "finance-admin",
     "selections": [

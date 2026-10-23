@@ -6,8 +6,9 @@ import { computeRoutes, getScenario, roleExposure, type ScenarioId } from '@/lib
 import { activeSignals, computeScored, setState, type AppState } from '@/lib/store'
 import { SegmentedControl } from './segmented-control'
 
-export function ScenarioSwitch({ state, context = 'map' }: { state: AppState; context?: 'map' | 'routes' }) {
+export function ScenarioSwitch({ state, context = 'map', onPreset }: { state: AppState; context?: 'map' | 'routes'; onPreset?: () => void }) {
   function change(next: ScenarioId) {
+    onPreset?.()
     if (next === state.scenario) return
     const before = computeScored(state, state.scenario)
     const after = computeScored(state, next)
