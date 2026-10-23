@@ -1,6 +1,6 @@
 import { roleById, skills } from './data/seed'
 import { parseCustomInputs } from './custom-inputs'
-import { parseStored, type AppState } from './store'
+import { emptyState, parseStored, type AppState } from './store'
 const record = (value: unknown): value is Record<string, unknown> => !!value && typeof value === 'object' && !Array.isArray(value)
 const strings = (value: unknown): value is string[] => Array.isArray(value) && value.every((item) => typeof item === 'string')
 
@@ -17,7 +17,9 @@ export function readAccountProfile(value: unknown): AppState {
   for (const selection of value.selections) if (!record(selection) || typeof selection.taskId !== 'string' || typeof selection.share !== 'number' || !Number.isFinite(selection.share) || selection.share < 0 || selection.share > 100) throw new Error('This saved profile has invalid task shares.')
   const ids = new Set(skills.map((skill) => skill.id))
   for (const [id, level] of Object.entries(value.skills)) if (!ids.has(id) || typeof level !== 'number' || !Number.isInteger(level) || level < 0 || level > 4) throw new Error('This saved profile has invalid skill ratings.')
-  const result = parseStored(JSON.stringify(value))
+  if (value.freeOnly !== undefined && typeof value.freeOnly !== 'boolean') throw new Error('This saved profile has invalid preferences.')
+  const parsed = parseStored(JSON.stringify(value))
+  const result = Object.fromEntries(Object.keys(emptyState).map((key) => [key, parsed[key as keyof AppState]])) as unknown as AppState
   return {
     ...result, resumeSkillIds: strings(value.resumeSkillIds) ? [...new Set(value.resumeSkillIds)].filter((id) => ids.has(id)) : [], customTasks: custom.customTasks, customSignals: custom.customSignals,
     jobTitle: typeof value.jobTitle === 'string' ? value.jobTitle.slice(0, 60) : '',

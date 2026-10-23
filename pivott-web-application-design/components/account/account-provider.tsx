@@ -37,6 +37,7 @@ export function AccountProvider({ children }: { children: ReactNode }) {
   const inFlight = useRef(false)
   const activeUser = useRef<string | null>(null); activeUser.current = user?.id ?? null
   const generation = useRef(0)
+  const authGeneration = useRef(0)
   const retry = useRef<ReturnType<typeof setTimeout> | null>(null)
   const expiry = useRef<ReturnType<typeof setTimeout> | null>(null)
   const saveRef = useRef<() => Promise<void>>(async () => {})
@@ -138,9 +139,17 @@ export function AccountProvider({ children }: { children: ReactNode }) {
     setNeedsChoice(false); setCompareOpen(false); setReady(true); readyRef.current = true; setStatus(syncRef.current ? 'Saved' : 'Sync paused')
   }
   async function signOut(local = false) {
-    stopRetry(); setReady(false); readyRef.current = false
-    if (client) { const { error } = await client.auth.signOut(local ? { scope: 'local' } : undefined); setStatus(error ? 'Couldn’t sign out. Retry.' : 'Signed out. Work remains on this device.'); if (!error) setUser(null) }
+    authGeneration.current++; stopRetry(); setReady(false); readyRef.current = false
+    if (!client) return
+    const { error } = await client.auth.signOut(local ? { scope: 'local' } : undefined)
+    if (local) {
+      client.auth.stopAutoRefresh()
+      try { for (const key of Object.keys(localStorage)) if (key.startsWith('sb-')) localStorage.removeItem(key) } catch {}
+    }
+    if (!error || local) setUser(null)
+    setStatus(error && !local ? 'Couldn’t sign out. Retry.' : 'Signed out. Work remains on this device.')
   }
+
   async function deleteAccount() {
     if (!client || !activeUser.current) return false
     stopRetry(); setReady(false); readyRef.current = false
@@ -151,8 +160,9 @@ export function AccountProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!client) return
     let active = true
-    void client.auth.getSession().then(({ data, error }) => { if (active) { setUser(data.session?.user ?? null); if (error) setStatus('Couldn’t check sign-in. Try again.') } })
-    const { data: { subscription } } = client.auth.onAuthStateChange((_event, session) => { if (active) setUser(session?.user ?? null) })
+    const authRequest = authGeneration.current
+    void client.auth.getSession().then(({ data, error }) => { if (active && authRequest === authGeneration.current) { setUser(data.session?.user ?? null); if (error) setStatus('Couldn’t check sign-in. Try again.') } })
+    const { data: { subscription } } = client.auth.onAuthStateChange((_event, session) => { if (active) { setUser(session?.user ?? null); if (session) client.auth.startAutoRefresh() } })
     return () => { active = false; subscription.unsubscribe() }
   }, [client])
   useEffect(() => {

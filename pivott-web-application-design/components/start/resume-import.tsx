@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { FileText, Upload } from 'lucide-react'
 import { toast } from 'sonner'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { ConfirmDialog } from '@/components/pivott/confirm-dialog'
 import { PButton } from '@/components/pivott/p-button'
 import { roles, roleById, skillById, tasksForRole } from '@/lib/data/seed'
 import { getState, setState, useAppState } from '@/lib/store'
@@ -15,6 +16,7 @@ export function ResumeImport() {
   const controller = useRef<AbortController | null>(null)
   const request = useRef(0)
   const [open, setOpen] = useState(false)
+  const [replaceOpen, setReplaceOpen] = useState(false)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const [text, setText] = useState('')
@@ -30,7 +32,7 @@ export function ResumeImport() {
     request.current++
     controller.current?.abort()
     controller.current = null
-    setOpen(false); setBusy(false); setText(''); setSuggestions(null); setError('')
+    setReplaceOpen(false); setOpen(false); setBusy(false); setText(''); setSuggestions(null); setError('')
     setRoleId(''); setJobTitle(''); setTaskIds([]); setSkillIds([])
     if (input.current) input.current.value = ''
   }
@@ -64,17 +66,20 @@ export function ResumeImport() {
     }
   }
 
+  function applySelected() {
+    try {
+      const patch = resumeProfilePatch(getState(), { roleId, jobTitle, taskIds, skillIds })
+      setState(patch); close()
+      toast.success('Suggestions applied. Review your tasks and time shares below.')
+      requestAnimationFrame(() => document.getElementById('tasks-title')?.focus())
+      return true
+    } catch (failure) { setError(failure instanceof Error ? failure.message : 'Couldn’t apply these suggestions. Your work is unchanged.'); return false }
+  }
   function apply(event: React.FormEvent) {
     event.preventDefault()
     const current = getState()
-    try {
-      const patch = resumeProfilePatch(current, { roleId, jobTitle, taskIds, skillIds })
-      if ((current.roleId || current.selections.length || current.targetRoleId) && !window.confirm('Replace your current reference role and task selection, and reset the active plan? Your skill ratings, custom tasks, saved routes and career preferences will be kept.')) return
-      setState(patch)
-      close()
-      toast.success('Suggestions applied. Review your tasks and time shares below.')
-      requestAnimationFrame(() => document.getElementById('tasks-title')?.focus())
-    } catch (failure) { setError(failure instanceof Error ? failure.message : 'Couldn’t apply these suggestions. Your work is unchanged.') }
+    if (current.roleId || current.selections.length || current.targetRoleId) setReplaceOpen(true)
+    else applySelected()
   }
 
   const availableTasks = tasksForRole(roleId)
@@ -87,7 +92,7 @@ export function ResumeImport() {
     {state.mode === 'demo' && <p className="mt-2 text-sm text-muted-foreground">Exit the example profile before importing your own résumé.</p>}
     <Dialog open={open} onOpenChange={(value) => { if (!value) close() }}>
       <DialogContent className="max-h-[90dvh] overflow-y-auto sm:max-w-2xl">
-        <DialogHeader><DialogTitle className="pr-8 text-xl">Review résumé suggestions</DialogTitle><DialogDescription>Your file is never uploaded or stored by Pivott. Extracted text is discarded when you close this review. Only confirmed profile fields are saved. Account upload still requires Save to account.</DialogDescription></DialogHeader>
+        <DialogHeader><DialogTitle className="pr-8 text-xl">Review résumé suggestions</DialogTitle><DialogDescription>Your file is never uploaded or stored by Pivott. Extracted text is discarded when you close this review. Only confirmed profile fields are saved. Confirmed profile fields sync when you are signed in and sync is on.</DialogDescription></DialogHeader>
         <p role="status" className="text-sm">{busy ? 'Reading your résumé on this device…' : suggestions ? 'Check each suggestion before applying it.' : ''}</p>
         {error && <p role="alert" className="rounded-lg border border-border p-3 text-sm text-destructive">{error}</p>}
         {suggestions && <form onSubmit={apply} className="flex flex-col gap-6">
@@ -106,5 +111,6 @@ export function ResumeImport() {
         {!suggestions && <div className="flex flex-wrap gap-3">{!busy && <PButton variant="secondary" onClick={() => input.current?.click()}>Choose another file</PButton>}<PButton variant="ghost" onClick={close}>{busy ? 'Cancel reading' : 'Continue with manual setup'}</PButton></div>}
       </DialogContent>
     </Dialog>
+    <ConfirmDialog open={replaceOpen} onOpenChange={setReplaceOpen} title="Apply résumé suggestions" description="Replace the reference role and selected tasks and reset the active plan. Existing skill ratings, custom task records, saved routes and career preferences will be kept." confirmLabel="Apply suggestions" onConfirm={applySelected} />
   </section>
 }

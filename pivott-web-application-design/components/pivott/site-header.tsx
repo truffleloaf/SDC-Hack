@@ -77,10 +77,11 @@ export function SiteHeader() {
   const [nameOpen, setNameOpen] = useState(false)
   const { state } = useAppState()
 
-  function deleteData() {
+  async function deleteData() {
+    await account.signOut(true)
     clearAllData()
     setConfirmOpen(false)
-    toast.success('Your data has been deleted from this browser')
+    toast.success('Device work deleted. Signed out on this device.')
     router.push('/')
   }
 
@@ -89,23 +90,15 @@ export function SiteHeader() {
       <header className="sticky top-0 z-40 glass-panel border-x-0 border-t-0 px-3 sm:px-5">
         <nav
           aria-label="Main"
-          className="mx-auto flex min-h-18 w-full max-w-[1200px] flex-wrap items-center justify-between gap-x-3 gap-y-1 py-2"
+          className="mx-auto flex h-18 w-full max-w-[1200px] flex-nowrap items-center justify-between gap-x-3 gap-y-1 py-2"
         >
           <Link href="/?welcome=1" className="rounded-lg" aria-label="Pivott home">
             <Logo />
           </Link>
-          <div className="ml-auto flex min-w-0 flex-wrap items-center justify-end gap-1">
+          <div className="ml-auto flex min-w-0 flex-nowrap items-center justify-end gap-1">
             <Link href="/workspace" className={cn(pButton({ variant: 'ghost', size: 'sm' }), 'hidden sm:inline-flex')}>Your work</Link>
-            {account.user ? <DropdownMenu><DropdownMenuTrigger className={pButton({ variant: 'ghost', size: 'sm' })}>Account</DropdownMenuTrigger><DropdownMenuContent align="end"><DropdownMenuItem onClick={() => router.push('/account')}>Account settings</DropdownMenuItem><DropdownMenuItem onClick={() => router.push('/workspace')}>Your plan</DropdownMenuItem><DropdownMenuItem onClick={() => void account.signOut()}>Sign out · Keep device work</DropdownMenuItem></DropdownMenuContent></DropdownMenu> : <button onClick={() => openSignIn(pathname)} className={pButton({ variant: 'ghost', size: 'sm' })}>Sign in</button>}
-            <Link
-              href="/signals"
-              className={cn(
-                pButton({ variant: 'ghost', size: 'sm' }),
-                pathname === '/signals' && 'bg-subtle text-foreground',
-              )}
-            >
-              Signals
-            </Link>
+            {account.user ? <DropdownMenu><DropdownMenuTrigger aria-label="Account menu" className={cn(pButton({ variant: 'ghost', size: 'icon-sm' }), 'rounded-full border border-border')}>{account.user.email?.charAt(0).toUpperCase() || 'A'}</DropdownMenuTrigger><DropdownMenuContent align="end" className="max-w-[calc(100vw-2rem)]"><p className="break-words px-3 py-2 text-sm">{account.user.email}</p><p role="status" className="px-3 pb-2 text-xs text-muted-foreground">{account.status}</p><DropdownMenuItem onClick={() => router.push('/account')}>Account</DropdownMenuItem><DropdownMenuItem onClick={() => void account.signOut()}>Sign out</DropdownMenuItem></DropdownMenuContent></DropdownMenu> : account.configured && <button onClick={() => openSignIn(pathname)} className={pButton({ variant: 'ghost', size: 'sm' })}>Sign in</button>}
+            <Link href="/signals" className={cn(pButton({ variant: 'ghost', size: 'sm' }), 'hidden sm:inline-flex', pathname === '/signals' && 'bg-subtle text-foreground')}>Signals</Link>
             <span className="hidden sm:contents"><ProfileButton onClick={() => setNameOpen(true)} /></span>
             <ThemeToggle />
             <DropdownMenu>
@@ -116,6 +109,9 @@ export function SiteHeader() {
                 <MoreHorizontal aria-hidden />
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuItem className="sm:hidden" onClick={() => router.push('/workspace')}>Your work</DropdownMenuItem>
+                <DropdownMenuItem className="sm:hidden" onClick={() => router.push('/signals')}>Signals</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => router.push('/account')}>Saving and backups</DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setNameOpen(true)}>
                   <PenLine aria-hidden />
                   Edit display name
@@ -156,7 +152,7 @@ export function SiteHeader() {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem variant="destructive" onClick={() => setConfirmOpen(true)}>
                   <Trash2 aria-hidden />
-                  Delete my data
+                  Delete my data on this device
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -169,7 +165,7 @@ export function SiteHeader() {
           <DialogHeader>
             <DialogTitle className="font-serif text-2xl font-normal">What should we call you?</DialogTitle>
             <DialogDescription className="leading-relaxed">
-              Your name personalises your map and passport. It stays on this device unless you explicitly save the profile to your account.
+              Your name appears on your passport. It stays on this device for guests and syncs with your profile when signed in.
             </DialogDescription>
           </DialogHeader>
           <form
@@ -189,9 +185,9 @@ export function SiteHeader() {
       <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
         <DialogContent className="rounded-[20px] sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="font-serif text-2xl font-normal">Delete your data?</DialogTitle>
+            <DialogTitle className="font-serif text-2xl font-normal">Delete data on this device</DialogTitle>
             <DialogDescription className="leading-relaxed">
-              This clears your profile and progress from this browser. A saved account copy remains. To remove that copy and your account, use Delete account in account settings.
+              This removes the device profile, progress, backups and sign-in session. Your saved account copy remains. Delete the account separately in Account settings.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="bg-subtle">
@@ -200,7 +196,7 @@ export function SiteHeader() {
             </PButton>
             <PButton onClick={deleteData} className="bg-destructive text-card">
               <Trash2 aria-hidden />
-              Delete my data
+              Delete my data on this device
             </PButton>
           </DialogFooter>
         </DialogContent>

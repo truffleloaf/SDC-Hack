@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { toast } from 'sonner'
+import { ConfirmDialog } from '@/components/pivott/confirm-dialog'
 import { PButton } from '@/components/pivott/p-button'
 import { ValueSlider } from '@/components/pivott/value-slider'
 import { skills, tasksForRole } from '@/lib/data/seed'
@@ -10,6 +11,7 @@ import { getState, setState, type AppState } from '@/lib/store'
 
 export function TaskPicker({ state }: { state: AppState }) {
   const [name, setName] = useState('')
+  const [restoreOpen, setRestoreOpen] = useState(false)
   const [picked, setPicked] = useState<string[]>([])
   const tasks = [...tasksForRole(state.roleId!), ...state.customTasks]
 
@@ -24,10 +26,6 @@ export function TaskPicker({ state }: { state: AppState }) {
     } } })
   }
 
-  function restore() {
-    if (!window.confirm('Restore this role’s suggested tasks and time shares? Your custom tasks and saved skill ratings will be kept.')) return
-    setState({ selections: tasksForRole(state.roleId!).map((task) => ({ taskId: task.id, share: task.defaultShare })), taskNames: {} })
-  }
 
   return (
     <div className="flex flex-col gap-4">
@@ -78,7 +76,8 @@ export function TaskPicker({ state }: { state: AppState }) {
           <PButton size="sm" type="submit" className="self-start" disabled={!name.trim()}>Add task</PButton>
         </form>
       </details>
-      <PButton variant="ghost" size="sm" className="self-start" onClick={restore}>Restore defaults</PButton>
+      <PButton variant="ghost" size="sm" className="self-start" onClick={() => setRestoreOpen(true)}>Restore defaults</PButton>
+      <ConfirmDialog open={restoreOpen} onOpenChange={setRestoreOpen} title="Restore template tasks" description="Replace the selected tasks, names and time shares with the role defaults. Your custom task records and skill ratings will be kept." confirmLabel="Restore defaults" onConfirm={() => setState({ selections: tasksForRole(getState().roleId!).map((task) => ({ taskId: task.id, share: task.defaultShare })), taskNames: {} })} />
     </div>
   )
 }
