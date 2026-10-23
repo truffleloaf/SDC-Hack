@@ -24,20 +24,16 @@ export const PassportCard = forwardRef<HTMLDivElement, { data: PassportData }>(f
   return (
     <div
       ref={ref}
-      className="light-scope relative overflow-hidden rounded-[28px] p-3 sm:p-4"
+      className="light-scope relative overflow-hidden rounded-xl p-3 sm:p-4"
       style={{ background: 'var(--subtle)' }}
     >
-      <div className="relative flex flex-col overflow-hidden rounded-[20px] border border-border bg-card md:flex-row">
+      <div className="relative flex flex-col overflow-hidden rounded-xl border border-border bg-card md:flex-row">
         <div className="flex flex-1 flex-col gap-8 p-6 sm:p-8">
           <div className="flex items-start justify-between gap-4">
             <div className="flex flex-col gap-1">
               <span className="font-sans text-xs font-medium text-faint">Skill Passport</span>
               <span className="font-serif text-2xl leading-tight">{data.name || 'Your name'}</span>
               <span className="text-sm text-muted-foreground">{data.currentRole}</span>
-            </div>
-            <div className="flex flex-col items-end gap-1 text-right">
-              <span className="font-sans text-xs font-medium text-faint">Sample reference</span>
-              <span className="font-mono text-sm">{data.code}</span>
             </div>
           </div>
 

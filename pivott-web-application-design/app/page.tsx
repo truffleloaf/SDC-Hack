@@ -1,27 +1,19 @@
 import Link from 'next/link'
-import { ArrowRight, Lock, Scale } from 'lucide-react'
+import { ArrowRight, Scale } from 'lucide-react'
 import { LivingTaskMap } from '@/components/landing/living-task-map'
 import { ResumeWork } from '@/components/pivott/resume-work'
 import { LogoMark } from '@/components/pivott/logo'
 import { PLink } from '@/components/pivott/p-button'
-
-const steps = [
-  { title: 'Pick your job', body: 'Start with the tasks you actually perform.' },
-  { title: 'See your tasks', body: 'Understand which tasks AI may automate, augment, or leave to human judgment.' },
-  { title: 'Find your route', body: 'Discover adjacent roles and the skills needed to move forward.' },
-]
 
 export default function LandingPage() {
   return (
     <>
       <ResumeWork />
       <section className="landing-hero relative overflow-hidden">
-        <div aria-hidden className="hero-contour pointer-events-none absolute -right-32 -top-64 size-[880px] rounded-full border border-border/60" />
         <div className="relative mx-auto grid w-full max-w-[1240px] items-center gap-12 px-5 pb-16 pt-12 sm:px-8 lg:grid-cols-[0.95fr_1.05fr] lg:gap-14 lg:pb-20 lg:pt-16">
           <div className="flex flex-col items-start">
-            <p className="mb-6 flex items-center gap-3 text-sm font-medium text-primary"><span className="h-px w-8 bg-primary" aria-hidden />Understand your work</p>
             <h1 className="max-w-xl text-[3rem] font-semibold leading-[1.06] tracking-[-0.045em] text-balance sm:text-[4rem] lg:text-[4.5rem]">
-              Don&apos;t predict the job.<br /><span className="text-primary">Map the tasks.</span>
+              See which parts of your job AI could take on.
             </h1>
             <p className="mt-7 max-w-md text-lg leading-relaxed text-muted-foreground text-pretty">
               See where AI could change your daily work, which skills carry into other roles, and what you could learn next.
@@ -33,26 +25,19 @@ export default function LandingPage() {
                 View an example
               </Link>
             </div>
-            <p className="mt-6 flex items-center gap-2 text-xs text-muted-foreground"><Lock className="size-3.5" aria-hidden />No account needed to start.</p>
+            <p className="mt-6 text-xs text-muted-foreground">No account needed. Your answers stay in this browser.</p>
           </div>
           <LivingTaskMap />
         </div>
       </section>
 
-      <section aria-labelledby="how-title" className="mx-auto w-full max-w-[1240px] px-5 py-14 sm:px-8 lg:py-20">
-        <div className="flex flex-wrap items-end justify-between gap-4">
-          <h2 id="how-title" className="max-w-lg text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">Understand, compare, plan.</h2>
-          <p className="max-w-xs text-sm leading-relaxed text-muted-foreground">From the tasks you do today to the skills you can use tomorrow.</p>
-        </div>
-        <ol className="mt-9 grid gap-8 md:grid-cols-3 md:gap-10">
-          {steps.map((step, index) => (
-            <li key={step.title} className="relative border-t border-border-strong pt-5">
-              <span className="inline-flex size-8 items-center justify-center rounded-full bg-mint text-sm font-semibold text-accent-foreground" aria-hidden>{index + 1}</span>
-              <h3 className="mt-4 text-xl font-semibold tracking-tight">{step.title}</h3>
-              <p className="mt-2 max-w-sm text-sm leading-relaxed text-muted-foreground">{step.body}</p>
-            </li>
-          ))}
-        </ol>
+      <section aria-labelledby="tools-title" className="mx-auto w-full max-w-[1240px] px-5 py-12 sm:px-8">
+        <h2 id="tools-title" className="text-2xl font-semibold">What you can use</h2>
+        <ul className="mt-5 max-w-2xl list-disc space-y-3 pl-5 text-muted-foreground">
+          <li>A task map showing time spent and estimated AI exposure.</li>
+          <li>Up to three ranked nearby roles, with the skills to add.</li>
+          <li>A week-by-week study plan with free resources and a calendar file.</li>
+        </ul>
       </section>
 
       <footer className="mx-auto flex w-full max-w-[1240px] flex-col justify-between gap-5 border-t border-border px-5 py-8 text-sm text-muted-foreground sm:flex-row sm:px-8">

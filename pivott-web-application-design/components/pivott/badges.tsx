@@ -70,7 +70,7 @@ export function SkillChip({
   return (
     <span
       className={cn(
-        'inline-flex items-center rounded-full border px-2.5 py-1 text-xs leading-none',
+        'inline-flex items-center rounded-md border px-2.5 py-1 text-xs leading-none',
         tone === 'neutral' && 'border-border bg-subtle text-muted-foreground',
         tone === 'teal' && 'border-teal/30 bg-mint text-accent-foreground',
         tone === 'peach' && 'border-exp-high/60 bg-exp-high/20 text-foreground',

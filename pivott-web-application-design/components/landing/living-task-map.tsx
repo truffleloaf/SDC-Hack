@@ -59,7 +59,7 @@ export function LivingTaskMap() {
   const cls: Classification | null = current ? classify(current.exposure, current.judgment) : null
 
   return (
-    <div className="task-atlas relative mx-auto w-full max-w-[620px] overflow-hidden rounded-[28px] border border-border bg-card">
+    <div className="task-atlas relative mx-auto w-full max-w-[620px] overflow-hidden rounded-xl border border-border bg-card">
       <div className="relative z-10 flex items-start justify-between gap-3 border-b border-border px-5 py-4 sm:px-7">
         <div><p className="text-sm font-semibold">Finance Admin · Example</p><p className="mt-1 text-xs text-muted-foreground">Select a task to see how it could change.</p></div>
         <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-2.5 py-1 text-xs text-accent-foreground"><span className="size-1.5 rounded-full bg-primary" aria-hidden />Task map</span>
@@ -174,7 +174,7 @@ export function LivingTaskMap() {
             exit={{ opacity: 0, y: 4 }}
             transition={{ duration: 0.16 }}
             className={cn(
-              'glass-panel pointer-events-none absolute z-10 w-48 -translate-x-1/2 rounded-xl p-3',
+              'surface-panel pointer-events-none absolute z-10 w-48 -translate-x-1/2 rounded-xl p-3',
             )}
             style={{
               left: `${(Math.min(Math.max(current.x, 100), W - 100) / W) * 100}%`,

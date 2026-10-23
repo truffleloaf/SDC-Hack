@@ -161,7 +161,7 @@ export function SiteHeader() {
       </header>
 
       <Dialog open={nameOpen} onOpenChange={setNameOpen}>
-        <DialogContent className="rounded-[20px] sm:max-w-md">
+        <DialogContent className="rounded-xl sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="font-serif text-2xl font-normal">What should we call you?</DialogTitle>
             <DialogDescription className="leading-relaxed">
@@ -183,7 +183,7 @@ export function SiteHeader() {
       </Dialog>
 
       <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
-        <DialogContent className="rounded-[20px] sm:max-w-md">
+        <DialogContent className="rounded-xl sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="font-serif text-2xl font-normal">Delete data on this device</DialogTitle>
             <DialogDescription className="leading-relaxed">

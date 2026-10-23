@@ -45,3 +45,9 @@ Part S is implemented and its required checks passed (S5). Remaining work: T1–
 Converted the 12 invented news records into undated, unlinked assumptions with no organisation names. The timeline contains published/user entries only; a separate section shows assumptions and their per-task point contributions. Engine/API sorting, confidence explanation, badges and admin help reflect the distinction. Existing eight published references were retained, not newly verified; network access does not support claiming new source checks.
 
 Both engines use a fixed assumption weight equal to the previous strength × cut-off recency. This removes invented dates without changing scores at the data cut-off. Seed and goldens regenerated; custom-signal fixtures now start from a dated published entry. Added regression coverage for absent publication metadata and preserved demo scores. Full checks follow at the Part T boundary.
+
+## T2: typography and surfaces
+
+Loaded four local IBM Plex Sans weights with `next/font/local`; tabular numerals align data. Removed the hero eyebrow, split-colour headline, rings, glow and numbered card grid. Added a plain tools list and privacy sentence. Solid surfaces replace glass everywhere. Cards use 12px corners, controls 8px; data circles and status/filter pills retain their meaning. Empty states are left-aligned without icon ornaments. Shared primitive tokens/shadows and the font example were updated; DESIGN records the decisions. Fake QR was already absent; removed the remaining reference number. The passport light scope is still required for exports.
+
+Files: root layout/CSS/landing, states, shared primitives, panel/control consumers, passport and styleguide. Type checking passed before the final shadow-token substitutions. Responsive/theme and full checks run at the Part T boundary.

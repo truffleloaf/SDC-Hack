@@ -149,7 +149,7 @@ export default function MapPage() {
       </div>
 
       <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
-        <SheetContent side="bottom" className="max-h-[85dvh] overflow-y-auto rounded-t-[24px] px-5 pb-8">
+        <SheetContent side="bottom" className="max-h-[85dvh] overflow-y-auto rounded-t-xl px-5 pb-8">
           <SheetHeader className="px-0">
             <SheetTitle className="font-serif text-2xl font-normal">Your skills on this map</SheetTitle>
           </SheetHeader>

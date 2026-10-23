@@ -274,7 +274,7 @@ export function TaskDetailCard({ task, pinned, onClose, surface = 'glass' }: { t
   }[task.classification]
 
   return (
-    <div className={cn('rounded-xl p-5', surface === 'glass' ? 'glass-panel' : 'bg-card', pinned && 'border-teal/40')}>
+    <div className={cn('rounded-xl p-5', surface === 'glass' ? 'surface-panel' : 'bg-card', pinned && 'border-teal/40')}>
       <div className="flex items-start justify-between gap-2">
         <h3 className="font-serif text-xl leading-tight">{task.name}</h3>
         {pinned && (

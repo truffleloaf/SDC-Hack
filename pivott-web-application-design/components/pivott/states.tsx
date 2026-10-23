@@ -1,4 +1,3 @@
-import { CloudOff, Compass } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { cn } from '@/lib/utils'
 import { PButton, PLink } from './p-button'
@@ -25,23 +24,18 @@ export function EmptyState({
   title,
   description,
   action,
-  icon,
   className,
 }: {
   title: string
   description?: string
   action?: ReactNode
-  icon?: ReactNode
   className?: string
 }) {
   return (
-    <div className={cn('flex flex-col items-center gap-3 rounded-[20px] border border-dashed border-border-strong bg-card/60 px-6 py-12 text-center', className)}>
-      <span className="grid size-12 place-items-center rounded-full bg-mint text-accent-foreground">
-        {icon ?? <Compass className="size-5" aria-hidden />}
-      </span>
+    <div className={cn('flex flex-col items-start gap-3 rounded-xl border border-border bg-card px-6 py-8', className)}>
       <h2 className="font-serif text-2xl text-balance">{title}</h2>
       {description && <p className="max-w-sm text-sm leading-relaxed text-muted-foreground text-pretty">{description}</p>}
-      {action && <div className="mt-2 flex flex-wrap justify-center gap-3">{action}</div>}
+      {action && <div className="mt-2 flex flex-wrap justify-start gap-3">{action}</div>}
     </div>
   )
 }
@@ -49,7 +43,6 @@ export function EmptyState({
 export function ErrorState({ title = 'Something went off route', onRetry }: { title?: string; onRetry?: () => void }) {
   return (
     <EmptyState
-      icon={<CloudOff className="size-5" aria-hidden />}
       title={title}
       description="Nothing is lost. Your profile is still saved in this browser."
       action={onRetry && <PButton variant="secondary" onClick={onRetry}>Try again</PButton>}
@@ -69,10 +62,7 @@ export function NeedsProfile({ step = 'job' }: { step?: 'job' | 'skills' | 'rout
         title={map.title}
         description={map.description}
         action={
-          <>
-            <PLink href={map.href}>{map.cta}</PLink>
-            <PLink href="/example" variant="secondary">Use Aisyah’s example</PLink>
-          </>
+<PLink href={map.href}>{map.cta}</PLink>
         }
       />
     </div>

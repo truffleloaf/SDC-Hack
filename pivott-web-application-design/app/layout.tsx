@@ -7,7 +7,18 @@ import { SiteHeader } from '@/components/pivott/site-header'
 import { DemoBanner } from '@/components/pivott/demo-banner'
 import { RouteStepper } from '@/components/pivott/route-stepper'
 import { TooltipProvider } from '@/components/ui/tooltip'
+import localFont from 'next/font/local'
 import './globals.css'
+
+const plex = localFont({
+  src: [
+    { path: '../public/fonts/ibm-plex-sans-latin-400-normal.woff2', weight: '400', style: 'normal' },
+    { path: '../public/fonts/ibm-plex-sans-latin-500-normal.woff2', weight: '500', style: 'normal' },
+    { path: '../public/fonts/ibm-plex-sans-latin-600-normal.woff2', weight: '600', style: 'normal' },
+    { path: '../public/fonts/ibm-plex-sans-latin-700-normal.woff2', weight: '700', style: 'normal' },
+  ],
+  variable: '--font-plex', display: 'swap',
+})
 
 export const metadata: Metadata = {
   title: 'Pivott — Map the tasks. Route the skills.',
@@ -29,7 +40,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html
       lang="en"
       suppressHydrationWarning
-      className="bg-background"
+      className={`${plex.variable} bg-background`}
     >
       <body className="min-h-dvh font-sans antialiased">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem storageKey="pivott:theme">

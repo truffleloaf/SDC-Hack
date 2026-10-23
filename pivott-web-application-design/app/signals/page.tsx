@@ -91,7 +91,7 @@ export default function SignalsPage() {
             exit={{ opacity: 0, height: 0 }}
             className="overflow-hidden"
           >
-            <div className="mt-8 flex flex-col gap-4 rounded-[20px] border border-teal/30 bg-mint p-5 md:flex-row md:items-center md:justify-between">
+            <div className="mt-8 flex flex-col gap-4 rounded-xl border border-teal/30 bg-mint p-5 md:flex-row md:items-center md:justify-between">
               {pending.length > 0 ? (
                 <>
                   <p className="text-sm">

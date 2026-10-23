@@ -92,7 +92,7 @@ export default function PathwayPage() {
                     key="done"
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="flex items-center gap-5 rounded-[20px] border border-teal/30 bg-mint p-6"
+                    className="flex items-center gap-5 rounded-xl border border-teal/30 bg-mint p-6"
                   >
                     <LogoMark animated className="size-14 shrink-0 text-foreground" />
                     <div className="flex flex-col gap-1">
