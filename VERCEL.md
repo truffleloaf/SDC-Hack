@@ -4,8 +4,14 @@ Import `truffleloaf/SDC-Hack` as a single Vercel project with its Root Directory
 
 | Service | Framework | Public paths |
 | --- | --- | --- |
-| `backend` | FastAPI; entrypoint `backend/app/main.py` | `/api` and `/api/*` |
+| `backend` | FastAPI; entrypoint `app.main:app` | `/api` and `/api/*` |
 | `pivott-web-application-design` | Next.js | All other paths, including `/`, application pages, and `/_next/*` |
+
+The `entrypoint` must use Vercel's Python `module:attribute` form
+(`app.main:app`, resolved inside the `backend/` service root), not a file path
+such as `app/main.py`. A file path is valid only for Node.js services; with it,
+every `/api/*` request fails before FastAPI runs and the browser sees Vercel's
+generic `{"error":{"code":"500","message":"A server error has occurred"}}`.
 
 The API rewrite comes first. It preserves the `/api` prefix, which FastAPI already uses for its routers. The frontend catch-all comes last; directing that catch-all to the backend would hide the website. Frameworks and entrypoint are declared per service, with routing at the project level. The Next.js service explicitly uses pnpm 12.3.4 and a frozen lockfile for installation, rather than relying on Vercel’s lockfile-version heuristic to choose pnpm.
 
@@ -16,6 +22,21 @@ There are no existing cross-service calls, hardcoded service hostnames, or front
 No binding is necessary for this topology. Supabase public build variables are optional for account saving and are unrelated to service bindings. Do not add a dummy binding, expose an internal URL with a `NEXT_PUBLIC_*` variable, or set a binding variable manually. If server-side Next.js functions later call an internal backend, declare a service binding on the Next.js service and read its injected URL at request time. Browser-side calls should use same-origin `/api/*` paths.
 
 FastAPI's `/docs`, `/redoc`, `/openapi.json`, and `/` are not publicly routed in this proposal. These paths currently go to Next.js. Exposing API documentation would require explicit rewrites to `backend` before the frontend catch-all.
+
+## Backend storage on Vercel
+
+Vercel Functions get a read-only checkout; only `/tmp` is writable. When the
+backend service has no `PIVOTT_DB` or `DATABASE_URL`, the API now falls back to
+an ephemeral SQLite file under `/tmp` and reseeds the demo catalogue whenever a
+new instance starts. Catalogue, analysis and pathway endpoints work in that
+mode, but saved profiles and user-created signals do not survive an instance.
+
+For persistent data — and for `/api/me/profile`, which stores rows per Supabase
+user — set `DATABASE_URL` on the backend service to the Supabase Session pooler
+string, and run `backend/supabase/schema.sql` plus every file in
+`backend/supabase/migrations/` before deploying. See
+[Supabase setup](backend/supabase/README.md) and
+[backend auth docs](backend/docs/auth.md).
 
 ## Local multi-service development
 
@@ -39,9 +60,25 @@ Use the printed `localhost` hostname for browser checks; Next.js rejects dev-onl
 
 - `/` renders Pivott's landing page.
 - `/_next/*` assets and the retained local font assets load from Next.js.
-- `/api/health` returns `status: "ok"`, seed version `2026.10.2`, and counts including 6 roles and 31 tasks.
+- `/api/health` returns `status: "ok"`, seed version `2026.10.1`, and counts including 6 roles and 31 tasks.
 - `/api/analysis` and `/api/pathways` accept the documented payloads in `backend/README.md`.
 - Open the demo and complete map → routes → pathway → passport; verify signals, scenario controls and export tools remain available.
+
+## Troubleshooting: every `/api/*` returns 500
+
+A generic Vercel 500 — `{"error":{"code":"500","message":"A server error has occurred"}}` —
+means the FastAPI service failed before the application could answer, so CORS
+and the `{"error": ...}` envelope never run. Check these in order:
+
+1. `services.backend.entrypoint` is `app.main:app` (`module:attribute`), not a
+   file path like `app/main.py`; a file path is only valid for Node.js.
+2. `services.backend.root` is `backend` and `backend/app/__init__.py` exists,
+   so `app.main` is importable from the service root.
+3. The backend service logs show the startup exception (Vercel → Project →
+   Logs → Functions). Reproduce with `pytest` and `uvicorn app.main:app`.
+4. If `DATABASE_URL` is set, the database is reachable and every migration in
+   `backend/supabase/migrations/` has run. If it is not set, the API uses the
+   ephemeral `/tmp` SQLite database; no further configuration is required.
 
 Independent checks remain `pnpm test` and `pnpm build` in the frontend, `pnpm exec tsc --noEmit --incremental false` for explicit type checking, and `python -m pytest -q` in `backend`.
 
