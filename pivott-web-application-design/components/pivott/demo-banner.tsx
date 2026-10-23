@@ -7,8 +7,6 @@ import { exitDemo, useAppState } from '@/lib/store'
 import { hasDemoPersona, SEED_VERSION } from '@/lib/data/seed'
 import { pButton } from './p-button'
 
-const API_BASE = (process.env.NEXT_PUBLIC_API_BASE || 'http://127.0.0.1:8001').replace(/\/+$/, '')
-
 export function DemoBanner() {
   const { state, hydrated } = useAppState()
   const pathname = usePathname()
@@ -31,7 +29,7 @@ export function DemoBanner() {
             </span>
           </p>
           <a
-            href={`${API_BASE}/api/live/status`}
+            href="/api/live/status"
             target="_blank"
             rel="noreferrer"
             className="font-medium text-foreground underline-offset-4 hover:underline"

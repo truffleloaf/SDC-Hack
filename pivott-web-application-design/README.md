@@ -27,14 +27,15 @@ Guest mode needs no environment variables or database. Optional Supabase email-l
 
 ## Live catalogue
 
-The root layout and every Route Handler under `app/api/*` call `getCatalog()` (`lib/catalog.ts`) once per request group. It fetches `GET /api/seed` from the FastAPI service and applies the payload in place, so pages and API routes use the same catalogue.
+The root layout and every Route Handler under `app/api/*` call `getCatalog()` (`lib/catalog.ts`) once per request group, so pages and API routes use the same catalogue.
 
-- Default API base: `http://127.0.0.1:8001` (live dataset). Override with `PIVOTT_API_BASE` (server-only) or `NEXT_PUBLIC_API_BASE`; see `.env.local`.
-- If the API is unreachable or returns an invalid payload, the app falls back to the built-in demo seed. The demo keeps Aisyah and the “View an example” flow; the live catalogue has no demo persona, so the landing page shows a live occupation preview and demo actions are hidden.
-- In live mode `GET /api/seed` returns the live payload and `POST /api/seed` returns 403; the route handlers and the FastAPI service agree on `GET /api/health`, roles, tasks, signals, SDGs and analysis results.
-- Account saving is independent of the catalogue: signed-in users still go directly to Supabase `user_profiles`; FastAPI is only the catalogue/analysis service here.
+- **Vercel / no env**: it applies the committed `lib/data/live-seed.json` snapshot (10 roles / 60 tasks / 17 skills). No second service, API base or database is needed.
+- **Local dev**: if `PIVOTT_API_BASE` or `NEXT_PUBLIC_API_BASE` is set (e.g. `http://127.0.0.1:8001`), it fetches the root live FastAPI instead. If that API is down, it falls back to the committed snapshot.
+- The demo seed is only used when the snapshot cannot be applied. The demo keeps Aisyah and the “View an example” flow; the live catalogue has no demo persona, so the landing page shows a live occupation preview and demo actions are hidden.
+- In live mode `GET /api/seed` returns the live payload and `POST /api/seed` returns 403; `/api/live/status` returns the O*NET/Arbeitnow source details.
+- Account saving is independent of the catalogue: signed-in users go directly to Supabase `user_profiles`; the Supabase public defaults live in `next.config.mjs`.
 
-Run the live API before the frontend (or let it fall back to demo):
+Refresh the committed snapshot from the root live FastAPI:
 
 ```bash
 # repository root
@@ -42,15 +43,17 @@ $env:PIVOTT_DATASET='live'
 $env:PIVOTT_DB='sqlite:///./pivott-live.db'
 .venv/bin/python -m uvicorn app.main:app --port 8001
 
-# frontend
-NEXT_PUBLIC_API_BASE=http://127.0.0.1:8001 pnpm dev
+# frontend checkout
+node scripts/export-live-seed.mjs http://127.0.0.1:8001
 ```
+
+Commit both `lib/data/live-seed.json` and `lib/data/live-meta.json`; Vercel redeploys automatically.
 
 
 ## Seed data and reset
 
-- Seed data lives in `lib/data/seed.ts`: 6 roles, 31 tasks, 15 skills, 20 dated signals, 2 scenarios, 4 SDGs, 25 learning resources (at least one free option for each skill), and the demo persona **Aisyah (Finance Admin)**. With `PIVOTT_API_BASE` set to a live API, the same exports are replaced at request time by 10 live roles / 60 tasks / 17 skills (O*NET 31.0).
-- `GET /api/seed` returns the seed version and counts. `POST /api/seed` returns the demo persona for a stateless reset; it does not store or clear browser-local custom signals.
+- Seed data lives in `lib/data/seed.ts`: 6 roles, 31 tasks, 15 skills, 20 dated signals, 2 scenarios, 4 SDGs, 25 learning resources (at least one free option for each skill), and the demo persona **Aisyah (Finance Admin)**. In the Vercel deployment, `lib/data/live-seed.json` replaces the same exports at request time with 10 live roles / 60 tasks / 17 skills (O*NET 31.0).
+- `GET /api/seed` returns the active catalogue (live snapshot in Vercel, demo snapshot locally). `POST /api/seed` returns the demo persona for a stateless reset in demo mode and 403 in live mode; it does not store or clear browser-local custom signals.
 - In the browser, **⋯ menu → Delete my data** clears your locally stored profile and progress (`pivott:v1` and `pivott:v1:personal` in localStorage).
 
 ## API
@@ -64,6 +67,8 @@ NEXT_PUBLIC_API_BASE=http://127.0.0.1:8001 pnpm dev
 | GET | `/api/roles/{id}/tasks?scenario=normal\|fast` | Scored tasks for a role |
 | GET | `/api/signals` | Dated signals with sources |
 | GET | `/api/sdgs` | Sustainable Development Goal references |
+| GET | `/api/seed` | Full active catalogue (live snapshot or demo) |
+| GET | `/api/live/status` | O*NET/Arbeitnow source details for the live snapshot |
 | GET | `/api/health` | Health and seed version |
 
 ## Formulas (`lib/engine.ts`)

@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { getCatalog } from './catalog'
+import liveSeed from './data/live-seed.json'
 import {
   applyCatalog,
   catalogSource,
@@ -69,5 +70,12 @@ describe('catalogue overlay', () => {
     await getCatalog()
     expect(catalogSource).toBe('demo')
     expect(hasDemoPersona).toBe(true)
+  })
+
+  it('ships a live O*NET snapshot for the code-only deployment', () => {
+    expect(liveSeed.roles).toHaveLength(10)
+    expect(liveSeed.tasks).toHaveLength(60)
+    expect(liveSeed.skills).toHaveLength(17)
+    expect(liveSeed.demoPersona).toBeNull()
   })
 })

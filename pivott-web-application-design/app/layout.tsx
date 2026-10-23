@@ -31,7 +31,7 @@ export const viewport: Viewport = {
 }
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  // Live catalogue when the API is up; the built-in demo seed otherwise.
+  // External live API when configured; otherwise the committed live snapshot.
   const catalog = await getCatalog()
 
   return (
