@@ -87,7 +87,7 @@ export function SiteHeader() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 glass-panel border-x-0 border-t-0 px-3 sm:px-5">
+      <header className="sticky top-0 z-40 bg-background border-b border-border px-3 sm:px-5">
         <nav
           aria-label="Main"
           className="mx-auto flex h-18 w-full max-w-[1200px] flex-nowrap items-center justify-between gap-x-3 gap-y-1 py-2"

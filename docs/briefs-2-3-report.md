@@ -27,3 +27,9 @@ Added guest JSON export/import with validation and a review dialog; signed-in sy
 ## S4: contextual sign-in and progress feedback
 
 Added a dismissible sync note on chosen routes and plans, suppressed for examples, configured-out deployments, signed-in users and repeat visits in the same session. Dismissal persists on the device. Completing a learning step offers an explicit rating increase to the role's required level; declining leaves the rating untouched. Workspace leads with the next step and its stored hour estimate. Files: `SyncNote`, routes/pathway/workspace. Type and browser checks are included at the S5 part boundary. No automatic proficiency claim is made.
+
+## S5: auth, sync and accessibility verification
+
+Added 86 frontend tests in total, including auth state transitions, recovery expiry, reconciliation and backup boundaries. Expanded the browser script for actual SDK requests against synthetic endpoints: code errors/resend/keyboard, Google handoff/return, first sync, conflicts, rollback, JSON import/export, optional rating changes, offline retry and local session deletion. Axe passed at 375px and 1280px in light and dark. Removed header and dialog/sheet backdrop blur early from T2 because software-rendered browser checks stalled on it; the solid surfaces also match the requested design.
+
+Files: auth/sync helpers and tests, provider/dialog guards, header/dialog/sheet surfaces, browser script/helper. Verification: frontend **86 passed**; TypeScript passed; production build passed; backend **66 passed**; all eight browser groups passed. These are synthetic auth checks, not proof of live SMTP or Google configuration. Supabase sometimes combines invalid/expired OTP errors, so the UI gives a combined next action when the server cannot distinguish them.

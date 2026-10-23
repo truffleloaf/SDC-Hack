@@ -5,7 +5,7 @@ import type { User } from '@supabase/supabase-js'
 import { toast } from 'sonner'
 import { SignInProvider } from './sign-in-dialog'
 import { accountProfile, readAccountRow } from '@/lib/account-data'
-import { BACKUP_KEY, createBackup, hasWork, profileContent, readBackup, syncDecision, type ProfileBackup, type SavedProfile } from '@/lib/account-sync'
+import { BACKUP_KEY, createBackup, expireBackup, hasWork, profileContent, readBackup, syncDecision, type ProfileBackup, type SavedProfile } from '@/lib/account-sync'
 import { getSupabase, accountSavingConfigured } from '@/lib/supabase'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
 import { PButton } from '@/components/pivott/p-button'
@@ -35,6 +35,7 @@ export function AccountProvider({ children }: { children: ReactNode }) {
   const [status, setStatus] = useState('Saved on this device')
   const [saving, setSaving] = useState(false)
   const inFlight = useRef(false)
+  const failedContent = useRef<string | null>(null)
   const activeUser = useRef<string | null>(null); activeUser.current = user?.id ?? null
   const generation = useRef(0)
   const authGeneration = useRef(0)
@@ -106,6 +107,7 @@ export function AccountProvider({ children }: { children: ReactNode }) {
       if (activeUser.current !== owner) return
       if (error?.code === '23505' || (!error && !data)) { await refresh(); return }
       if (error) {
+        failedContent.current = profileContent(profile)
         const offline = !navigator.onLine || /fetch|network|connection/i.test(error.message)
         setStatus(offline ? 'Offline, will retry' : 'Sync failed. Retry from Account.')
         if (offline && syncRef.current) retry.current = setTimeout(() => void saveRef.current(), 5000)
@@ -113,9 +115,9 @@ export function AccountProvider({ children }: { children: ReactNode }) {
       }
       const row = readAccountRow(data)
       if (recovery) { recovery.revision = row.revision; localStorage.setItem(BACKUP_KEY, JSON.stringify(recovery)) }
-      recordSaved(row); setStatus(syncRef.current ? 'Saved' : 'Sync paused')
+      failedContent.current = null; recordSaved(row); setStatus(syncRef.current ? 'Saved' : 'Sync paused')
       if (!previous || recovery) announce('Plan saved to your account.', recovery)
-    } catch { if (activeUser.current === owner) setStatus('Sync failed. Your device work is unchanged. Retry from Account.') }
+    } catch { if (activeUser.current === owner) { failedContent.current = profileContent(profile); setStatus('Sync failed. Your device work is unchanged. Retry from Account.') } }
     finally { inFlight.current = false; setSaving(false) }
   }
   saveRef.current = save
@@ -139,7 +141,7 @@ export function AccountProvider({ children }: { children: ReactNode }) {
     setNeedsChoice(false); setCompareOpen(false); setReady(true); readyRef.current = true; setStatus(syncRef.current ? 'Saved' : 'Sync paused')
   }
   async function signOut(local = false) {
-    authGeneration.current++; stopRetry(); setReady(false); readyRef.current = false
+    authGeneration.current++; generation.current++; activeUser.current = null; stopRetry(); setReady(false); readyRef.current = false
     if (!client) return
     const { error } = await client.auth.signOut(local ? { scope: 'local' } : undefined)
     if (local) {
@@ -152,7 +154,7 @@ export function AccountProvider({ children }: { children: ReactNode }) {
 
   async function deleteAccount() {
     if (!client || !activeUser.current) return false
-    stopRetry(); setReady(false); readyRef.current = false
+    generation.current++; activeUser.current = null; stopRetry(); setReady(false); readyRef.current = false
     const { error } = await client.rpc('delete_own_account')
     if (error) { setStatus('Couldn’t delete the account. Retry.'); return false }
     await signOut(true); recordSaved(null); setStatus('Account deleted. Work remains on this device.'); return true
@@ -166,7 +168,7 @@ export function AccountProvider({ children }: { children: ReactNode }) {
     return () => { active = false; subscription.unsubscribe() }
   }, [client])
   useEffect(() => {
-    generation.current++; stopRetry(); recordSaved(null); setLoaded(false); setReady(false); readyRef.current = false; setNeedsChoice(false); setCompareOpen(false)
+    generation.current++; failedContent.current = null; stopRetry(); recordSaved(null); setLoaded(false); setReady(false); readyRef.current = false; setNeedsChoice(false); setCompareOpen(false)
     if (!user) { setStatus('Saved on this device'); return }
     let enabled = true
     try { enabled = localStorage.getItem(`pivott:sync:${user.id}`) !== 'false' } catch {}
@@ -174,12 +176,14 @@ export function AccountProvider({ children }: { children: ReactNode }) {
   }, [user?.id])
   useEffect(() => {
     if (!user || !ready || !syncEnabled || saving || state.mode === 'demo') return
+    if (failedContent.current === profileContent(state)) return
     if (saved && profileContent(state) === profileContent(saved.profile)) return
     const timer = setTimeout(() => void saveRef.current(), 2000)
     return () => clearTimeout(timer)
   }, [state, saved, user?.id, ready, syncEnabled, saving])
   useEffect(() => { if (user && loaded && !ready && !needsChoice && state.mode === 'personal') reconcile(savedRef.current) }, [state.mode, loaded])
   useEffect(() => {
+    try { const pending = expireBackup(localStorage); if (pending) expiry.current = setTimeout(() => { if (JSON.parse(localStorage.getItem(BACKUP_KEY) || 'null')?.id === pending.id) localStorage.removeItem(BACKUP_KEY) }, pending.remaining) } catch {}
     const online = () => { if (activeUser.current && syncRef.current) { if (readyRef.current) void saveRef.current(); else void refresh() } }
     window.addEventListener('online', online)
     return () => { window.removeEventListener('online', online); stopRetry(); if (expiry.current) clearTimeout(expiry.current) }

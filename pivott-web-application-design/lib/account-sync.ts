@@ -34,3 +34,14 @@ export function readBackup(storage: Pick<Storage, 'getItem'>, owner: string | nu
     return { ...value, profile: value.profile === null ? null : readAccountProfile(value.profile) }
   } catch { return null }
 }
+
+/** Purge expired recovery data when the app is opened again after a closed/suspended tab. */
+export function expireBackup(storage: Pick<Storage, 'getItem' | 'removeItem'>, now = Date.now()): { id: string; remaining: number } | null {
+  try {
+    const value = JSON.parse(storage.getItem(BACKUP_KEY) || 'null')
+    if (!value) return null
+    const remaining = value.expiresAt - now
+    if (typeof value.id !== 'string' || !Number.isFinite(remaining) || remaining <= 0 || remaining > 30000) { storage.removeItem(BACKUP_KEY); return null }
+    return { id: value.id, remaining }
+  } catch { storage.removeItem(BACKUP_KEY); return null }
+}
