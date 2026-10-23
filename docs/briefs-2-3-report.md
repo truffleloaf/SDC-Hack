@@ -83,3 +83,7 @@ Added a TypeScript-AST copy checker for app/components (excluding styleguide), c
 ## U3: copy guidance
 
 Added the Copy rules section to DESIGN, including concrete sentences, no rhetorical headings/negative parallels, one linked disclaimer and meaningful use of names. Documents the checker and reasoned exceptions. Documentation-only; required Part U checks follow.
+
+## Part U verification
+
+Checker self-test and UI scan passed. Frontend **89 passed**, backend **66 passed**, TypeScript and production build passed again. U changes only documentation, the checker and CI; the unchanged UI retains Part T's 40 passing responsive/theme/accessibility checks. Part U complete. Before A1, reproduced the reported bug directly: Excel-only Finance Systems Analyst fit **89.09%**, versus **56.04%** with the full demo ratings. Proceeding with conservative bounds.
