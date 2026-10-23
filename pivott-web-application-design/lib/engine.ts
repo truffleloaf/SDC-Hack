@@ -28,13 +28,18 @@ export function recency(age: number) {
   return Math.pow(0.5, age / 180)
 }
 
+/** Assumptions use a fixed editorial weight, without pretending to have a publication date. */
+export function signalWeight(signal: Signal, asOf: string = DATA_AS_OF) {
+  return signal.evidence === 'assumption' ? signal.assumptionWeight : signal.strength * recency(ageDays(signal.date, asOf))
+}
+
 /** signal_adjustment(task) = clamp(sum(strength × direction × recency × impact), -0.2, 0.2) */
 export function signalAdjustment(taskId: string, signals: Signal[], asOf: string = DATA_AS_OF) {
   let sum = 0
   for (const s of signals) {
     for (const i of s.impacts) {
       if (i.taskId !== taskId) continue
-      sum += s.strength * s.direction * recency(ageDays(s.date, asOf)) * i.impact
+      sum += signalWeight(s, asOf) * s.direction * i.impact
     }
   }
   return clamp(sum, -0.2, 0.2)
@@ -363,7 +368,7 @@ export function confidence(tasks: ScoredTask[], signals: Signal[]): 'High' | 'Me
   for (const s of signals) {
     for (const i of s.impacts) {
       if (!ids.has(i.taskId)) continue
-      const w = s.strength * recency(ageDays(s.date)) * i.impact
+      const w = signalWeight(s) * i.impact
       total += w
       if (s.evidence === 'verified') verified += w
     }

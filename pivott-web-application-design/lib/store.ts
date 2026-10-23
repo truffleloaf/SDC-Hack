@@ -258,6 +258,6 @@ export function analyze(s: AppState) {
         limit: 10,
       })
     : []
-  const lastUpdated = signals.reduce((a, b) => (b.date > a ? b.date : a), '2000-01-01')
+  const lastUpdated = signals.reduce((a, b) => (b.date && b.date > a ? b.date : a), '2000-01-01')
   return { signals, scored, exposure, routes: allRoutes.slice(0, 3), allRoutes, userTaskSkills, lastUpdated, unassessed, assessmentCoverage }
 }

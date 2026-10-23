@@ -82,7 +82,7 @@ export function AdminSheet({ open, onOpenChange, state }: { open: boolean; onOpe
           <SheetHeader className="border-b border-border p-6">
             <p className="font-sans text-xs font-medium text-primary">Admin</p>
             <SheetTitle className="font-serif text-3xl font-normal">Add a signal</SheetTitle>
-            <SheetDescription>Signals adjust task exposure by at most ±20 points, weighted by recency.</SheetDescription>
+            <SheetDescription>Your entries are labelled “Added by you”. Dated entries fade with a 180-day half-life; all adjustments together are capped at ±20 points.</SheetDescription>
           </SheetHeader>
 
           <div className="flex flex-col gap-5 p-6">

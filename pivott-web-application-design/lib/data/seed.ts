@@ -45,18 +45,19 @@ export interface Resource {
   free: boolean
 }
 
-export interface Signal {
+interface SignalBase {
   id: string
-  date: string
   headline: string
-  sourceName: string
-  sourceUrl: string
   direction: 1 | -1
   strength: number
   impacts: { taskId: string; impact: number }[]
   explanation: string
-  evidence: 'verified' | 'illustrative' | 'user'
 }
+
+export type Signal = SignalBase & (
+  | { evidence: 'assumption'; assumptionWeight: number; date?: never; sourceName?: never; sourceUrl?: never }
+  | { evidence: 'verified' | 'user'; date: string; sourceName: string; sourceUrl: string; assumptionWeight?: never }
+)
 
 export interface Scenario {
   id: 'normal' | 'fast'
@@ -72,7 +73,7 @@ export interface Sdg {
 }
 
 export const DATA_AS_OF = '2026-10-01'
-export const SEED_VERSION = '2026.10.2'
+export const SEED_VERSION = '2026.10.3'
 
 export const scenarios: Scenario[] = [
   {
@@ -276,18 +277,18 @@ export const resources: Resource[] = [
 ]
 
 export const signals: Signal[] = [
-  { id: 's01', date: '2026-09-18', headline: 'Invoice-capture agents reach general availability in major ERPs', sourceName: 'SAP Business AI', sourceUrl: 'https://www.sap.com/products/artificial-intelligence.html', direction: 1, strength: 0.7, impacts: [{ taskId: 'fa-invoice', impact: 0.045 }, { taskId: 'oc-tracking', impact: 0.04 }], explanation: 'Line-item extraction now ships inside core finance modules.', evidence: 'illustrative' },
-  { id: 's02', date: '2026-09-02', headline: 'Finance teams report more time on exception review after automation', sourceName: 'Microsoft Work Trend Index', sourceUrl: 'https://www.microsoft.com/en-us/worklab/work-trend-index', direction: -1, strength: 0.5, impacts: [{ taskId: 'fa-exception', impact: 0.07 }, { taskId: 'fsa-controls', impact: 0.05 }], explanation: 'Judgment-heavy review grows as routine entry shrinks.', evidence: 'illustrative' },
-  { id: 's03', date: '2026-08-21', headline: 'Bank-feed matching rules become a standard accounting feature', sourceName: 'Microsoft Copilot', sourceUrl: 'https://www.microsoft.com/en-us/microsoft-365/copilot', direction: 1, strength: 0.6, impacts: [{ taskId: 'fa-recon', impact: 0.05 }, { taskId: 'fsa-pipeline', impact: 0.05 }], explanation: 'Rule-based reconciliation is moving into default workflows.', evidence: 'illustrative' },
-  { id: 's04', date: '2026-08-05', headline: 'Support teams pair AI drafts with human escalation paths', sourceName: 'HubSpot', sourceUrl: 'https://www.hubspot.com/', direction: 1, strength: 0.6, impacts: [{ taskId: 'cs-faq', impact: 0.1 }, { taskId: 'cs-triage', impact: 0.08 }], explanation: 'Routine replies are increasingly drafted automatically.', evidence: 'illustrative' },
-  { id: 's05', date: '2026-07-14', headline: 'Demand rises for people who can design and govern automations', sourceName: 'TalentCorp Malaysia', sourceUrl: 'https://www.talentcorp.com.my/', direction: -1, strength: 0.5, impacts: [{ taskId: 'fsa-automation', impact: 0.1 }, { taskId: 'oc-improve', impact: 0.08 }], explanation: 'Organisations need owners for new automated processes.', evidence: 'illustrative' },
-  { id: 's06', date: '2026-06-30', headline: 'Generative tools draft month-end commentary from ledger data', sourceName: 'Anthropic Economic Index', sourceUrl: 'https://www.anthropic.com/economic-index', direction: 1, strength: 0.5, impacts: [{ taskId: 'fa-reporting', impact: 0.07 }, { taskId: 'me-reporting', impact: 0.05 }], explanation: 'Narrative drafting is a common professional AI use.', evidence: 'illustrative' },
-  { id: 's07', date: '2026-06-10', headline: 'Expense tools add policy pre-screening by default', sourceName: 'SAP Concur', sourceUrl: 'https://www.concur.com/', direction: 1, strength: 0.55, impacts: [{ taskId: 'fa-expense', impact: 0.11 }], explanation: 'Claims are flagged against policy before a reviewer sees them.', evidence: 'illustrative' },
-  { id: 's08', date: '2026-05-20', headline: 'Marketing teams scale AI copy while tightening brand review', sourceName: 'HubSpot', sourceUrl: 'https://www.hubspot.com/state-of-marketing', direction: 1, strength: 0.6, impacts: [{ taskId: 'me-copy', impact: 0.1 }, { taskId: 'me-social', impact: 0.08 }], explanation: 'Draft volume rises; editing and approval become the bottleneck.', evidence: 'illustrative' },
-  { id: 's09', date: '2026-04-15', headline: 'AI Index tracks rapid gains in agentic task completion', sourceName: 'Stanford HAI AI Index', sourceUrl: 'https://hai.stanford.edu/ai-index', direction: 1, strength: 0.4, impacts: [{ taskId: 'da-clean', impact: 0.08 }, { taskId: 'da-query', impact: 0.08 }, { taskId: 'oc-scheduling', impact: 0.05 }], explanation: 'Benchmarks show models completing longer multi-step tasks.', evidence: 'illustrative' },
-  { id: 's10', date: '2026-03-12', headline: 'Employers prize communication and relationship skills alongside AI', sourceName: 'LinkedIn Economic Graph', sourceUrl: 'https://economicgraph.linkedin.com/', direction: -1, strength: 0.4, impacts: [{ taskId: 'fa-comms', impact: 0.11 }, { taskId: 'me-partners', impact: 0.08 }, { taskId: 'oc-vendors', impact: 0.06 }], explanation: 'Interpersonal work is valued more as routine work shifts.', evidence: 'illustrative' },
-  { id: 's11', date: '2026-02-04', headline: 'Escalations handled by people show higher customer satisfaction', sourceName: 'Zendesk CX Trends', sourceUrl: 'https://www.zendesk.com/customer-experience-trends/', direction: -1, strength: 0.45, impacts: [{ taskId: 'cs-escalation', impact: 0.1 }, { taskId: 'fa-exception', impact: 0.05 }], explanation: 'Complex cases still benefit from a human owner.', evidence: 'illustrative' },
-  { id: 's12', date: '2025-11-18', headline: 'Process mining makes SOP drafting faster', sourceName: 'Celonis', sourceUrl: 'https://www.celonis.com/process-mining/', direction: 1, strength: 0.4, impacts: [{ taskId: 'oc-docs', impact: 0.08 }, { taskId: 'cs-kb', impact: 0.05 }], explanation: 'Event logs can generate first-draft procedures.', evidence: 'illustrative' },
+  { id: 's01', headline: "Built-in invoice capture", direction: 1, strength: 0.7, impacts: [{ taskId: 'fa-invoice', impact: 0.045 }, { taskId: 'oc-tracking', impact: 0.04 }], explanation: "Assume tools can extract invoice line items inside finance workflows.", evidence: 'assumption', assumptionWeight: 0.6658202274413345 },
+  { id: 's02', headline: "People review exceptions after routine entry is automated", direction: -1, strength: 0.5, impacts: [{ taskId: 'fa-exception', impact: 0.07 }, { taskId: 'fsa-controls', impact: 0.05 }], explanation: "Assume exception handling continues to require human judgment.", evidence: 'assumption', assumptionWeight: 0.44716801031556647 },
+  { id: 's03', headline: "Rules match bank transactions", direction: 1, strength: 0.6, impacts: [{ taskId: 'fa-recon', impact: 0.05 }, { taskId: 'fsa-pipeline', impact: 0.05 }], explanation: "Assume matching rules reduce manual reconciliation work.", evidence: 'assumption', assumptionWeight: 0.5123695442245741 },
+  { id: 's04', headline: "AI drafts routine support replies", direction: 1, strength: 0.6, impacts: [{ taskId: 'cs-faq', impact: 0.1 }, { taskId: 'cs-triage', impact: 0.08 }], explanation: "Assume routine replies and triage can be assisted by AI.", evidence: 'assumption', assumptionWeight: 0.48175372911802583 },
+  { id: 's05', headline: "People design and govern automated processes", direction: -1, strength: 0.5, impacts: [{ taskId: 'fsa-automation', impact: 0.1 }, { taskId: 'oc-improve', impact: 0.08 }], explanation: "Assume process owners remain responsible for automated workflows.", evidence: 'assumption', assumptionWeight: 0.3688512707566328 },
+  { id: 's06', headline: "AI drafts commentary from ledger data", direction: 1, strength: 0.5, impacts: [{ taskId: 'fa-reporting', impact: 0.07 }, { taskId: 'me-reporting', impact: 0.05 }], explanation: "Assume AI can prepare a first draft from structured numbers.", evidence: 'assumption', assumptionWeight: 0.3494924835447548 },
+  { id: 's07', headline: "Tools screen expenses against policy", direction: 1, strength: 0.55, impacts: [{ taskId: 'fa-expense', impact: 0.11 }], explanation: "Assume policy screening can flag claims for a reviewer.", evidence: 'assumption', assumptionWeight: 0.35594487791342755 },
+  { id: 's08', headline: "AI drafts marketing copy for human review", direction: 1, strength: 0.6, impacts: [{ taskId: 'me-copy', impact: 0.1 }, { taskId: 'me-social', impact: 0.08 }], explanation: "Assume people review AI drafts for accuracy and brand requirements.", evidence: 'assumption', assumptionWeight: 0.35813860900748107 },
+  { id: 's09', headline: "AI handles some multi-step data and scheduling work", direction: 1, strength: 0.4, impacts: [{ taskId: 'da-clean', impact: 0.08 }, { taskId: 'da-query', impact: 0.08 }, { taskId: 'oc-scheduling', impact: 0.05 }], explanation: "Assume some data preparation, querying and scheduling steps can be automated.", evidence: 'assumption', assumptionWeight: 0.2086537878410323 },
+  { id: 's10', headline: "People handle stakeholder and partner conversations", direction: -1, strength: 0.4, impacts: [{ taskId: 'fa-comms', impact: 0.11 }, { taskId: 'me-partners', impact: 0.08 }, { taskId: 'oc-vendors', impact: 0.06 }], explanation: "Assume relationship work continues to need human involvement.", evidence: 'assumption', assumptionWeight: 0.1830480268372381 },
+  { id: 's11', headline: "People own complex customer escalations", direction: -1, strength: 0.45, impacts: [{ taskId: 'cs-escalation', impact: 0.1 }, { taskId: 'fa-exception', impact: 0.05 }], explanation: "Assume complex cases need a human owner.", evidence: 'assumption', assumptionWeight: 0.1792716332325769 },
+  { id: 's12', headline: "Process logs help draft procedures", direction: 1, strength: 0.4, impacts: [{ taskId: 'oc-docs', impact: 0.08 }, { taskId: 'cs-kb', impact: 0.05 }], explanation: "Assume event logs can support a first draft of a procedure.", evidence: 'assumption', assumptionWeight: 0.11800834541119304 },
   { id: 's13', date: '2025-09-15', headline: 'Usage data shows AI concentrated in writing, coding, and analysis', sourceName: 'Anthropic Economic Index', sourceUrl: 'https://www.anthropic.com/economic-index', direction: 1, strength: 0.5, impacts: [{ taskId: 'da-clean', impact: 0.1 }, { taskId: 'me-copy', impact: 0.1 }, { taskId: 'fa-reporting', impact: 0.05 }], explanation: 'Reported usage clusters in text and data-heavy tasks.', evidence: 'verified' },
   { id: 's14', date: '2025-06-03', headline: 'AI-exposed industries see faster productivity growth', sourceName: 'PwC Global AI Jobs Barometer', sourceUrl: 'https://www.pwc.com/gx/en/issues/artificial-intelligence/ai-jobs-barometer.html', direction: 1, strength: 0.4, impacts: [{ taskId: 'fa-invoice', impact: 0.05 }, { taskId: 'da-query', impact: 0.05 }], explanation: 'Productivity gains are strongest where tasks are most exposed.', evidence: 'verified' },
   { id: 's15', date: '2025-05-20', headline: 'Refined index finds clerical work most exposed to generative AI', sourceName: 'International Labour Organization', sourceUrl: 'https://www.ilo.org/publications/generative-ai-and-jobs-refined-global-index-occupational-exposure', direction: 1, strength: 0.6, impacts: [{ taskId: 'fa-invoice', impact: 0.1 }, { taskId: 'fa-recon', impact: 0.05 }, { taskId: 'cs-faq', impact: 0.05 }], explanation: 'Clerical support occupations show the highest exposure.', evidence: 'verified' },

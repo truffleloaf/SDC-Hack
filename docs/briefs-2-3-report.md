@@ -39,3 +39,9 @@ Files: auth/sync helpers and tests, provider/dialog guards, header/dialog/sheet 
 Updated root/frontend READMEs and `supabase/README.md` for the code flow, autosave and recovery. All eight external setup checks remain **owner-unverified**: custom SMTP/non-team delivery; token email template; 600-second OTP expiry; Google credentials/consent; redirect allowlist/Site URL; Vercel public build variables/redeploy; SQL migration application; real phone/incognito verification. Verify the migration's applied state before running it again. No project credentials are available here, and no live-provider success is claimed.
 
 Part S is implemented and its required checks passed (S5). Remaining work: T1–T6, U, then A/B/C/D items not already covered. No features were removed. Résumé import remains local and available.
+
+## T1: evidence and assumptions
+
+Converted the 12 invented news records into undated, unlinked assumptions with no organisation names. The timeline contains published/user entries only; a separate section shows assumptions and their per-task point contributions. Engine/API sorting, confidence explanation, badges and admin help reflect the distinction. Existing eight published references were retained, not newly verified; network access does not support claiming new source checks.
+
+Both engines use a fixed assumption weight equal to the previous strength × cut-off recency. This removes invented dates without changing scores at the data cut-off. Seed and goldens regenerated; custom-signal fixtures now start from a dated published entry. Added regression coverage for absent publication metadata and preserved demo scores. Full checks follow at the Part T boundary.

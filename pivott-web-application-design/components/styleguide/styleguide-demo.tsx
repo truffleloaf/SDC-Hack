@@ -83,7 +83,7 @@ export function StyleguideDemo() {
         <DirectionBadge direction={1} />
         <DirectionBadge direction={-1} />
         <EvidenceBadge evidence="verified" />
-        <EvidenceBadge evidence="illustrative" />
+        <EvidenceBadge evidence="assumption" />
         <SdgBadge id={8} />
         <DemoLabel />
       </Section>

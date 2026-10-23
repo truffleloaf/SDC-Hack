@@ -98,10 +98,10 @@ export function DirectionBadge({ direction }: { direction: 1 | -1 }) {
   )
 }
 
-export function EvidenceBadge({ evidence }: { evidence: 'verified' | 'illustrative' | 'user' }) {
+export function EvidenceBadge({ evidence }: { evidence: 'verified' | 'assumption' | 'user' }) {
   const map = {
     verified: { icon: BadgeCheck, label: 'Published source', cls: 'text-accent-foreground' },
-    illustrative: { icon: FlaskConical, label: 'Illustrative', cls: 'text-muted-foreground' },
+    assumption: { icon: FlaskConical, label: 'Assumption', cls: 'text-muted-foreground' },
     user: { icon: UserPen, label: 'Added by you', cls: 'text-foreground' },
   }[evidence]
   const Icon = map.icon

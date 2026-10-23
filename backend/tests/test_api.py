@@ -34,7 +34,7 @@ def test_seed_get_and_reset(client):
     response = client.get("/api/seed")
     assert response.status_code == 200
     body = response.json()
-    assert body["version"] == "2026.10.2"
+    assert body["version"] == "2026.10.3"
     assert len(body["roles"]) == 6
     assert len(body["tasks"]) == 31
     assert len(body["skills"]) == 15
@@ -177,10 +177,14 @@ def test_signals(client):
     assert body["asOf"] == "2026-10-01"
     assert body["count"] == 20
     assert len(body["signals"]) == 20
-    dates = [signal["date"] for signal in body["signals"]]
+    dates = [signal["date"] for signal in body["signals"] if signal["evidence"] != "assumption"]
     assert dates == sorted(dates, reverse=True)
     for signal in body["signals"]:
-        assert 0 <= signal["recency"] <= 1
+        if signal["evidence"] == "assumption":
+            assert signal["recency"] is None
+            assert "date" not in signal and "sourceUrl" not in signal and "sourceName" not in signal
+        else:
+            assert 0 <= signal["recency"] <= 1
 
 
 def test_sdgs(client):

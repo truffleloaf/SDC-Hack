@@ -31,7 +31,8 @@ export default function SignalsPage() {
   if (!hydrated) return <PageSkeleton />
 
   const pending = state.customSignals.filter((s) => !state.appliedSignalIds.includes(s.id))
-  const all = [...seedSignals, ...state.customSignals].sort((a, b) => b.date.localeCompare(a.date))
+  const assumptions = seedSignals.filter((s) => s.evidence === 'assumption' && (dir === 'all' || (dir === 'up' ? s.direction === 1 : s.direction === -1)))
+  const all = [...seedSignals, ...state.customSignals].filter((s) => s.evidence !== 'assumption').sort((a, b) => b.date.localeCompare(a.date))
   const mine = new Set(state.selections.map((s) => s.taskId))
   const filtered = all.filter(
     (s) =>
@@ -154,7 +155,7 @@ export default function SignalsPage() {
 
       <p className="mt-4 max-w-3xl text-xs leading-relaxed text-muted-foreground">
         <span className="font-medium text-foreground">Published source</span> signals summarise public reports.{' '}
-        <span className="font-medium text-foreground">Illustrative</span> signals are seeded demo records linked to related product or research pages; their strengths and task mappings are not verified evidence.
+        Task mappings and numeric weights are model inputs. Undated assumptions are listed separately below.
       </p>
 
       {filtered.length === 0 ? (
@@ -250,6 +251,18 @@ export default function SignalsPage() {
           })}
         </ol>
       )}
+
+      <section className="mt-12" aria-labelledby="assumptions-title">
+        <h2 id="assumptions-title" className="font-serif text-2xl">Assumptions behind the scores</h2>
+        <p className="mt-2 max-w-2xl text-sm text-muted-foreground">These are editorial inputs, with fixed weights. They are not published news and are independent of the date filter.</p>
+        <ul className="mt-5 grid gap-4 md:grid-cols-2">
+          {assumptions.map((s) => <li key={s.id} className="card-surface p-5">
+            <div className="flex flex-wrap justify-between gap-2"><EvidenceBadge evidence="assumption" /><DirectionBadge direction={s.direction} /></div>
+            <h3 className="mt-3 font-medium">{s.headline}</h3><p className="mt-2 text-sm text-muted-foreground">{s.explanation}</p>
+            <ul className="mt-3 space-y-1 text-sm">{s.impacts.map((i) => <li key={i.taskId}>{taskById[i.taskId]?.name}: {s.direction > 0 ? '+' : '−'}{(s.assumptionWeight! * i.impact * 100).toFixed(2)} points before the combined adjustment cap</li>)}</ul>
+          </li>)}
+        </ul>
+      </section>
 
       <AdminSheet open={adminOpen} onOpenChange={setAdminOpen} state={state} />
     </div>

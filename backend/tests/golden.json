@@ -699,9 +699,9 @@
       {
         "id": "user-parity",
         "date": "2026-10-01",
-        "headline": "Invoice-capture agents reach general availability in major ERPs",
-        "sourceName": "SAP Business AI",
-        "sourceUrl": "https://www.sap.com/products/artificial-intelligence.html",
+        "headline": "Usage data shows AI concentrated in writing, coding, and analysis",
+        "sourceName": "Anthropic Economic Index",
+        "sourceUrl": "https://www.anthropic.com/economic-index",
         "direction": 1,
         "strength": 0.6,
         "impacts": [
@@ -714,7 +714,7 @@
             "impact": 0.15
           }
         ],
-        "explanation": "Line-item extraction now ships inside core finance modules.",
+        "explanation": "Reported usage clusters in text and data-heavy tasks.",
         "evidence": "user"
       }
     ]

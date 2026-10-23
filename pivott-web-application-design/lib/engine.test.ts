@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   buildPathway,
+  signalWeight,
   classify,
   computeRoutes,
   learningWeeks,
@@ -109,5 +110,22 @@ describe('pathway', () => {
     const { steps } = buildPathway({ targetRoleId: 'finance-systems-analyst', levels: demoPersona.skills, hoursPerWeek: 6, freeOnly: true })
     expect(steps.length).toBeGreaterThan(0)
     expect(steps.every((s) => s.resource === null || s.resource.free)).toBe(true)
+  })
+})
+
+
+describe('scoring assumptions', () => {
+  it('has no invented publication metadata and stays independent of the clock', () => {
+    const assumptions = signals.filter((s) => s.evidence === 'assumption')
+    expect(assumptions).toHaveLength(12)
+    for (const signal of assumptions) {
+      expect(signal).not.toHaveProperty('date')
+      expect(signal).not.toHaveProperty('sourceName')
+      expect(signal).not.toHaveProperty('sourceUrl')
+      expect(signalWeight(signal, '2030-01-01')).toBe(signalWeight(signal))
+    }
+  })
+  it('preserves the original Normal demonstration score', () => {
+    expect(roleExposure(scoreTasks(selections, lookup, 'normal', signals))).toBeCloseTo(0.6190312308415231, 12)
   })
 })

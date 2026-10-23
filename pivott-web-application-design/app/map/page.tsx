@@ -72,7 +72,7 @@ export default function MapPage() {
                     <Info className="size-3.5" />
                   </TooltipTrigger>
                   <TooltipContent className="max-w-60">
-                    Based on how much of your time is covered by signals and how many come from published sources.
+                    {signals.filter((s) => s.evidence === 'verified' && s.impacts.some((i) => scored.some((t) => t.id === i.taskId))).length} published sources reference your tasks. The label combines time coverage with their share of the adjustment weight; assumptions do not count as published sources.
                   </TooltipContent>
                 </Tooltip>
               </dd>

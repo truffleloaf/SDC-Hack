@@ -30,7 +30,7 @@ const customProfile = {
   roleId: 'finance-admin', selections: [...selections, { taskId: 'custom-review', share: 25 }],
   skills: seed.demoPersona.skills, scenario: 'normal', hoursPerWeek: 8, freeOnly: false,
   customTasks: [{ id: 'custom-review', name: 'Review project notes', skills: ['analysis', 'writing'], baseExposure: 0.5, humanJudgment: 0.5 }],
-  customSignals: [{ ...seed.signals[0], id: 'user-parity', date: seed.DATA_AS_OF, evidence: 'user', strength: 0.6,
+  customSignals: [{ ...seed.signals.find((signal) => signal.evidence === 'verified'), id: 'user-parity', date: seed.DATA_AS_OF, evidence: 'user', strength: 0.6,
     impacts: [{ taskId: 'fa-invoice', impact: 0.15 }, { taskId: 'custom-review', impact: 0.15 }] }],
 }
 const golden = {

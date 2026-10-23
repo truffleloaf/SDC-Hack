@@ -41,6 +41,12 @@ def recency(age: float) -> float:
     return 0.5 ** (age / 180.0)
 
 
+def signal_weight(signal: dict[str, Any], as_of: str = DATA_AS_OF) -> float:
+    if signal["evidence"] == "assumption":
+        return signal["assumptionWeight"]
+    return signal["strength"] * recency(age_days(signal["date"], as_of))
+
+
 def signal_adjustment(
     task_id: str,
     signals: Sequence[dict[str, Any]] = SIGNALS,
@@ -53,9 +59,8 @@ def signal_adjustment(
             if impact["taskId"] != task_id:
                 continue
             total += (
-                signal["strength"]
+                signal_weight(signal, as_of)
                 * signal["direction"]
-                * recency(age_days(signal["date"], as_of))
                 * impact["impact"]
             )
     return clamp(total, -0.2, 0.2)
@@ -354,7 +359,7 @@ def confidence(
         for impact in signal.get("impacts", []):
             if impact["taskId"] not in task_ids:
                 continue
-            weight = signal["strength"] * recency(age_days(signal["date"])) * impact["impact"]
+            weight = signal_weight(signal) * impact["impact"]
             total += weight
             if signal["evidence"] == "verified":
                 verified += weight
