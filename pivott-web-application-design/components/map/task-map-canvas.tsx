@@ -266,7 +266,7 @@ export function TaskMapCanvas({
   )
 }
 
-export function TaskDetailCard({ task, pinned, onClose, surface = 'glass' }: { task: ScoredTask; pinned: boolean; onClose: () => void; surface?: 'glass' | 'solid' }) {
+export function TaskDetailCard({ task, pinned, onClose, surface = 'panel' }: { task: ScoredTask; pinned: boolean; onClose: () => void; surface?: 'panel' | 'solid' }) {
   const explanation = {
     Automate: `High exposure and low reliance on judgment. Tools may assist with routine parts of ${task.name.toLowerCase()}. Outputs still need checking.`,
     Augment: `AI can speed up parts of ${task.name.toLowerCase()}, while your judgment shapes the result.`,
@@ -274,7 +274,7 @@ export function TaskDetailCard({ task, pinned, onClose, surface = 'glass' }: { t
   }[task.classification]
 
   return (
-    <div className={cn('rounded-xl p-5', surface === 'glass' ? 'surface-panel' : 'bg-card', pinned && 'border-teal/40')}>
+    <div className={cn('rounded-xl p-5', surface === 'panel' ? 'surface-panel' : 'bg-card', pinned && 'border-teal/40')}>
       <div className="flex items-start justify-between gap-2">
         <h3 className="font-serif text-xl leading-tight">{task.name}</h3>
         {pinned && (

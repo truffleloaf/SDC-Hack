@@ -176,7 +176,7 @@ function RouteFan({ current, count }: { current: string; count: number }) {
             strokeDasharray="1 6"
             strokeLinecap="round"
             vectorEffect="non-scaling-stroke"
-            className="route-flow"
+            
           />
         ))}
       </svg>

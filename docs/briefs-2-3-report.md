@@ -63,3 +63,7 @@ Kept the requested exposure statement on Map and linked it to the new `/method` 
 ## T5: learning context from actual inputs
 
 Removed every skill `why` claim and replaced pathway `why` with numeric current/required levels in both engines. Step cards derive task count/names from the selected tasks (including edited names) and show the target requirement alongside the rating. Concrete deliverables remain; customer notes now name interview output directly. Seed and goldens regenerated. Added regression coverage against promotional fields and incorrect levels. Files: seed, both engines, step card, pathway, engine tests and fixtures. Full checks follow at the Part T boundary.
+
+## T6: unused assets and motion cleanup
+
+Deleted placeholder images and unused legacy app icons; retained the referenced SVG icon and all four now-used Plex files/license. Removed disabled float/dash keyframes, unused dot-grid fade and route-flow classes. No floating loop, auto-cycle, global page fade or celebration was added. The passport light scope remains in use by exports and is not dead code. Banned-word search found only a PDF orientation enum (`landscape`), test fixtures and a developer comment, with no promotional UI prose. Files: public assets, CSS, graph class/prop names. Full Part T verification follows.

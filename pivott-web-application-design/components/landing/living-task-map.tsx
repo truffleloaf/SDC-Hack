@@ -84,7 +84,7 @@ export function LivingTaskMap() {
               strokeWidth={1.5}
               strokeDasharray="3 5"
               strokeLinecap="round"
-              className="route-flow transition-opacity duration-300"
+              className="transition-opacity duration-300"
               opacity={active && active !== n.id ? 0.15 : active === n.id ? 0.95 : 0.45}
             />
           ))}

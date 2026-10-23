@@ -183,42 +183,11 @@
   background-size: 22px 22px;
 }
 
-@utility dot-grid-fade {
-  mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
-}
 
 
 
-@keyframes pivott-float {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0);
-  }
-  50% {
-    transform: translate3d(0, -6px, 0);
-  }
-}
-
-@keyframes pivott-dash {
-  to {
-    stroke-dashoffset: -16;
-  }
-}
-
-.float-node {
-  animation: none;
-  transform-box: fill-box;
-}
-
-.route-flow {
-  animation: none;
-}
 
 @media (prefers-reduced-motion: reduce) {
-  .float-node,
-  .route-flow {
-    animation: none;
-  }
   *,
   *::before,
   *::after {
