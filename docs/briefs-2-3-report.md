@@ -151,3 +151,7 @@ Frontend **93 passed**, backend **67 passed**, TypeScript, production build and 
 ## C1: adoption preview
 
 Added a 1.00–1.50 multiplier slider with two-decimal values and 0.02 preset snapping. Map exposure, filled cores, classifications and the nearby-role order recompute live; non-preset previews remain temporary and hide API verification until a preset is chosen. Normal/Fast retain their verified path. Both engines accept the same optional bounded preview multiplier without changing the existing formula or public API. Added snap, ranking/exposure and cross-language preview golden coverage; fixtures regenerated. Files: preview helper/control, Map/store, both engines, scenario switch, Method, generator/tests. Unit/type/browser results are consolidated at the Part C boundary.
+
+## C2: skill bridge bars
+
+Route cards compare your level and the required level for the three most important requirements. Bars enter once on view; reduced motion is immediate. Unknown ratings use a labelled hatch, never an empty zero bar. Focus/hover reveals the actual level gap and catalogue hours, or asks for a rating. Existing gap and learning details remain. Files: SkillBridge, route card and DESIGN's data-pattern exception. Browser/theme/Axe checks follow at the Part C boundary.

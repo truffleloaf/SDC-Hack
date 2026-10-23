@@ -2,6 +2,7 @@
 
 import { ArrowRight } from 'lucide-react'
 import { motion, useReducedMotion } from 'motion/react'
+import { SkillBridge } from './skill-bridge'
 import { PButton } from '@/components/pivott/p-button'
 import { exposureColor, fitLabel, type RouteResult } from '@/lib/engine'
 import { roleById, skillById, tasksForRole } from '@/lib/data/seed'
@@ -52,6 +53,7 @@ export function RouteCard({ route, rank, currentExposure, selected, onSelect, on
       </div>
       <div><h3 className="text-sm font-medium">Why it fits</h3><p className="mt-1 text-sm leading-relaxed text-muted-foreground">{transfers.length ? `Your rated skills include ${transfers.slice(0, 3).join(', ')}.` : route.similarity ? 'Some skills used in your selected tasks also appear in this role.' : 'This is an exploratory comparison, rather than a strong overlap.'} Fit {fitLabel(route)} based on your task overlap and skill ratings.</p></div>
       {unknown > 0 && <p className="text-sm text-muted-foreground">Rate {unknown} more {unknown === 1 ? 'skill' : 'skills'} to narrow this range.</p>}
+      <SkillBridge roleId={route.roleId} levels={levels} />
       <div><h3 className="text-sm font-medium">Skills to develop</h3><p className="mt-1 text-sm text-muted-foreground">{route.gaps.slice(0, 3).map((gap) => gap.name).join(', ') || (unknown ? 'Rate the remaining skills to identify gaps.' : 'No gaps identified from your ratings.')}</p></div>
       <div><h3 className="text-sm font-medium">Learning estimate</h3><p className="mt-1 text-sm text-muted-foreground">{rated ? `${unknown ? 'At least ' : 'About '}${route.weeks} weeks at ${hoursPerWeek} hours/week.${unknown ? ' Unrated skills may add learning time.' : ' Based on the stored learning-hour estimates.'}` : 'Not estimated until relevant skills are rated.'}</p></div>
       <ExposureCompare current={currentExposure} target={route.targetExposure} />
