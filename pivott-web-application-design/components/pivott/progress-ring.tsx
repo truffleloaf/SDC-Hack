@@ -19,6 +19,7 @@ export function ProgressRing({
   className?: string
   label: string
 }) {
+  const reduce = useReducedMotion()
   const r = (size - stroke) / 2
   const c = 2 * Math.PI * r
   const v = Math.max(0, Math.min(1, value))
@@ -42,7 +43,7 @@ export function ProgressRing({
           strokeDasharray={c}
           initial={false}
           animate={{ strokeDashoffset: c * (1 - v) }}
-          transition={{ duration: 0.5, ease: [0.2, 0.7, 0.2, 1] }}
+          transition={{ duration: reduce ? 0 : 0.5, ease: [0.2, 0.7, 0.2, 1] }}
         />
       </svg>
       <div className="absolute inset-0 grid place-items-center">{children}</div>

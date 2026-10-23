@@ -143,3 +143,7 @@ Restored motion.article layout-position springs using stable role keys. Rank cha
 ## B4/B5: overlap and amendments
 
 B4 was completed in T2 (local Plex and tabular figures). B5 is explicitly dropped by Brief 3; no global page fade was added.
+
+## Part B verification
+
+Frontend **93 passed**, backend **67 passed**, TypeScript, production build and copy lint passed. Responsive/theme/Axe checks passed across 48 page combinations plus four List views. New motion browser checks passed at 375px/dark/reduced motion and 1280px/light/normal motion: hero selection, final exposure announcement/display, Normal/Fast order change and three-second movement-label expiry. Also made existing exposure/progress bars use zero-duration transitions under reduced motion. No decorative loops or page transitions were added. Part B complete; proceeding to C.

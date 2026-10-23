@@ -8,6 +8,7 @@ import { roleById, skillById, tasksForRole } from '@/lib/data/seed'
 import { cn } from '@/lib/utils'
 
 export function ExposureCompare({ current, target }: { current: number | null; target: number }) {
+  const reduce = useReducedMotion()
   return (
     <div className="flex flex-col gap-2" role="group" aria-label="Exposure comparison">
       {[
@@ -21,7 +22,7 @@ export function ExposureCompare({ current, target }: { current: number | null; t
               className="block h-full rounded-full"
               initial={false}
               animate={{ width: `${(row.v ?? 0) * 100}%`, backgroundColor: exposureColor(row.v ?? 0) }}
-              transition={{ duration: 0.45 }}
+              transition={{ duration: reduce ? 0 : 0.45 }}
             />
           </span>
           <span className="text-right font-mono text-xs tabular-nums">{row.v === null ? '—' : `${Math.round(row.v * 100)}%`}</span>
