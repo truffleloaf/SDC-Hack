@@ -12,7 +12,7 @@ Preserve Pivott’s original palette: light surfaces (#F8FAF9, #FFFFFF), dark in
 
 Preserve the original landing task-map interaction, with its illustrative task values and hover/focus details. Keep task-map interactions stable. Preserve the existing scenario, signals, API verification, comparison, calendar and passport tools. Put the initial map before skill ratings, then use Work / Routes / Plan navigation.
 
-Use borders and spacing to group content. Keep button corners compact, panels modestly rounded, and shadows quiet. Use solid forms and reading surfaces. All navigation, floating actions, overlays and map details use solid surfaces. Avoid decorative glows and gradients. Motion should explain a user action and respect reduced motion.
+Use borders and spacing to group content. Keep button corners compact, panels modestly rounded, and shadows quiet. Use solid forms and reading surfaces. All navigation, floating actions, overlays and map details use solid surfaces. Avoid decorative glows and gradients. Motion is allowed only to show a state change, direct attention, or show data. Respect reduced motion. Do not add decorative loops, global page fades, automatic highlights or celebrations.
 
 ## Content and uncertainty
 
@@ -32,3 +32,5 @@ These are practitioner heuristics, not evidence that a font or colour proves AI 
 Cards and sheets use 12px corners; inputs, buttons, menus and small labels use 8px. Pills are reserved for filters and status. Circles remain for actual graph nodes, progress markers and account avatars. Spacing follows content: compact controls, 20–24px panels and larger page gaps. Teal identifies actions, selections and graph data, without colouring a word in a headline. The hero has no eyebrow, rings or glow.
 
 The shared UI primitives use Pivott palette tokens, an 8px control radius, soft neutral shadows, a 2px teal focus outline and solid popovers. Dialog and sheet overlays are opaque black tints without blur; bottom sheets use the 12px panel radius. Tooltip arrow geometry is exempt from panel corners. The passport's white export surface remains scoped for readable image/PDF exports. Fake QR graphics were already absent; the remaining reference number was removed because it implied verification.
+
+No decorative gradients, glows, blur or icon-on-top card grids. The dot grid belongs only inside the working map canvas. Hero nodes may enter once as data appears; route cards may move when their rank changes.
