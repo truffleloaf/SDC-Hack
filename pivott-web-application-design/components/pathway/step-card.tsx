@@ -10,10 +10,14 @@ export function StepCard({
   step,
   done,
   onToggle,
+  taskNames,
+  roleTitle,
 }: {
   step: PathwayStep
   done: boolean
   onToggle: () => void
+  taskNames: string[]
+  roleTitle: string
 }) {
   const weeks = step.startWeek === step.endWeek ? `Week ${step.startWeek}` : `Weeks ${step.startWeek}–${step.endWeek}`
   return (
@@ -66,7 +70,7 @@ export function StepCard({
           <h3 className={cn('font-serif text-2xl leading-tight', done && 'text-muted-foreground line-through decoration-teal/60 decoration-1')}>
             {step.title}
           </h3>
-          <p className="text-sm leading-relaxed text-muted-foreground">{step.why}</p>
+          <p className="text-sm leading-relaxed text-muted-foreground">{taskNames.length ? `Used in ${taskNames.length} of your tasks (${taskNames.join(', ')}). ` : 'Not listed in your selected tasks. '}{roleTitle} needs level {step.required}; you are at level {step.current}.</p>
         </div>
 
         <div className="flex flex-wrap gap-1.5">

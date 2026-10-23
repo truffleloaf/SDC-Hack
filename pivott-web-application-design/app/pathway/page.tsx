@@ -17,7 +17,7 @@ import { Switch } from '@/components/ui/switch'
 import { roleById, skillById } from '@/lib/data/seed'
 import { buildPathway } from '@/lib/engine'
 import { buildIcs, downloadFile } from '@/lib/ics'
-import { setState, useAnalysis, useAppState } from '@/lib/store'
+import { setState, taskLookup, useAnalysis, useAppState } from '@/lib/store'
 
 export default function PathwayPage() {
   const { state, hydrated } = useAppState()
@@ -78,7 +78,7 @@ export default function PathwayPage() {
           />
           <ol className="flex flex-col gap-5" aria-label="Learning steps">
             {steps.map((s) => (
-              <StepCard key={s.id} step={s} done={doneIds.has(s.id)} onToggle={() => toggle(s.id)} />
+              <StepCard key={s.id} step={s} roleTitle={role.title} taskNames={state.selections.filter((item) => taskLookup(state)[item.taskId]?.skills.includes(s.skillId)).map((item) => state.taskNames[item.taskId] || taskLookup(state)[item.taskId].name)} done={doneIds.has(s.id)} onToggle={() => toggle(s.id)} />
             ))}
             <li className="relative grid grid-cols-[40px_1fr] gap-4 sm:grid-cols-[56px_1fr]">
               <div className="relative z-10 flex justify-center pt-5">

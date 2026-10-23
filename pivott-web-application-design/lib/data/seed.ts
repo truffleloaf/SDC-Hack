@@ -6,7 +6,6 @@ export interface Skill {
   category: SkillCategory
   hoursPerLevel: number
   deliverable: string
-  why: string
 }
 
 export interface Task {
@@ -98,21 +97,21 @@ export const sdgs: Sdg[] = [
 ]
 
 export const skills: Skill[] = [
-  { id: 'excel', name: 'Spreadsheet modelling', category: 'Technical', hoursPerLevel: 10, deliverable: 'A reusable reconciliation workbook with lookups and checks', why: 'Spreadsheets remain the lingua franca of finance and ops teams.' },
-  { id: 'erp', name: 'ERP systems', category: 'Technical', hoursPerLevel: 14, deliverable: 'A documented test script for one ERP workflow', why: 'Knowing how the system is configured moves you from user to owner.' },
-  { id: 'sql', name: 'SQL', category: 'Technical', hoursPerLevel: 12, deliverable: 'Five queries answering real questions about a sample ledger', why: 'SQL lets you pull the data yourself instead of waiting for exports.' },
-  { id: 'python', name: 'Python', category: 'Technical', hoursPerLevel: 16, deliverable: 'A small script that cleans a messy CSV export', why: 'Light scripting turns repetitive cleanup into a one-click job.' },
-  { id: 'bi', name: 'BI dashboards', category: 'Technical', hoursPerLevel: 10, deliverable: 'A one-page dashboard tracking three finance KPIs', why: 'Dashboards make your analysis visible to decision makers.' },
-  { id: 'automation', name: 'Process automation', category: 'Technical', hoursPerLevel: 12, deliverable: 'An approval flow that routes invoices automatically', why: 'Building automations positions you as the person who designs the work.' },
-  { id: 'ai', name: 'AI tool fluency', category: 'Technical', hoursPerLevel: 6, deliverable: 'A prompt library for three recurring tasks, with checks', why: 'Using AI well is quickly becoming a baseline expectation.' },
-  { id: 'analysis', name: 'Data analysis', category: 'Analytical', hoursPerLevel: 12, deliverable: 'A variance analysis memo with three clear findings', why: 'Interpreting numbers is where human judgment adds the most value.' },
-  { id: 'stats', name: 'Statistics', category: 'Analytical', hoursPerLevel: 12, deliverable: 'A short note explaining a trend with confidence intervals', why: 'Statistics helps you tell signal from noise.' },
-  { id: 'controls', name: 'Financial controls', category: 'Analytical', hoursPerLevel: 10, deliverable: 'A control matrix for one end-to-end process', why: 'Controls expertise is durable: automation still needs oversight.' },
-  { id: 'stakeholder', name: 'Stakeholder communication', category: 'Communication', hoursPerLevel: 8, deliverable: 'A requirements summary signed off by a stakeholder', why: 'Translating between teams is hard to automate and highly valued.' },
-  { id: 'writing', name: 'Writing & storytelling', category: 'Communication', hoursPerLevel: 8, deliverable: 'A one-page narrative explaining a business change', why: 'Clear writing turns analysis into action.' },
-  { id: 'empathy', name: 'Customer empathy', category: 'Communication', hoursPerLevel: 6, deliverable: 'Three customer journey notes with pain points', why: 'Understanding people keeps your work anchored to real needs.' },
-  { id: 'process', name: 'Process design', category: 'Operational', hoursPerLevel: 10, deliverable: 'A swimlane map of a current process with one redesign', why: 'Redesigning processes is central to every AI rollout.' },
-  { id: 'coordination', name: 'Project coordination', category: 'Operational', hoursPerLevel: 8, deliverable: 'A lightweight project plan with owners and milestones', why: 'Coordinating change keeps people and tools moving together.' },
+  { id: 'excel', name: 'Spreadsheet modelling', category: 'Technical', hoursPerLevel: 10, deliverable: 'A reusable reconciliation workbook with lookups and checks' },
+  { id: 'erp', name: 'ERP systems', category: 'Technical', hoursPerLevel: 14, deliverable: 'A documented test script for one ERP workflow' },
+  { id: 'sql', name: 'SQL', category: 'Technical', hoursPerLevel: 12, deliverable: 'Five queries answering real questions about a sample ledger' },
+  { id: 'python', name: 'Python', category: 'Technical', hoursPerLevel: 16, deliverable: 'A small script that cleans a messy CSV export' },
+  { id: 'bi', name: 'BI dashboards', category: 'Technical', hoursPerLevel: 10, deliverable: 'A one-page dashboard tracking three finance KPIs' },
+  { id: 'automation', name: 'Process automation', category: 'Technical', hoursPerLevel: 12, deliverable: 'An approval flow that routes invoices automatically' },
+  { id: 'ai', name: 'AI tool fluency', category: 'Technical', hoursPerLevel: 6, deliverable: 'A prompt library for three recurring tasks, with checks' },
+  { id: 'analysis', name: 'Data analysis', category: 'Analytical', hoursPerLevel: 12, deliverable: 'A variance analysis memo with three clear findings' },
+  { id: 'stats', name: 'Statistics', category: 'Analytical', hoursPerLevel: 12, deliverable: 'A short note explaining a trend with confidence intervals' },
+  { id: 'controls', name: 'Financial controls', category: 'Analytical', hoursPerLevel: 10, deliverable: 'A control matrix for one end-to-end process' },
+  { id: 'stakeholder', name: 'Stakeholder communication', category: 'Communication', hoursPerLevel: 8, deliverable: 'A requirements summary signed off by a stakeholder' },
+  { id: 'writing', name: 'Writing & storytelling', category: 'Communication', hoursPerLevel: 8, deliverable: 'A one-page narrative explaining a business change' },
+  { id: 'empathy', name: 'Customer empathy', category: 'Communication', hoursPerLevel: 6, deliverable: 'Three customer interview notes with specific pain points' },
+  { id: 'process', name: 'Process design', category: 'Operational', hoursPerLevel: 10, deliverable: 'A swimlane map of a current process with one redesign' },
+  { id: 'coordination', name: 'Project coordination', category: 'Operational', hoursPerLevel: 8, deliverable: 'A lightweight project plan with owners and milestones' },
 ]
 
 export const roles: Role[] = [

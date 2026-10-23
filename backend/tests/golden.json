@@ -1382,7 +1382,8 @@
         "startWeek": 1,
         "endWeek": 3,
         "deliverable": "An approval flow that routes invoices automatically",
-        "why": "Building automations positions you as the person who designs the work."
+        "current": 1,
+        "required": 3
       },
       {
         "id": "finance-systems-analyst:process",
@@ -1401,7 +1402,8 @@
         "startWeek": 4,
         "endWeek": 6,
         "deliverable": "A swimlane map of a current process with one redesign",
-        "why": "Redesigning processes is central to every AI rollout."
+        "current": 1,
+        "required": 3
       },
       {
         "id": "finance-systems-analyst:sql",
@@ -1420,7 +1422,8 @@
         "startWeek": 6,
         "endWeek": 9,
         "deliverable": "Five queries answering real questions about a sample ledger",
-        "why": "SQL lets you pull the data yourself instead of waiting for exports."
+        "current": 0,
+        "required": 2
       },
       {
         "id": "finance-systems-analyst:erp",
@@ -1439,7 +1442,8 @@
         "startWeek": 9,
         "endWeek": 11,
         "deliverable": "A documented test script for one ERP workflow",
-        "why": "Knowing how the system is configured moves you from user to owner."
+        "current": 3,
+        "required": 4
       },
       {
         "id": "finance-systems-analyst:stakeholder",
@@ -1458,7 +1462,8 @@
         "startWeek": 11,
         "endWeek": 12,
         "deliverable": "A requirements summary signed off by a stakeholder",
-        "why": "Translating between teams is hard to automate and highly valued."
+        "current": 2,
+        "required": 3
       }
     ],
     "totalHours": 90,
@@ -1483,7 +1488,8 @@
         "startWeek": 1,
         "endWeek": 3,
         "deliverable": "An approval flow that routes invoices automatically",
-        "why": "Building automations positions you as the person who designs the work."
+        "current": 1,
+        "required": 3
       },
       {
         "id": "finance-systems-analyst:process",
@@ -1502,7 +1508,8 @@
         "startWeek": 4,
         "endWeek": 6,
         "deliverable": "A swimlane map of a current process with one redesign",
-        "why": "Redesigning processes is central to every AI rollout."
+        "current": 1,
+        "required": 3
       },
       {
         "id": "finance-systems-analyst:sql",
@@ -1521,7 +1528,8 @@
         "startWeek": 6,
         "endWeek": 9,
         "deliverable": "Five queries answering real questions about a sample ledger",
-        "why": "SQL lets you pull the data yourself instead of waiting for exports."
+        "current": 0,
+        "required": 2
       },
       {
         "id": "finance-systems-analyst:erp",
@@ -1540,7 +1548,8 @@
         "startWeek": 9,
         "endWeek": 11,
         "deliverable": "A documented test script for one ERP workflow",
-        "why": "Knowing how the system is configured moves you from user to owner."
+        "current": 3,
+        "required": 4
       },
       {
         "id": "finance-systems-analyst:stakeholder",
@@ -1559,7 +1568,8 @@
         "startWeek": 11,
         "endWeek": 12,
         "deliverable": "A requirements summary signed off by a stakeholder",
-        "why": "Translating between teams is hard to automate and highly valued."
+        "current": 2,
+        "required": 3
       }
     ],
     "totalHours": 90,

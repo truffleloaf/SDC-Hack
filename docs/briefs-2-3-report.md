@@ -59,3 +59,7 @@ Rewrote the hero, metadata, start, skills, signals, plan, passport, time panel a
 ## T4: one explanation and a method page
 
 Kept the requested exposure statement on Map and linked it to the new `/method` page. The global footer and passport footer also link there. Removed repeated illustrative/disclaimer labels from the map, hero details, plan completion, example and passport. Evidence badges and useful unknown/assessment coverage information remain because they describe inputs, rather than repeating warnings. Method documents formulas, thresholds, fixed assumptions, confidence, learning estimates and data handling. Files: method/layout/footer and corresponding copy consumers. Full checks follow at the Part T boundary.
+
+## T5: learning context from actual inputs
+
+Removed every skill `why` claim and replaced pathway `why` with numeric current/required levels in both engines. Step cards derive task count/names from the selected tasks (including edited names) and show the target requirement alongside the rating. Concrete deliverables remain; customer notes now name interview output directly. Seed and goldens regenerated. Added regression coverage against promotional fields and incorrect levels. Files: seed, both engines, step card, pathway, engine tests and fixtures. Full checks follow at the Part T boundary.

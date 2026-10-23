@@ -129,3 +129,15 @@ describe('scoring assumptions', () => {
     expect(roleExposure(scoreTasks(selections, lookup, 'normal', signals))).toBeCloseTo(0.6190312308415231, 12)
   })
 })
+
+
+describe('derived learning context', () => {
+  it('returns the rated shortfall without promotional claims', () => {
+    const plan = buildPathway({ targetRoleId: 'finance-systems-analyst', levels: demoPersona.skills, hoursPerWeek: 6, freeOnly: true })
+    for (const step of plan.steps) {
+      expect(step).not.toHaveProperty('why')
+      expect(step.current).toBe(demoPersona.skills[step.skillId as keyof typeof demoPersona.skills])
+      expect(step.required).toBeGreaterThan(step.current)
+    }
+  })
+})

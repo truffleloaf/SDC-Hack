@@ -295,7 +295,8 @@ export interface PathwayStep {
   startWeek: number
   endWeek: number
   deliverable: string
-  why: string
+  current: number
+  required: number
 }
 
 export function buildPathway(params: {
@@ -326,7 +327,8 @@ export function buildPathway(params: {
       startWeek: Math.floor(startHours / Math.max(1, params.hoursPerWeek)) + 1,
       endWeek: Math.max(1, Math.ceil(cursor / Math.max(1, params.hoursPerWeek))),
       deliverable: skill?.deliverable ?? 'A small practical project',
-      why: skill?.why ?? '',
+      current: g.current,
+      required: g.required,
     }
   })
   return { steps, totalHours: cursor, weeks: learningWeeks(cursor, params.hoursPerWeek) }
