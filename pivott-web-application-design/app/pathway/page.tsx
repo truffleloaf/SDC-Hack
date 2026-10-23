@@ -1,5 +1,7 @@
 'use client'
 
+import { useState } from 'react'
+import { SyncNote } from '@/components/account/sync-note'
 import { ArrowRight, CalendarPlus } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
 import { toast } from 'sonner'
@@ -12,13 +14,14 @@ import { PageIntro } from '@/components/pivott/route-stepper'
 import { NeedsProfile, PageSkeleton } from '@/components/pivott/states'
 import { ValueSlider } from '@/components/pivott/value-slider'
 import { Switch } from '@/components/ui/switch'
-import { roleById } from '@/lib/data/seed'
+import { roleById, skillById } from '@/lib/data/seed'
 import { buildPathway } from '@/lib/engine'
 import { buildIcs, downloadFile } from '@/lib/ics'
 import { displayName, greetingName, possessive, setState, useAnalysis, useAppState } from '@/lib/store'
 
 export default function PathwayPage() {
   const { state, hydrated } = useAppState()
+  const [ratingOffer, setRatingOffer] = useState<{ skillId: string; from: number; to: number; stepId: string } | null>(null)
   const { routes } = useAnalysis(state)
 
   if (!hydrated) return <PageSkeleton />
@@ -41,9 +44,12 @@ export default function PathwayPage() {
   const fill = steps.length ? doneIds.size / steps.length : 0
 
   function toggle(id: string) {
-    setState((s) => ({
-      completedSteps: s.completedSteps.includes(id) ? s.completedSteps.filter((x) => x !== id) : [...s.completedSteps, id],
-    }))
+    const step = steps.find((item) => item.id === id)
+    const wasDone = state.completedSteps.includes(id)
+    setState((s) => ({ completedSteps: wasDone ? s.completedSteps.filter((x) => x !== id) : [...s.completedSteps, id] }))
+    if (wasDone) { if (ratingOffer?.stepId === id) setRatingOffer(null); return }
+    const requirement = role.requirements.find((item) => item.skillId === step?.skillId)
+    if (step && requirement && state.skills[step.skillId] !== undefined && state.skills[step.skillId] < requirement.requiredLevel) setRatingOffer({ skillId: step.skillId, from: state.skills[step.skillId], to: requirement.requiredLevel, stepId: id })
   }
 
   function exportIcs() {
@@ -57,6 +63,8 @@ export default function PathwayPage() {
         Hi {greetingName(state)} — steps are ordered by gap priority, so the skills that matter most for this role come first.
       </PageIntro>
 
+      <SyncNote eligible={state.mode === 'personal'} />
+      {ratingOffer && <div role="status" className="mt-5 rounded-lg border border-primary p-4 text-sm"><p>Raise your {skillById[ratingOffer.skillId]?.name} rating from {ratingOffer.from} to {ratingOffer.to}?</p><p className="mt-2 text-xs text-muted-foreground">Choose Yes only if you can now work at that level. You can review the level descriptions on Skills.</p><div className="mt-3 flex gap-3"><PButton size="sm" onClick={() => { setState((current) => current.skills[ratingOffer.skillId] === ratingOffer.from ? { skills: { ...current.skills, [ratingOffer.skillId]: ratingOffer.to } } : {}); setRatingOffer(null) }}>Yes</PButton><PButton size="sm" variant="secondary" onClick={() => setRatingOffer(null)}>Not yet</PButton></div></div>}
       {unknown.length > 0 && <div className="mt-5 rounded-lg border border-border bg-card p-4 text-sm"><p>Partial plan: rate {unknown.length} more skills to estimate the remaining learning needs. Unrated skills are not treated as gaps or zero ability.</p><PLink href="/skills" variant="link" className="mt-2">Continue skill ratings</PLink></div>}
       <div className="mt-12 grid gap-10 lg:grid-cols-[1fr_340px]">
         <div className="relative">

@@ -1,5 +1,6 @@
 'use client'
 
+import { SyncNote } from '@/components/account/sync-note'
 import { Columns3, LayoutGrid } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { AnimatePresence, motion } from 'motion/react'
@@ -55,6 +56,7 @@ export default function RoutesPage() {
         </div>
       </div>
 
+      <SyncNote eligible={!!state.targetRoleId && state.mode === 'personal'} />
       <p className="mt-5 text-sm text-muted-foreground">You can save up to three routes. <a href="/skills" className="text-primary underline">Edit skill ratings</a></p>
       {assessmentCoverage < 1 && <p className="mt-2 text-sm text-muted-foreground">Current exposure covers assessed reference tasks only ({Math.round(assessmentCoverage * 100)}% of selected time). Custom tasks have no estimate.</p>}
       <RouteFan current={roleById[state.roleId]?.title ?? 'Current role'} count={routes.length} />
