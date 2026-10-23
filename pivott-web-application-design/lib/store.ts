@@ -30,6 +30,7 @@ export interface AppState {
   scenario: ScenarioId
   targetRoleId: string | null
   hoursPerWeek: number
+  workHoursPerWeek: number
   freeOnly: boolean
   completedSteps: string[]
   customSignals: Signal[]
@@ -54,6 +55,7 @@ export const emptyState: AppState = {
   scenario: 'normal',
   targetRoleId: null,
   hoursPerWeek: 6,
+  workHoursPerWeek: 40,
   freeOnly: false,
   completedSteps: [],
   customSignals: [],
@@ -108,6 +110,7 @@ export function parseStored(raw: string): AppState {
     ...emptyState,
     ...parsed,
     mode: parsed.mode === 'demo' || legacyDemo ? 'demo' : 'personal',
+    workHoursPerWeek: typeof parsed.workHoursPerWeek === 'number' && Number.isFinite(parsed.workHoursPerWeek) ? Math.max(1, Math.min(168, Math.round(parsed.workHoursPerWeek))) : 40,
     name: sanitizeName(typeof parsed.name === 'string' ? parsed.name : ''),
     resumeSkillIds: Array.isArray(parsed.resumeSkillIds) ? [...new Set(parsed.resumeSkillIds)].filter((id) => catalogueSkills.some((skill) => skill.id === id)) : [],
   }

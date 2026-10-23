@@ -167,3 +167,7 @@ Map now retains a dashed ring at each changed task's previous filled-core size, 
 ## C5: plan progress only
 
 The existing dotted state path and checked skill nodes already show progress. Kept those, explicitly respected reduced motion and removed the animated logo flourish on completion. No arrival burst, passport stamp or extra travel terminology was added, following Brief 3. Files: pathway and step card. Progress/rating browser checks are included in S5 and the final regression run.
+
+## C6: weekly time allocation
+
+Added editable work hours (default 40, separate from study hours), class-hour totals and a segmented bar. It multiplies the existing time shares by work hours; unassessed tasks retain a separate hatched share. The caption explicitly says these are not predicted saved hours. The preference persists/syncs with a validated profile and old profiles default to 40. No scoring formula changes. Files: WorkHours, Map, store/account boundary; also placed the C4 ghost ring above the filled core so it remains visible after increases. Full Part C checks follow.

@@ -3,6 +3,7 @@
 import { ArrowRight, Info, Layers, List, Map as MapIcon } from 'lucide-react'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { useEffect, useState } from 'react'
+import { WorkHours } from '@/components/map/work-hours'
 import { AdoptionPreview } from '@/components/map/adoption-preview'
 import { snapPreview } from '@/lib/preview'
 import { VerifyAnalysis } from '@/components/map/verify-analysis'
@@ -155,6 +156,8 @@ export default function MapPage() {
           </div>
         </aside>
       </div>
+
+      <WorkHours tasks={scored} coverage={assessmentCoverage} hours={state.workHoursPerWeek} onChange={(hours) => setState({ workHoursPerWeek: hours })} />
 
       <section className="mt-10" aria-labelledby="nearby-title"><h2 id="nearby-title" className="text-xl font-semibold">Nearby roles{preview !== undefined ? ' · Preview' : ''}</h2><p className="mt-2 text-sm text-muted-foreground">Ranked with the current adoption multiplier.</p><ol className="mt-4 divide-y divide-border">{routes.map((route) => <motion.li key={route.roleId} layout={reduce ? false : 'position'} transition={{ type: 'spring', stiffness: 240, damping: 30 }} className="flex flex-wrap justify-between gap-2 py-4"><span className="font-medium">{route.title}</span><span className="text-sm text-muted-foreground">Fit {fitLabel(route)} · Target exposure {Math.round(route.targetExposure * 100)}%</span></motion.li>)}</ol><PLink href="/routes" variant="link">Compare {preview !== undefined ? 'preset ' : ''}routes</PLink></section>
 

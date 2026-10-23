@@ -198,7 +198,6 @@ export function TaskMapCanvas({
                         transition={{ duration: reduce ? 0 : 0.2 }}
                       />
                     )}
-                    {change && <circle data-before-exposure={change.before} r={p.r * Math.sqrt(Math.max(0, change.before))} fill="none" stroke="var(--foreground)" strokeOpacity={0.65} strokeDasharray="3 4" strokeWidth={2} pointerEvents="none" />}
                     <circle className="ring opacity-0 transition-opacity" r={p.r + 5} fill="none" stroke="var(--ring)" strokeWidth={2} />
                     <motion.circle
                       initial={false}
@@ -213,6 +212,7 @@ export function TaskMapCanvas({
                       animate={{ r: p.r * Math.sqrt(t.exposure), fill: color }}
                       transition={{ duration: reduce ? 0 : 0.45, ease: [0.2, 0.7, 0.2, 1] }}
                     />
+                    {change && <circle data-before-exposure={change.before} r={p.r * Math.sqrt(Math.max(0, change.before))} fill="none" stroke="var(--foreground)" strokeOpacity={0.65} strokeDasharray="3 4" strokeWidth={2} pointerEvents="none" />}
                     {change && <g aria-hidden pointerEvents="none" transform={`translate(${p.r * 0.35} ${-p.r * 0.7})`}><rect x={-29} y={-10} width={58} height={18} rx={4} fill="var(--card)" stroke="var(--border-strong)" /><text textAnchor="middle" y={3} fontSize={11} className="fill-foreground font-mono">{delta >= 0 ? '+' : ''}{delta} pts</text></g>}
                     {inside ? (
                       <g pointerEvents="none" className="font-sans">
