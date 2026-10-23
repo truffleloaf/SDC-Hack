@@ -46,7 +46,6 @@ export default function PassportPage() {
     steps,
     completed: new Set(state.completedSteps),
     date,
-    code: `PV-${target.id.slice(0, 3).toUpperCase()}-${String(Math.round(fit * 10)).padStart(4, '0')}`,
   }
 
   const summary = `${possessive(data.name, 'My')} Pivott Skill Passport: ${data.currentRole} → ${data.destination}. ${route ? `${fitLabel(route)} fit` : 'Fit unavailable'}${unknown ? ' (incomplete comparison)' : ''}, ${rated ? `${unknown ? 'partial ' : ''}est. ${weeks} weeks at ${state.hoursPerWeek} h/week` : 'learning time not estimated'}. Route: ${steps.map((s) => s.title).join(' → ') || (unknown ? 'rate remaining skills to estimate learning needs' : 'no gaps identified')}. How scores work: https://pivottstudio.vercel.app/method`

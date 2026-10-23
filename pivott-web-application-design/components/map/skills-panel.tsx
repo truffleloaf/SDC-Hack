@@ -26,14 +26,14 @@ export function SkillsPanel({ stays, reinforce }: { stays: string[]; reinforce: 
     <div className="flex flex-col gap-7">
       <section aria-labelledby="stay-title" className="flex flex-col gap-3">
         <h3 id="stay-title" className="font-serif text-xl">
-          Skills that stay
+          Skills in lower-exposure tasks
         </h3>
         <p className="text-xs leading-relaxed text-muted-foreground">Strengths tied to your lower-exposure work.</p>
         <div className="flex flex-wrap gap-1.5">
           {stays.length ? (
             stays.map((s) => <SkillChip key={s} skillId={s} tone="teal" />)
           ) : (
-            <span className="text-sm text-muted-foreground">Rate more skills to see durable strengths.</span>
+            <span className="text-sm text-muted-foreground">Rate more skills to identify these overlaps.</span>
           )}
         </div>
       </section>

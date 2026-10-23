@@ -17,7 +17,6 @@ export interface PassportData {
   steps: PathwayStep[]
   completed: Set<string>
   date: string
-  code: string
 }
 
 export const PassportCard = forwardRef<HTMLDivElement, { data: PassportData }>(function PassportCard({ data }, ref) {
@@ -48,7 +47,7 @@ export const PassportCard = forwardRef<HTMLDivElement, { data: PassportData }>(f
             </div>
             <div className="flex items-end justify-between gap-4">
               <div className="flex flex-col gap-1">
-                <span className="font-sans text-xs font-medium text-faint">Destination</span>
+                <span className="font-sans text-xs font-medium text-faint">Target role</span>
                 <span className="font-serif text-3xl leading-[1.05] tracking-[-0.02em] sm:text-4xl">{data.destination}</span>
                 <span className="text-sm text-muted-foreground">{data.destinationFamily}</span>
               </div>
@@ -71,7 +70,7 @@ export const PassportCard = forwardRef<HTMLDivElement, { data: PassportData }>(f
               </span>
             </div>
             <div className="col-span-2 flex flex-col gap-2 sm:col-span-1">
-              <span className="font-sans text-xs font-medium text-faint">Durable skills</span>
+              <span className="font-sans text-xs font-medium text-faint">Rated skills</span>
               <div className="flex flex-wrap gap-1.5">
                 {data.skills.slice(0, 5).map((s) => (
                   <SkillChip key={s} skillId={s} tone="teal" />
@@ -92,7 +91,7 @@ export const PassportCard = forwardRef<HTMLDivElement, { data: PassportData }>(f
         <div className="relative flex flex-col gap-5 border-t-2 border-dashed border-border-strong bg-subtle p-6 sm:p-8 md:w-72 md:border-l-2 md:border-t-0">
           <span aria-hidden className="absolute -left-3 -top-3 hidden size-6 rounded-full md:block" style={{ background: '#E9F5F6' }} />
           <span aria-hidden className="absolute -bottom-3 -left-3 hidden size-6 rounded-full md:block" style={{ background: '#EAF3FC' }} />
-          <span className="font-sans text-xs font-medium text-faint">Route stops</span>
+          <span className="font-sans text-xs font-medium text-faint">Learning steps</span>
           <ol className="relative flex flex-col gap-4">
             <span aria-hidden className="absolute bottom-2 left-[5px] top-2 border-l-2 border-dotted border-teal/60" />
             {stubSteps.map((s) => {

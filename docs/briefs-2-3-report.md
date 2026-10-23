@@ -201,3 +201,5 @@ Added Sales Operations Coordinator and HR Operations Coordinator with eight samp
 ## D6: prior unfinished items and refutations
 
 Method was implemented in T4 and linked from Map/footer/passport. The fake QR was already absent in the base; T2 removed the remaining reference number. Mobile details already used a sheet; D4 enlarged targets. No duplicates of those tools were added.
+
+D6 cleanup also removed the unused passport reference-code field and replaced remaining travel/strength labels with Rated skills, Target role and Learning steps. Existing passport exports remain available.
