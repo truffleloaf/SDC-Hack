@@ -2,7 +2,7 @@
 
 import { useMemo, useSyncExternalStore } from 'react'
 import { DEMO_HOURS_PER_WEEK, DEMO_SCENARIO } from './demo'
-import { demoPersona, signals as seedSignals, tasksForRole, taskById, type Signal } from './data/seed'
+import { demoPersona, skills as catalogueSkills, signals as seedSignals, tasksForRole, taskById, type Signal } from './data/seed'
 import {
   computeRoutes,
   roleExposure,
@@ -25,6 +25,7 @@ export interface AppState {
   roleId: string | null
   selections: { taskId: string; share: number }[]
   customTasks: CustomTask[]
+  resumeSkillIds: string[]
   skills: Record<string, number>
   scenario: ScenarioId
   targetRoleId: string | null
@@ -48,6 +49,7 @@ export const emptyState: AppState = {
   roleId: null,
   selections: [],
   customTasks: [],
+  resumeSkillIds: [],
   skills: {},
   scenario: 'normal',
   targetRoleId: null,
@@ -96,6 +98,7 @@ export function parseStored(raw: string): AppState {
     ...parsed,
     mode: parsed.mode === 'demo' || legacyDemo ? 'demo' : 'personal',
     name: sanitizeName(typeof parsed.name === 'string' ? parsed.name : ''),
+    resumeSkillIds: Array.isArray(parsed.resumeSkillIds) ? [...new Set(parsed.resumeSkillIds)].filter((id) => catalogueSkills.some((skill) => skill.id === id)) : [],
   }
 }
 

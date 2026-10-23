@@ -7,6 +7,7 @@ import { PLink } from '@/components/pivott/p-button'
 import { PageIntro } from '@/components/pivott/route-stepper'
 import { PageSkeleton } from '@/components/pivott/states'
 import { RoleSelector } from '@/components/start/role-selector'
+import { ResumeImport } from '@/components/start/resume-import'
 import { TaskPicker } from '@/components/start/task-picker'
 import { TimePanel } from '@/components/start/time-panel'
 import { roleById, tasksForRole } from '@/lib/data/seed'
@@ -41,6 +42,7 @@ export default function StartPage() {
 
         <div className="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_380px]">
           <div className="flex min-w-0 flex-col gap-8">
+          <ResumeImport />
           <label className="flex flex-col gap-2 text-sm font-medium">Your job title (optional)
             <input className="pivott-input" value={state.jobTitle} maxLength={60} placeholder="e.g. Accounts Executive" onChange={(event) => setState({ jobTitle: event.target.value.slice(0, 60) })} />
           </label>
@@ -59,7 +61,7 @@ export default function StartPage() {
                 className="flex flex-col gap-4"
               >
                 <div className="flex items-baseline justify-between">
-                  <h2 id="tasks-title" className="font-serif text-3xl">
+                  <h2 id="tasks-title" tabIndex={-1} className="font-serif text-3xl">
                     Tasks for {role.title}
                   </h2>
                   <span className="font-mono text-xs text-muted-foreground">{role.family}</span>

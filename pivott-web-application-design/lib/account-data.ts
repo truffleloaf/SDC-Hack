@@ -19,7 +19,7 @@ export function readAccountProfile(value: unknown): AppState {
   for (const [id, level] of Object.entries(value.skills)) if (!ids.has(id) || typeof level !== 'number' || !Number.isInteger(level) || level < 0 || level > 4) throw new Error('This saved profile has invalid skill ratings.')
   const result = parseStored(JSON.stringify(value))
   return {
-    ...result, customTasks: custom.customTasks, customSignals: custom.customSignals,
+    ...result, resumeSkillIds: strings(value.resumeSkillIds) ? [...new Set(value.resumeSkillIds)].filter((id) => ids.has(id)) : [], customTasks: custom.customTasks, customSignals: custom.customSignals,
     jobTitle: typeof value.jobTitle === 'string' ? value.jobTitle.slice(0, 60) : '',
     careerGoal: typeof value.careerGoal === 'string' ? value.careerGoal.slice(0, 200) : '',
     taskNames: record(value.taskNames) ? Object.fromEntries(Object.entries(value.taskNames).filter((entry): entry is [string, string] => typeof entry[1] === 'string').map(([id, title]) => [id, title.slice(0, 60)])) : {},

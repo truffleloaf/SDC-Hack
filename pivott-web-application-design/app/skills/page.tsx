@@ -17,6 +17,7 @@ export default function SkillsPage() {
 
   const lookup = taskLookup(state)
   const suggested = new Set([
+    ...state.resumeSkillIds,
     ...state.selections.flatMap((s) => lookup[s.taskId]?.skills ?? []),
     ...(roleById[state.roleId]?.requirements.map((r) => r.skillId) ?? []),
   ])
