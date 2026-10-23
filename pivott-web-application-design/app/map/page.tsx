@@ -32,11 +32,12 @@ export default function MapPage() {
   const [sheetOpen, setSheetOpen] = useState(false)
 
   const changedIds = state.recentlyChanged.map((c) => c.taskId)
+  const changeKey = state.recentlyChanged.map((change) => `${change.taskId}:${change.before}:${change.after}`).join('|')
   useEffect(() => {
     if (!changedIds.length) return
     const t = setTimeout(() => setState({ recentlyChanged: [] }), 7000)
     return () => clearTimeout(t)
-  }, [changedIds.length])
+  }, [changeKey])
 
   if (!hydrated) return <PageSkeleton />
   if (!state.roleId || state.selections.length === 0) return <NeedsProfile step="job" />
@@ -124,7 +125,7 @@ export default function MapPage() {
               />
             </div>
           </div>
-          <p className="text-sm text-muted-foreground">Bubble size shows time spent within assessed tasks. Color shows estimated AI exposure.</p>
+          <p className="text-sm text-muted-foreground">Bubble size shows time spent within assessed tasks. Color shows estimated AI exposure.{state.recentlyChanged.length > 0 && " Dashed rings show exposure before the applied signals; labels show the change in points."}</p>
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={view}
@@ -134,7 +135,7 @@ export default function MapPage() {
               transition={{ duration: 0.2 }}
             >
               {view === 'map' ? (
-                <TaskMapCanvas tasks={scored} highlightIds={changedIds} />
+                <TaskMapCanvas tasks={scored} highlightIds={changedIds} changes={state.recentlyChanged} />
               ) : (
                 <TaskListTable tasks={scored} highlightIds={changedIds} />
               )}

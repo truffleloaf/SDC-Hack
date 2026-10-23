@@ -71,9 +71,11 @@ function splitLabel(name: string) {
 export function TaskMapCanvas({
   tasks,
   highlightIds = [],
+  changes = [],
 }: {
   tasks: ScoredTask[]
   highlightIds?: string[]
+  changes?: { taskId: string; before: number; after: number }[]
 }) {
   const { ref, width } = useSize<HTMLDivElement>()
   const reduce = useReducedMotion()
@@ -155,6 +157,8 @@ export function TaskMapCanvas({
               const lines = splitLabel(t.name)
               const inside = p.r >= 44 && Math.max(...lines.map((l) => l.length)) * 7.4 < p.r * 1.7
               const highlighted = highlightIds.includes(t.id)
+              const change = changes.find((item) => item.taskId === t.id)
+              const delta = change ? Math.round((change.after - change.before) * 1000) / 10 : 0
               return (
                 <motion.g
                   key={t.id}
@@ -166,7 +170,7 @@ export function TaskMapCanvas({
                     tabIndex={0}
                     role="button"
                     aria-pressed={pinned === t.id}
-                    aria-label={`${t.name}: ${Math.round(t.exposure * 100)}% exposure, ${t.classification}, ${Math.round(t.share * 100)}% of your time`}
+                    aria-label={`${t.name}: ${Math.round(t.exposure * 100)}% exposure, ${t.classification}, ${Math.round(t.share * 100)}% of your time${change ? `, ${delta >= 0 ? 'up' : 'down'} ${Math.abs(delta)} points after signal application` : ''}`}
                     className="cursor-pointer outline-none [&:focus-visible_.ring]:opacity-100"
                     onMouseEnter={() => setHovered(t.id)}
                     onMouseLeave={() => setHovered(null)}
@@ -183,7 +187,7 @@ export function TaskMapCanvas({
                       }
                     }}
                   >
-                    {highlighted && (
+                    {highlighted && !change && (
                       <motion.circle
                         r={p.r + 8}
                         fill="none"
@@ -191,14 +195,15 @@ export function TaskMapCanvas({
                         strokeWidth={2}
                         initial={{ opacity: 0.9, scale: 0.95 }}
                         animate={{ opacity: 0.6, scale: 1 }}
-                        transition={{ duration: 0.2 }}
+                        transition={{ duration: reduce ? 0 : 0.2 }}
                       />
                     )}
+                    {change && <circle data-before-exposure={change.before} r={p.r * Math.sqrt(Math.max(0, change.before))} fill="none" stroke="var(--foreground)" strokeOpacity={0.65} strokeDasharray="3 4" strokeWidth={2} pointerEvents="none" />}
                     <circle className="ring opacity-0 transition-opacity" r={p.r + 5} fill="none" stroke="var(--ring)" strokeWidth={2} />
                     <motion.circle
                       initial={false}
                       animate={{ r: p.r, fill: color }}
-                      transition={{ duration: 0.35 }}
+                      transition={{ duration: reduce ? 0 : 0.35 }}
                       fillOpacity={0.42}
                       stroke="var(--card)"
                       strokeWidth={2}
@@ -206,8 +211,9 @@ export function TaskMapCanvas({
                     <motion.circle
                       initial={false}
                       animate={{ r: p.r * Math.sqrt(t.exposure), fill: color }}
-                      transition={{ duration: 0.45, ease: [0.2, 0.7, 0.2, 1] }}
+                      transition={{ duration: reduce ? 0 : 0.45, ease: [0.2, 0.7, 0.2, 1] }}
                     />
+                    {change && <g aria-hidden pointerEvents="none" transform={`translate(${p.r * 0.35} ${-p.r * 0.7})`}><rect x={-29} y={-10} width={58} height={18} rx={4} fill="var(--card)" stroke="var(--border-strong)" /><text textAnchor="middle" y={3} fontSize={11} className="fill-foreground font-mono">{delta >= 0 ? '+' : ''}{delta} pts</text></g>}
                     {inside ? (
                       <g pointerEvents="none" className="font-sans">
                         {lines.map((l, i) => (

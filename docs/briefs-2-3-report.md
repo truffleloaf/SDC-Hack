@@ -159,3 +159,7 @@ Route cards compare your level and the required level for the three most importa
 ## C3: direct time editing
 
 Added 44px draggable divider targets, pointer capture, left/right keyboard changes (1%, or 5% with Shift) and separator value labels. Only the neighbouring pair changes; other task shares and the total remain fixed. Number fields and sliders remain available. The existing setShare rescales every other task, so a tested adjacent-pair helper is needed for this specific interaction. Files: ShareBar, TimePanel, shares helper and workflow test. Part C browser checks cover drag and keyboard invariants.
+
+## C4: signal before/after
+
+Map now retains a dashed ring at each changed task's previous filled-core size, morphs to the new value and labels the point difference. The SVG's accessible label includes the change. Feedback clears after seven seconds, with the timer reset by actual change content. Reduced motion updates immediately. Imported account/JSON profiles discard this temporary presentation state. Files: task canvas, Map and account boundary. A9 already removed the fake delay. Browser checks follow at the Part C boundary.
