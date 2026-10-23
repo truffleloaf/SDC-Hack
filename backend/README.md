@@ -115,7 +115,7 @@ role_exposure     = sum(time_share × exposure)
 classification    = Automate if exposure >= 0.65 and human_judgment < 0.4
                     Protect  if human_judgment >= 0.65
                     Augment  otherwise
-skill_coverage    = sum_rated(importance × min(current / required, 1)) / sum_rated(importance)
+skill_coverage    = sum_rated(importance × min(current / required, 1)) / sum_all(importance)
 fit               = 100 × (0.8 × coverage + 0.2 × task_similarity)  (falls back to coverage)
 gap               = max(0, required - current)
 gap_priority      = gap × importance × (role_demand / 100)
@@ -197,4 +197,6 @@ This demo has no application rate limiter or authentication. Configure hosting-e
 
 ## Personal profiles and unknown inputs
 
-Unrated requirements remain unknown, distinct from explicit level 0, and are excluded from coverage and learning gaps. With no rated requirements, provisional fit uses task similarity only. Custom tasks remain unassessed; exposure is normalized over reference tasks, with assessment coverage returned separately. Optional Supabase accounts are independent of the stateless scoring API; see [account setup](../supabase/README.md).
+Unrated requirements remain unknown, distinct from explicit level 0, and are excluded from learning gaps. Fit bounds give unknown requirements zero contribution or fully met contribution, using all requirement importance in the denominator. Ranking uses fitLow; ratedShare records the importance share with ratings. Custom tasks remain unassessed; exposure is normalized over reference tasks, with assessment coverage returned separately. Optional Supabase accounts are independent of the stateless scoring API; see [account setup](../supabase/README.md).
+
+Undated assumption signals use a fixed editorial assumptionWeight and carry no invented publication metadata. Dated published/user entries retain the 180-day recency half-life.

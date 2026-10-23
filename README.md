@@ -85,7 +85,7 @@ Start with a PDF or DOCX résumé to review local catalogue suggestions before c
 
 Choose a reference role, confirm its tasks, then view the initial map before rating skills. A personal job title and task names do not change the template's illustrative scores. Time edits rebalance to 100%; task removal has Undo, and restoring defaults requires confirmation. Custom tasks remain **Not assessed yet**, including older custom tasks with numeric assumptions. Exposure is conditional on assessed reference tasks, with the assessed share shown separately.
 
-**Not sure** is distinct from level 0 (**No experience**). Unanswered skills are excluded from coverage and learning gaps. With no rated requirements, provisional ranking uses task similarity and target exposure; partial ratings and learning estimates are labeled. Users can save up to three routes and resume one active profile/plan at `/workspace`.
+**Not sure** is distinct from level 0 (**No experience**). Unanswered skills stay out of learning gaps. Fit is bounded by counting their contribution as zero (lower bound) or fully met (upper bound), using all requirement importance in the denominator. Routes rank by the lower bound; partial learning estimates include rated gaps only. Users can save up to three routes and resume one active profile/plan at `/workspace`.
 
 Accounts are optional. Follow [Supabase setup](supabase/README.md) for owner-only RLS, public build variables, SMTP/OTP and Google settings. Signing in starts sync; different versions require a choice, replacements have a 30-second backup/undo, and stale revisions cannot overwrite another device silently. Account settings live at `/account`. No service-role key is used by the frontend.
 

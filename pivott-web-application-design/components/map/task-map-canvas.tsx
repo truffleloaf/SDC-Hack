@@ -125,7 +125,7 @@ export function TaskMapCanvas({
           <svg
             width={W}
             height={H}
-            className="absolute inset-0"
+            className="absolute inset-0 touch-manipulation"
             role="group"
             aria-label={`Task map with ${tasks.length} tasks. Bubble size shows time share; the filled core shows exposure.`}
           >

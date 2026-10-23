@@ -67,7 +67,7 @@ export function LivingTaskMap() {
         <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-2.5 py-1 text-xs text-accent-foreground"><span className="size-1.5 rounded-full bg-primary" aria-hidden />Task map</span>
       </div>
       <div className="relative aspect-[56/48]">
-      <svg viewBox={`0 0 ${W} ${H}`} className="absolute inset-0 size-full overflow-visible" aria-labelledby="ltm-title ltm-desc" role="group">
+      <svg viewBox={`0 0 ${W} ${H}`} className="absolute inset-0 size-full touch-manipulation overflow-visible" aria-labelledby="ltm-title ltm-desc" role="group">
         <title id="ltm-title">Living task map</title>
         <desc id="ltm-desc">An example map of a Finance Admin’s tasks, sized by time and coloured by AI exposure.</desc>
         <g aria-hidden="true" fill="none" stroke="var(--border-strong)">

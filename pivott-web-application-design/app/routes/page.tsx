@@ -93,7 +93,7 @@ export default function RoutesPage() {
           </motion.div>
         ) : (
           <motion.div key="compare" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-            <div className="card-surface overflow-x-auto p-2">
+            <div className="card-surface relative overflow-x-auto p-2">
               <table className="w-full min-w-[640px] text-sm">
                 <caption className="sr-only">Side-by-side comparison of career routes</caption>
                 <thead>

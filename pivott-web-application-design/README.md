@@ -54,14 +54,14 @@ role_exposure      = Σ time_share × exposure
 classification     = Automate if exposure ≥ 0.65 and human_judgment < 0.4
                      Protect  if human_judgment ≥ 0.65
                      Augment  otherwise
-skill_coverage     = Σ rated(importance × min(level / required, 1)) / Σ rated importance
+skill_coverage     = Σ rated(importance × min(level / required, 1)) / Σ all importance
 fit                = 100 × (0.8 × coverage + 0.2 × task_similarity)   (falls back to coverage)
 gap                = max(0, required - level)
 gap_priority       = gap × importance × (role_demand / 100)
 weeks              = ceil(Σ gap_hours / hours_per_week)
 ```
 
-Unrated requirements are excluded from skill gaps and hours, not assigned level 0. With no ratings for a role, provisional fit uses task similarity only. Custom tasks are unassessed; role exposure normalizes over reference tasks, and assessment coverage is returned separately.
+Unrated requirements are excluded from skill gaps and hours, not assigned level 0. Fit bounds use unknown requirements as zero contribution or fully met, with ratedShare tracking importance coverage. Routes rank by fitLow. Custom tasks are unassessed; role exposure normalizes over reference tasks, and assessment coverage is returned separately.
 
 Every route card has a **View route** sheet that shows these values for the selected role.
 
@@ -109,3 +109,5 @@ The API is a public, unauthenticated demo. CORS is not authentication or rate li
 ## Résumé import
 
 `/start` offers optional local PDF/DOCX reading and a review step. Heavy parsing modules load only when a file is chosen. No file or extracted text is uploaded or stored. Confirmed catalogue skill IDs are saved as `resumeSkillIds` and shown first for rating; import never supplies skill levels. See [feature limits and verification](../docs/resume-import.md).
+
+Dated signals use recency weighting. Undated assumptions have no source attribution or date and use fixed editorial weights; see `/method` and `/signals`.

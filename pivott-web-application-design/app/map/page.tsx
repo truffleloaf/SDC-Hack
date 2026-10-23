@@ -94,8 +94,8 @@ export default function MapPage() {
 
       <p className="mt-5 max-w-2xl text-sm leading-relaxed text-muted-foreground">{scored.length > 0 && `The largest contributions come from ${[...scored].sort((a, b) => b.share * b.exposure - a.share * a.exposure).slice(0, 2).map((task) => task.name.toLowerCase()).join(' and ')}.`} {unassessed.length > 0 && `Only ${Math.round(assessmentCoverage * 100)}% of your selected time is assessed. The percentage above describes assessed tasks only.`}</p>
       <div className="mt-5 flex flex-wrap gap-3"><PLink href="/start" variant="secondary" size="sm">Edit tasks</PLink><PLink href="/skills" variant="secondary" size="sm">Rate skills for routes</PLink></div>
-      <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_300px]">
-        <section aria-label="Task visualisation" className="card-surface flex flex-col gap-5 p-4 sm:p-6">
+      <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_300px]">
+        <section aria-label="Task visualisation" className="card-surface flex min-w-0 flex-col gap-5 p-4 sm:p-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <ScenarioSwitch state={state} />
             <div className="flex items-center gap-2">

@@ -43,7 +43,7 @@ export function TaskListTable({ tasks, highlightIds = [] }: { tasks: ScoredTask[
   }
 
   return (
-    <div className="overflow-x-auto rounded-2xl border border-border">
+    <div className="relative min-w-0 max-w-full overflow-x-auto rounded-2xl border border-border">
       <table className="w-full min-w-[640px] text-sm">
         <caption className="sr-only">Your tasks with AI exposure and classification. Column headers are sortable.</caption>
         <thead className="border-b border-border bg-subtle">

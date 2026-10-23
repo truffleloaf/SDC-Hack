@@ -22,13 +22,13 @@ const classMeta: Record<Classification, { icon: typeof Bot; label: string; class
   Automate: {
     icon: Bot,
     label: 'Automate',
-    className: 'bg-exp-high/35 text-foreground border-exp-high/70',
+    className: 'bg-exp-high/35 text-foreground border-exp-high/70 dark:bg-exp-high/15',
     hint: 'AI could handle much of this task.',
   },
   Augment: {
     icon: Sparkles,
     label: 'Augment',
-    className: 'bg-exp-mid/40 text-foreground border-exp-mid',
+    className: 'bg-exp-mid/40 text-foreground border-exp-mid dark:bg-exp-mid/15',
     hint: 'AI can assist while you stay in charge.',
   },
   Protect: {
