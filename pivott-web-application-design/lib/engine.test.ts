@@ -141,3 +141,22 @@ describe('derived learning context', () => {
     }
   })
 })
+
+
+describe('partial fit bounds', () => {
+  const base = { currentRoleId: 'finance-admin', userTaskSkills: taskSkills, signals, hoursPerWeek: 6, scenarioId: 'normal' as const, limit: 10 }
+  it('cannot inflate a single rated skill above the full demo fit', () => {
+    const full = computeRoutes({ ...base, levels: demoPersona.skills })
+    const partial = computeRoutes({ ...base, levels: { excel: 3 } })
+    for (const route of partial) {
+      expect(route.fitLow).toBeLessThanOrEqual(full.find((r) => r.roleId === route.roleId)!.fit)
+      expect(route.fitLow).toBeLessThanOrEqual(route.fitHigh)
+      expect(route.fit).toBe(route.fitLow)
+      expect(route.ratedShare).toBeLessThan(1)
+    }
+    for (const route of full) { expect(route.fitLow).toBeCloseTo(route.fitHigh, 12); expect(route.ratedShare).toBe(1) }
+  })
+  it('keeps unknown ratings out of learning gaps, including an entirely unrated profile', () => {
+    for (const route of computeRoutes({ ...base, levels: {} })) { expect(route.ratedShare).toBe(0); expect(route.fitHigh).toBeGreaterThan(route.fitLow); expect(route.gaps).toEqual([]) }
+  })
+})

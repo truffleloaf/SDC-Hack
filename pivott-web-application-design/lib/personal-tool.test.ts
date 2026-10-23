@@ -8,10 +8,10 @@ import { analysisRequest, compareAnalysis } from './remote'
 
 const role = roles.find((item) => item.id === 'data-analyst')!
 describe('unknown inputs', () => {
-  it('excludes unanswered requirements rather than scoring them as no experience', () => {
+  it('bounds unanswered requirements without turning them into learning gaps', () => {
     const first = role.requirements[0]
     const partial = { [first.skillId]: first.requiredLevel }
-    expect(skillCoverage(role, partial)).toBe(1)
+    expect(skillCoverage(role, partial)).toBeCloseTo(first.importance / role.requirements.reduce((sum, r) => sum + r.importance, 0))
     expect(skillGaps(role, partial)).toEqual([])
     expect(skillGaps(role, { [first.skillId]: 0 }).length).toBe(1)
     const route = computeRoutes({ currentRoleId: 'finance-admin', userTaskSkills: ['analysis'], levels: partial, scenarioId: 'normal', signals, hoursPerWeek: 6, limit: 10 }).find((item) => item.roleId === role.id)!

@@ -153,7 +153,7 @@ def assessment_summary(selections, lookup):
 def skill_coverage(role: dict[str, Any], levels: dict[str, float]) -> float:
     """sum(importance × min(current / required, 1)) / sum(importance)"""
     rated = [requirement for requirement in role["requirements"] if requirement["skillId"] in levels]
-    total_importance = sum(requirement["importance"] for requirement in rated)
+    total_importance = sum(requirement["importance"] for requirement in role["requirements"])
     if not total_importance:
         return 0.0
     covered = sum(
@@ -256,7 +256,11 @@ def compute_routes(
         coverage = skill_coverage(role, levels)
         similarity = task_similarity(user_task_skills, role["id"])
         unknown = [requirement["skillId"] for requirement in role["requirements"] if requirement["skillId"] not in levels]
-        fit = 100 * (similarity or 0) if len(unknown) == len(role["requirements"]) else role_fit(coverage, similarity)
+        total_importance = sum(r["importance"] for r in role["requirements"])
+        rated_share = sum(r["importance"] for r in role["requirements"] if r["skillId"] in levels) / total_importance if total_importance else 1
+        fit_low = role_fit(coverage, similarity)
+        fit_high = role_fit(min(1, coverage + 1 - rated_share), similarity)
+        fit = fit_low
         exposure = target_role_exposure(role["id"], scenario_id, signals)
         gaps = skill_gaps(role, levels)
         total_gap_hours = sum(gap["hours"] for gap in gaps)
@@ -269,6 +273,9 @@ def compute_routes(
                 "coverage": coverage,
                 "similarity": similarity,
                 "fit": fit,
+                "fitLow": fit_low,
+                "fitHigh": fit_high,
+                "ratedShare": rated_share,
                 "targetExposure": exposure,
                 "score": route_score(fit, exposure),
                 "gaps": gaps,

@@ -11,6 +11,7 @@ export interface PassportData {
   ratedSkillCount?: number
   unknownSkillCount?: number
   match: number
+  matchHigh: number
   weeks: number
   skills: string[]
   steps: PathwayStep[]
@@ -57,14 +58,14 @@ export const PassportCard = forwardRef<HTMLDivElement, { data: PassportData }>(f
           <div className="grid grid-cols-2 gap-6 sm:grid-cols-[auto_auto_1fr]">
             <div className="flex flex-col gap-1">
               <span className="font-sans text-xs font-medium text-faint">Skill match</span>
-              <span className="font-serif text-5xl leading-none tracking-[-0.03em]">
-                {data.ratedSkillCount === 0 ? '—' : Math.round(data.match)}
-                {data.ratedSkillCount !== 0 && <span className="text-2xl text-muted-foreground">%</span>}
+              <span className="font-serif text-4xl leading-none tracking-[-0.03em]">
+                {Math.round(data.match)}{data.unknownSkillCount ? `–${Math.round(data.matchHigh)}` : ''}
+                <span className="text-2xl text-muted-foreground">%</span>
               </span>
             </div>
             <div className="flex flex-col gap-1">
               <span className="font-sans text-xs font-medium text-faint">Est. route</span>
-              <span className="font-serif text-5xl leading-none tracking-[-0.03em]">
+              <span className="font-serif text-4xl leading-none tracking-[-0.03em]">
                 {data.ratedSkillCount === 0 ? '—' : `${data.unknownSkillCount ? '≥ ' : ''}${data.weeks}`}
                 {data.ratedSkillCount !== 0 && <span className="text-2xl text-muted-foreground"> wks</span>}
               </span>

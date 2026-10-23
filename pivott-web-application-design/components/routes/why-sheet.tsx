@@ -2,7 +2,7 @@
 
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import { roleById, skillById } from '@/lib/data/seed'
-import type { RouteResult } from '@/lib/engine'
+import { fitLabel, type RouteResult } from '@/lib/engine'
 
 const f2 = (n: number) => n.toFixed(2)
 
@@ -45,7 +45,7 @@ export function WhySheet({
             </SheetHeader>
             <div className="flex flex-col gap-6 p-6">
               <Block title="Skill coverage">
-                <p className="text-sm text-muted-foreground">{route.unknownSkillIds.length} required skills remain unrated. Coverage uses only rated requirements; with no ratings, ordering uses task overlap and exposure only.</p>
+                <p className="text-sm text-muted-foreground">{route.unknownSkillIds.length} required skills remain unrated. The lower bound gives unknown requirements no contribution; the upper bound assumes they are fully met. Ratings themselves stay unknown.</p>
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
@@ -68,7 +68,7 @@ export function WhySheet({
                     </tbody>
                   </table>
                 </div>
-                {route.unknownSkillIds.length < role.requirements.length && <Formula>{`skill_coverage = Σ rated(importance × min(current / required, 1)) / Σ rated importance\n             = ${f2(route.coverage)}`}</Formula>}
+                {route.unknownSkillIds.length < role.requirements.length && <Formula>{`skill_coverage = Σ rated(importance × min(current / required, 1)) / Σ all importance\n             = ${f2(route.coverage)}`}</Formula>}
               </Block>
 
               <Block title="Task similarity">
@@ -79,14 +79,10 @@ export function WhySheet({
               </Block>
 
               <Block title="Skill match">
-                {route.unknownSkillIds.length === role.requirements.length && <p className="text-sm text-muted-foreground">No skill match is available yet. The ranking uses task similarity, without assigning zero ability to unknown skills.</p>}
-                <Formula>
-                  {route.unknownSkillIds.length === role.requirements.length
-                    ? `provisional fit = 100 × task_similarity = ${route.fit.toFixed(1)}`
-                    : route.similarity === null
-                    ? `fit = 100 × skill_coverage = ${route.fit.toFixed(1)}`
-                    : `fit = 100 × (0.8 × ${f2(route.coverage)} + 0.2 × ${f2(route.similarity)})\n    = ${route.fit.toFixed(1)}`}
-                </Formula>
+                <p className="text-sm text-muted-foreground">Fit {fitLabel(route)}. {Math.round(route.ratedShare * 100)}% of requirement importance has a rating.</p>
+                <Formula>{`fit_low = 100 × ${route.similarity === null ? 'coverage_low' : '(0.8 × coverage_low + 0.2 × similarity)'} = ${route.fitLow.toFixed(1)}
+fit_high uses fully met unknown requirements = ${route.fitHigh.toFixed(1)}
+Ranking uses fit_low.`}</Formula>
               </Block>
 
               <Block title="Gap priority">

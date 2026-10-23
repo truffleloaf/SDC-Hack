@@ -221,12 +221,12 @@ def test_custom_api_analysis_matches_frontend_golden(client, scenario, key):
     assert_close(response.json(), {**GOLDEN[key], "illustrative": True})
 
 
-def test_unknown_skills_are_excluded_from_coverage_and_gaps():
+def test_unknown_skills_bound_coverage_and_are_excluded_from_gaps():
     from app.engine import skill_gaps
     role = ROLE_BY_ID["data-analyst"]
     first = role["requirements"][0]
     levels = {first["skillId"]: first["requiredLevel"]}
-    assert skill_coverage(role, levels) == 1
+    assert skill_coverage(role, levels) == pytest.approx(first["importance"] / sum(r["importance"] for r in role["requirements"]))
     assert skill_gaps(role, levels) == []
     assert len(skill_gaps(role, {first["skillId"]: 0})) == 1
 
@@ -239,3 +239,17 @@ def test_custom_tasks_have_no_fabricated_exposure(client):
     assert response.json()["tasks"] == []
     assert response.json()["assessmentCoverage"] == 0
     assert response.json()["unassessedTasks"][0]["id"] == custom["id"]
+
+
+def test_one_rating_cannot_exceed_fully_rated_demo_fit():
+    common = dict(current_role_id="finance-admin", user_task_skills=list({skill for task in TASKS_BY_ROLE["finance-admin"] for skill in task["skills"]}), scenario_id="normal", hours_per_week=6, limit=10)
+    full = {r["roleId"]: r for r in compute_routes(**common, levels=DEMO_PERSONA["skills"])}
+    partial = compute_routes(**common, levels={"excel": 3})
+    for route in partial:
+        assert route["fitLow"] <= full[route["roleId"]]["fit"]
+        assert route["fitLow"] <= route["fitHigh"]
+        assert route["fit"] == route["fitLow"]
+        assert 0 <= route["ratedShare"] < 1
+    for route in full.values():
+        assert route["fitHigh"] == pytest.approx(route["fitLow"])
+        assert route["ratedShare"] == 1

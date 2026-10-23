@@ -3,7 +3,7 @@
 import { ArrowRight } from 'lucide-react'
 import { motion } from 'motion/react'
 import { PButton } from '@/components/pivott/p-button'
-import { exposureColor, type RouteResult } from '@/lib/engine'
+import { exposureColor, fitLabel, type RouteResult } from '@/lib/engine'
 import { roleById, skillById, tasksForRole } from '@/lib/data/seed'
 import { cn } from '@/lib/utils'
 
@@ -43,12 +43,12 @@ export function RouteCard({ route, rank, currentExposure, selected, onSelect, on
   return (
     <article aria-labelledby={`route-${route.roleId}`} className={cn('card-surface flex flex-col gap-5 p-5', selected && 'border-primary')}>
       <div>
-        {rank === 0 && <p className="mb-2 text-xs font-medium text-primary">{unknown ? 'First suggested route · Incomplete ratings' : 'Closest match in this dataset'}</p>}
+        {rank === 0 && <p className="mb-2 text-xs font-medium text-primary">{unknown ? 'First suggested route' : 'Closest match in this dataset'}</p>}
         <h2 id={`route-${route.roleId}`} className="text-xl font-semibold">{route.title}</h2>
         <p className="mt-2 text-sm leading-relaxed text-muted-foreground">Work includes {tasksForRole(route.roleId).slice(0, 2).map((task) => task.name.toLowerCase()).join(' and ')}.</p>
       </div>
-      <div><h3 className="text-sm font-medium">Why it fits</h3><p className="mt-1 text-sm leading-relaxed text-muted-foreground">{transfers.length ? `Your rated skills include ${transfers.slice(0, 3).join(', ')}.` : route.similarity ? 'Some skills used in your selected tasks also appear in this role.' : 'This is an exploratory comparison, rather than a strong overlap.'} {rated ? `${Math.round(route.fit)}% fit based on rated skills and task overlap.` : 'No skill match is shown until you rate relevant skills.'}</p></div>
-      {unknown > 0 && <p className="text-sm text-muted-foreground">Rate {unknown} more {unknown === 1 ? 'skill' : 'skills'} to complete this comparison. Unknown skills are excluded, not treated as zero.</p>}
+      <div><h3 className="text-sm font-medium">Why it fits</h3><p className="mt-1 text-sm leading-relaxed text-muted-foreground">{transfers.length ? `Your rated skills include ${transfers.slice(0, 3).join(', ')}.` : route.similarity ? 'Some skills used in your selected tasks also appear in this role.' : 'This is an exploratory comparison, rather than a strong overlap.'} Fit {fitLabel(route)} based on your task overlap and skill ratings.</p></div>
+      {unknown > 0 && <p className="text-sm text-muted-foreground">Rate {unknown} more {unknown === 1 ? 'skill' : 'skills'} to narrow this range.</p>}
       <div><h3 className="text-sm font-medium">Skills to develop</h3><p className="mt-1 text-sm text-muted-foreground">{route.gaps.slice(0, 3).map((gap) => gap.name).join(', ') || (unknown ? 'Rate the remaining skills to identify gaps.' : 'No gaps identified from your ratings.')}</p></div>
       <div><h3 className="text-sm font-medium">Learning estimate</h3><p className="mt-1 text-sm text-muted-foreground">{rated ? `${unknown ? 'At least ' : 'About '}${route.weeks} weeks at ${hoursPerWeek} hours/week.${unknown ? ' Unrated skills may add learning time.' : ' Based on the stored learning-hour estimates.'}` : 'Not estimated until relevant skills are rated.'}</p></div>
       <ExposureCompare current={currentExposure} target={route.targetExposure} />

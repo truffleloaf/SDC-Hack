@@ -87,3 +87,7 @@ Added the Copy rules section to DESIGN, including concrete sentences, no rhetori
 ## Part U verification
 
 Checker self-test and UI scan passed. Frontend **89 passed**, backend **66 passed**, TypeScript and production build passed again. U changes only documentation, the checker and CI; the unchanged UI retains Part T's 40 passing responsive/theme/accessibility checks. Part U complete. Before A1, reproduced the reported bug directly: Excel-only Finance Systems Analyst fit **89.09%**, versus **56.04%** with the full demo ratings. Proceeding with conservative bounds.
+
+## A1: conservative partial fit
+
+Reproduced the inflation before fixing it (Part U result). Both engines now compute fitLow/fitHigh and importance-weighted ratedShare; fit remains a compatibility alias for fitLow, which drives ranking. Cards, comparison, formula sheet and passport show ranges until all required skills are rated. Unknown ratings remain absent from learning gaps. Added the Excel-only regression in both languages and the fully rated collapsed-range check; regenerated goldens. Remote verification reads route IDs only, so its response parser needs no change. Updated Method to explain bounds. Backend **67 passed**; frontend checks follow the old coverage-test expectation update and Part A boundary. No fully rated demo scores change.

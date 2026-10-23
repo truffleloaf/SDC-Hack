@@ -14,6 +14,7 @@ import { SegmentedControl } from '@/components/pivott/segmented-control'
 import { NeedsProfile, PageSkeleton } from '@/components/pivott/states'
 import { RouteCard } from '@/components/routes/route-card'
 import { WhySheet } from '@/components/routes/why-sheet'
+import { fitLabel } from '@/lib/engine'
 import { roleById } from '@/lib/data/seed'
 import { setState, useAnalysis, useAppState } from '@/lib/store'
 import { cn } from '@/lib/utils'
@@ -39,7 +40,7 @@ export default function RoutesPage() {
     <div className="mx-auto w-full max-w-[1200px] px-5 pb-20 pt-10">
       <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
         <PageIntro eyebrow="Routes" title="Compare possible roles.">
-          Routes combine rated skill coverage, overlap with the skills used in your tasks, and estimated exposure in the target role. Incomplete ratings make the ordering provisional.
+          Routes combine skill coverage, overlap with your task skills and target exposure. With unknown ratings, fit is a range and routes rank by its lower bound.
         </PageIntro>
         <div className="flex flex-wrap items-center gap-2">
           <ScenarioSwitch state={state} context="routes" />
@@ -100,7 +101,7 @@ export default function RoutesPage() {
                     <td className="w-40" />
                     {routes.map((r, i) => (
                       <th key={r.roleId} scope="col" className={cn('p-4 text-left align-bottom font-normal', r.roleId === selectedId && 'bg-mint/60 rounded-t-xl')}>
-                        {i === 0 && <span className="mb-2 block font-sans text-xs font-medium text-primary">{r.unknownSkillIds.length ? 'First suggested · Incomplete ratings' : 'Closest match'}</span>}
+                        {i === 0 && <span className="mb-2 block font-sans text-xs font-medium text-primary">{r.unknownSkillIds.length ? 'First suggested' : 'Closest match'}</span>}
                         <span className="font-serif text-xl">{r.title}</span>
                       </th>
                     ))}
@@ -108,7 +109,7 @@ export default function RoutesPage() {
                 </thead>
                 <tbody className="font-mono text-sm">
                   {[
-                    { label: 'Skill match', get: (r: (typeof routes)[number]) => r.unknownSkillIds.length === roleById[r.roleId].requirements.length ? 'Not rated' : `${Math.round(r.fit)}%${r.unknownSkillIds.length ? ' · Partial' : ''}` },
+                    { label: 'Skill match', get: (r: (typeof routes)[number]) => fitLabel(r) },
                     { label: 'Weeks to prepare', get: (r: (typeof routes)[number]) => r.unknownSkillIds.length === roleById[r.roleId].requirements.length ? 'Not estimated' : `${r.unknownSkillIds.length ? 'At least ' : ''}${r.weeks}` },
                     { label: 'Skill gaps', get: (r: (typeof routes)[number]) => r.gaps.length },
                     { label: 'Target exposure', get: (r: (typeof routes)[number]) => `${Math.round(r.targetExposure * 100)}%` },

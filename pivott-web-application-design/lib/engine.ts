@@ -140,10 +140,10 @@ export function assessmentSummary(selections: ShareInput[], lookup: Record<strin
   return { assessmentCoverage: valid.filter((item) => 'roleId' in lookup[item.taskId]).reduce((sum, item) => sum + item.share, 0), unassessedTasks }
 }
 
-/** Coverage uses rated requirements only, preserving unknown separately from explicit zero. */
+/** Conservative coverage includes all requirements in the denominator; unknowns remain separate. */
 export function skillCoverage(role: Role, levels: Record<string, number>) {
   const rated = role.requirements.filter((r) => levels[r.skillId] !== undefined)
-  const totalImportance = rated.reduce((a, r) => a + r.importance, 0)
+  const totalImportance = role.requirements.reduce((a, r) => a + r.importance, 0)
   if (!totalImportance) return 0
   const covered = rated.reduce(
     (a, r) => a + r.importance * Math.min((levels[r.skillId] ?? 0) / r.requiredLevel, 1),
@@ -235,6 +235,9 @@ export interface RouteResult {
   coverage: number
   similarity: number | null
   fit: number
+  fitLow: number
+  fitHigh: number
+  ratedShare: number
   targetExposure: number
   score: number
   gaps: SkillGap[]
@@ -260,7 +263,11 @@ export function computeRoutes(params: {
       const coverage = skillCoverage(role, levels)
       const similarity = taskSimilarity(userTaskSkills, role.id)
       const unknownSkillIds = role.requirements.filter((r) => levels[r.skillId] === undefined).map((r) => r.skillId)
-      const fit = unknownSkillIds.length === role.requirements.length ? 100 * (similarity ?? 0) : roleFit(coverage, similarity)
+      const totalImportance = role.requirements.reduce((sum, r) => sum + r.importance, 0)
+      const ratedShare = totalImportance ? role.requirements.filter((r) => levels[r.skillId] !== undefined).reduce((sum, r) => sum + r.importance, 0) / totalImportance : 1
+      const fitLow = roleFit(coverage, similarity)
+      const fitHigh = roleFit(Math.min(1, coverage + 1 - ratedShare), similarity)
+      const fit = fitLow
       const exposure = targetRoleExposure(role.id, scenarioId, signals)
       const gaps = skillGaps(role, levels)
       const totalGapHours = gaps.reduce((a, g) => a + g.hours, 0)
@@ -271,7 +278,7 @@ export function computeRoutes(params: {
         demand: role.demand,
         coverage,
         similarity,
-        fit,
+        fit, fitLow, fitHigh, ratedShare,
         targetExposure: exposure,
         score: routeScore(fit, exposure),
         gaps,
@@ -382,3 +389,8 @@ export function confidence(tasks: ScoredTask[], signals: Signal[]): 'High' | 'Me
 }
 
 export const pct = (v: number, digits = 0) => `${(v * 100).toFixed(digits)}%`
+
+
+export function fitLabel(route: Pick<RouteResult, 'fitLow' | 'fitHigh' | 'ratedShare'>) {
+  return route.ratedShare < 1 ? `${Math.round(route.fitLow)}–${Math.round(route.fitHigh)}%` : `${Math.round(route.fitLow)}%`
+}

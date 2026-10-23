@@ -10,7 +10,7 @@ import { PButton } from '@/components/pivott/p-button'
 import { PageIntro } from '@/components/pivott/route-stepper'
 import { NeedsProfile, PageSkeleton } from '@/components/pivott/states'
 import { roleById } from '@/lib/data/seed'
-import { buildPathway } from '@/lib/engine'
+import { buildPathway, fitLabel } from '@/lib/engine'
 import { downloadFile } from '@/lib/ics'
 import { NameField } from '@/components/pivott/name-field'
 import { displayName, possessive, useAnalysis, useAppState } from '@/lib/store'
@@ -39,7 +39,7 @@ export default function PassportPage() {
     currentRole: state.jobTitle || roleById[state.roleId]?.title || '',
     destination: target.title,
     destinationFamily: target.family,
-    match: fit,
+    match: fit, matchHigh: route?.fitHigh ?? 100,
     ratedSkillCount: rated, unknownSkillCount: unknown,
     weeks,
     skills: stays.length ? stays : Object.entries(state.skills).filter(([, v]) => v >= 3).map(([k]) => k),
@@ -49,7 +49,7 @@ export default function PassportPage() {
     code: `PV-${target.id.slice(0, 3).toUpperCase()}-${String(Math.round(fit * 10)).padStart(4, '0')}`,
   }
 
-  const summary = `${possessive(data.name, 'My')} Pivott Skill Passport: ${data.currentRole} → ${data.destination}. ${rated ? `${Math.round(fit)}% fit based on rated skills` : 'Skills not rated'}${unknown ? ' (incomplete comparison)' : ''}, ${rated ? `${unknown ? 'partial ' : ''}est. ${weeks} weeks at ${state.hoursPerWeek} h/week` : 'learning time not estimated'}. Route: ${steps.map((s) => s.title).join(' → ') || (unknown ? 'rate remaining skills to estimate learning needs' : 'no gaps identified')}. How scores work: https://pivottstudio.vercel.app/method`
+  const summary = `${possessive(data.name, 'My')} Pivott Skill Passport: ${data.currentRole} → ${data.destination}. ${route ? `${fitLabel(route)} fit` : 'Fit unavailable'}${unknown ? ' (incomplete comparison)' : ''}, ${rated ? `${unknown ? 'partial ' : ''}est. ${weeks} weeks at ${state.hoursPerWeek} h/week` : 'learning time not estimated'}. Route: ${steps.map((s) => s.title).join(' → ') || (unknown ? 'rate remaining skills to estimate learning needs' : 'no gaps identified')}. How scores work: https://pivottstudio.vercel.app/method`
 
   async function renderPng() {
     const { toPng } = await import('html-to-image')
