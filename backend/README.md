@@ -9,6 +9,7 @@ Pivott 把岗位拆成任务，估算 AI 对每个任务的暴露度，再把现
 - 架构与当前状态：[`docs/architecture.md`](docs/architecture.md)
 - 3 分钟演示：[`docs/demo-script.md`](docs/demo-script.md)
 - 部署：[`docs/deploy.md`](docs/deploy.md)
+- Vercel 前端 + Render 后端：[`docs/deploy-render.md`](docs/deploy-render.md)
 - live 真实数据：[`docs/live-data.md`](docs/live-data.md)
 - Supabase Auth 与用户数据：[`docs/auth.md`](docs/auth.md)
 - 本地 PostgreSQL 验证：[`docs/local-postgres.md`](docs/local-postgres.md)
