@@ -111,12 +111,7 @@ export const PassportCard = forwardRef<HTMLDivElement, { data: PassportData }>(f
             })}
             {stubSteps.length === 0 && <li className="text-sm text-muted-foreground">{data.unknownSkillCount ? 'Rate the remaining skills to estimate learning needs.' : 'No gaps identified from your ratings.'}</li>}
           </ol>
-          <div className="mt-auto flex items-end justify-between gap-3">
-            <p className="max-w-40 text-xs leading-relaxed text-muted-foreground">Personal planning summary. This is not a qualification or a verified credential.</p>
-            <span className="max-w-24 text-right font-mono text-[9px] uppercase leading-relaxed tracking-wider text-faint">
-              Illustrative demo data
-            </span>
-          </div>
+          <a href="/method" className="mt-auto min-h-11 text-xs text-muted-foreground underline">How scores work · pivottstudio.vercel.app/method</a>
         </div>
       </div>
     </div>

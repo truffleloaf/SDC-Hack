@@ -18,7 +18,7 @@ export default function ExamplePage() {
       <div className="flex flex-col items-center gap-4 text-center">
         <LogoMark animated className="size-14 text-foreground" />
         <p className="font-serif text-2xl">Loading Aisyah’s map…</p>
-        <p className="text-sm text-muted-foreground">Finance Admin · illustrative demo profile</p>
+        <p className="text-sm text-muted-foreground">Finance Admin · example profile</p>
       </div>
     </div>
   )

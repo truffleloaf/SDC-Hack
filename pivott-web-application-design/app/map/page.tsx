@@ -7,7 +7,6 @@ import { VerifyAnalysis } from '@/components/map/verify-analysis'
 import { SkillsPanel, deriveSkillGroups } from '@/components/map/skills-panel'
 import { TaskListTable } from '@/components/map/task-list-table'
 import { TaskMapCanvas } from '@/components/map/task-map-canvas'
-import { DemoLabel } from '@/components/pivott/badges'
 import { MobileActionBar } from '@/components/pivott/mobile-action-bar'
 import { PButton, PLink } from '@/components/pivott/p-button'
 import { ScenarioSwitch } from '@/components/pivott/scenario-switch'
@@ -58,7 +57,6 @@ export default function MapPage() {
             <span className="text-5xl font-semibold leading-none md:text-6xl">{scored.length ? `${Math.round(exposure * 100)}%` : 'Not assessed'}</span>
             <span className="text-2xl text-muted-foreground md:text-3xl">estimated task exposure</span>
           </h1>
-          <DemoLabel className="w-fit" />
         </div>
 
         <div className="flex flex-col gap-4 md:pb-2">
@@ -89,7 +87,7 @@ export default function MapPage() {
             </div>
           </dl>
           <p className="max-w-xl text-sm leading-relaxed text-muted-foreground text-pretty">
-            The share of your working time spent on tasks AI could potentially handle. It is not a probability of losing your job.
+            Exposure estimates how much of a task AI could handle. It does not predict job loss. Scores use sample data, <a href="/method" className="text-primary underline">see how scores work</a>.
           </p>
         </div>
       </section>

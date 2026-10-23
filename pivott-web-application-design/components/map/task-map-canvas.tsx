@@ -268,9 +268,9 @@ export function TaskMapCanvas({
 
 export function TaskDetailCard({ task, pinned, onClose, surface = 'glass' }: { task: ScoredTask; pinned: boolean; onClose: () => void; surface?: 'glass' | 'solid' }) {
   const explanation = {
-    Automate: `High exposure and low reliance on judgment. This illustrative estimate suggests tools may assist with routine parts of ${task.name.toLowerCase()}. Outputs still need checking.`,
+    Automate: `High exposure and low reliance on judgment. Tools may assist with routine parts of ${task.name.toLowerCase()}. Outputs still need checking.`,
     Augment: `AI can speed up parts of ${task.name.toLowerCase()}, while your judgment shapes the result.`,
-    Protect: `${task.name} leans heavily on human judgment and relationships. The estimate does not establish how a particular employer will use AI.`,
+    Protect: `${task.name} leans heavily on human judgment and relationships.`,
   }[task.classification]
 
   return (
@@ -283,7 +283,7 @@ export function TaskDetailCard({ task, pinned, onClose, surface = 'glass' }: { t
           </button>
         )}
       </div>
-      <p className="mt-2 text-sm text-muted-foreground">{Math.round(task.share * 100)}% of assessed working time · Illustrative estimate</p>
+      <p className="mt-2 text-sm text-muted-foreground">{Math.round(task.share * 100)}% of assessed working time</p>
       <div className="mt-3 flex flex-wrap items-center gap-2">
         <ExposureBadge value={task.exposure} />
         <ClassificationBadge value={task.classification} />

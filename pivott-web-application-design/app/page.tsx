@@ -1,8 +1,7 @@
 import Link from 'next/link'
-import { ArrowRight, Scale } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { LivingTaskMap } from '@/components/landing/living-task-map'
 import { ResumeWork } from '@/components/pivott/resume-work'
-import { LogoMark } from '@/components/pivott/logo'
 import { PLink } from '@/components/pivott/p-button'
 
 export default function LandingPage() {
@@ -40,10 +39,7 @@ export default function LandingPage() {
         </ul>
       </section>
 
-      <footer className="mx-auto flex w-full max-w-[1240px] flex-col justify-between gap-5 border-t border-border px-5 py-8 text-sm text-muted-foreground sm:flex-row sm:px-8">
-        <span className="flex items-center gap-2 self-start"><LogoMark className="size-6 text-primary" title="" /><span className="text-base font-semibold text-foreground">Pivott</span></span>
-        <p className="flex max-w-xl items-start gap-3 text-xs leading-relaxed"><Scale className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden />Task exposure describes work AI could potentially handle. It does not predict whether anyone will lose their job. Illustrative demo data; scores are deterministic.</p>
-      </footer>
+
     </>
   )
 }

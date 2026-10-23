@@ -41,7 +41,7 @@ export function WhySheet({
             <SheetHeader className="border-b border-border p-6">
               <p className="font-sans text-xs font-medium text-primary">Why this score?</p>
               <SheetTitle className="font-serif text-3xl font-normal">{route.title}</SheetTitle>
-              <SheetDescription>These are illustrative, deterministic comparisons. Unrated requirements are excluded from skill coverage and learning gaps.</SheetDescription>
+              <SheetDescription>See the inputs and calculations for this role. Unrated skills stay unknown.</SheetDescription>
             </SheetHeader>
             <div className="flex flex-col gap-6 p-6">
               <Block title="Skill coverage">

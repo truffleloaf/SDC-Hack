@@ -55,6 +55,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             <DemoBanner />
             <RouteStepper />
             <main id="main">{children}</main>
+            <footer className="mx-auto flex max-w-[1200px] justify-between gap-4 border-t border-border px-5 py-8 pb-28 text-sm text-muted-foreground lg:pb-8"><span>Pivott</span><a href="/method" className="min-h-11 underline">How scores work</a></footer>
             <Toaster
               position="bottom-center"
               toastOptions={{

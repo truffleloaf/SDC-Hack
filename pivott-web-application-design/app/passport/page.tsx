@@ -49,7 +49,7 @@ export default function PassportPage() {
     code: `PV-${target.id.slice(0, 3).toUpperCase()}-${String(Math.round(fit * 10)).padStart(4, '0')}`,
   }
 
-  const summary = `${possessive(data.name, 'My')} Pivott Skill Passport: ${data.currentRole} → ${data.destination}. ${rated ? `${Math.round(fit)}% fit based on rated skills` : 'Skills not rated'}${unknown ? ' (incomplete comparison)' : ''}, ${rated ? `${unknown ? 'partial ' : ''}est. ${weeks} weeks at ${state.hoursPerWeek} h/week` : 'learning time not estimated'}. Route: ${steps.map((s) => s.title).join(' → ') || (unknown ? 'rate remaining skills to estimate learning needs' : 'no gaps identified')}. (Illustrative demo data)`
+  const summary = `${possessive(data.name, 'My')} Pivott Skill Passport: ${data.currentRole} → ${data.destination}. ${rated ? `${Math.round(fit)}% fit based on rated skills` : 'Skills not rated'}${unknown ? ' (incomplete comparison)' : ''}, ${rated ? `${unknown ? 'partial ' : ''}est. ${weeks} weeks at ${state.hoursPerWeek} h/week` : 'learning time not estimated'}. Route: ${steps.map((s) => s.title).join(' → ') || (unknown ? 'rate remaining skills to estimate learning needs' : 'no gaps identified')}. How scores work: https://pivottstudio.vercel.app/method`
 
   async function renderPng() {
     const { toPng } = await import('html-to-image')

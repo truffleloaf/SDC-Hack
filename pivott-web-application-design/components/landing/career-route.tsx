@@ -8,7 +8,7 @@ export function CareerRoute() {
   return (
     <svg viewBox="0 0 620 240" role="img" aria-labelledby="career-route-title career-route-desc" className="w-full">
       <title id="career-route-title">A route built on your existing skills</title>
-      <desc id="career-route-desc">{source.title} to {destination.title}: an illustrative route based on the default demo profile.</desc>
+      <desc id="career-route-desc">{source.title} to {destination.title}: an example route based on the default demo profile.</desc>
       <g fill="none" stroke="var(--border-strong)" strokeWidth="1">
         <path d="M30 50H590 M30 190H590" strokeDasharray="2 7" />
         <path d="M60 24V216 M560 24V216" strokeDasharray="2 7" />

@@ -55,3 +55,7 @@ Files: root layout/CSS/landing, states, shared primitives, panel/control consume
 ## T3: specific copy
 
 Rewrote the hero, metadata, start, skills, signals, plan, passport, time panel and error/empty state copy. Removed name greetings and prose em dashes; table placeholders remain. Classification definitions now use a definition list. Account name help describes autosync accurately. The skills sentence explicitly says unknown ratings are excluded from learning gaps; the fit-range implementation in A1 will bound their possible contribution instead of claiming they never affect comparisons. Files: the corresponding pages/components and comments. Full validation follows at the Part T boundary.
+
+## T4: one explanation and a method page
+
+Kept the requested exposure statement on Map and linked it to the new `/method` page. The global footer and passport footer also link there. Removed repeated illustrative/disclaimer labels from the map, hero details, plan completion, example and passport. Evidence badges and useful unknown/assessment coverage information remain because they describe inputs, rather than repeating warnings. Method documents formulas, thresholds, fixed assumptions, confidence, learning estimates and data handling. Files: method/layout/footer and corresponding copy consumers. Full checks follow at the Part T boundary.

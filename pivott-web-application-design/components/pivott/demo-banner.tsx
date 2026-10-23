@@ -27,7 +27,7 @@ export function DemoBanner() {
         <p className="flex items-center gap-2 text-muted-foreground">
           <FlaskConical aria-hidden className="size-4 shrink-0 text-primary" />
           <span>
-            <span className="font-medium text-foreground">Demo profile</span> · illustrative data. Your own profile is kept separately.
+            <span className="font-medium text-foreground">Example profile</span>. Your own profile is kept separately.
           </span>
         </p>
         <button type="button" onClick={leave} className={pButton({ variant: 'ghost', size: 'sm' })}>

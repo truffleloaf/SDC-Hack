@@ -67,7 +67,7 @@ export function LivingTaskMap() {
       <div className="relative aspect-[56/48]">
       <svg viewBox={`0 0 ${W} ${H}`} className="absolute inset-0 size-full overflow-visible" aria-labelledby="ltm-title ltm-desc" role="group">
         <title id="ltm-title">Living task map</title>
-        <desc id="ltm-desc">An illustrative map of a Finance Admin’s tasks, sized by time and coloured by AI exposure.</desc>
+        <desc id="ltm-desc">An example map of a Finance Admin’s tasks, sized by time and coloured by AI exposure.</desc>
         <g aria-hidden="true" fill="none" stroke="var(--border-strong)">
           <ellipse cx="282" cy="246" rx="212" ry="188" strokeDasharray="3 8" opacity="0.45" />
           <ellipse cx="282" cy="246" rx="138" ry="122" opacity="0.35" />
@@ -109,7 +109,7 @@ export function LivingTaskMap() {
               <g
                 tabIndex={0}
                 role="button"
-                aria-label={`${n.label}: ${Math.round(n.exposure * 100)}% illustrative exposure, ${c}`}
+                aria-label={`${n.label}: ${Math.round(n.exposure * 100)}% exposure, ${c}`}
                 aria-pressed={isActive}
                 onClick={() => setActive(isActive ? null : n.id)}
                 onKeyDown={(event) => {
@@ -186,13 +186,12 @@ export function LivingTaskMap() {
               <span className="font-mono text-xs text-muted-foreground">{Math.round(current.exposure * 100)}% exposure</span>
               <span className="text-xs font-medium text-primary">{cls}</span>
             </div>
-            <p className="mt-1.5 font-sans text-xs text-faint">Illustrative</p>
           </motion.div>
         )}
       </AnimatePresence>
       </div>
       <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border px-5 py-4 text-xs text-muted-foreground sm:px-7">
-        <span>Illustrative estimates</span>
+        <a href="/method" className="underline">How scores work</a>
         <span className="flex items-center gap-2"><span>Lower</span><span className="flex gap-1" aria-hidden><i className="size-2.5 rounded-full bg-exp-low" /><i className="size-2.5 rounded-full bg-exp-mid" /><i className="size-2.5 rounded-full bg-exp-high" /></span><span>Higher</span></span>
       </div>
     </div>
