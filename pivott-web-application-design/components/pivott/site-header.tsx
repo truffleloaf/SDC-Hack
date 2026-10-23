@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { useSignIn } from '@/components/account/sign-in-dialog'
 import { useAccount } from '@/components/account/account-provider'
 import { usePathname, useRouter } from 'next/navigation'
 import { useTheme } from 'next-themes'
@@ -70,6 +71,7 @@ function ProfileButton({ onClick }: { onClick: () => void }) {
 export function SiteHeader() {
   const pathname = usePathname()
   const account = useAccount()
+  const { openSignIn } = useSignIn()
   const router = useRouter()
   const [confirmOpen, setConfirmOpen] = useState(false)
   const [nameOpen, setNameOpen] = useState(false)
@@ -94,7 +96,7 @@ export function SiteHeader() {
           </Link>
           <div className="ml-auto flex min-w-0 flex-wrap items-center justify-end gap-1">
             <Link href="/workspace" className={cn(pButton({ variant: 'ghost', size: 'sm' }), 'hidden sm:inline-flex')}>Your work</Link>
-            {account.user ? <DropdownMenu><DropdownMenuTrigger className={pButton({ variant: 'ghost', size: 'sm' })}>Account</DropdownMenuTrigger><DropdownMenuContent align="end"><DropdownMenuItem onClick={() => router.push('/account')}>Account settings</DropdownMenuItem><DropdownMenuItem onClick={() => router.push('/workspace')}>Your plan</DropdownMenuItem><DropdownMenuItem onClick={() => void account.signOut()}>Sign out · Keep device work</DropdownMenuItem></DropdownMenuContent></DropdownMenu> : <Link href={`/signin?next=${encodeURIComponent(pathname)}`} className={pButton({ variant: 'ghost', size: 'sm' })}>Sign in</Link>}
+            {account.user ? <DropdownMenu><DropdownMenuTrigger className={pButton({ variant: 'ghost', size: 'sm' })}>Account</DropdownMenuTrigger><DropdownMenuContent align="end"><DropdownMenuItem onClick={() => router.push('/account')}>Account settings</DropdownMenuItem><DropdownMenuItem onClick={() => router.push('/workspace')}>Your plan</DropdownMenuItem><DropdownMenuItem onClick={() => void account.signOut()}>Sign out · Keep device work</DropdownMenuItem></DropdownMenuContent></DropdownMenu> : <button onClick={() => openSignIn(pathname)} className={pButton({ variant: 'ghost', size: 'sm' })}>Sign in</button>}
             <Link
               href="/signals"
               className={cn(

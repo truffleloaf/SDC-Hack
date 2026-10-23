@@ -1,6 +1,7 @@
 'use client'
 
 import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from 'react'
+import { SignInProvider } from './sign-in-dialog'
 import type { User } from '@supabase/supabase-js'
 import { accountProfile, readAccountRow } from '@/lib/account-data'
 import { getSupabase, accountSavingConfigured } from '@/lib/supabase'
@@ -81,7 +82,7 @@ export function AccountProvider({ children }: { children: ReactNode }) {
   let visibleStatus = !user && saveStatus === 'error' ? 'Couldn’t save on this device · Retry from your plan' : status
   if (user && saved && status === 'Saved to your account' && JSON.stringify({ ...state, recentlyChanged: [] }) !== JSON.stringify(saved.profile)) visibleStatus = 'Changes on this device · Save to account when ready'
   const exposed = { user, configured: accountSavingConfigured, saved, needsChoice, status: visibleStatus, refresh, save, load, signOut, deleteAccount }
-  return <Context.Provider value={exposed}>{children}
+  return <Context.Provider value={exposed}><SignInProvider>{children}</SignInProvider>
     <Dialog open={!!user && needsChoice && !!saved} onOpenChange={(open) => setNeedsChoice(open)}>
       <DialogContent><DialogHeader><DialogTitle>Choose which work to keep</DialogTitle><DialogDescription>Neither profile has been replaced. Choosing account work replaces this device’s ratings; choosing device work replaces the account copy only after you press Save to account. Ratings are never merged automatically.</DialogDescription></DialogHeader>
         {saved && <>

@@ -4,10 +4,12 @@ import { roleById } from '@/lib/data/seed'
 import { buildPathway } from '@/lib/engine'
 import { PButton, PLink } from '@/components/pivott/p-button'
 import { PageSkeleton } from '@/components/pivott/states'
+import { useSignIn } from '@/components/account/sign-in-dialog'
 import { useAccount } from '@/components/account/account-provider'
 export default function WorkspacePage() {
   const { state, hydrated, saveStatus } = useAppState()
   const account = useAccount()
+  const { openSignIn } = useSignIn()
   if (!hydrated) return <PageSkeleton />
   const role = state.targetRoleId ? roleById[state.targetRoleId] : null
   const plan = role ? buildPathway({ targetRoleId: role.id, levels: state.skills, hoursPerWeek: state.hoursPerWeek, freeOnly: state.freeOnly }) : null
@@ -20,6 +22,6 @@ export default function WorkspacePage() {
     <section className="mt-6"><h2 className="text-lg font-semibold">Routes you are considering</h2><ul className="mt-3 space-y-2">{state.savedRouteIds.map((id) => <li key={id}><PLink href="/routes" variant="link">{roleById[id]?.title}</PLink></li>)}</ul>{!state.savedRouteIds.length && <p className="mt-2 text-sm text-muted-foreground">No routes saved yet.</p>}</section>
     <div className="mt-6 flex flex-wrap gap-3"><PLink href="/start" variant="secondary" size="sm">Edit tasks</PLink><PLink href="/skills" variant="secondary" size="sm">Edit skills</PLink></div>
     <section className="mt-8 grid gap-4 sm:grid-cols-2"><label className="flex flex-col gap-2 text-sm">Career goal (optional)<input className="pivott-input" maxLength={200} value={state.careerGoal} onChange={(event) => setState({ careerGoal: event.target.value })} /></label><label className="flex flex-col gap-2 text-sm">Learning hours per week<input className="pivott-input" type="number" min={1} max={40} value={state.hoursPerWeek} onChange={(event) => { const value = event.target.valueAsNumber; if (Number.isFinite(value)) setState({ hoursPerWeek: Math.min(40, Math.max(1, Math.round(value))) }) }} /></label></section>
-    <section className="mt-10 border-t border-border pt-6"><h2 className="text-lg font-semibold">Save your work</h2><p role="status" className="mt-2 text-sm text-muted-foreground">{account.status}</p>{account.user ? <PButton className="mt-4" size="sm" loading={account.status.startsWith('Saving')} onClick={() => void account.save()}>Save to account</PButton> : <><p className="mt-2 text-sm text-muted-foreground">Keep your tasks, skills and learning plan across devices with an optional account.</p><PLink href="/signin?next=/workspace" variant="secondary" size="sm" className="mt-4">Create account / Sign in</PLink></>}<PLink href="/account" variant="link" className="ml-3">Saving and account settings</PLink></section>
+    <section className="mt-10 border-t border-border pt-6"><h2 className="text-lg font-semibold">Save your work</h2><p role="status" className="mt-2 text-sm text-muted-foreground">{account.status}</p>{account.user ? <PButton className="mt-4" size="sm" loading={account.status.startsWith('Saving')} onClick={() => void account.save()}>Save to account</PButton> : <><p className="mt-2 text-sm text-muted-foreground">Keep your tasks, skills and learning plan across devices with an optional account.</p><PButton onClick={() => openSignIn()} variant="secondary" size="sm" className="mt-4">Sign in to sync</PButton></>}<PLink href="/account" variant="link" className="ml-3">Saving and account settings</PLink></section>
   </div>
 }
