@@ -24,7 +24,7 @@ function analysis(scenario, profile = {}, previewMultiplier) {
 const normal = analysis('normal')
 const pathway = { targetRoleId: 'finance-systems-analyst', levels: seed.demoPersona.skills, hoursPerWeek: 8 }
 const data = Object.fromEntries([
-  'DATA_AS_OF', 'SEED_VERSION', 'scenarios', 'sdgs', 'skills', 'roles', 'tasks', 'resources', 'signals', 'demoPersona',
+  'DATA_AS_OF', 'SEED_VERSION', 'scenarios', 'sdgs', 'skills', 'roles', 'customRole', 'tasks', 'resources', 'signals', 'demoPersona',
 ].map((key) => [key, seed[key]]))
 const customProfile = {
   roleId: 'finance-admin', selections: [...selections, { taskId: 'custom-review', share: 25 }],

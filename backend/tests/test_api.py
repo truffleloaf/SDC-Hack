@@ -27,16 +27,16 @@ def test_health(client):
     body = response.json()
     assert body["status"] == "ok"
     assert body["dataAsOf"] == "2026-10-01"
-    assert body["counts"] == {"roles": 6, "tasks": 31, "skills": 15, "signals": 20}
+    assert body["counts"] == {"roles": 8, "tasks": 39, "skills": 15, "signals": 20}
 
 
 def test_seed_get_and_reset(client):
     response = client.get("/api/seed")
     assert response.status_code == 200
     body = response.json()
-    assert body["version"] == "2026.10.3"
-    assert len(body["roles"]) == 6
-    assert len(body["tasks"]) == 31
+    assert body["version"] == "2026.10.4"
+    assert len(body["roles"]) == 8
+    assert len(body["tasks"]) == 39
     assert len(body["skills"]) == 15
     assert len(body["signals"]) == 20
     assert body["demoPersona"]["name"] == "Aisyah"
@@ -264,3 +264,12 @@ def test_cors_allows_deployed_origin_and_rejects_unlisted_origins(client):
     denied = client.options("/api/analysis", headers={"Origin": "https://untrusted.invalid", "Access-Control-Request-Method": "POST"})
     assert denied.status_code == 400
     assert "access-control-allow-origin" not in denied.headers
+
+
+def test_own_task_profile_stays_unassessed_and_is_not_recommended(client):
+    response = client.post("/api/analysis", json=profile_payload(roleId="other", selections=[{"taskId":"custom-own","share":100}], customTasks=[{"id":"custom-own","name":"Own work","skills":["analysis"]}], skills={}))
+    assert response.status_code == 200
+    body = response.json()
+    assert body["tasks"] == [] and body["assessmentCoverage"] == 0
+    assert body["unassessedTasks"][0]["id"] == "custom-own"
+    assert all(route["roleId"] != "other" for route in body["routes"])

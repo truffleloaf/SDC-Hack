@@ -1,4 +1,4 @@
-import { roleById, signals as seedSignals, skills, taskById, type Signal } from './data/seed'
+import { customRole, roleById, signals as seedSignals, skills, taskById, type Signal } from './data/seed'
 import { parseCustomInputs } from './custom-inputs'
 import type { CustomTask, ScenarioId } from './engine'
 
@@ -46,7 +46,7 @@ export function parseProfile(body: unknown): { ok: true; value: ProfileInput } |
 
   const scenario: ScenarioId = b.scenario === 'fast' ? 'fast' : 'normal'
   const hoursPerWeek = Math.max(1, Math.min(40, Math.round(finiteNumber(b.hoursPerWeek) || 6)))
-  const targetRoleId = typeof b.targetRoleId === 'string' && roleById[b.targetRoleId] ? b.targetRoleId : undefined
+  const targetRoleId = typeof b.targetRoleId === 'string' && roleById[b.targetRoleId] && b.targetRoleId !== customRole.id ? b.targetRoleId : undefined
 
   return {
     ok: true,

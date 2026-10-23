@@ -91,7 +91,7 @@ Accounts are optional. Follow [Supabase setup](supabase/README.md) for owner-onl
 
 ## Data and maintenance
 
-The dataset has 6 roles, 31 tasks, 15 skills, 20 dated signals, 4 SDGs, 25 resources, and 2 scenarios. Every skill has at least one free resource. The data cut-off remains 1 October 2026; seed version is `2026.10.2`.
+The dataset has 8 reference roles, 39 tasks, 15 skills, 8 published signals and 12 undated assumptions, 4 SDGs, 25 resources, and 2 scenarios. Every skill has at least one free resource. The data cut-off remains 1 October 2026; seed version is `2026.10.4`.
 
 Edit `pivott-web-application-design/lib/data/seed.ts` and regenerate `backend/app/data/seed.json` and `backend/tests/golden.json` with:
 

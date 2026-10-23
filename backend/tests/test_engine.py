@@ -86,8 +86,8 @@ def assert_close(actual, expected, path: str = "") -> None:
 
 
 def test_seed_counts() -> None:
-    assert len(ROLES) == 6
-    assert len(TASKS) == 31
+    assert len(ROLES) == 8
+    assert len(TASKS) == 39
     assert len(SKILLS) == 15
     assert len(SIGNALS) == 20
     assert len(SDGS) == 4

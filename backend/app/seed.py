@@ -4,10 +4,10 @@ The JSON in ``app/data/seed.json`` is a 1:1 export of the frontend's
 ``pivott-web-application-design/lib/data/seed.ts``. It is the single source
 of truth for this backend:
 
-- 6 roles
-- 31 tasks
+- 8 reference roles and an unassessed own-task path
+- 39 reference tasks
 - 15 skills
-- 20 dated signals
+- 8 published signals and 12 undated assumptions
 - 4 SDGs
 - 25 learning resources
 - 2 scenarios
@@ -33,13 +33,14 @@ SCENARIOS: list[dict[str, Any]] = _SEED["scenarios"]
 SDGS: list[dict[str, Any]] = _SEED["sdgs"]
 SKILLS: list[dict[str, Any]] = _SEED["skills"]
 ROLES: list[dict[str, Any]] = _SEED["roles"]
+CUSTOM_ROLE: dict[str, Any] = _SEED["customRole"]
 TASKS: list[dict[str, Any]] = _SEED["tasks"]
 RESOURCES: list[dict[str, Any]] = _SEED["resources"]
 SIGNALS: list[dict[str, Any]] = _SEED["signals"]
 DEMO_PERSONA: dict[str, Any] = _SEED["demoPersona"]
 
 SKILL_BY_ID: dict[str, dict[str, Any]] = {item["id"]: item for item in SKILLS}
-ROLE_BY_ID: dict[str, dict[str, Any]] = {item["id"]: item for item in ROLES}
+ROLE_BY_ID: dict[str, dict[str, Any]] = {item["id"]: item for item in [*ROLES, CUSTOM_ROLE]}
 TASK_BY_ID: dict[str, dict[str, Any]] = {item["id"]: item for item in TASKS}
 
 TASKS_BY_ROLE: dict[str, list[dict[str, Any]]] = {}
@@ -50,6 +51,7 @@ SEED_PAYLOAD: dict[str, Any] = {
     "version": SEED_VERSION,
     "asOf": DATA_AS_OF,
     "roles": ROLES,
+    "customRole": CUSTOM_ROLE,
     "tasks": TASKS,
     "skills": SKILLS,
     "signals": SIGNALS,

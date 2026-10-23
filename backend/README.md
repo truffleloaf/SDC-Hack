@@ -20,8 +20,8 @@ frontend can point its API base URL at this service without UI changes.
 
 | Dataset | Count |
 |---|---:|
-| Roles | 6 |
-| Tasks | 31 |
+| Reference roles | 8 |
+| Tasks | 39 |
 | Skills | 15 |
 | Dated signals | 20 |
 | SDGs | 4 |

@@ -193,3 +193,11 @@ Added clickable All/Automate/Augment/Protect legend controls with counts and pre
 ## D4: mobile details and targets
 
 The mobile detail sheet was already present, so it was retained rather than rebuilt. Added invisible hit circles guaranteeing at least 44px for map bubbles; hero targets are also enlarged at phone widths. Pointer-only hover avoids synthetic touch hover. Detail close and learning-step controls now have 44px boxes. Files: task canvas, hero, step card and decorative stepper-tick semantics. Browser checks follow at the Part D boundary.
+
+## D5: broader references and an honest unlisted path
+
+Added Sales Operations Coordinator and HR Operations Coordinator with eight sample tasks, mirrored in the Python data. The catalogue now has eight reference roles and 39 tasks; these are editorial reference values, with no new evidence claims. A separate own-task profile supports jobs outside the catalogue without forcing a template or assigning exposure. It is not a recommended destination. The dialog keeps the person's title, explains switching, and returns focus to reference search or the own-task control. Added API/profile handling and regression coverage for wholly unassessed own work. Résumé matching includes the new roles' titles/aliases without assigning ratings. Updated current dataset docs; fixtures regenerated. Normal/Fast demo winners remain covered by the existing tests; new roles can change lower-ranked suggestions.
+
+## D6: prior unfinished items and refutations
+
+Method was implemented in T4 and linked from Map/footer/passport. The fake QR was already absent in the base; T2 removed the remaining reference number. Mobile details already used a sheet; D4 enlarged targets. No duplicates of those tools were added.

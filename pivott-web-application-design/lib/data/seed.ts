@@ -72,7 +72,7 @@ export interface Sdg {
 }
 
 export const DATA_AS_OF = '2026-10-01'
-export const SEED_VERSION = '2026.10.3'
+export const SEED_VERSION = '2026.10.4'
 
 export const scenarios: Scenario[] = [
   {
@@ -205,6 +205,8 @@ export const roles: Role[] = [
       { skillId: 'erp', requiredLevel: 2, importance: 2 },
     ],
   },
+  {"id": "sales-operations", "title": "Sales Operations Coordinator", "family": "Sales", "demand": 60, "sdgs": [8], "requirements": [{"skillId": "excel", "requiredLevel": 3, "importance": 4}, {"skillId": "erp", "requiredLevel": 3, "importance": 3}, {"skillId": "stakeholder", "requiredLevel": 4, "importance": 5}, {"skillId": "coordination", "requiredLevel": 3, "importance": 4}, {"skillId": "process", "requiredLevel": 3, "importance": 4}, {"skillId": "ai", "requiredLevel": 3, "importance": 3}, {"skillId": "analysis", "requiredLevel": 3, "importance": 3}]},
+  {"id": "hr-operations", "title": "HR Operations Coordinator", "family": "People Operations", "demand": 58, "sdgs": [8, 10], "requirements": [{"skillId": "stakeholder", "requiredLevel": 4, "importance": 5}, {"skillId": "empathy", "requiredLevel": 3, "importance": 4}, {"skillId": "writing", "requiredLevel": 4, "importance": 4}, {"skillId": "coordination", "requiredLevel": 3, "importance": 4}, {"skillId": "controls", "requiredLevel": 3, "importance": 3}, {"skillId": "process", "requiredLevel": 3, "importance": 4}, {"skillId": "ai", "requiredLevel": 3, "importance": 2}]},
 ]
 
 export const tasks: Task[] = [
@@ -245,6 +247,14 @@ export const tasks: Task[] = [
   { id: 'oc-docs', roleId: 'operations-coordinator', name: 'Process documentation', description: 'Write and maintain standard operating procedures.', baseExposure: 0.56, humanJudgment: 0.4, defaultShare: 15, skills: ['process', 'writing'], tryThisWeek: 'Record yourself doing a task and let AI draft the SOP from the transcript.' },
   { id: 'oc-tracking', roleId: 'operations-coordinator', name: 'Order tracking', description: 'Monitor inventory levels and order status.', baseExposure: 0.68, humanJudgment: 0.25, defaultShare: 20, skills: ['erp', 'excel', 'automation'], tryThisWeek: 'Set up one automated low-stock alert instead of a manual check.' },
   { id: 'oc-improve', roleId: 'operations-coordinator', name: 'Improvement projects', description: 'Lead small projects to remove friction from operations.', baseExposure: 0.24, humanJudgment: 0.72, defaultShare: 20, skills: ['process', 'coordination', 'stakeholder'], tryThisWeek: 'Pick the most annoying step in a process and propose one fix to your manager.' },
+  {"id": "sales-records", "roleId": "sales-operations", "name": "Update CRM records", "description": "Maintain contact and deal records, checking duplicates and missing fields.", "baseExposure": 0.76, "humanJudgment": 0.3, "defaultShare": 30, "skills": ["erp", "excel"], "tryThisWeek": "Check ten sample records against the source before accepting an automated update."},
+  {"id": "sales-forecast", "roleId": "sales-operations", "name": "Prepare sales summaries", "description": "Summarise pipeline changes for the team.", "baseExposure": 0.57, "humanJudgment": 0.55, "defaultShare": 25, "skills": ["analysis", "excel", "ai"], "tryThisWeek": "Draft a summary from a sample spreadsheet, then check every number."},
+  {"id": "sales-handoffs", "roleId": "sales-operations", "name": "Coordinate deal handoffs", "description": "Confirm owners, next steps and requirements between teams.", "baseExposure": 0.38, "humanJudgment": 0.78, "defaultShare": 25, "skills": ["stakeholder", "coordination", "process"], "tryThisWeek": "Use a handoff checklist for one example deal and note missing information."},
+  {"id": "sales-quality", "roleId": "sales-operations", "name": "Review pipeline quality", "description": "Review inconsistent stages, dates and forecast assumptions.", "baseExposure": 0.5, "humanJudgment": 0.62, "defaultShare": 20, "skills": ["analysis", "process", "erp"], "tryThisWeek": "Write rules for three common data-quality issues and review the exceptions."},
+  {"id": "hr-records", "roleId": "hr-operations", "name": "Maintain staff records", "description": "Check staff records for completeness and access permissions.", "baseExposure": 0.68, "humanJudgment": 0.35, "defaultShare": 30, "skills": ["erp", "controls"], "tryThisWeek": "Use synthetic records to test a completeness checklist without personal data."},
+  {"id": "hr-onboarding", "roleId": "hr-operations", "name": "Coordinate onboarding", "description": "Arrange access, introductions and onboarding responsibilities.", "baseExposure": 0.4, "humanJudgment": 0.72, "defaultShare": 30, "skills": ["coordination", "stakeholder", "process"], "tryThisWeek": "Map an example onboarding process and identify one unclear owner."},
+  {"id": "hr-questions", "roleId": "hr-operations", "name": "Handle staff questions", "description": "Explain policies and route sensitive questions to the appropriate person.", "baseExposure": 0.44, "humanJudgment": 0.75, "defaultShare": 25, "skills": ["empathy", "writing", "stakeholder"], "tryThisWeek": "Draft answers to three fictional policy questions and check them against the policy."},
+  {"id": "hr-policy", "roleId": "hr-operations", "name": "Review policy exceptions", "description": "Review cases that require interpretation or approval.", "baseExposure": 0.3, "humanJudgment": 0.85, "defaultShare": 15, "skills": ["controls", "stakeholder", "analysis"], "tryThisWeek": "Document an example exception with the information and approval it would need."},
 ]
 
 export const resources: Resource[] = [
@@ -321,6 +331,7 @@ export const demoPersona = {
 }
 
 export const skillById = Object.fromEntries(skills.map((s) => [s.id, s]))
-export const roleById = Object.fromEntries(roles.map((r) => [r.id, r]))
+export const customRole: Role = { id: 'other', title: 'Your own tasks', family: 'Custom', demand: 0, requirements: [], sdgs: [] }
+export const roleById = Object.fromEntries([...roles, customRole].map((r) => [r.id, r]))
 export const taskById = Object.fromEntries(tasks.map((t) => [t.id, t]))
 export const tasksForRole = (roleId: string) => tasks.filter((t) => t.roleId === roleId)

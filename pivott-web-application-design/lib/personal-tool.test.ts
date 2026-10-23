@@ -53,3 +53,13 @@ describe('account profile boundary', () => {
     expect(personal.skills.excel).toBe(0)
   })
 })
+
+
+it('supports an unlisted job without inventing an assessment or recommending its blank profile', () => {
+  const state = { ...emptyState, roleId: 'other', customTasks: [{ id:'custom-own',name:'Own work',skills:['analysis'] }], selections:[{taskId:'custom-own',share:100}] }
+  const result = analyze(state)
+  expect(result.assessmentCoverage).toBe(0)
+  expect(result.scored).toEqual([])
+  expect(result.unassessed).toHaveLength(1)
+  expect(result.allRoutes.every((route) => route.roleId !== 'other')).toBe(true)
+})

@@ -1,4 +1,4 @@
-import { roleById, skills } from './data/seed'
+import { customRole, roleById, skills } from './data/seed'
 import { parseCustomInputs } from './custom-inputs'
 import { emptyState, parseStored, type AppState } from './store'
 const record = (value: unknown): value is Record<string, unknown> => !!value && typeof value === 'object' && !Array.isArray(value)
@@ -26,8 +26,8 @@ export function readAccountProfile(value: unknown): AppState {
     jobTitle: typeof value.jobTitle === 'string' ? value.jobTitle.slice(0, 60) : '',
     careerGoal: typeof value.careerGoal === 'string' ? value.careerGoal.slice(0, 200) : '',
     taskNames: record(value.taskNames) ? Object.fromEntries(Object.entries(value.taskNames).filter((entry): entry is [string, string] => typeof entry[1] === 'string').map(([id, title]) => [id, title.slice(0, 60)])) : {},
-    savedRouteIds: strings(value.savedRouteIds) ? value.savedRouteIds.filter((id) => Object.hasOwn(roleById, id)).slice(0, 3) : [],
-    targetRoleId: typeof value.targetRoleId === 'string' && Object.hasOwn(roleById, value.targetRoleId) ? value.targetRoleId : null,
+    savedRouteIds: strings(value.savedRouteIds) ? value.savedRouteIds.filter((id) => Object.hasOwn(roleById, id) && id !== customRole.id).slice(0, 3) : [],
+    targetRoleId: typeof value.targetRoleId === 'string' && Object.hasOwn(roleById, value.targetRoleId) && value.targetRoleId !== customRole.id ? value.targetRoleId : null,
     updatedAt: typeof value.updatedAt === 'string' && Number.isFinite(Date.parse(value.updatedAt)) ? value.updatedAt : null,
   }
 }

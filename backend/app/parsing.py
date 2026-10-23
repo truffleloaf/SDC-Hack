@@ -16,7 +16,7 @@ from typing import Any
 
 from fastapi import Request
 
-from app.seed import DATA_AS_OF, ROLE_BY_ID, SKILL_BY_ID, TASK_BY_ID
+from app.seed import CUSTOM_ROLE, DATA_AS_OF, ROLE_BY_ID, SKILL_BY_ID, TASK_BY_ID
 
 
 class ProfileError(ValueError):
@@ -149,7 +149,7 @@ def parse_profile(body: Any) -> dict[str, Any]:
     hours_per_week = max(1, min(40, js_round(hours_raw)))
 
     target = body.get("targetRoleId")
-    target_role_id = target if isinstance(target, str) and target in ROLE_BY_ID else None
+    target_role_id = target if isinstance(target, str) and target in ROLE_BY_ID and target != CUSTOM_ROLE["id"] else None
 
     profile = {
         "roleId": role_id,

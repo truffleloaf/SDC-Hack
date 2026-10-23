@@ -3,8 +3,8 @@ import * as seed from '@/lib/data/seed'
 
 /** Returns the full, versioned seed dataset. POST resets the demo (stateless server; clients clear localStorage). */
 export function GET() {
-  const { roles, tasks, skills, signals, resources, scenarios, sdgs, demoPersona, SEED_VERSION, DATA_AS_OF } = seed
-  return json({ version: SEED_VERSION, asOf: DATA_AS_OF, roles, tasks, skills, signals, resources, scenarios, sdgs, demoPersona })
+  const { roles, customRole, tasks, skills, signals, resources, scenarios, sdgs, demoPersona, SEED_VERSION, DATA_AS_OF } = seed
+  return json({ version: SEED_VERSION, asOf: DATA_AS_OF, roles, customRole, tasks, skills, signals, resources, scenarios, sdgs, demoPersona })
 }
 
 export function POST() {

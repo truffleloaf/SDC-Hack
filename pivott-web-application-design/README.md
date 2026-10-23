@@ -27,7 +27,7 @@ Guest mode needs no environment variables or database. Optional Supabase email-c
 
 ## Seed data and reset
 
-- Seed data lives in `lib/data/seed.ts`: 6 roles, 31 tasks, 15 skills, 20 dated signals, 2 scenarios, 4 SDGs, 25 learning resources (at least one free option for each skill), and the demo persona **Aisyah (Finance Admin)**.
+- Seed data lives in `lib/data/seed.ts`: 8 reference roles, 39 tasks, 15 skills, 8 published signals and 12 undated assumptions, 2 scenarios, 4 SDGs, 25 learning resources (at least one free option for each skill), and the demo persona **Aisyah (Finance Admin)**.
 - `GET /api/seed` returns the seed version and counts. `POST /api/seed` returns the demo persona for a stateless reset; it does not store or clear browser-local custom signals.
 - In the browser, **⋯ menu → Delete my data** clears your locally stored profile and progress (`pivott:v1` and `pivott:v1:personal` in localStorage).
 
