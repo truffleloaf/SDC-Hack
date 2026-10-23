@@ -107,3 +107,7 @@ Confirmed the effect redirected personal profiles to Workspace. Replaced it with
 ## A5–A7: already completed in S3
 
 Configured-only sign-in/workspace promotion, compact phone navigation and local session deletion were implemented and verified in S3/S5. No duplicate implementation commit is needed.
+
+## A8: disclose renamed templates
+
+Confirmed names are display-only while estimates retain reference task values. Map detail cards (including mobile sheet) and list rows now name the source template whenever the displayed name differs. Files: task map/list. No formula or API shape changed. Part A browser checks cover a renamed Invoice entry.

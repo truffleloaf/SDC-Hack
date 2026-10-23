@@ -8,6 +8,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { ClassificationBadge, ExposureBadge, SkillChip } from '@/components/pivott/badges'
 import { CopyButton } from '@/components/pivott/copy-button'
 import { exposureColor, type ScoredTask } from '@/lib/engine'
+import { taskById } from '@/lib/data/seed'
 import { cn } from '@/lib/utils'
 
 interface LayoutNode extends SimulationNodeDatum {
@@ -283,6 +284,7 @@ export function TaskDetailCard({ task, pinned, onClose, surface = 'panel' }: { t
           </button>
         )}
       </div>
+      {taskById[task.id] && taskById[task.id].name !== task.name && <p className="mt-2 text-xs text-muted-foreground">Based on template: {taskById[task.id].name}</p>}
       <p className="mt-2 text-sm text-muted-foreground">{Math.round(task.share * 100)}% of assessed working time</p>
       <div className="mt-3 flex flex-wrap items-center gap-2">
         <ExposureBadge value={task.exposure} />
