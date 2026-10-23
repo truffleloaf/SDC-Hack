@@ -26,7 +26,6 @@ export default function SignalsPage() {
   const [dir, setDir] = useState<Dir>('all')
   const [rec, setRec] = useState<Rec>('all')
   const [adminOpen, setAdminOpen] = useState(false)
-  const [computing, setComputing] = useState(false)
 
   if (!hydrated) return <PageSkeleton />
 
@@ -40,10 +39,8 @@ export default function SignalsPage() {
       (rec === 'all' || ageDays(s.date) <= Number(rec)),
   )
 
-  async function recompute() {
-    setComputing(true)
+  function recompute() {
     const beforeScored = computeScored(state)
-    await new Promise((r) => setTimeout(r, 900))
     const appliedSignalIds = [...state.appliedSignalIds, ...pending.map((p) => p.id)]
     const next = { ...state, appliedSignalIds }
     const afterScored = computeScored(next, next.scenario, activeSignals(next))
@@ -51,7 +48,6 @@ export default function SignalsPage() {
       .map((t, i) => ({ taskId: t.id, before: beforeScored[i]?.exposure ?? t.exposure, after: t.exposure }))
       .filter((c) => Math.abs(c.after - c.before) > 0.0005)
     setState({ appliedSignalIds, recentlyChanged: changed })
-    setComputing(false)
     const b = roleExposure(beforeScored)
     const a = roleExposure(afterScored)
     toast.success('Task map recomputed', {
@@ -97,9 +93,9 @@ export default function SignalsPage() {
                   <p className="text-sm">
                     <span className="font-medium">{pending.length} new signal{pending.length > 1 ? 's' : ''}</span> ready to apply to your task map.
                   </p>
-                  <PButton onClick={recompute} loading={computing} disabled={computing}>
-                    {!computing && <RefreshCw aria-hidden />}
-                    {computing ? 'Recomputing…' : 'Recompute task map'}
+                  <PButton onClick={recompute}>
+                    <RefreshCw aria-hidden />
+                    Recompute task map
                   </PButton>
                 </>
               ) : (

@@ -111,3 +111,7 @@ Configured-only sign-in/workspace promotion, compact phone navigation and local 
 ## A8: disclose renamed templates
 
 Confirmed names are display-only while estimates retain reference task values. Map detail cards (including mobile sheet) and list rows now name the source template whenever the displayed name differs. Files: task map/list. No formula or API shape changed. Part A browser checks cover a renamed Invoice entry.
+
+## A9: immediate signal application
+
+Removed the reproduced 900ms timer and its pretend processing state. Applying signals computes before/after values synchronously and immediately updates state. The existing change list remains; C4 will visualise it on Map. File: signals page. Part A/C4 browser checks cover the action.
