@@ -79,7 +79,7 @@ export function SiteHeader() {
 
   async function deleteData() {
     await account.signOut(true)
-    clearAllData()
+    if (!clearAllData()) throw new Error("Couldn’t delete browser storage. Check your browser settings and retry.")
     setConfirmOpen(false)
     toast.success('Device work deleted. Signed out on this device.')
     router.push('/')

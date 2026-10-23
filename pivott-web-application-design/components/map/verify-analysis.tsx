@@ -4,9 +4,9 @@ import { useEffect, useRef, useState } from 'react'
 import { ShieldCheck } from 'lucide-react'
 import { PButton } from '@/components/pivott/p-button'
 import { analysisRequest, compareAnalysis, fetchAnalysis } from '@/lib/remote'
-import { analyze, type AppState } from '@/lib/store'
+import { type analyze, type AppState } from '@/lib/store'
 
-export function VerifyAnalysis({ state }: { state: AppState }) {
+export function VerifyAnalysis({ state, analysis }: { state: AppState; analysis: ReturnType<typeof analyze> }) {
   const inputKey = JSON.stringify(analysisRequest(state))
   const [pendingKey, setPendingKey] = useState<string | null>(null)
   const [result, setResult] = useState<{ inputKey: string; message: string } | null>(null)
@@ -24,7 +24,7 @@ export function VerifyAnalysis({ state }: { state: AppState }) {
     try {
       const remote = await fetchAnalysis(state, { signal: request.signal })
       if (request.signal.aborted) return
-      const compared = compareAnalysis(state, remote)
+      const compared = compareAnalysis(state, remote, analysis)
       const message = compared.matches
         ? `Matches API: ${compared.matchedTasks}/${compared.totalTasks} assessed tasks, role exposure matches, route order identical.`
         : `API differs: ${compared.matchedTasks}/${compared.totalTasks} task exposures match; role exposure ${compared.roleExposureMatches ? 'matches' : 'differs'}; route order ${compared.routeOrderMatches ? 'matches' : 'differs'}.`
@@ -41,7 +41,7 @@ export function VerifyAnalysis({ state }: { state: AppState }) {
 
   return (
     <div className="flex flex-col items-start gap-2 border-t border-border pt-4">
-      <PButton variant="secondary" size="sm" loading={pendingKey === inputKey} disabled={!analyze(state).scored.length} onClick={verify}>
+      <PButton variant="secondary" size="sm" loading={pendingKey === inputKey} disabled={!analysis.scored.length} onClick={verify}>
         <ShieldCheck aria-hidden />Verify with API
       </PButton>
       <p className="text-xs leading-relaxed text-muted-foreground">This check sends task and skill inputs only. It does not send your display name or progress. Custom tasks without estimates are excluded from exposure verification.</p>

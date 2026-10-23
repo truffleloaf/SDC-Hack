@@ -78,10 +78,21 @@ let state: AppState = emptyState
 let loaded = false
 let saveStatus: 'saved' | 'error' = 'saved'
 const listeners = new Set<() => void>()
+let persistenceTimer: ReturnType<typeof setTimeout> | null = null
+let persistenceBound = false
+function cancelPersistence() { if (persistenceTimer) clearTimeout(persistenceTimer); persistenceTimer = null }
+export function flushPersistence() {
+  cancelPersistence()
+  const previous = saveStatus
+  try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); saveStatus = 'saved' }
+  catch { saveStatus = 'error' }
+  if (previous !== saveStatus) emit()
+}
 
 function load() {
   if (loaded || typeof window === 'undefined') return
   loaded = true
+  if (!persistenceBound) { window.addEventListener('pagehide', () => { if (persistenceTimer) flushPersistence() }); persistenceBound = true }
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY)
     if (raw) state = parseStored(raw)
@@ -163,38 +174,38 @@ export function setState(next: Partial<AppState> | ((s: AppState) => Partial<App
   const patch = typeof next === 'function' ? next(state) : next
   const changedProfile = Object.keys(patch).some((key) => key !== 'recentlyChanged')
   state = { ...state, ...patch, ...(changedProfile ? { updatedAt: new Date().toISOString() } : {}) }
-  try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
-    saveStatus = 'saved'
-  } catch { saveStatus = 'error' }
+  cancelPersistence()
+  persistenceTimer = setTimeout(flushPersistence, 150)
   emit()
 }
 
 export function replaceState(next: AppState) {
   loaded = true
   state = next
-  try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
-    saveStatus = 'saved'
-  } catch { saveStatus = 'error' }
+  flushPersistence()
   emit()
 }
 
 export function clearAllData() {
+  cancelPersistence()
+  let cleared = true
   try {
     window.localStorage.removeItem(STORAGE_KEY)
     window.localStorage.removeItem(PERSONAL_KEY)
     for (const key of Object.keys(window.localStorage)) if (key === 'pivott:v1:backup' || key.startsWith('pivott:sync:') || key.startsWith('sb-')) window.localStorage.removeItem(key)
-  } catch {}
+  } catch { cleared = false }
   loaded = true
   state = emptyState
+  saveStatus = cleared ? 'saved' : 'error'
   emit()
+  return cleared
 }
 
 function subscribe(l: () => void) {
   listeners.add(l)
   const onStorage = (e: StorageEvent) => {
     if (e.key === STORAGE_KEY) {
+      cancelPersistence()
       loaded = false
       load()
       l()
@@ -213,7 +224,7 @@ let clientSnapshot: StoreSnapshot = { state, hydrated: true, saveStatus }
 
 function getSnapshot() {
   load()
-  if (clientSnapshot.state !== state) clientSnapshot = { state, hydrated: true, saveStatus }
+  if (clientSnapshot.state !== state || clientSnapshot.saveStatus !== saveStatus) clientSnapshot = { state, hydrated: true, saveStatus }
   return clientSnapshot
 }
 

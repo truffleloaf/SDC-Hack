@@ -113,7 +113,7 @@ export function LivingTaskMap() {
                 role="button"
                 aria-label={`${n.label}: ${Math.round(n.exposure * 100)}% exposure, ${c}`}
                 aria-pressed={pinned === n.id}
-                onClick={() => setPinned((value) => value === n.id ? null : n.id)}
+                onClick={() => { setHovered(null); setPinned((value) => value === n.id ? null : n.id) }}
                 onKeyDown={(event) => {
                   if (event.key === 'Enter' || event.key === ' ') {
                     event.preventDefault()

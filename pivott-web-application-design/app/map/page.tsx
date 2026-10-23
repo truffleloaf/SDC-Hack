@@ -132,7 +132,7 @@ export default function MapPage() {
             </motion.div>
           </AnimatePresence>
           {unassessed.length > 0 && <section className="border-t border-border pt-4"><h2 className="text-sm font-medium">Not assessed yet</h2><ul className="mt-2 space-y-2">{unassessed.map((task) => <li key={task.taskId} className="flex justify-between gap-3 text-sm"><span>{state.taskNames[task.taskId] || task.name}</span><span className="text-muted-foreground">{Math.round(task.share)}% of your time · No estimate</span></li>)}</ul></section>}
-          <VerifyAnalysis state={state} />
+          <VerifyAnalysis state={state} analysis={analysis} />
         </section>
 
         <aside className="hidden lg:block">

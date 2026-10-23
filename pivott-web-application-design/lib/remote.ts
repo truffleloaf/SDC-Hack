@@ -40,8 +40,7 @@ export async function fetchAnalysis(state: AppState, options: { signal?: AbortSi
   return { scenario: body.scenario, roleExposure: body.roleExposure, tasks, routes }
 }
 
-export function compareAnalysis(state: AppState, remote: RemoteAnalysis) {
-  const local = analyze(state)
+export function compareAnalysis(state: AppState, remote: RemoteAnalysis, local = analyze(state)) {
   // Python and JavaScript may differ in the last floating-point bits.
   const equal = (a: number, b: number) => Math.abs(a - b) <= 1e-9
   const byId = new Map(remote.tasks.map((task) => [task.id, task.exposure]))

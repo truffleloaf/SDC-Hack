@@ -115,3 +115,9 @@ Confirmed names are display-only while estimates retain reference task values. M
 ## A9: immediate signal application
 
 Removed the reproduced 900ms timer and its pretend processing state. Applying signals computes before/after values synchronously and immediately updates state. The existing change list remains; C4 will visualise it on Map. File: signals page. Part A/C4 browser checks cover the action.
+
+## A10: persistence, reused analysis and page fallbacks
+
+Passed the memoised Map analysis into API verification (including its comparison), avoiding another route computation on render/click. Device writes now debounce for 150ms with immediate in-memory updates, flush pending work on pagehide, and cancel pending writes when replacing/deleting state or accepting another tab's storage update. Added meaningful timer/flush/deletion tests. Storage deletion failures now surface in the confirmation dialog instead of claiming success.
+
+Added root error/loading/not-found states and a real generated PNG Open Graph image. Native confirmations were already replaced in S3; Plex files are used and unused assets/CSS were removed in T6. Fresh-start text now distinguishes guests from signed-in accounts. Files: store/persistence tests, remote/verification/Map, fallback/OG routes and header/welcome error details. Type checking and full Part A checks follow.
