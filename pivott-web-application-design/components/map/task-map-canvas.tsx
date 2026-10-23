@@ -100,6 +100,12 @@ export function TaskMapCanvas({
   const active = tasks.find((t) => t.id === activeId) ?? null
   const activePos = active ? positions.get(active.id) : null
 
+  const taskIds = tasks.map((task) => task.id).join('|')
+  useEffect(() => {
+    if (pinned && !tasks.some((task) => task.id === pinned)) setPinned(null)
+    if (hovered && !tasks.some((task) => task.id === hovered)) setHovered(null)
+  }, [taskIds, pinned, hovered])
+
   useEffect(() => {
     if (!pinned) return
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setPinned(null)

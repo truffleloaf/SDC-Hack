@@ -3,6 +3,7 @@
 import { ArrowRight, Info, Layers, List, Map as MapIcon } from 'lucide-react'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { useEffect, useState } from 'react'
+import { ClassificationFilter, type ClassFilter } from '@/components/map/classification-filter'
 import { WorkHours } from '@/components/map/work-hours'
 import { AdoptionPreview } from '@/components/map/adoption-preview'
 import { snapPreview } from '@/lib/preview'
@@ -15,7 +16,7 @@ import { MobileActionBar } from '@/components/pivott/mobile-action-bar'
 import { PButton, PLink } from '@/components/pivott/p-button'
 import { ScenarioSwitch } from '@/components/pivott/scenario-switch'
 import { SegmentedControl } from '@/components/pivott/segmented-control'
-import { NeedsProfile, PageSkeleton } from '@/components/pivott/states'
+import { EmptyState, NeedsProfile, PageSkeleton } from '@/components/pivott/states'
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { roleById } from '@/lib/data/seed'
@@ -30,6 +31,7 @@ export default function MapPage() {
   const reduce = useReducedMotion()
   const analysis = useAnalysis(state, preview)
   const [view, setView] = useState<'map' | 'list'>('map')
+  const [classFilter, setClassFilter] = useState<ClassFilter>('All')
   const [sheetOpen, setSheetOpen] = useState(false)
 
   const changedIds = state.recentlyChanged.map((c) => c.taskId)
@@ -51,6 +53,7 @@ export default function MapPage() {
   const role = roleById[state.roleId]
   const { scored, exposure, routes, lastUpdated, signals, unassessed, assessmentCoverage } = analysis
   const conf = confidence(scored, signals)
+  const visibleTasks = classFilter === 'All' ? scored : scored.filter((task) => task.classification === classFilter)
   const { stays, reinforce } = deriveSkillGroups(scored, state.skills, routes[0])
   const counts = {
     Automate: scored.filter((t) => t.classification === 'Automate').length,
@@ -128,6 +131,8 @@ export default function MapPage() {
             </div>
           </div>
           <p className="text-sm text-muted-foreground">Bubble size shows time spent within assessed tasks. Color shows estimated AI exposure.{state.recentlyChanged.length > 0 && " Dashed rings show exposure before the applied signals; labels show the change in points."}</p>
+          <ClassificationFilter tasks={scored} value={classFilter} onChange={setClassFilter} />
+          <p className="text-xs text-muted-foreground">Showing {visibleTasks.length} of {scored.length} assessed tasks.</p>
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={view}
@@ -136,10 +141,10 @@ export default function MapPage() {
               exit={{ opacity: 0, y: -4 }}
               transition={{ duration: 0.2 }}
             >
-              {view === 'map' ? (
-                <TaskMapCanvas tasks={scored} highlightIds={changedIds} changes={state.recentlyChanged} />
+              {!visibleTasks.length ? <EmptyState title={scored.length ? `No ${classFilter.toLowerCase()} tasks to show.` : 'No reference tasks to show.'} description={scored.length ? 'Choose All tasks to see the full map.' : 'Your own tasks are listed below without an exposure estimate.'} action={scored.length ? <PButton variant="secondary" onClick={() => setClassFilter('All')}>Show all tasks</PButton> : <PLink href="/start">Edit tasks</PLink>} /> : view === 'map' ? (
+                <TaskMapCanvas tasks={visibleTasks} highlightIds={changedIds} changes={state.recentlyChanged} />
               ) : (
-                <TaskListTable tasks={scored} highlightIds={changedIds} />
+                <TaskListTable tasks={visibleTasks} highlightIds={changedIds} />
               )}
             </motion.div>
           </AnimatePresence>

@@ -185,3 +185,7 @@ Replaced selects with native radio groups for levels 0–4 and Not sure, all wit
 ## D2: navigation progress
 
 Added Work completion, Skills rated n/15 and Plan progress/partial state, completion ticks and a shared underline that moves between sections. Reduced motion updates immediately. A shared UI progress helper retains a recorded completed step when accepting its skill increase removes the current gap, preventing progress from dropping back to zero. Unknown requirements prevent a complete-plan claim. Pathway and Workspace use the same recorded counts; tests cover rating increases and unestimated plans. Files: stepper, progress helper/tests, pathway/workspace. No scoring formula changed. Full Part D verification follows.
+
+## D3: map classification filters
+
+Added clickable All/Automate/Augment/Protect legend controls with counts and pressed state. They filter the map and list while keeping the full assessment and hour allocation. Empty filters provide an exact reset action; hidden task details close. Custom-only profiles keep an explicit unassessed state. Files: ClassificationFilter, Map and task canvas. Full Part D checks follow.
