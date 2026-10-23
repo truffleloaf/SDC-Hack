@@ -77,6 +77,10 @@ Frontend and backend checks run in [.github/workflows](.github/workflows). The o
 
 The current suites cover formulas, the demo workflow, every skill's free-resource coverage, custom-input validation, cross-language goldens, API errors, and CORS.
 
+## Résumé import
+
+Start with a PDF or DOCX résumé to review local catalogue suggestions before changing your profile. Files are read in the browser; extracted text is discarded and new skills stay unrated. Manual setup remains available. See [supported files, privacy and tests](docs/resume-import.md).
+
 ## Personal workflow and account saving
 
 Choose a reference role, confirm its tasks, then view the initial map before rating skills. A personal job title and task names do not change the template's illustrative scores. Time edits rebalance to 100%; task removal has Undo, and restoring defaults requires confirmation. Custom tasks remain **Not assessed yet**, including older custom tasks with numeric assumptions. Exposure is conditional on assessed reference tasks, with the assessed share shown separately.

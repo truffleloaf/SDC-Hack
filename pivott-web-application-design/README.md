@@ -105,3 +105,7 @@ On `/map`, click **Verify with API**. It checks task exposures, weighted role ex
 The API accepts up to 100 custom tasks, 100 selected tasks, and 100 applied custom signals, with at most 100 impacts per signal. Custom task IDs must start `custom-`; custom signal IDs must start `user-`. Seed IDs cannot be overridden. Legacy custom exposure/judgment fields are accepted and clamped to 0–1 but never used to assess custom tasks; signal strength to 0.1–1 and impact to 0.05–0.4, rounded to two decimals as in the editor. Dates must be real ISO dates no later than the seed cut-off, source URLs must use HTTPS, and custom evidence is always `user`. The same validation is implemented in both APIs.
 
 The API is a public, unauthenticated demo. CORS is not authentication or rate limiting: configure abuse/rate controls at the hosting edge before wider use. The backend allows the deployed origin and localhost by default; see `backend/README.md` for explicit CORS configuration.
+
+## Résumé import
+
+`/start` offers optional local PDF/DOCX reading and a review step. Heavy parsing modules load only when a file is chosen. No file or extracted text is uploaded or stored. Confirmed catalogue skill IDs are saved as `resumeSkillIds` and shown first for rating; import never supplies skill levels. See [feature limits and verification](../docs/resume-import.md).
