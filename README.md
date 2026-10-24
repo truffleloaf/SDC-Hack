@@ -5,7 +5,29 @@ Don't predict the job. Map the tasks. Route the skills.
 [![Frontend checks](https://github.com/truffleloaf/Tudou-Pivott/actions/workflows/frontend.yml/badge.svg)](https://github.com/truffleloaf/Tudou-Pivott/actions/workflows/frontend.yml)
 [![Backend checks](https://github.com/truffleloaf/Tudou-Pivott/actions/workflows/backend-tests.yml/badge.svg)](https://github.com/truffleloaf/Tudou-Pivott/actions/workflows/backend-tests.yml)
 
+## Team Information
+
+| Field | Details |
+| --- | --- |
+| **Team Name** | Tudou |
+| **Team Domain** | Domain 1 — Aiversecity Future-Ready Workforce |
+| **SDG Track** | SDG 8 — Decent Work and Economic Growth |
+| **Team Leader** | Ho Xiang Ting |
+| **University** | Xiamen University Malaysia |
+| **Number of Members** | 2 |
+
+## Project Links
+
+| Resource | Link |
+| --- | --- |
+| **GitHub Repository** | [Tudou-Pivott](https://github.com/truffleloaf/Tudou-Pivott) |
+| **Live Demo** | [pivottstudio.vercel.app](https://pivottstudio.vercel.app) |
+| **RunPod Endpoint** | - |
+| **Slide Deck** | [Add your slide deck link] |
+| **Demo Video** | [Add your demo video link] |
+
 **Live demo:** [pivottstudio.vercel.app](https://pivottstudio.vercel.app)
+**Replit Demo** [Open Pivott on Replit](https://pivott.replit.app/workspace) |
 
 ![Pivott homepage with its task map preview](docs/screenshots/home-desktop.png)
 
