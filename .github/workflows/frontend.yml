@@ -6,13 +6,17 @@ on:
     paths:
       - "pivott-web-application-design/**"
       - "backend/tests/golden.json"
-      - "scripts/lint-copy.mjs"
+      - "scripts/**"
+      - "docs/**"
+      - "README.md"
       - ".github/workflows/frontend.yml"
   pull_request:
     paths:
       - "pivott-web-application-design/**"
       - "backend/tests/golden.json"
-      - "scripts/lint-copy.mjs"
+      - "scripts/**"
+      - "docs/**"
+      - "README.md"
       - ".github/workflows/frontend.yml"
 
 permissions:
@@ -35,7 +39,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Copy rules
-        run: node ../scripts/lint-copy.mjs --self-test && node ../scripts/lint-copy.mjs
+        run: node ../scripts/checks/lint-copy.mjs --self-test && node ../scripts/checks/lint-copy.mjs
+      - name: Markdown links
+        run: node ../scripts/checks/check-links.mjs
       - name: Test
         run: pnpm test
       - name: Type check

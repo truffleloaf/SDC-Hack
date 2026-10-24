@@ -1,5 +1,11 @@
 # Account sync setup
 
+## Which folder is which
+
+The root [`supabase/`](.) folder supports account sync for the Next.js web app. Its `user_profiles` table stores the complete browser profile as versioned JSON, and its template configures email sign-in codes.
+
+The [`backend/supabase/`](../backend/supabase/) folder defines the optional FastAPI database, including catalogue tables and a structured `profiles` table. The two profile migrations serve different applications and do not create the same table: the web migration creates `public.user_profiles`, while the backend migration creates `public.profiles`. Keep both folders and preserve applied migration filenames.
+
 Guest use and local résumé import need no Supabase connection. Sign-in controls appear only when the public connection settings are supplied. The app supports email/password accounts, password reset, email codes and Google, and syncs profile changes after sign-in. The sign-in dialog states that behaviour before authentication.
 
 ## Project owner checklist (required for live sign-in)
@@ -33,7 +39,7 @@ See the official [password auth](https://supabase.com/docs/guides/auth/passwords
 
 Run frontend Vitest/type/build checks and backend pytest using the root README commands. `lib/auth/flow.test.ts` covers code send/verify/errors/resend, different addresses, Google and safe returns. `lib/account-sync.test.ts` covers first-sync decisions, owner/expiry-bound backups and profile boundaries.
 
-`scripts/check-account-browser.cjs` drives the actual browser SDK against intercepted synthetic responses. Start a development Next.js server with:
+`scripts/browser/account-sync.cjs` drives the actual browser SDK against intercepted synthetic responses. Start a development Next.js server with:
 
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=https://pivott-account-test.supabase.co NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=public-test-fixture-not-a-real-key pnpm dev --hostname localhost --port 3003
@@ -45,7 +51,7 @@ The actual SQL migration can be checked against isolated PGlite PostgreSQL:
 
 ```bash
 npm install --prefix /tmp/pivott-policy-check @electric-sql/pglite@0.5.11
-PGLITE_MODULE=/tmp/pivott-policy-check/node_modules/@electric-sql/pglite node scripts/test-supabase-policies.mjs
+PGLITE_MODULE=/tmp/pivott-policy-check/node_modules/@electric-sql/pglite node scripts/checks/test-supabase-policies.mjs
 ```
 
 Use two real accounts for live owner-only access checks: anonymous denial; no reads/writes/deletes of another user's profile; first sync; simultaneous edits; offline recovery; pause/undo; sign-out; typed deletion and cascade. Never put real keys, sessions or private profiles in chat, repository, screenshots or test logs.

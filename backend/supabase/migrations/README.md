@@ -63,4 +63,4 @@ Supabase 不自动回滚。每个 migration 在 PR 描述里写清楚：
 
 Apply `202610240500_skill_sdgs.sql`, `202610240510_resource_provenance.sql`, then `202610240520_domain1_constraints.sql` before restarting the optional FastAPI service. These add skill tags/resource provenance, allow all 17 goals, Slow and labelled assumptions, and populate the new product constants/canonical skill tags without deleting user profiles. The public JSON-profile sync used by Next.js is a separate migration under the repository-root `supabase/` directory.
 
-Run `PGLITE_MODULE=/path/to/@electric-sql/pglite node scripts/test-backend-schema.mjs` from the repository root for the isolated PostgreSQL check; it never connects to a live project.
+Run `PGLITE_MODULE=/path/to/@electric-sql/pglite node scripts/checks/test-backend-schema.mjs` from the repository root for the isolated PostgreSQL check; it never connects to a live project.

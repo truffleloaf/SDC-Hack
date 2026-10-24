@@ -7,7 +7,7 @@ Don't predict the job. Map the tasks. Route the skills.
 
 **Live demo:** [pivottstudio.vercel.app](https://pivottstudio.vercel.app)
 
-![Pivott homepage with its task map preview](docs/pivott-desktop.png)
+![Pivott homepage with its task map preview](docs/screenshots/home-desktop.png)
 
 ## What Pivott does
 
@@ -24,7 +24,7 @@ Pivott helps clerical and finance workers in Malaysia examine the tasks in their
 | SDG mapping | [`/routes`](https://pivottstudio.vercel.app/routes), [`/pathway`](https://pivottstudio.vercel.app/pathway) | [`backend/app/data/sdg-map.json`](backend/app/data/sdg-map.json), [`docs/sdg-mapping.md`](docs/sdg-mapping.md) | All 17 goals are available; mappings are team judgement, not an official UN classification or measured impact. |
 | Uncertainty | [`/map`](https://pivottstudio.vercel.app/map), [`/routes`](https://pivottstudio.vercel.app/routes) | [`lib/engine.ts`](pivott-web-application-design/lib/engine.ts), [`app/method`](pivott-web-application-design/app/method) | Slow, Normal and Fast scenarios expose assumptions; they are not forecasts. |
 
-Pivott uses synthetic demo data and attributed public data. Recommendations link to their source where one exists. The app does not invent job listings, courses or statistics, and people remain responsible for career decisions. See the [Domain 1 verification record](docs/domain1-report.md).
+Pivott uses synthetic demo data and attributed public data. Recommendations link to their source where one exists. The app does not invent job listings, courses or statistics, and people remain responsible for career decisions. See the [Domain 1 verification record](docs/verification.md).
 
 ## Quick start
 
@@ -49,7 +49,7 @@ python -m venv .venv
 PYTHONPATH=. .venv/bin/python -m uvicorn app.main:app --reload --port 8001
 ```
 
-On Windows, use `.venv\Scripts\python.exe`. See the [backend README](backend/README.md) and [Render deployment guide](backend/docs/deploy-render.md).
+On Windows, use `.venv\Scripts\python.exe`. See the [backend README](backend/README.md) and [Render deployment guide](docs/deployment/render.md).
 
 ## Run all checks
 
@@ -58,8 +58,8 @@ Run from the repository root after installing the frontend and backend dependenc
 ```bash
 (cd pivott-web-application-design && pnpm lint && pnpm test && pnpm build)
 (cd backend && PYTHONPATH=. .venv/bin/python -m pytest -q)
-node scripts/generate-data.mjs --check
-node scripts/lint-copy.mjs
+node scripts/data/generate-data.mjs --check
+node scripts/checks/lint-copy.mjs
 ```
 
 ## How it fits together

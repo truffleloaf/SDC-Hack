@@ -1,3 +1,14 @@
 
 # Vercel local service metadata
 .vercel/
+node_modules/
+.next/
+.venv/
+__pycache__/
+*.py[cod]
+.env*.local
+.DS_Store
+*.log
+playwright-report/
+test-results/
+pivott-screenshots/
