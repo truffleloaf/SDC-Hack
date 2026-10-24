@@ -1,6 +1,6 @@
 # Pivott
 
-> **Don't predict the job. Map the tasks. Route the skills.**
+Don't predict the job. Map the tasks. Route the skills.
 
 [![Frontend checks](https://github.com/truffleloaf/Tudou-Pivott/actions/workflows/frontend.yml/badge.svg)](https://github.com/truffleloaf/Tudou-Pivott/actions/workflows/frontend.yml)
 [![Backend checks](https://github.com/truffleloaf/Tudou-Pivott/actions/workflows/backend-tests.yml/badge.svg)](https://github.com/truffleloaf/Tudou-Pivott/actions/workflows/backend-tests.yml)
