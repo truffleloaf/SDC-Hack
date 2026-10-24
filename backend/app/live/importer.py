@@ -145,6 +145,15 @@ def collect(options: ImportOptions | None = None) -> ImportResult:
         postings_per_role=options.postings_per_role,
         generated_at=datetime.now(timezone.utc),
     )
+    from app.live.trends import compute_trends
+    matched_rows = [dict(p.to_row(), description=p.description, role_id=role_id) for role_id, pairs in (matches.postings_by_role.items() if matches else []) for p, _ in pairs]
+    # Retain public observations across runs so baseline coverage can accumulate.
+    archive = Path(__file__).resolve().parents[2] / 'data/postings.json'
+    history = json.loads(archive.read_text()) if archive.exists() else []
+    merged = {p['id']:p for p in history}
+    merged.update({p['id']:p for p in matched_rows})
+    catalog.observations = [p for p in merged.values() if 0 <= (as_of-date.fromisoformat(str(p['posted_at'])[:10])).days < 90]
+    catalog.signals, catalog.provenance['trends'] = compute_trends(catalog.observations,catalog.roles,catalog.skills,catalog.tasks,catalog.task_skills,as_of)
     return ImportResult(
         catalog=catalog,
         onet=onet,
@@ -209,6 +218,13 @@ def write_catalog(
     session.flush()
     session.add_all([TaskSkill(**row) for row in catalog.task_skills])
     session.add_all([JobPosting(**row) for row in catalog.postings])
+    for signal in catalog.signals:
+        row = dict(signal)
+        impacts = row.pop('impacts')
+        row['date'] = date.fromisoformat(row['date'])
+        row['source_name'] = row.pop('sourceName'); row['source_url'] = row.pop('sourceUrl')
+        session.add(Signal(**row)); session.flush()
+        session.add_all([SignalTaskImpact(signal_id=row['id'],task_id=i['taskId'],impact=i['impact']) for i in impacts])
 
     provenance = {
         "dataset": "live",

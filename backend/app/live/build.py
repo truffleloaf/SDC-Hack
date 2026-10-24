@@ -32,6 +32,8 @@ def slugify(value: str) -> str:
 
 @dataclass
 class LiveCatalog:
+    observations: list[dict] = field(default_factory=list)
+    signals: list[dict] = field(default_factory=list)
     roles: list[dict] = field(default_factory=list)
     tasks: list[dict] = field(default_factory=list)
     skills: list[dict] = field(default_factory=list)

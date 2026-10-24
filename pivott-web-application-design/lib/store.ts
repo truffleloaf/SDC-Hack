@@ -27,6 +27,7 @@ export interface AppState {
   customTasks: CustomTask[]
   resumeSkillIds: string[]
   skills: Record<string, number>
+  ignoreTrendSignals: boolean
   scenario: ScenarioId
   targetRoleId: string | null
   hoursPerWeek: number
@@ -52,6 +53,7 @@ export const emptyState: AppState = {
   customTasks: [],
   resumeSkillIds: [],
   skills: {},
+  ignoreTrendSignals: false,
   scenario: 'normal',
   targetRoleId: null,
   hoursPerWeek: 6,
@@ -254,7 +256,7 @@ export function useAnalysis(s: AppState, previewMultiplier?: number) {
 }
 
 export function analyze(s: AppState, previewMultiplier?: number) {
-  const signals = activeSignals(s)
+  const signals = s.ignoreTrendSignals ? [] : activeSignals(s)
   const lookup = taskLookup(s)
   const scored = scoreTasks(s.selections, lookup, s.scenario, signals, previewMultiplier).map((task) => ({ ...task, name: s.taskNames?.[task.id] || task.name }))
   const unassessed = s.selections.filter((selection) => lookup[selection.taskId] && !('roleId' in lookup[selection.taskId])).map((selection) => ({ ...selection, name: lookup[selection.taskId].name }))

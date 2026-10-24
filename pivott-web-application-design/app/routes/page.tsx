@@ -23,6 +23,7 @@ export default function RoutesPage() {
   const router = useRouter()
   const { state, hydrated } = useAppState()
   const { routes, allRoutes, exposure, scored, assessmentCoverage } = useAnalysis(state)
+  const baseline = useAnalysis({ ...state, ignoreTrendSignals: true })
   const [mode, setMode] = useState<'cards' | 'compare'>('cards')
   const [whyId, setWhyId] = useState<string | null>(null)
   const previousOrder = useRef<string[]>([])
@@ -76,6 +77,16 @@ export default function RoutesPage() {
       <SyncNote eligible={!!state.targetRoleId && state.mode === 'personal'} />
       <p className="mt-5 text-sm text-muted-foreground">You can save up to three routes. <a href="/skills" className="text-primary underline">Edit skill ratings</a></p>
       {assessmentCoverage < 1 && <p className="mt-2 text-sm text-muted-foreground">Current exposure covers assessed reference tasks only ({Math.round(assessmentCoverage * 100)}% of selected time). Custom tasks have no estimate.</p>}
+      <section className="card-surface mt-6 p-5" aria-labelledby="trend-effect">
+        <h2 id="trend-effect" className="text-lg font-semibold">What changed with trend signals</h2>
+        <label className="mt-2 flex min-h-11 items-center gap-3 text-sm"><input type="checkbox" checked={state.ignoreTrendSignals} onChange={e => setState({ignoreTrendSignals:e.target.checked})} />Ignore trend signals</label>
+        <p className="text-xs text-muted-foreground">Baseline uses the same ratings and scenario with no signal adjustments.</p>
+        <ul className="mt-3 space-y-2 text-sm">{allRoutes.map((route,index) => {
+          const old = baseline.allRoutes.findIndex(r => r.roleId===route.roleId)
+          const delta=route.score-(baseline.allRoutes[old]?.score ?? route.score)
+          return <li key={route.roleId}>{route.title}: rank {old+1} → {index+1} · {delta>=0?'+':''}{delta.toFixed(2)} score points</li>
+        })}</ul>
+      </section>
       <RouteFan current={roleById[state.roleId]?.title ?? 'Current role'} count={routes.length} />
 
       <AnimatePresence mode="wait">

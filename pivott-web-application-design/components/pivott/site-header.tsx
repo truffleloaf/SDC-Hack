@@ -99,7 +99,7 @@ export function SiteHeader() {
           <div className="ml-auto flex min-w-0 flex-nowrap items-center justify-end gap-1">
             <Link href="/workspace" className={cn(pButton({ variant: 'ghost', size: 'sm' }), 'hidden sm:inline-flex')}>Your work</Link>
             {account.user ? <DropdownMenu><DropdownMenuTrigger aria-label="Account menu" className={cn(pButton({ variant: 'ghost', size: 'icon-sm' }), 'rounded-full border border-border')}>{account.user.email?.charAt(0).toUpperCase() || 'A'}</DropdownMenuTrigger><DropdownMenuContent align="end" className="max-w-[calc(100vw-2rem)]"><p className="break-words px-3 py-2 text-sm">{account.user.email}</p><p role="status" className="px-3 pb-2 text-xs text-muted-foreground">{account.status}</p><DropdownMenuItem onClick={() => router.push('/account')}>Account</DropdownMenuItem><DropdownMenuItem onClick={() => void account.signOut()}>Sign out</DropdownMenuItem></DropdownMenuContent></DropdownMenu> : account.configured && <button onClick={() => openSignIn(pathname)} className={pButton({ variant: 'ghost', size: 'sm' })}>Sign in</button>}
-            <Link href="/signals" className={cn(pButton({ variant: 'ghost', size: 'sm' }), 'hidden sm:inline-flex', pathname === '/signals' && 'bg-subtle text-foreground')}>Signals</Link>
+            <Link href="/signals" className={cn(pButton({ variant: 'ghost', size: 'sm' }), 'hidden sm:inline-flex', pathname === '/signals' && 'bg-subtle text-foreground')}>Future Skills Radar</Link>
             <span className="hidden sm:contents"><ProfileButton onClick={() => setNameOpen(true)} /></span>
             <ThemeToggle />
             <DropdownMenu>
@@ -111,7 +111,7 @@ export function SiteHeader() {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuItem className="sm:hidden" onClick={() => router.push('/workspace')}>Your work</DropdownMenuItem>
-                <DropdownMenuItem className="sm:hidden" onClick={() => router.push('/signals')}>Signals</DropdownMenuItem>
+                <DropdownMenuItem className="sm:hidden" onClick={() => router.push('/signals')}>Future Skills Radar</DropdownMenuItem>
                 <DropdownMenuItem onClick={() => router.push('/account')}>Saving and backups</DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setNameOpen(true)}>
                   <PenLine aria-hidden />

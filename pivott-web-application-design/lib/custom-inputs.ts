@@ -1,7 +1,6 @@
 import { DATA_AS_OF, taskById, skills, type Signal } from './data/seed'
 import { clamp, type CustomTask } from './engine'
 
-const skillIds = new Set(skills.map((skill) => skill.id))
 const object = (value: unknown): value is Record<string, unknown> => !!value && typeof value === 'object' && !Array.isArray(value)
 const text = (value: unknown, limit: number) => typeof value === 'string' ? value.trim().slice(0, limit) : ''
 const finite = (value: unknown): value is number => typeof value === 'number' && Number.isFinite(value)
@@ -9,6 +8,7 @@ const round2 = (value: number) => Math.round(value * 100) / 100
 
 /** Validates browser-created inputs at the HTTP boundary; never trusts evidence labels. */
 export function parseCustomInputs(body: Record<string, unknown>) {
+  const skillIds = new Set(skills.map((skill) => skill.id))
   const customTasks: CustomTask[] = []
   const customSignals: Signal[] = []
   const taskIds = new Set(Object.keys(taskById))

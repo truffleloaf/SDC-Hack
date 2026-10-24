@@ -42,6 +42,7 @@ def live_status(session: Session = Depends(get_session)) -> LiveStatusResponse:
         catalog=meta.get("catalog"),
         demand=meta.get("demand"),
         model=meta.get("model"),
+        trends=meta.get("trends"),
     )
 
 

@@ -14,6 +14,7 @@ import { AdminSheet } from '@/components/signals/admin-sheet'
 import { catalogSource, DATA_AS_OF, signals as seedSignals, taskById } from '@/lib/data/seed'
 import { ageDays, recency, roleExposure } from '@/lib/engine'
 import { activeSignals, computeScored, setState, useAppState } from '@/lib/store'
+import liveMeta from '@/lib/data/live-meta.json'
 import { cn } from '@/lib/utils'
 
 type Dir = 'all' | 'up' | 'down'
@@ -70,7 +71,7 @@ export default function SignalsPage() {
   return (
     <div className="mx-auto w-full max-w-[1200px] px-5 pb-20 pt-10">
       <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
-        <PageIntro eyebrow="Signals" title="Evidence behind the scores">
+        <PageIntro eyebrow="Signals" title="Future Skills Radar">
           Each dated item moves task exposure up or down. Older items count for less (half-life 180 days).
         </PageIntro>
         <PButton variant="secondary" onClick={() => setAdminOpen(true)}>
@@ -78,6 +79,22 @@ export default function SignalsPage() {
           Admin
         </PButton>
       </div>
+
+      {catalogSource === 'live' && <section className="card-surface mt-6 p-5" aria-label="Job posting trends">
+        <p className="text-sm">Data as of {liveMeta.dataAsOf} · Source: <a className="underline" href={liveMeta.demand.url} target="_blank" rel="noreferrer">{liveMeta.demand.name}</a></p>
+        <p className="mt-2 text-xs text-muted-foreground">Posting demand, not a measure of AI adoption. A rise reduces modeled exposure by a documented team assumption.</p>
+        {(() => {
+          const trends=liveMeta.trends as {status:string;minimumPostings:number;totals: {recent:number;baseline:number}|null;sincePrevious?:{asOf:string;counts:Record<string,{recent:number;baseline:number}>}}
+          return <>
+            {trends.totals ? <p className="mt-2 text-sm">Recent window: {trends.totals.recent} postings · Baseline: {trends.totals.baseline}. Minimum {trends.minimumPostings} in each window; five percentage point change and ten total mentions required.</p> : <p className="mt-2 text-sm">Window counts have not been computed for this older snapshot. Trends require at least {trends.minimumPostings} postings in each of the recent 30-day and prior 60-day windows. No trend is inferred.</p>}
+            {trends.sincePrevious && <details className="mt-3 text-sm"><summary className="cursor-pointer">Change since snapshot {trends.sincePrevious.asOf}</summary><ul>{Object.entries(trends.sincePrevious.counts).filter(([,c])=>c.recent || c.baseline).map(([id,c])=><li key={id}>{id}: recent {c.recent>=0?'+':''}{c.recent}, baseline {c.baseline>=0?'+':''}{c.baseline} mentions</li>)}</ul></details>}
+          </>
+        })()}
+        <div className="mt-5 grid gap-5 md:grid-cols-2">{(['Rising','Declining'] as const).map(label => <div key={label}><h2 className="text-lg font-semibold">{label}</h2>{(['skill','role'] as const).map(kind => {
+          const rows=seedSignals.filter(s=>s.id.startsWith(`trend-${kind}-`) && s.direction===(label==='Rising'?-1:1))
+          return <div key={kind} className="mt-3"><h3 className="font-medium">{kind==='skill'?'Skills':'Roles'}</h3>{rows.length ? rows.map(s=><article key={s.id} className="mt-2 border-t border-border pt-3 text-sm"><p>{s.headline}</p>{s.evidence!=='assumption' && <p className="mt-1 text-xs"><a href={s.sourceUrl} className="underline" target="_blank" rel="noreferrer">{s.sourceName}</a> · {s.date} · Computed from source counts</p>}<p className="mt-2 text-xs text-muted-foreground">{s.explanation}</p><EvidenceBadge evidence={s.evidence} /></article>) : <p className="mt-1 text-sm text-muted-foreground">No {label.toLowerCase()} {kind} trend meets the data thresholds.</p>}</div>
+        })}</div>)}</div>
+      </section>}
 
       <AnimatePresence>
         {(pending.length > 0 || state.recentlyChanged.length > 0) && (

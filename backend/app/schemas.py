@@ -482,3 +482,4 @@ class LiveStatusResponse(BaseModel):
     catalog: dict[str, Any] | None = None
     demand: dict[str, Any] | None = None
     model: dict[str, Any] | None = None
+    trends: dict[str, Any] | None = None

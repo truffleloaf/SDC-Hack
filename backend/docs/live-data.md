@@ -207,3 +207,11 @@ curl "http://127.0.0.1:8001/api/live/jobs?roleId=bookkeeping-clerk"
 - O*NET 31.0 Database, U.S. Department of Labor, Employment and Training
   Administration, CC BY 4.0. <https://www.onetcenter.org/database.html>
 - Job posting data from Arbeitnow. <https://www.arbeitnow.com/>
+
+## Count-derived trends
+
+`live/trends.py` compares ages 0–29 days against ages 30–89 days, relative to the UTC snapshot date. Future and older postings are excluded; IDs are deduplicated. Denominators use all matched postings before display sampling. A signal needs at least 10 postings in **each** window, at least 10 mentions in total, and a share change of at least 5 percentage points. Roles use the existing longest-title match. Skills use explicit whole phrases in `SKILL_TERMS` over normalized title, tags and HTML-stripped description; English-only matching undercounts other languages. This is posting demand, not measured AI adoption or a Malaysia labour-market forecast.
+
+Strength is `min(1, 2 * abs(recent_share - baseline_share))`. Rising demand reduces modeled exposure, declining demand increases it: this inverse mapping and task impact 0.1 are team assumptions. The existing ±0.2 adjustment clamp and 180-day half-life still apply. Zero signals are an expected, honest result for a feed without historical coverage.
+
+Run `PIVOTT_DATASET=live PIVOTT_DB=sqlite:////tmp/pivott-refresh.db PYTHONPATH=. python scripts/refresh_snapshot.py` from backend. The weekly/manual workflow runs only in the original repository and publishes `data/live-snapshot` using the built-in token; no custom secrets. Source errors abort before tracked writes. Counts are retained in dated `backend/data/snapshots` files, with changes since the previous date. A fresh ephemeral DB means no production database is touched. Review the data branch before merging.
