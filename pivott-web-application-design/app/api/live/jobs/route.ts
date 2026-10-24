@@ -4,6 +4,8 @@ import aliases from '@/lib/data/job-aliases.json'
 import {filterJobs,parsePublicJobs,type PublicJob} from '@/lib/jobs'
 export async function GET(request:Request){
  const q=new URL(request.url).searchParams
+ const roleId=q.get('roleId')?.trim()||undefined
+ if(roleId && !(roleId in aliases)) return Response.json({error:'Role not found'},{status:404})
  let jobs=bundled as PublicJob[],asOf=meta.dataAsOf
  if(q.get('refresh')==='1'){
   try{
@@ -11,6 +13,9 @@ export async function GET(request:Request){
    jobs=parsePublicJobs(payloads,aliases);asOf=new Date().toISOString().slice(0,10)
   }catch{return Response.json({error:'The public board could not be reached. The dated snapshot is still available.'},{status:503})}
  }
- const postings=filterJobs(jobs,{query:q.get('q')??'',role:q.get('roleId')??'',location:q.get('location')??'',remote:q.get('remote')==='true',sort:'newest'})
- return Response.json({dataset:'live',asOf,count:postings.length,postings},{headers:{'Cache-Control':'no-store'}})
+ const matched=filterJobs(jobs,{query:q.get('q')??'',role:roleId??'',location:q.get('location')??'',remote:q.get('remote')==='true',sort:'newest'})
+ const rawLimit=Number(q.get('limit'))
+ const limit=Number.isFinite(rawLimit)&&rawLimit>0?Math.min(100,Math.max(1,Math.trunc(rawLimit))):undefined
+ const postings=limit?matched.slice(0,limit):matched
+ return Response.json({dataset:'live',asOf,count:matched.length,postings},{headers:{'Cache-Control':'no-store'}})
 }
