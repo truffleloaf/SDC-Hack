@@ -1,10 +1,13 @@
 import Link from 'next/link'
+import { getCatalog } from '@/lib/catalog'
+import { catalogSource, hasDemoPersona, resources } from '@/lib/data/seed'
 import { ArrowRight } from 'lucide-react'
 import { LivingTaskMap } from '@/components/landing/living-task-map'
 import { ResumeWork } from '@/components/pivott/resume-work'
 import { PLink } from '@/components/pivott/p-button'
 
-export default function LandingPage() {
+export default async function LandingPage() {
+  await getCatalog()
   return (
     <>
       <ResumeWork />
@@ -19,10 +22,12 @@ export default function LandingPage() {
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
               <PLink href="/start" size="lg">Map my work<ArrowRight aria-hidden /></PLink>
+              {hasDemoPersona && (
               <Link href="/example" className="group inline-flex min-h-11 items-center gap-2.5 rounded-lg text-sm font-medium text-foreground underline-offset-4 hover:underline">
                 <span className="grid size-8 place-items-center rounded-full border border-border-strong bg-card transition-colors group-hover:border-primary"><span className="ml-0.5 size-0 border-y-[4px] border-l-[6px] border-y-transparent border-l-primary" aria-hidden /></span>
                 View an example
               </Link>
+              )}
             </div>
             <p className="mt-6 text-xs text-muted-foreground">No account needed. Your answers stay in this browser.</p>
           </div>
@@ -35,7 +40,7 @@ export default function LandingPage() {
         <ul className="mt-5 max-w-2xl list-disc space-y-3 pl-5 text-muted-foreground">
           <li>A task map showing time spent and estimated AI exposure.</li>
           <li>Up to three ranked nearby roles, with the skills to add.</li>
-          <li>A week-by-week study plan with free resources and a calendar file.</li>
+          <li>A week-by-week study plan with project deliverables and a calendar file.{resources.length > 0 ? " Catalogue resources can be filtered to free options." : " Learning resources have not been added to this catalogue yet."}</li>
         </ul>
       </section>
 

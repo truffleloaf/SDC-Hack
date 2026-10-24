@@ -111,3 +111,8 @@ Do not hand-edit the JSON. Formula changes must be mirrored in both engines, fol
 The live address was confirmed by the project owner; direct live-site requests are blocked from the development environment. Automated checks here validate local builds and the combined services router, not the current production deployment.
 
 Presentation: Present in an incognito window, or open `/?welcome=1`. Returning visitors can stay on the landing page and continue their saved plan.
+
+
+## Current deployment
+
+Vercel serves the Next.js application and its route handlers. It uses the committed, dated O*NET/Arbeitnow catalogue when no optional external FastAPI URL is configured. FastAPI remains available for catalogue imports, PostgreSQL APIs and independent scoring checks. Demo fixtures are synthetic and separate from live data. See `docs/briefs-2-3-report.md` for the interaction and authentication changes.

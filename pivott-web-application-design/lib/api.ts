@@ -1,3 +1,4 @@
+import { getCatalog } from './catalog'
 import { customRole, roleById, signals as seedSignals, skills, taskById, type Signal } from './data/seed'
 import { parseCustomInputs } from './custom-inputs'
 import type { CustomTask, ScenarioId } from './engine'
@@ -19,10 +20,11 @@ function finiteNumber(value: unknown) {
   return Number.isFinite(number) ? number : 0
 }
 
-const skillIds = new Set(skills.map((s) => s.id))
+
 
 export function parseProfile(body: unknown): { ok: true; value: ProfileInput } | { ok: false; error: string } {
   if (!body || typeof body !== 'object' || Array.isArray(body)) return { ok: false, error: 'Body must be a JSON object' }
+  const skillIds = new Set(skills.map((s) => s.id))
   const b = body as Record<string, unknown>
   const roleId = typeof b.roleId === 'string' ? b.roleId : ''
   if (!Object.hasOwn(roleById, roleId)) return { ok: false, error: 'Unknown roleId' }
@@ -74,3 +76,5 @@ export function decodeId(id: string): unknown {
 
 export const json = (data: unknown, status = 200) =>
   Response.json(data, { status, headers: { 'Cache-Control': 'no-store' } })
+
+export { getCatalog }

@@ -71,10 +71,10 @@ export interface Sdg {
   color: string
 }
 
-export const DATA_AS_OF = '2026-10-01'
-export const SEED_VERSION = '2026.10.4'
+export let DATA_AS_OF = '2026-10-01'
+export let SEED_VERSION = '2026.10.4'
 
-export const scenarios: Scenario[] = [
+export let scenarios: Scenario[] = [
   {
     id: 'normal',
     label: 'Normal',
@@ -89,14 +89,14 @@ export const scenarios: Scenario[] = [
   },
 ]
 
-export const sdgs: Sdg[] = [
+export let sdgs: Sdg[] = [
   { id: 4, name: 'Quality Education', color: '#C5192D' },
   { id: 8, name: 'Decent Work and Economic Growth', color: '#A21942' },
   { id: 9, name: 'Industry, Innovation and Infrastructure', color: '#FD6925' },
   { id: 10, name: 'Reduced Inequalities', color: '#DD1367' },
 ]
 
-export const skills: Skill[] = [
+export let skills: Skill[] = [
   { id: 'excel', name: 'Spreadsheet modelling', category: 'Technical', hoursPerLevel: 10, deliverable: 'A reusable reconciliation workbook with lookups and checks' },
   { id: 'erp', name: 'ERP systems', category: 'Technical', hoursPerLevel: 14, deliverable: 'A documented test script for one ERP workflow' },
   { id: 'sql', name: 'SQL', category: 'Technical', hoursPerLevel: 12, deliverable: 'Five queries answering real questions about a sample ledger' },
@@ -114,7 +114,7 @@ export const skills: Skill[] = [
   { id: 'coordination', name: 'Project coordination', category: 'Operational', hoursPerLevel: 8, deliverable: 'A lightweight project plan with owners and milestones' },
 ]
 
-export const roles: Role[] = [
+export let roles: Role[] = [
   {
     id: 'finance-admin',
     title: 'Finance Admin',
@@ -209,7 +209,7 @@ export const roles: Role[] = [
   {"id": "hr-operations", "title": "HR Operations Coordinator", "family": "People Operations", "demand": 58, "sdgs": [8, 10], "requirements": [{"skillId": "stakeholder", "requiredLevel": 4, "importance": 5}, {"skillId": "empathy", "requiredLevel": 3, "importance": 4}, {"skillId": "writing", "requiredLevel": 4, "importance": 4}, {"skillId": "coordination", "requiredLevel": 3, "importance": 4}, {"skillId": "controls", "requiredLevel": 3, "importance": 3}, {"skillId": "process", "requiredLevel": 3, "importance": 4}, {"skillId": "ai", "requiredLevel": 3, "importance": 2}]},
 ]
 
-export const tasks: Task[] = [
+export let tasks: Task[] = [
   // Finance Admin
   { id: 'fa-invoice', roleId: 'finance-admin', name: 'Invoice entry', description: 'Capture supplier invoices and code them to the ledger.', baseExposure: 0.78, humanJudgment: 0.15, defaultShare: 30, skills: ['erp', 'excel'], tryThisWeek: 'Batch ten invoices through your ERP’s capture feature and log every field you had to correct.' },
   { id: 'fa-recon', roleId: 'finance-admin', name: 'Bank reconciliation', description: 'Match bank lines to ledger entries and clear differences.', baseExposure: 0.66, humanJudgment: 0.3, defaultShare: 20, skills: ['excel', 'controls', 'erp'], tryThisWeek: 'Write matching rules for your three most common transaction types and test them on last month.' },
@@ -257,7 +257,7 @@ export const tasks: Task[] = [
   {"id": "hr-policy", "roleId": "hr-operations", "name": "Review policy exceptions", "description": "Review cases that require interpretation or approval.", "baseExposure": 0.3, "humanJudgment": 0.85, "defaultShare": 15, "skills": ["controls", "stakeholder", "analysis"], "tryThisWeek": "Document an example exception with the information and approval it would need."},
 ]
 
-export const resources: Resource[] = [
+export let resources: Resource[] = [
   { id: 'r-excel-gcf', skillId: 'excel', title: 'Excel Tutorials', provider: 'GCFGlobal', url: 'https://edu.gcfglobal.org/en/excel/', free: true },
   { id: 'r-erp-sap', skillId: 'erp', title: 'SAP Learning Journeys', provider: 'SAP Learning', url: 'https://learning.sap.com/', free: true },
   { id: 'r-sql-bolt', skillId: 'sql', title: 'Interactive SQL Lessons', provider: 'SQLBolt', url: 'https://sqlbolt.com/', free: true },
@@ -285,7 +285,7 @@ export const resources: Resource[] = [
   { id: 'r-coord-open', skillId: 'coordination', title: 'OpenLearn free courses', provider: 'The Open University', url: 'https://www.open.edu/openlearn/', free: true },
 ]
 
-export const signals: Signal[] = [
+export let signals: Signal[] = [
   { id: 's01', headline: "Built-in invoice capture", direction: 1, strength: 0.7, impacts: [{ taskId: 'fa-invoice', impact: 0.045 }, { taskId: 'oc-tracking', impact: 0.04 }], explanation: "Assume tools can extract invoice line items inside finance workflows.", evidence: 'assumption', assumptionWeight: 0.6658202274413345 },
   { id: 's02', headline: "People review exceptions after routine entry is automated", direction: -1, strength: 0.5, impacts: [{ taskId: 'fa-exception', impact: 0.07 }, { taskId: 'fsa-controls', impact: 0.05 }], explanation: "Assume exception handling continues to require human judgment.", evidence: 'assumption', assumptionWeight: 0.44716801031556647 },
   { id: 's03', headline: "Rules match bank transactions", direction: 1, strength: 0.6, impacts: [{ taskId: 'fa-recon', impact: 0.05 }, { taskId: 'fsa-pipeline', impact: 0.05 }], explanation: "Assume matching rules reduce manual reconciliation work.", evidence: 'assumption', assumptionWeight: 0.5123695442245741 },
@@ -308,7 +308,7 @@ export const signals: Signal[] = [
   { id: 's20', date: '2023-03-17', headline: 'Around 80% of US workers have at least 10% of tasks exposed to LLMs', sourceName: 'Eloundou et al. (arXiv)', sourceUrl: 'https://arxiv.org/abs/2303.10130', direction: 1, strength: 0.4, impacts: [{ taskId: 'da-query', impact: 0.05 }], explanation: 'Early task-level estimate of exposure across occupations.', evidence: 'verified' },
 ]
 
-export const demoPersona = {
+export let demoPersona = {
   name: 'Aisyah',
   roleId: 'finance-admin',
   skills: {
@@ -330,8 +330,120 @@ export const demoPersona = {
   } as Record<string, number>,
 }
 
-export const skillById = Object.fromEntries(skills.map((s) => [s.id, s]))
+export let skillById = Object.fromEntries(skills.map((s) => [s.id, s]))
 export const customRole: Role = { id: 'other', title: 'Your own tasks', family: 'Custom', demand: 0, requirements: [], sdgs: [] }
-export const roleById = Object.fromEntries([...roles, customRole].map((r) => [r.id, r]))
-export const taskById = Object.fromEntries(tasks.map((t) => [t.id, t]))
-export const tasksForRole = (roleId: string) => tasks.filter((t) => t.roleId === roleId)
+export let roleById = Object.fromEntries([...roles, customRole].map((r) => [r.id, r]))
+export let taskById = Object.fromEntries(tasks.map((t) => [t.id, t]))
+export let tasksForRole = (roleId: string) => tasks.filter((t) => t.roleId === roleId)
+
+// ---------------------------------------------------------------------------
+// Live catalogue overlay (FastAPI `GET /api/seed`)
+// ---------------------------------------------------------------------------
+
+export interface DemoPersona {
+  name: string
+  roleId: string
+  skills: Record<string, number>
+}
+
+/**
+ * Shape returned by the backend's `GET /api/seed`. The demo seed follows the
+ * same contract, so pages keep importing the names above; applying a payload
+ * swaps the underlying data in place.
+ */
+export interface CatalogPayload {
+  version: string
+  asOf: string
+  roles: Role[]
+  tasks: Task[]
+  skills: Skill[]
+  signals: Signal[]
+  resources: Resource[]
+  scenarios: Scenario[]
+  sdgs: Sdg[]
+  demoPersona: DemoPersona | null
+}
+
+export let hasDemoPersona = true
+export let catalogSource: 'demo' | 'live' = 'demo'
+
+// Captured at module load, before any live payload can replace the bindings.
+const DEMO_CATALOG = {
+  roles,
+  tasks,
+  skills,
+  signals,
+  resources,
+  scenarios,
+  sdgs,
+  demoPersona,
+  asOf: DATA_AS_OF,
+  version: SEED_VERSION,
+}
+
+let appliedCatalogKey = ''
+
+/**
+ * Put the built-in demo catalogue back.
+ *
+ * The root layout calls this when the backend is unreachable, so a server
+ * process that previously served live data cannot leak it into a request whose
+ * client is still holding the demo seed (which would break hydration).
+ */
+export function resetCatalog(): void {
+  appliedCatalogKey = ''
+  roles = DEMO_CATALOG.roles
+  tasks = DEMO_CATALOG.tasks
+  skills = DEMO_CATALOG.skills
+  signals = DEMO_CATALOG.signals
+  resources = DEMO_CATALOG.resources
+  scenarios = DEMO_CATALOG.scenarios
+  sdgs = DEMO_CATALOG.sdgs
+  DATA_AS_OF = DEMO_CATALOG.asOf
+  SEED_VERSION = DEMO_CATALOG.version
+  demoPersona = DEMO_CATALOG.demoPersona
+  hasDemoPersona = true
+  catalogSource = 'demo'
+  roleById = Object.fromEntries([...roles, customRole].map((r) => [r.id, r]))
+  skillById = Object.fromEntries(skills.map((s) => [s.id, s]))
+  taskById = Object.fromEntries(tasks.map((t) => [t.id, t]))
+}
+
+/**
+ * Point every catalogue export at a live payload.
+ *
+ * The module exports are `let` bindings, so importers that did
+ * `import { roleById } from './data/seed'` see the new values without touching
+ * their call sites. `CatalogBoot` calls this on the server and again on the
+ * client before rendering children, and the second call is a cheap no-op.
+ */
+export function applyCatalog(payload: CatalogPayload): boolean {
+  if (
+    !payload ||
+    !Array.isArray(payload.roles) ||
+    !Array.isArray(payload.tasks) ||
+    !Array.isArray(payload.skills)
+  ) {
+    return false
+  }
+  const key = `${payload.version}|${payload.asOf}|${payload.roles.length}|${payload.tasks.length}|${payload.skills.length}|${payload.resources?.length ?? 0}|${payload.signals?.length ?? 0}`
+  if (key === appliedCatalogKey) return false
+  appliedCatalogKey = key
+
+  roles = payload.roles
+  tasks = payload.tasks
+  skills = payload.skills.map(({ id, name, category, hoursPerLevel, deliverable }) => ({ id, name, category, hoursPerLevel, deliverable }))
+  signals = (payload.signals ?? []).map((signal) => signal.evidence === 'assumption' ? { id: signal.id, headline: signal.headline, direction: signal.direction, strength: signal.strength, impacts: signal.impacts, explanation: signal.explanation, evidence: 'assumption', assumptionWeight: signal.assumptionWeight } : signal)
+  resources = payload.resources ?? []
+  scenarios = payload.scenarios ?? DEMO_CATALOG.scenarios
+  sdgs = payload.sdgs ?? DEMO_CATALOG.sdgs
+  DATA_AS_OF = payload.asOf
+  SEED_VERSION = payload.version
+  demoPersona = payload.demoPersona ?? DEMO_CATALOG.demoPersona
+  hasDemoPersona = payload.demoPersona != null
+  catalogSource = hasDemoPersona ? 'demo' : 'live'
+  roleById = Object.fromEntries([...roles, customRole].map((r) => [r.id, r]))
+  skillById = Object.fromEntries(skills.map((s) => [s.id, s]))
+  taskById = Object.fromEntries(tasks.map((t) => [t.id, t]))
+  return true
+}

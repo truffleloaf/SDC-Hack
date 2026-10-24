@@ -3,6 +3,7 @@
 import { Clock, ExternalLink, FileCheck2 } from 'lucide-react'
 import { motion, useReducedMotion } from 'motion/react'
 import { SkillChip } from '@/components/pivott/badges'
+import { hasDemoPersona } from '@/lib/data/seed'
 import type { PathwayStep } from '@/lib/engine'
 import { cn } from '@/lib/utils'
 
@@ -96,7 +97,11 @@ export function StepCard({
               <span className="sr-only">(opens in a new tab)</span>
             </a>
           ) : (
-            <p className="text-sm text-muted-foreground">No free resource stored for this skill yet.</p>
+            <p className="text-sm text-muted-foreground">
+              {hasDemoPersona
+                ? 'No resource stored for this skill yet.'
+                : 'The live catalogue has no curated learning resource for this skill yet.'}
+            </p>
           )}
           <p className="flex items-start gap-2 text-sm">
             <FileCheck2 className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden />

@@ -1,16 +1,29 @@
-from fastapi import APIRouter, Request, status
-from fastapi.responses import JSONResponse
+"""Profile validation endpoint.
 
-from app.parsing import ProfileError, encode_id, parse_profile, read_json
+The demo keeps profiles in browser localStorage; this endpoint only validates
+and echoes the normalised profile with a shareable id. Nothing is persisted.
+"""
 
-router = APIRouter()
+from __future__ import annotations
+
+from fastapi import APIRouter, Depends, status
+from sqlmodel import Session
+
+from app.db import get_session
+from app.schemas import ProfileInput, ProfileResponse
+from app.services.profile import encode_id, normalize_profile
+
+router = APIRouter(prefix="/api/profiles", tags=["profiles"])
 
 
-@router.post("/profiles", status_code=status.HTTP_201_CREATED)
-async def create_profile(request: Request):
-    body = await read_json(request)
-    try:
-        profile = parse_profile(body)
-    except ProfileError as error:
-        return JSONResponse(status_code=400, content={"error": str(error)})
-    return {"id": encode_id(profile), "profile": profile, "storage": "client"}
+@router.post("", response_model=ProfileResponse, status_code=status.HTTP_201_CREATED)
+def create_profile(
+    payload: ProfileInput,
+    session: Session = Depends(get_session),
+) -> ProfileResponse:
+    profile = normalize_profile(session, payload)
+    return ProfileResponse(
+        id=encode_id(profile.model_dump()),
+        profile=profile,
+        storage="client",
+    )

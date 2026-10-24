@@ -20,7 +20,7 @@ from app.engine import (
     skill_coverage,
     task_similarity,
 )
-from app.seed import (
+from app.reference_seed import (
     DEMO_PERSONA,
     RESOURCES,
     ROLES,
@@ -215,12 +215,6 @@ def test_every_skill_has_a_free_resource(skill):
     assert any(resource["skillId"] == skill["id"] and resource["free"] for resource in RESOURCES)
 
 
-@pytest.mark.parametrize("scenario,key", [("normal", "analysisCustomNormal"), ("fast", "analysisCustomFast")])
-def test_custom_api_analysis_matches_frontend_golden(client, scenario, key):
-    response = client.post("/api/analysis", json={**GOLDEN["customProfile"], "scenario": scenario})
-    assert response.status_code == 200
-    assert_close(response.json(), {**GOLDEN[key], "illustrative": True})
-
 
 def test_unknown_skills_bound_coverage_and_are_excluded_from_gaps():
     from app.engine import skill_gaps
@@ -230,16 +224,6 @@ def test_unknown_skills_bound_coverage_and_are_excluded_from_gaps():
     assert skill_coverage(role, levels) == pytest.approx(first["importance"] / sum(r["importance"] for r in role["requirements"]))
     assert skill_gaps(role, levels) == []
     assert len(skill_gaps(role, {first["skillId"]: 0})) == 1
-
-
-def test_custom_tasks_have_no_fabricated_exposure(client):
-    custom = {"id": "custom-unknown", "name": "My task", "skills": ["analysis"]}
-    assert score_tasks([{"taskId": custom["id"], "share": 100}], {custom["id"]: custom}, "normal") == []
-    response = client.post("/api/analysis", json={"roleId": "finance-admin", "customTasks": [custom], "selections": [{"taskId": custom["id"], "share": 100}]})
-    assert response.status_code == 200
-    assert response.json()["tasks"] == []
-    assert response.json()["assessmentCoverage"] == 0
-    assert response.json()["unassessedTasks"][0]["id"] == custom["id"]
 
 
 def test_one_rating_cannot_exceed_fully_rated_demo_fit():

@@ -11,7 +11,7 @@ import { PageIntro } from '@/components/pivott/route-stepper'
 import { SegmentedControl } from '@/components/pivott/segmented-control'
 import { EmptyState, PageSkeleton } from '@/components/pivott/states'
 import { AdminSheet } from '@/components/signals/admin-sheet'
-import { DATA_AS_OF, signals as seedSignals, taskById } from '@/lib/data/seed'
+import { catalogSource, DATA_AS_OF, signals as seedSignals, taskById } from '@/lib/data/seed'
 import { ageDays, recency, roleExposure } from '@/lib/engine'
 import { activeSignals, computeScored, setState, useAppState } from '@/lib/store'
 import { cn } from '@/lib/utils'
@@ -155,7 +155,7 @@ export default function SignalsPage() {
       </p>
 
       {filtered.length === 0 ? (
-        <EmptyState className="mt-10" title="No signals match these filters" description="Try widening the time range or showing both directions." />
+        <EmptyState className="mt-10" title={catalogSource === 'live' && all.length === 0 ? "No published signals in this catalogue" : "No signals match these filters"} description={catalogSource === 'live' && all.length === 0 ? "Scores currently use the catalogue baselines. You can add a dated source for your own task map." : "Try widening the time range or showing both directions."} />
       ) : (
         <ol className="relative mt-10 flex flex-col gap-4">
           <span aria-hidden className="absolute bottom-4 left-[84px] top-4 hidden border-l-2 border-dotted border-border-strong sm:block" />
@@ -248,7 +248,7 @@ export default function SignalsPage() {
         </ol>
       )}
 
-      <section className="mt-12" aria-labelledby="assumptions-title">
+      {assumptions.length > 0 && <section className="mt-12" aria-labelledby="assumptions-title">
         <h2 id="assumptions-title" className="font-serif text-2xl">Assumptions behind the scores</h2>
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground">These are editorial inputs, with fixed weights. They are not published news and are independent of the date filter.</p>
         <ul className="mt-5 grid gap-4 md:grid-cols-2">
@@ -258,7 +258,7 @@ export default function SignalsPage() {
             <ul className="mt-3 space-y-1 text-sm">{s.impacts.map((i) => <li key={i.taskId}>{taskById[i.taskId]?.name}: {s.direction > 0 ? '+' : '−'}{(s.assumptionWeight! * i.impact * 100).toFixed(2)} points before the combined adjustment cap</li>)}</ul>
           </li>)}
         </ul>
-      </section>
+      </section>}
 
       <AdminSheet open={adminOpen} onOpenChange={setAdminOpen} state={state} />
     </div>

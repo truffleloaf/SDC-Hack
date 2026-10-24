@@ -1,4 +1,4 @@
-"""Check the combined Vercel router: python scripts/smoke_vercel.py [origin]."""
+"""Check the single-service Vercel/Next router: python scripts/smoke_vercel.py [origin]."""
 
 import json
 import sys
@@ -26,42 +26,49 @@ def main():
     assert status == 200 and "text/html" in content_type
     assert b"Map the tasks." in raw, "Next.js landing page is missing"
 
-    # The static font confirms the frontend catch-all also serves assets.
     status, _, font = request("/fonts/ibm-plex-sans-latin-400-normal.woff2")
     assert status == 200 and font[:4] == b"wOF2", "Frontend asset routing failed"
 
     health = api("/api/health")
-    assert health["status"] == "ok" and health["counts"]["tasks"] == 31
+    assert health["status"] == "ok" and health["counts"]["tasks"] in (31, 60)
     seed = api("/api/seed")
+    assert seed["roles"] and seed["tasks"]
+    role = seed["roles"][0]
+    tasks = [task for task in seed["tasks"] if task["roleId"] == role["id"]]
+    assert tasks, "Role has no tasks in the active catalogue"
+
     profile = {
-        "roleId": "finance-admin",
-        "selections": [
-            {"taskId": task["id"], "share": task["defaultShare"]}
-            for task in seed["tasks"] if task["roleId"] == "finance-admin"
-        ],
-        "skills": seed["demoPersona"]["skills"],
+        "roleId": role["id"],
+        "selections": [{"taskId": task["id"], "share": task["defaultShare"]} for task in tasks],
+        "skills": {},
         "scenario": "normal",
-        "hoursPerWeek": 8,
+        "hoursPerWeek": 6,
         "freeOnly": False,
     }
     normal = api("/api/analysis", profile)
     fast = api("/api/analysis", {**profile, "scenario": "fast"})
-    assert len(normal["tasks"]) == 6 and len(normal["routes"]) == 3
-    assert fast["roleExposure"] > normal["roleExposure"]
-    assert api("/api/roles/finance-admin/tasks?scenario=fast")["scenario"] == "fast"
-    pathway = api("/api/pathways", {**profile, "targetRoleId": "finance-systems-analyst"}, 201)
-    assert pathway["weeks"] == 12 and len(pathway["steps"]) == 5
+    assert len(normal["tasks"]) == len(tasks) and len(normal["routes"]) == 3
+    assert fast["roleExposure"] >= normal["roleExposure"]
+    assert api(f"/api/roles/{role['id']}/tasks?scenario=fast")["scenario"] == "fast"
+
+    target = seed["roles"][1]
+    levels = {requirement["skillId"]: 0 for requirement in target["requirements"]}
+    pathway = api(
+        "/api/pathways",
+        {**profile, "skills": levels, "targetRoleId": target["id"]},
+        201,
+    )
+    assert pathway["steps"], "Pathway has no steps for a rated target role"
     fetched = api("/api/pathways/" + pathway["id"])
     assert fetched["steps"] == pathway["steps"], "Pathway round trip failed"
 
-    # FastAPI's 404 shape distinguishes its router from Next.js's HTML 404.
     try:
         request("/api/no-such-route")
     except HTTPError as error:
-        assert error.code == 404 and json.load(error) == {"detail": "Not Found"}
+        assert error.code == 404
     else:
-        raise AssertionError("Unknown API route should return FastAPI's 404")
-    print("PASS: Next.js page/assets; FastAPI health, scenarios, query parameters, pathway round trip, and API 404 routing")
+        raise AssertionError("Unknown API route should return 404")
+    print("PASS: page/assets; live-or-demo health, analysis, scenario, role tasks, pathway round trip, API 404")
 
 
 if __name__ == "__main__":

@@ -2,7 +2,7 @@
 
 import { useMemo, useSyncExternalStore } from 'react'
 import { DEMO_HOURS_PER_WEEK, DEMO_SCENARIO } from './demo'
-import { demoPersona, skills as catalogueSkills, signals as seedSignals, tasksForRole, taskById, type Signal } from './data/seed'
+import { demoPersona, hasDemoPersona, roleById, skills as catalogueSkills, signals as seedSignals, tasksForRole, taskById, type Signal } from './data/seed'
 import {
   computeRoutes,
   roleExposure,
@@ -105,11 +105,13 @@ function load() {
 
 export function parseStored(raw: string): AppState {
   const parsed = JSON.parse(raw) as Partial<AppState>
-  const legacyDemo = !parsed.mode && parsed.name === demoPersona.name && parsed.roleId === demoPersona.roleId
+  const legacyDemo = hasDemoPersona && !parsed.mode && parsed.name === demoPersona.name && parsed.roleId === demoPersona.roleId
+  if (parsed.roleId && !Object.hasOwn(roleById, parsed.roleId)) return { ...emptyState }
+  const demoMode = (parsed.mode === 'demo' || legacyDemo) && hasDemoPersona
   return {
     ...emptyState,
     ...parsed,
-    mode: parsed.mode === 'demo' || legacyDemo ? 'demo' : 'personal',
+    mode: demoMode ? 'demo' : 'personal',
     workHoursPerWeek: typeof parsed.workHoursPerWeek === 'number' && Number.isFinite(parsed.workHoursPerWeek) ? Math.max(1, Math.min(168, Math.round(parsed.workHoursPerWeek))) : 40,
     name: sanitizeName(typeof parsed.name === 'string' ? parsed.name : ''),
     resumeSkillIds: Array.isArray(parsed.resumeSkillIds) ? [...new Set(parsed.resumeSkillIds)].filter((id) => catalogueSkills.some((skill) => skill.id === id)) : [],

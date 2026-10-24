@@ -5,9 +5,9 @@ import { useEffect, useId, useMemo, useState, type KeyboardEvent } from 'react'
 import { roles, tasksForRole } from '@/lib/data/seed'
 import { cn } from '@/lib/utils'
 
-const families = ['All', ...Array.from(new Set(roles.map((r) => r.family.split(' & ')[0])))]
 
 export function RoleSelector({ value, onSelect, onUnlisted, resetKey = 0 }: { value: string | null; onSelect: (id: string) => void; onUnlisted?: () => void; resetKey?: number }) {
+  const families = ['All', ...Array.from(new Set(roles.map((r) => r.family.split(' & ')[0])))]
   const [query, setQuery] = useState('')
   const [family, setFamily] = useState('All')
   const [cursor, setCursor] = useState(0)

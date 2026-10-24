@@ -3,7 +3,7 @@
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { useState } from 'react'
 import { classify, exposureColor, scoreTasks, type Classification } from '@/lib/engine'
-import { signals, taskById, tasksForRole } from '@/lib/data/seed'
+import { roles, skillById, signals, taskById, tasksForRole } from '@/lib/data/seed'
 import { cn } from '@/lib/utils'
 
 interface HeroNode {
@@ -30,20 +30,6 @@ const positions: Record<string, { x: number; y: number }> = {
   'fa-comms': { x: 150, y: 365 },
   'fa-expense': { x: 78, y: 252 },
 }
-const nodes: HeroNode[] = scoreTasks(
-  tasksForRole('finance-admin').map((task) => ({ taskId: task.id, share: task.defaultShare })),
-  taskById, 'normal', signals,
-).map((task) => ({
-  id: task.id, label: task.name, ...positions[task.id],
-  r: 100 * Math.sqrt(task.share), exposure: task.exposure,
-  judgment: task.humanJudgment, showLabel: true,
-}))
-
-const skills = [
-  { label: 'Controls', x: 365, y: 227 },
-  { label: 'Spreadsheets', x: 170, y: 196 },
-  { label: 'Stakeholders', x: 236, y: 330 },
-]
 
 function curve(a: { x: number; y: number }, b: { x: number; y: number }) {
   const mx = (a.x + b.x) / 2
@@ -54,6 +40,9 @@ function curve(a: { x: number; y: number }, b: { x: number; y: number }) {
 }
 
 export function LivingTaskMap() {
+  const exampleRole = roles[0]
+  const nodes: HeroNode[] = scoreTasks(tasksForRole(exampleRole.id).map(t => ({taskId:t.id,share:t.defaultShare})),taskById,'normal',signals).slice(0,6).map((task,i) => ({id:task.id,label:task.name,...Object.values(positions)[i],r:100*Math.sqrt(task.share),exposure:task.exposure,judgment:task.humanJudgment,showLabel:true}))
+  const skills = exampleRole.requirements.slice(0,3).map((r,i) => ({label:skillById[r.skillId]?.name ?? r.skillId,...[{x:365,y:227},{x:150,y:196},{x:236,y:330}][i]}))
   const reduce = useReducedMotion()
   const [hovered, setHovered] = useState<string | null>(null)
   const [pinned, setPinned] = useState<string | null>(null)
@@ -64,13 +53,13 @@ export function LivingTaskMap() {
   return (
     <div className="task-atlas relative mx-auto w-full max-w-[620px] overflow-hidden rounded-xl border border-border bg-card">
       <div className="relative z-10 flex items-start justify-between gap-3 border-b border-border px-5 py-4 sm:px-7">
-        <div><p className="text-sm font-semibold">Finance Admin · Example</p><p className="mt-1 text-xs text-muted-foreground">Select a task to see how it could change.</p></div>
+        <div><p className="text-sm font-semibold">{exampleRole.title} · Reference tasks</p><p className="mt-1 text-xs text-muted-foreground">Select a task to see how it could change.</p></div>
         <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-2.5 py-1 text-xs text-accent-foreground"><span className="size-1.5 rounded-full bg-primary" aria-hidden />Task map</span>
       </div>
       <div className="relative aspect-[56/48]">
       <svg viewBox={`0 0 ${W} ${H}`} className="absolute inset-0 size-full touch-manipulation overflow-visible" aria-labelledby="ltm-title ltm-desc" role="group">
         <title id="ltm-title">Living task map</title>
-        <desc id="ltm-desc">An example map of a Finance Admin’s tasks, sized by time and coloured by AI exposure.</desc>
+        <desc id="ltm-desc">Reference tasks sized by time and coloured by estimated AI exposure.</desc>
 
         <g aria-hidden>
           {nodes.map((n) => (
@@ -90,7 +79,7 @@ export function LivingTaskMap() {
             <g key={s.label}>
               <rect x={s.x - 4} y={s.y - 4} width={8} height={8} rx={2} transform={`rotate(45 ${s.x} ${s.y})`} fill="var(--card)" stroke="var(--teal)" strokeWidth={1.2} />
               <text x={s.x + 10} y={s.y + 3.5} className="fill-muted-foreground font-sans" fontSize={10}>
-                {s.label}
+                {s.label.length > 19 ? s.label.slice(0,18) + '…' : s.label}
               </text>
             </g>
           ))}
@@ -150,7 +139,7 @@ export function LivingTaskMap() {
                     fontSize={11.5}
                     className="pointer-events-none fill-muted-foreground font-sans"
                   >
-                    {n.label}
+                    {n.label.length > 23 ? n.label.slice(0,22) + '…' : n.label}
                   </text>
                 )}
               </g>

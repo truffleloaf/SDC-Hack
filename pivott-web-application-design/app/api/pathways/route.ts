@@ -1,7 +1,9 @@
 import { encodeId, json, parseProfile } from '@/lib/api'
+import { getCatalog } from '@/lib/catalog'
 import { buildPathway } from '@/lib/engine'
 
 export async function POST(req: Request) {
+  await getCatalog()
   const parsed = parseProfile(await req.json().catch(() => null))
   if (!parsed.ok) return json({ error: parsed.error }, 400)
   const p = parsed.value

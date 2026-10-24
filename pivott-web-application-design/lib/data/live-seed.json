@@ -1,0 +1,1551 @@
+{
+  "version": "onet-31.0+arbeitnow-2026-10-23",
+  "asOf": "2026-10-23",
+  "roles": [
+    {
+      "id": "bookkeeping-clerk",
+      "title": "Bookkeeping, Accounting, and Auditing Clerks",
+      "family": "Office & Admin Support",
+      "demand": 11,
+      "sdgs": [
+        8,
+        10
+      ],
+      "requirements": [
+        {
+          "skillId": "mathematics",
+          "requiredLevel": 2,
+          "importance": 4
+        },
+        {
+          "skillId": "active-listening",
+          "requiredLevel": 2,
+          "importance": 4
+        },
+        {
+          "skillId": "critical-thinking",
+          "requiredLevel": 2,
+          "importance": 4
+        },
+        {
+          "skillId": "reading-comprehension",
+          "requiredLevel": 2,
+          "importance": 4
+        },
+        {
+          "skillId": "speaking",
+          "requiredLevel": 2,
+          "importance": 4
+        },
+        {
+          "skillId": "writing",
+          "requiredLevel": 2,
+          "importance": 4
+        },
+        {
+          "skillId": "monitoring",
+          "requiredLevel": 2,
+          "importance": 4
+        },
+        {
+          "skillId": "time-management",
+          "requiredLevel": 2,
+          "importance": 4
+        }
+      ]
+    },
+    {
+      "id": "executive-assistant",
+      "title": "Executive Secretaries and Executive Administrative Assistants",
+      "family": "Office & Admin Support",
+      "demand": 4,
+      "sdgs": [
+        8,
+        10
+      ],
+      "requirements": [
+        {
+          "skillId": "active-listening",
+          "requiredLevel": 2,
+          "importance": 5
+        },
+        {
+          "skillId": "reading-comprehension",
+          "requiredLevel": 2,
+          "importance": 5
+        },
+        {
+          "skillId": "speaking",
+          "requiredLevel": 2,
+          "importance": 5
+        },
+        {
+          "skillId": "service-orientation",
+          "requiredLevel": 2,
+          "importance": 5
+        },
+        {
+          "skillId": "writing",
+          "requiredLevel": 2,
+          "importance": 5
+        },
+        {
+          "skillId": "coordination",
+          "requiredLevel": 2,
+          "importance": 4
+        },
+        {
+          "skillId": "critical-thinking",
+          "requiredLevel": 2,
+          "importance": 4
+        },
+        {
+          "skillId": "social-perceptiveness",
+          "requiredLevel": 2,
+          "importance": 4
+        }
+      ]
+    },
+    {
+      "id": "customer-service-rep",
+      "title": "Customer Service Representatives",
+      "family": "Office & Admin Support",
+      "demand": 61,
+      "sdgs": [
+        8,
+        10
+      ],
+      "requirements": [
+        {
+          "skillId": "active-listening",
+          "requiredLevel": 2,
+          "importance": 5
+        },
+        {
+          "skillId": "service-orientation",
+          "requiredLevel": 2,
+          "importance": 5
+        },
+        {
+          "skillId": "speaking",
+          "requiredLevel": 2,
+          "importance": 5
+        },
+        {
+          "skillId": "reading-comprehension",
+          "requiredLevel": 2,
+          "importance": 4
+        },
+        {
+          "skillId": "critical-thinking",
+          "requiredLevel": 2,
+          "importance": 4
+        },
+        {
+          "skillId": "complex-problem-solving",
+          "requiredLevel": 2,
+          "importance": 4
+        },
+        {
+          "skillId": "time-management",
+          "requiredLevel": 2,
+          "importance": 4
+        },
+        {
+          "skillId": "monitoring",
+          "requiredLevel": 2,
+          "importance": 4
+        }
+      ]
+    },
+    {
+      "id": "accountant",
+      "title": "Accountants and Auditors",
+      "family": "Business & Finance",
+      "demand": 16,
+      "sdgs": [
+        8
+      ],
+      "requirements": [
+        {
+          "skillId": "reading-comprehension",
+          "requiredLevel": 2,
+          "importance": 5
+        },
+        {
+          "skillId": "active-listening",
+          "requiredLevel": 2,
+          "importance": 4
+        },
+        {
+          "skillId": "complex-problem-solving",
+          "requiredLevel": 2,
+          "importance": 4
+        },
+        {
+          "skillId": "critical-thinking",
+          "requiredLevel": 2,
+          "importance": 4
+        },
+        {
+          "skillId": "judgment-and-decision-making",
+          "requiredLevel": 2,
+          "importance": 4
+        },
+        {
+          "skillId": "writing",
+          "requiredLevel": 2,
+          "importance": 4
+        },
+        {
+          "skillId": "mathematics",
+          "requiredLevel": 2,
+          "importance": 4
+        },
+        {
+          "skillId": "speaking",
+          "requiredLevel": 2,
+          "importance": 4
+        }
+      ]
+    },
+    {
+      "id": "budget-analyst",
+      "title": "Budget Analysts",
+      "family": "Business & Finance",
+      "demand": 14,
+      "sdgs": [
+        8,
+        9
+      ],
+      "requirements": [
+        {
+          "skillId": "critical-thinking",
+          "requiredLevel": 2,
+          "importance": 5
+        },
+        {
+          "skillId": "mathematics",
+          "requiredLevel": 2,
+          "importance": 5
+        },
+        {
+          "skillId": "active-listening",
+          "requiredLevel": 2,
+          "importance": 5
+        },
+        {
+          "skillId": "complex-problem-solving",
+          "requiredLevel": 2,
+          "importance": 5
+        },
+        {
+          "skillId": "judgment-and-decision-making",
+          "requiredLevel": 2,
+          "importance": 5
+        },
+        {
+          "skillId": "reading-comprehension",
+          "requiredLevel": 2,
+          "importance": 5
+        },
+        {
+          "skillId": "speaking",
+          "requiredLevel": 2,
+          "importance": 5
+        },
+        {
+          "skillId": "management-of-financial-resources",
+          "requiredLevel": 2,
+          "importance": 4
+        }
+      ]
+    },
+    {
+      "id": "market-research-analyst",
+      "title": "Market Research Analysts and Marketing Specialists",
+      "family": "Business & Finance",
+      "demand": 18,
+      "sdgs": [
+        8,
+        9
+      ],
+      "requirements": [
+        {
+          "skillId": "active-listening",
+          "requiredLevel": 2,
+          "importance": 5
+        },
+        {
+          "skillId": "critical-thinking",
+          "requiredLevel": 2,
+          "importance": 5
+        },
+        {
+          "skillId": "reading-comprehension",
+          "requiredLevel": 3,
+          "importance": 5
+        },
+        {
+          "skillId": "writing",
+          "requiredLevel": 2,
+          "importance": 5
+        },
+        {
+          "skillId": "speaking",
+          "requiredLevel": 2,
+          "importance": 5
+        },
+        {
+          "skillId": "active-learning",
+          "requiredLevel": 2,
+          "importance": 5
+        },
+        {
+          "skillId": "complex-problem-solving",
+          "requiredLevel": 2,
+          "importance": 5
+        },
+        {
+          "skillId": "judgment-and-decision-making",
+          "requiredLevel": 2,
+          "importance": 5
+        }
+      ]
+    },
+    {
+      "id": "bi-analyst",
+      "title": "Business Intelligence Analysts",
+      "family": "Data & Analysis",
+      "demand": 61,
+      "sdgs": [
+        8,
+        9
+      ],
+      "requirements": [
+        {
+          "skillId": "reading-comprehension",
+          "requiredLevel": 2,
+          "importance": 5
+        },
+        {
+          "skillId": "active-learning",
+          "requiredLevel": 2,
+          "importance": 5
+        },
+        {
+          "skillId": "active-listening",
+          "requiredLevel": 2,
+          "importance": 5
+        },
+        {
+          "skillId": "critical-thinking",
+          "requiredLevel": 2,
+          "importance": 5
+        },
+        {
+          "skillId": "speaking",
+          "requiredLevel": 2,
+          "importance": 5
+        },
+        {
+          "skillId": "writing",
+          "requiredLevel": 2,
+          "importance": 5
+        },
+        {
+          "skillId": "judgment-and-decision-making",
+          "requiredLevel": 2,
+          "importance": 4
+        },
+        {
+          "skillId": "mathematics",
+          "requiredLevel": 2,
+          "importance": 4
+        }
+      ]
+    },
+    {
+      "id": "data-scientist",
+      "title": "Data Scientists",
+      "family": "Data & Analysis",
+      "demand": 100,
+      "sdgs": [
+        8,
+        9
+      ],
+      "requirements": [
+        {
+          "skillId": "mathematics",
+          "requiredLevel": 3,
+          "importance": 5
+        },
+        {
+          "skillId": "critical-thinking",
+          "requiredLevel": 3,
+          "importance": 5
+        },
+        {
+          "skillId": "reading-comprehension",
+          "requiredLevel": 3,
+          "importance": 5
+        },
+        {
+          "skillId": "complex-problem-solving",
+          "requiredLevel": 2,
+          "importance": 5
+        },
+        {
+          "skillId": "programming",
+          "requiredLevel": 2,
+          "importance": 5
+        },
+        {
+          "skillId": "active-learning",
+          "requiredLevel": 3,
+          "importance": 4
+        },
+        {
+          "skillId": "speaking",
+          "requiredLevel": 2,
+          "importance": 4
+        },
+        {
+          "skillId": "active-listening",
+          "requiredLevel": 2,
+          "importance": 4
+        }
+      ]
+    },
+    {
+      "id": "project-manager",
+      "title": "Project Management Specialists",
+      "family": "Management",
+      "demand": 19,
+      "sdgs": [
+        8,
+        9
+      ],
+      "requirements": [
+        {
+          "skillId": "active-listening",
+          "requiredLevel": 2,
+          "importance": 5
+        },
+        {
+          "skillId": "critical-thinking",
+          "requiredLevel": 2,
+          "importance": 5
+        },
+        {
+          "skillId": "judgment-and-decision-making",
+          "requiredLevel": 2,
+          "importance": 4
+        },
+        {
+          "skillId": "monitoring",
+          "requiredLevel": 2,
+          "importance": 4
+        },
+        {
+          "skillId": "writing",
+          "requiredLevel": 2,
+          "importance": 4
+        },
+        {
+          "skillId": "active-learning",
+          "requiredLevel": 2,
+          "importance": 4
+        },
+        {
+          "skillId": "coordination",
+          "requiredLevel": 2,
+          "importance": 4
+        },
+        {
+          "skillId": "reading-comprehension",
+          "requiredLevel": 2,
+          "importance": 4
+        }
+      ]
+    },
+    {
+      "id": "operations-manager",
+      "title": "General and Operations Managers",
+      "family": "Management",
+      "demand": 26,
+      "sdgs": [
+        8,
+        9
+      ],
+      "requirements": [
+        {
+          "skillId": "active-listening",
+          "requiredLevel": 2,
+          "importance": 5
+        },
+        {
+          "skillId": "monitoring",
+          "requiredLevel": 2,
+          "importance": 5
+        },
+        {
+          "skillId": "reading-comprehension",
+          "requiredLevel": 2,
+          "importance": 5
+        },
+        {
+          "skillId": "speaking",
+          "requiredLevel": 2,
+          "importance": 5
+        },
+        {
+          "skillId": "coordination",
+          "requiredLevel": 2,
+          "importance": 5
+        },
+        {
+          "skillId": "critical-thinking",
+          "requiredLevel": 2,
+          "importance": 5
+        },
+        {
+          "skillId": "management-of-personnel-resources",
+          "requiredLevel": 2,
+          "importance": 5
+        },
+        {
+          "skillId": "social-perceptiveness",
+          "requiredLevel": 2,
+          "importance": 5
+        }
+      ]
+    }
+  ],
+  "tasks": [
+    {
+      "id": "accountant-21514",
+      "roleId": "accountant",
+      "name": "Prepare, examine, or analyze accounting records, financial statements",
+      "description": "Prepare, examine, or analyze accounting records, financial statements, or other financial reports to assess accuracy, completeness, and conformance to reporting and procedural standards. O*NET-SOC 13-2011.00, task 21514, importance 4.6/5.",
+      "baseExposure": 0.62,
+      "humanJudgment": 0.33,
+      "defaultShare": 18,
+      "skills": [
+        "critical-thinking",
+        "reading-comprehension"
+      ],
+      "tryThisWeek": "Time one run of this task, then test one AI step inside it and note where it stops being reliable."
+    },
+    {
+      "id": "bi-analyst-16150",
+      "roleId": "bi-analyst",
+      "name": "Generate standard or custom reports summarizing business, financial",
+      "description": "Generate standard or custom reports summarizing business, financial, or economic data for review by executives, managers, clients, and other stakeholders. O*NET-SOC 15-2051.01, task 16150, importance 4.6/5.",
+      "baseExposure": 0.88,
+      "humanJudgment": 0.05,
+      "defaultShare": 19,
+      "skills": [
+        "writing"
+      ],
+      "tryThisWeek": "Ask an AI tool to draft this task once, then check every field against the source record."
+    },
+    {
+      "id": "bookkeeping-clerk-2487",
+      "roleId": "bookkeeping-clerk",
+      "name": "Operate computers programmed with accounting software",
+      "description": "Operate computers programmed with accounting software to record, store, and analyze information. O*NET-SOC 43-3031.00, task 2487, importance 4.8/5.",
+      "baseExposure": 0.6,
+      "humanJudgment": 0.06,
+      "defaultShare": 17,
+      "skills": [
+        "critical-thinking",
+        "reading-comprehension"
+      ],
+      "tryThisWeek": "Time one run of this task, then test one AI step inside it and note where it stops being reliable."
+    },
+    {
+      "id": "budget-analyst-3394",
+      "roleId": "budget-analyst",
+      "name": "Analyze monthly department budgeting and accounting reports",
+      "description": "Analyze monthly department budgeting and accounting reports to maintain expenditure controls. O*NET-SOC 13-2031.00, task 3394, importance 4.4/5.",
+      "baseExposure": 0.6,
+      "humanJudgment": 0.12,
+      "defaultShare": 17,
+      "skills": [
+        "critical-thinking",
+        "reading-comprehension"
+      ],
+      "tryThisWeek": "Time one run of this task, then test one AI step inside it and note where it stops being reliable."
+    },
+    {
+      "id": "customer-service-rep-18565",
+      "roleId": "customer-service-rep",
+      "name": "Confer with customers by telephone or in person",
+      "description": "Confer with customers by telephone or in person to provide information about products or services, take or enter orders, cancel accounts, or obtain details of complaints. O*NET-SOC 43-4051.00, task 18565, importance 4.7/5.",
+      "baseExposure": 0.76,
+      "humanJudgment": 0.2,
+      "defaultShare": 18,
+      "skills": [
+        "active-listening",
+        "critical-thinking",
+        "reading-comprehension"
+      ],
+      "tryThisWeek": "Ask an AI tool to draft this task once, then check every field against the source record."
+    },
+    {
+      "id": "data-scientist-21823",
+      "roleId": "data-scientist",
+      "name": "Analyze, manipulate, or process large sets of data using statisticalâ¦",
+      "description": "Analyze, manipulate, or process large sets of data using statistical software. O*NET-SOC 15-2051.00, task 21823, importance 4.3/5.",
+      "baseExposure": 0.6,
+      "humanJudgment": 0.12,
+      "defaultShare": 17,
+      "skills": [
+        "critical-thinking",
+        "reading-comprehension"
+      ],
+      "tryThisWeek": "Time one run of this task, then test one AI step inside it and note where it stops being reliable."
+    },
+    {
+      "id": "executive-assistant-2770",
+      "roleId": "executive-assistant",
+      "name": "Manage and maintain executives' schedules",
+      "description": "Manage and maintain executives' schedules. O*NET-SOC 43-6011.00, task 2770, importance 4.4/5.",
+      "baseExposure": 0.62,
+      "humanJudgment": 0.27,
+      "defaultShare": 17,
+      "skills": [
+        "critical-thinking"
+      ],
+      "tryThisWeek": "Time one run of this task, then test one AI step inside it and note where it stops being reliable."
+    },
+    {
+      "id": "market-research-analyst-5434",
+      "roleId": "market-research-analyst",
+      "name": "Prepare reports of findings, illustrating data graphically andâ¦",
+      "description": "Prepare reports of findings, illustrating data graphically and translating complex findings into written text. O*NET-SOC 13-1161.00, task 5434, importance 4.1/5.",
+      "baseExposure": 0.6,
+      "humanJudgment": 0.12,
+      "defaultShare": 17,
+      "skills": [
+        "writing"
+      ],
+      "tryThisWeek": "Time one run of this task, then test one AI step inside it and note where it stops being reliable."
+    },
+    {
+      "id": "operations-manager-20699",
+      "roleId": "operations-manager",
+      "name": "Review financial statements, sales or activity reports",
+      "description": "Review financial statements, sales or activity reports, or other performance data to measure productivity or goal achievement or to identify areas needing cost reduction or program improvement. O*NET-SOC 11-1021.00, task 20699, importance 4.2/5.",
+      "baseExposure": 0.6,
+      "humanJudgment": 0.12,
+      "defaultShare": 17,
+      "skills": [
+        "critical-thinking",
+        "reading-comprehension"
+      ],
+      "tryThisWeek": "Time one run of this task, then test one AI step inside it and note where it stops being reliable."
+    },
+    {
+      "id": "project-manager-21463",
+      "roleId": "project-manager",
+      "name": "Communicate with key stakeholders",
+      "description": "Communicate with key stakeholders to determine project requirements and objectives. O*NET-SOC 13-1082.00, task 21463, importance 4.5/5.",
+      "baseExposure": 0.22,
+      "humanJudgment": 0.66,
+      "defaultShare": 17,
+      "skills": [
+        "active-listening",
+        "speaking",
+        "writing"
+      ],
+      "tryThisWeek": "Write down the judgement calls this task needs; that is the part to keep and the part to teach."
+    },
+    {
+      "id": "accountant-21533",
+      "roleId": "accountant",
+      "name": "Process invoices for payment",
+      "description": "Process invoices for payment. O*NET-SOC 13-2011.00, task 21533, importance 4.5/5.",
+      "baseExposure": 0.74,
+      "humanJudgment": 0.08,
+      "defaultShare": 17,
+      "skills": [
+        "reading-comprehension",
+        "writing"
+      ],
+      "tryThisWeek": "Ask an AI tool to draft this task once, then check every field against the source record."
+    },
+    {
+      "id": "bi-analyst-16139",
+      "roleId": "bi-analyst",
+      "name": "Maintain or update business intelligence tools, databases, dashboardsâ¦",
+      "description": "Maintain or update business intelligence tools, databases, dashboards, systems, or methods. O*NET-SOC 15-2051.01, task 16139, importance 4.4/5.",
+      "baseExposure": 0.74,
+      "humanJudgment": 0.08,
+      "defaultShare": 18,
+      "skills": [
+        "critical-thinking",
+        "reading-comprehension"
+      ],
+      "tryThisWeek": "Ask an AI tool to draft this task once, then check every field against the source record."
+    },
+    {
+      "id": "bookkeeping-clerk-18561",
+      "roleId": "bookkeeping-clerk",
+      "name": "Prepare and process payroll information",
+      "description": "Prepare and process payroll information. O*NET-SOC 43-3031.00, task 18561, importance 4.7/5.",
+      "baseExposure": 0.74,
+      "humanJudgment": 0.05,
+      "defaultShare": 17,
+      "skills": [
+        "reading-comprehension",
+        "writing"
+      ],
+      "tryThisWeek": "Ask an AI tool to draft this task once, then check every field against the source record."
+    },
+    {
+      "id": "budget-analyst-3398",
+      "roleId": "budget-analyst",
+      "name": "Provide advice and technical assistance with cost analysis, fiscalâ¦",
+      "description": "Provide advice and technical assistance with cost analysis, fiscal allocation, and budget preparation. O*NET-SOC 13-2031.00, task 3398, importance 4.3/5.",
+      "baseExposure": 0.46,
+      "humanJudgment": 0.16,
+      "defaultShare": 17,
+      "skills": [
+        "active-listening",
+        "critical-thinking",
+        "monitoring"
+      ],
+      "tryThisWeek": "Time one run of this task, then test one AI step inside it and note where it stops being reliable."
+    },
+    {
+      "id": "customer-service-rep-2578",
+      "roleId": "customer-service-rep",
+      "name": "Keep records of customer interactions or transactions",
+      "description": "Keep records of customer interactions or transactions, recording details of inquiries, complaints, or comments, as well as actions taken. O*NET-SOC 43-4051.00, task 2578, importance 4.5/5.",
+      "baseExposure": 0.6,
+      "humanJudgment": 0.05,
+      "defaultShare": 17,
+      "skills": [
+        "writing"
+      ],
+      "tryThisWeek": "Time one run of this task, then test one AI step inside it and note where it stops being reliable."
+    },
+    {
+      "id": "data-scientist-21828",
+      "roleId": "data-scientist",
+      "name": "Create graphs, charts, or other visualizations",
+      "description": "Create graphs, charts, or other visualizations to convey the results of data analysis using specialized software. O*NET-SOC 15-2051.00, task 21828, importance 4.3/5.",
+      "baseExposure": 0.46,
+      "humanJudgment": 0.16,
+      "defaultShare": 17,
+      "skills": [
+        "critical-thinking",
+        "writing"
+      ],
+      "tryThisWeek": "Time one run of this task, then test one AI step inside it and note where it stops being reliable."
+    },
+    {
+      "id": "executive-assistant-18578",
+      "roleId": "executive-assistant",
+      "name": "Process payroll information",
+      "description": "Process payroll information. O*NET-SOC 43-6011.00, task 18578, importance 4.3/5.",
+      "baseExposure": 0.6,
+      "humanJudgment": 0.06,
+      "defaultShare": 17,
+      "skills": [
+        "reading-comprehension",
+        "writing"
+      ],
+      "tryThisWeek": "Time one run of this task, then test one AI step inside it and note where it stops being reliable."
+    },
+    {
+      "id": "market-research-analyst-5437",
+      "roleId": "market-research-analyst",
+      "name": "Seek and provide information",
+      "description": "Seek and provide information to help companies determine their position in the marketplace. O*NET-SOC 13-1161.00, task 5437, importance 4.1/5.",
+      "baseExposure": 0.34,
+      "humanJudgment": 0.41,
+      "defaultShare": 17,
+      "skills": [
+        "active-listening",
+        "critical-thinking",
+        "reading-comprehension"
+      ],
+      "tryThisWeek": "Time one run of this task, then test one AI step inside it and note where it stops being reliable."
+    },
+    {
+      "id": "operations-manager-933",
+      "roleId": "operations-manager",
+      "name": "Direct and coordinate activities of businesses or departments concernedâ¦",
+      "description": "Direct and coordinate activities of businesses or departments concerned with the production, pricing, sales, or distribution of products. O*NET-SOC 11-1021.00, task 933, importance 4.1/5.",
+      "baseExposure": 0.22,
+      "humanJudgment": 0.66,
+      "defaultShare": 17,
+      "skills": [
+        "active-learning",
+        "active-listening",
+        "critical-thinking"
+      ],
+      "tryThisWeek": "Write down the judgement calls this task needs; that is the part to keep and the part to teach."
+    },
+    {
+      "id": "project-manager-21467",
+      "roleId": "project-manager",
+      "name": "Identify project needs such as resources, staff, or finances",
+      "description": "Identify project needs such as resources, staff, or finances by reviewing project objectives and schedules. O*NET-SOC 13-1082.00, task 21467, importance 4.5/5.",
+      "baseExposure": 0.74,
+      "humanJudgment": 0.08,
+      "defaultShare": 17,
+      "skills": [
+        "active-learning",
+        "active-listening",
+        "critical-thinking"
+      ],
+      "tryThisWeek": "Ask an AI tool to draft this task once, then check every field against the source record."
+    },
+    {
+      "id": "accountant-21516",
+      "roleId": "accountant",
+      "name": "Review accounts for discrepancies and reconcile differences",
+      "description": "Review accounts for discrepancies and reconcile differences. O*NET-SOC 13-2011.00, task 21516, importance 4.5/5.",
+      "baseExposure": 0.74,
+      "humanJudgment": 0.08,
+      "defaultShare": 17,
+      "skills": [
+        "critical-thinking",
+        "reading-comprehension"
+      ],
+      "tryThisWeek": "Ask an AI tool to draft this task once, then check every field against the source record."
+    },
+    {
+      "id": "bi-analyst-16140",
+      "roleId": "bi-analyst",
+      "name": "Manage timely flow of business intelligence information",
+      "description": "Manage timely flow of business intelligence information to users. O*NET-SOC 15-2051.01, task 16140, importance 4.2/5.",
+      "baseExposure": 0.34,
+      "humanJudgment": 0.41,
+      "defaultShare": 17,
+      "skills": [
+        "reading-comprehension",
+        "writing"
+      ],
+      "tryThisWeek": "Time one run of this task, then test one AI step inside it and note where it stops being reliable."
+    },
+    {
+      "id": "bookkeeping-clerk-2486",
+      "roleId": "bookkeeping-clerk",
+      "name": "Check figures, postings, and documents",
+      "description": "Check figures, postings, and documents for correct entry, mathematical accuracy, and proper codes. O*NET-SOC 43-3031.00, task 2486, importance 4.7/5.",
+      "baseExposure": 0.88,
+      "humanJudgment": 0.05,
+      "defaultShare": 17,
+      "skills": [
+        "mathematics",
+        "reading-comprehension"
+      ],
+      "tryThisWeek": "Ask an AI tool to draft this task once, then check every field against the source record."
+    },
+    {
+      "id": "budget-analyst-3401",
+      "roleId": "budget-analyst",
+      "name": "Review operating budgets to analyze trends affecting budget needs",
+      "description": "Review operating budgets to analyze trends affecting budget needs. O*NET-SOC 13-2031.00, task 3401, importance 4.2/5.",
+      "baseExposure": 0.6,
+      "humanJudgment": 0.12,
+      "defaultShare": 17,
+      "skills": [
+        "critical-thinking",
+        "reading-comprehension"
+      ],
+      "tryThisWeek": "Time one run of this task, then test one AI step inside it and note where it stops being reliable."
+    },
+    {
+      "id": "customer-service-rep-2580",
+      "roleId": "customer-service-rep",
+      "name": "Check to ensure that appropriate changes were made to resolveâ¦",
+      "description": "Check to ensure that appropriate changes were made to resolve customers' problems. O*NET-SOC 43-4051.00, task 2580, importance 4.4/5.",
+      "baseExposure": 0.48,
+      "humanJudgment": 0.28,
+      "defaultShare": 17,
+      "skills": [
+        "active-listening",
+        "speaking"
+      ],
+      "tryThisWeek": "Time one run of this task, then test one AI step inside it and note where it stops being reliable."
+    },
+    {
+      "id": "data-scientist-21837",
+      "roleId": "data-scientist",
+      "name": "Test, validate, and reformulate models",
+      "description": "Test, validate, and reformulate models to ensure accurate prediction of outcomes of interest. O*NET-SOC 15-2051.00, task 21837, importance 4.2/5.",
+      "baseExposure": 0.46,
+      "humanJudgment": 0.16,
+      "defaultShare": 17,
+      "skills": [
+        "critical-thinking"
+      ],
+      "tryThisWeek": "Time one run of this task, then test one AI step inside it and note where it stops being reliable."
+    },
+    {
+      "id": "executive-assistant-2779",
+      "roleId": "executive-assistant",
+      "name": "Make travel arrangements for executives",
+      "description": "Make travel arrangements for executives. O*NET-SOC 43-6011.00, task 2779, importance 4.2/5.",
+      "baseExposure": 0.46,
+      "humanJudgment": 0.1,
+      "defaultShare": 17,
+      "skills": [
+        "active-listening",
+        "monitoring",
+        "speaking"
+      ],
+      "tryThisWeek": "Time one run of this task, then test one AI step inside it and note where it stops being reliable."
+    },
+    {
+      "id": "market-research-analyst-5439",
+      "roleId": "market-research-analyst",
+      "name": "Conduct research on consumer opinions and marketing strategies",
+      "description": "Conduct research on consumer opinions and marketing strategies, collaborating with marketing professionals, statisticians, pollsters, and other professionals. O*NET-SOC 13-1161.00, task 5439, importance 3.9/5.",
+      "baseExposure": 0.34,
+      "humanJudgment": 0.41,
+      "defaultShare": 17,
+      "skills": [
+        "critical-thinking",
+        "reading-comprehension"
+      ],
+      "tryThisWeek": "Time one run of this task, then test one AI step inside it and note where it stops being reliable."
+    },
+    {
+      "id": "operations-manager-20708",
+      "roleId": "operations-manager",
+      "name": "Manage the movement of goods into and out of production facilities toâ¦",
+      "description": "Manage the movement of goods into and out of production facilities to ensure efficiency, effectiveness, or sustainability of operations. O*NET-SOC 11-1021.00, task 20708, importance 4.0/5.",
+      "baseExposure": 0.34,
+      "humanJudgment": 0.41,
+      "defaultShare": 17,
+      "skills": [
+        "active-learning",
+        "active-listening",
+        "critical-thinking"
+      ],
+      "tryThisWeek": "Time one run of this task, then test one AI step inside it and note where it stops being reliable."
+    },
+    {
+      "id": "project-manager-21481",
+      "roleId": "project-manager",
+      "name": "Submit project deliverables to clients, ensuring adherence to qualityâ¦",
+      "description": "Submit project deliverables to clients, ensuring adherence to quality standards. O*NET-SOC 13-1082.00, task 21481, importance 4.4/5.",
+      "baseExposure": 0.46,
+      "humanJudgment": 0.16,
+      "defaultShare": 17,
+      "skills": [
+        "active-listening",
+        "critical-thinking",
+        "reading-comprehension"
+      ],
+      "tryThisWeek": "Time one run of this task, then test one AI step inside it and note where it stops being reliable."
+    },
+    {
+      "id": "accountant-21515",
+      "roleId": "accountant",
+      "name": "Prepare adjusting journal entries",
+      "description": "Prepare adjusting journal entries. O*NET-SOC 13-2011.00, task 21515, importance 4.3/5.",
+      "baseExposure": 0.6,
+      "humanJudgment": 0.12,
+      "defaultShare": 16,
+      "skills": [
+        "critical-thinking",
+        "reading-comprehension",
+        "writing"
+      ],
+      "tryThisWeek": "Time one run of this task, then test one AI step inside it and note where it stops being reliable."
+    },
+    {
+      "id": "bi-analyst-16134",
+      "roleId": "bi-analyst",
+      "name": "Provide technical support for existing reports, dashboards",
+      "description": "Provide technical support for existing reports, dashboards, or other tools. O*NET-SOC 15-2051.01, task 16134, importance 4.0/5.",
+      "baseExposure": 0.46,
+      "humanJudgment": 0.16,
+      "defaultShare": 16,
+      "skills": [
+        "active-listening",
+        "critical-thinking",
+        "monitoring"
+      ],
+      "tryThisWeek": "Time one run of this task, then test one AI step inside it and note where it stops being reliable."
+    },
+    {
+      "id": "bookkeeping-clerk-2499",
+      "roleId": "bookkeeping-clerk",
+      "name": "Prepare bank deposits by compiling data from cashiers",
+      "description": "Prepare bank deposits by compiling data from cashiers, verifying and balancing receipts, and sending cash, checks, or other forms of payment to banks. O*NET-SOC 43-3031.00, task 2499, importance 4.6/5.",
+      "baseExposure": 0.88,
+      "humanJudgment": 0.05,
+      "defaultShare": 17,
+      "skills": [
+        "mathematics",
+        "reading-comprehension"
+      ],
+      "tryThisWeek": "Ask an AI tool to draft this task once, then check every field against the source record."
+    },
+    {
+      "id": "budget-analyst-3405",
+      "roleId": "budget-analyst",
+      "name": "Compile and analyze accounting records and other data",
+      "description": "Compile and analyze accounting records and other data to determine the financial resources required to implement a program. O*NET-SOC 13-2031.00, task 3405, importance 4.1/5.",
+      "baseExposure": 0.62,
+      "humanJudgment": 0.33,
+      "defaultShare": 17,
+      "skills": [
+        "critical-thinking",
+        "reading-comprehension",
+        "active-listening"
+      ],
+      "tryThisWeek": "Time one run of this task, then test one AI step inside it and note where it stops being reliable."
+    },
+    {
+      "id": "customer-service-rep-2581",
+      "roleId": "customer-service-rep",
+      "name": "Contact customers to respond to inquiries or to notify them of claimâ¦",
+      "description": "Contact customers to respond to inquiries or to notify them of claim investigation results or any planned adjustments. O*NET-SOC 43-4051.00, task 2581, importance 4.2/5.",
+      "baseExposure": 0.6,
+      "humanJudgment": 0.05,
+      "defaultShare": 16,
+      "skills": [
+        "active-listening",
+        "speaking",
+        "writing"
+      ],
+      "tryThisWeek": "Time one run of this task, then test one AI step inside it and note where it stops being reliable."
+    },
+    {
+      "id": "data-scientist-21829",
+      "roleId": "data-scientist",
+      "name": "Deliver oral or written presentations of the results of mathematicalâ¦",
+      "description": "Deliver oral or written presentations of the results of mathematical modeling and data analysis to management or other end users. O*NET-SOC 15-2051.00, task 21829, importance 4.2/5.",
+      "baseExposure": 0.46,
+      "humanJudgment": 0.16,
+      "defaultShare": 17,
+      "skills": [
+        "writing"
+      ],
+      "tryThisWeek": "Time one run of this task, then test one AI step inside it and note where it stops being reliable."
+    },
+    {
+      "id": "executive-assistant-2771",
+      "roleId": "executive-assistant",
+      "name": "Prepare invoices, reports, memos, letters, financial statements, andâ¦",
+      "description": "Prepare invoices, reports, memos, letters, financial statements, and other documents, using word processing, spreadsheet, database, or presentation software. O*NET-SOC 43-6011.00, task 2771, importance 4.2/5.",
+      "baseExposure": 0.88,
+      "humanJudgment": 0.05,
+      "defaultShare": 17,
+      "skills": [
+        "writing"
+      ],
+      "tryThisWeek": "Ask an AI tool to draft this task once, then check every field against the source record."
+    },
+    {
+      "id": "market-research-analyst-5433",
+      "roleId": "market-research-analyst",
+      "name": "Collect and analyze data on customer demographics, preferences, needs",
+      "description": "Collect and analyze data on customer demographics, preferences, needs, and buying habits to identify potential markets and factors affecting product demand. O*NET-SOC 13-1161.00, task 5433, importance 3.9/5.",
+      "baseExposure": 0.6,
+      "humanJudgment": 0.12,
+      "defaultShare": 17,
+      "skills": [
+        "critical-thinking",
+        "reading-comprehension"
+      ],
+      "tryThisWeek": "Time one run of this task, then test one AI step inside it and note where it stops being reliable."
+    },
+    {
+      "id": "operations-manager-20700",
+      "roleId": "operations-manager",
+      "name": "Direct administrative activities directly related",
+      "description": "Direct administrative activities directly related to making products or providing services. O*NET-SOC 11-1021.00, task 20700, importance 4.0/5.",
+      "baseExposure": 0.34,
+      "humanJudgment": 0.41,
+      "defaultShare": 17,
+      "skills": [
+        "active-learning",
+        "active-listening",
+        "critical-thinking"
+      ],
+      "tryThisWeek": "Time one run of this task, then test one AI step inside it and note where it stops being reliable."
+    },
+    {
+      "id": "project-manager-21464",
+      "roleId": "project-manager",
+      "name": "Confer with project personnel",
+      "description": "Confer with project personnel to identify and resolve problems. O*NET-SOC 13-1082.00, task 21464, importance 4.3/5.",
+      "baseExposure": 0.22,
+      "humanJudgment": 0.66,
+      "defaultShare": 17,
+      "skills": [
+        "active-listening",
+        "critical-thinking",
+        "monitoring"
+      ],
+      "tryThisWeek": "Write down the judgement calls this task needs; that is the part to keep and the part to teach."
+    },
+    {
+      "id": "accountant-21526",
+      "roleId": "accountant",
+      "name": "Compute taxes owed and prepare tax returns",
+      "description": "Compute taxes owed and prepare tax returns, ensuring compliance with payment, reporting, or other tax requirements. O*NET-SOC 13-2011.00, task 21526, importance 4.3/5.",
+      "baseExposure": 0.74,
+      "humanJudgment": 0.08,
+      "defaultShare": 16,
+      "skills": [
+        "critical-thinking",
+        "mathematics",
+        "writing"
+      ],
+      "tryThisWeek": "Ask an AI tool to draft this task once, then check every field against the source record."
+    },
+    {
+      "id": "bi-analyst-16141",
+      "roleId": "bi-analyst",
+      "name": "Identify and analyze industry or geographic trends with businessâ¦",
+      "description": "Identify and analyze industry or geographic trends with business strategy implications. O*NET-SOC 15-2051.01, task 16141, importance 3.9/5.",
+      "baseExposure": 0.46,
+      "humanJudgment": 0.16,
+      "defaultShare": 15,
+      "skills": [
+        "critical-thinking",
+        "reading-comprehension"
+      ],
+      "tryThisWeek": "Time one run of this task, then test one AI step inside it and note where it stops being reliable."
+    },
+    {
+      "id": "bookkeeping-clerk-2488",
+      "roleId": "bookkeeping-clerk",
+      "name": "Comply with federal, state, and company policies, procedures",
+      "description": "Comply with federal, state, and company policies, procedures, and regulations. O*NET-SOC 43-3031.00, task 2488, importance 4.6/5.",
+      "baseExposure": 0.46,
+      "humanJudgment": 0.1,
+      "defaultShare": 16,
+      "skills": [
+        "active-listening",
+        "critical-thinking",
+        "monitoring"
+      ],
+      "tryThisWeek": "Time one run of this task, then test one AI step inside it and note where it stops being reliable."
+    },
+    {
+      "id": "budget-analyst-3402",
+      "roleId": "budget-analyst",
+      "name": "Examine budget estimates for completeness, accuracy",
+      "description": "Examine budget estimates for completeness, accuracy, and conformance with procedures and regulations. O*NET-SOC 13-2031.00, task 3402, importance 4.1/5.",
+      "baseExposure": 0.46,
+      "humanJudgment": 0.16,
+      "defaultShare": 16,
+      "skills": [
+        "mathematics",
+        "reading-comprehension"
+      ],
+      "tryThisWeek": "Time one run of this task, then test one AI step inside it and note where it stops being reliable."
+    },
+    {
+      "id": "customer-service-rep-2579",
+      "roleId": "customer-service-rep",
+      "name": "Resolve customers' service or billing complaints",
+      "description": "Resolve customers' service or billing complaints by performing activities such as exchanging merchandise, refunding money, or adjusting bills. O*NET-SOC 43-4051.00, task 2579, importance 4.2/5.",
+      "baseExposure": 0.48,
+      "humanJudgment": 0.28,
+      "defaultShare": 16,
+      "skills": [
+        "active-listening",
+        "reading-comprehension",
+        "speaking"
+      ],
+      "tryThisWeek": "Time one run of this task, then test one AI step inside it and note where it stops being reliable."
+    },
+    {
+      "id": "data-scientist-21836",
+      "roleId": "data-scientist",
+      "name": "Recommend data-driven solutions to key stakeholders",
+      "description": "Recommend data-driven solutions to key stakeholders. O*NET-SOC 15-2051.00, task 21836, importance 4.2/5.",
+      "baseExposure": 0.34,
+      "humanJudgment": 0.41,
+      "defaultShare": 16,
+      "skills": [
+        "active-listening",
+        "critical-thinking",
+        "monitoring"
+      ],
+      "tryThisWeek": "Time one run of this task, then test one AI step inside it and note where it stops being reliable."
+    },
+    {
+      "id": "executive-assistant-18576",
+      "roleId": "executive-assistant",
+      "name": "Coordinate and direct office services, such as records, departmentalâ¦",
+      "description": "Coordinate and direct office services, such as records, departmental finances, budget preparation, personnel issues, and housekeeping, to aid executives. O*NET-SOC 43-6011.00, task 18576, importance 4.1/5.",
+      "baseExposure": 0.36,
+      "humanJudgment": 0.56,
+      "defaultShare": 16,
+      "skills": [
+        "active-learning",
+        "active-listening",
+        "critical-thinking"
+      ],
+      "tryThisWeek": "Time one run of this task, then test one AI step inside it and note where it stops being reliable."
+    },
+    {
+      "id": "market-research-analyst-5443",
+      "roleId": "market-research-analyst",
+      "name": "Devise and evaluate methods and procedures",
+      "description": "Devise and evaluate methods and procedures for collecting data, such as surveys, opinion polls, or questionnaires, or arrange to obtain existing data. O*NET-SOC 13-1161.00, task 5443, importance 3.9/5.",
+      "baseExposure": 0.62,
+      "humanJudgment": 0.33,
+      "defaultShare": 16,
+      "skills": [
+        "critical-thinking",
+        "speaking",
+        "writing"
+      ],
+      "tryThisWeek": "Time one run of this task, then test one AI step inside it and note where it stops being reliable."
+    },
+    {
+      "id": "operations-manager-20707",
+      "roleId": "operations-manager",
+      "name": "Set prices or credit terms",
+      "description": "Set prices or credit terms for goods or services, based on forecasts of customer demand. O*NET-SOC 11-1021.00, task 20707, importance 4.0/5.",
+      "baseExposure": 0.34,
+      "humanJudgment": 0.41,
+      "defaultShare": 16,
+      "skills": [
+        "critical-thinking",
+        "speaking",
+        "writing"
+      ],
+      "tryThisWeek": "Time one run of this task, then test one AI step inside it and note where it stops being reliable."
+    },
+    {
+      "id": "project-manager-21473",
+      "roleId": "project-manager",
+      "name": "Plan, schedule, or coordinate project activities",
+      "description": "Plan, schedule, or coordinate project activities to meet deadlines. O*NET-SOC 13-1082.00, task 21473, importance 4.3/5.",
+      "baseExposure": 0.36,
+      "humanJudgment": 0.62,
+      "defaultShare": 16,
+      "skills": [
+        "critical-thinking",
+        "speaking",
+        "writing"
+      ],
+      "tryThisWeek": "Time one run of this task, then test one AI step inside it and note where it stops being reliable."
+    },
+    {
+      "id": "accountant-21508",
+      "roleId": "accountant",
+      "name": "Inspect account books and accounting systems",
+      "description": "Inspect account books and accounting systems for efficiency, effectiveness, and use of accepted accounting procedures to record transactions. O*NET-SOC 13-2011.00, task 21508, importance 4.2/5.",
+      "baseExposure": 0.6,
+      "humanJudgment": 0.12,
+      "defaultShare": 16,
+      "skills": [
+        "critical-thinking",
+        "reading-comprehension"
+      ],
+      "tryThisWeek": "Time one run of this task, then test one AI step inside it and note where it stops being reliable."
+    },
+    {
+      "id": "bi-analyst-16142",
+      "roleId": "bi-analyst",
+      "name": "Document specifications for business intelligence or informationâ¦",
+      "description": "Document specifications for business intelligence or information technology reports, dashboards, or other outputs. O*NET-SOC 15-2051.01, task 16142, importance 3.7/5.",
+      "baseExposure": 0.6,
+      "humanJudgment": 0.12,
+      "defaultShare": 15,
+      "skills": [
+        "writing",
+        "reading-comprehension"
+      ],
+      "tryThisWeek": "Time one run of this task, then test one AI step inside it and note where it stops being reliable."
+    },
+    {
+      "id": "bookkeeping-clerk-2495",
+      "roleId": "bookkeeping-clerk",
+      "name": "Operate 10-key calculators, typewriters, and copy machines",
+      "description": "Operate 10-key calculators, typewriters, and copy machines to perform calculations and produce documents. O*NET-SOC 43-3031.00, task 2495, importance 4.5/5.",
+      "baseExposure": 0.74,
+      "humanJudgment": 0.05,
+      "defaultShare": 16,
+      "skills": [
+        "mathematics",
+        "active-listening",
+        "critical-thinking"
+      ],
+      "tryThisWeek": "Ask an AI tool to draft this task once, then check every field against the source record."
+    },
+    {
+      "id": "budget-analyst-3399",
+      "roleId": "budget-analyst",
+      "name": "Summarize budgets and submit recommendations",
+      "description": "Summarize budgets and submit recommendations for the approval or disapproval of funds requests. O*NET-SOC 13-2031.00, task 3399, importance 4.1/5.",
+      "baseExposure": 0.6,
+      "humanJudgment": 0.12,
+      "defaultShare": 16,
+      "skills": [
+        "writing",
+        "active-listening",
+        "critical-thinking"
+      ],
+      "tryThisWeek": "Time one run of this task, then test one AI step inside it and note where it stops being reliable."
+    },
+    {
+      "id": "customer-service-rep-2583",
+      "roleId": "customer-service-rep",
+      "name": "Determine charges for services requested, collect deposits or payments",
+      "description": "Determine charges for services requested, collect deposits or payments, or arrange for billing. O*NET-SOC 43-4051.00, task 2583, importance 4.2/5.",
+      "baseExposure": 0.62,
+      "humanJudgment": 0.24,
+      "defaultShare": 16,
+      "skills": [
+        "critical-thinking",
+        "active-learning",
+        "active-listening"
+      ],
+      "tryThisWeek": "Time one run of this task, then test one AI step inside it and note where it stops being reliable."
+    },
+    {
+      "id": "data-scientist-21831",
+      "roleId": "data-scientist",
+      "name": "Identify business problems or management objectives that can beâ¦",
+      "description": "Identify business problems or management objectives that can be addressed through data analysis. O*NET-SOC 15-2051.00, task 21831, importance 4.1/5.",
+      "baseExposure": 0.46,
+      "humanJudgment": 0.16,
+      "defaultShare": 16,
+      "skills": [
+        "active-learning",
+        "active-listening",
+        "critical-thinking"
+      ],
+      "tryThisWeek": "Time one run of this task, then test one AI step inside it and note where it stops being reliable."
+    },
+    {
+      "id": "executive-assistant-18573",
+      "roleId": "executive-assistant",
+      "name": "Answer phone calls and direct calls",
+      "description": "Answer phone calls and direct calls to appropriate parties or take messages. O*NET-SOC 43-6011.00, task 18573, importance 4.1/5.",
+      "baseExposure": 0.48,
+      "humanJudgment": 0.31,
+      "defaultShare": 16,
+      "skills": [
+        "active-listening",
+        "speaking",
+        "writing"
+      ],
+      "tryThisWeek": "Time one run of this task, then test one AI step inside it and note where it stops being reliable."
+    },
+    {
+      "id": "market-research-analyst-5441",
+      "roleId": "market-research-analyst",
+      "name": "Gather data on competitors and analyze their prices, sales",
+      "description": "Gather data on competitors and analyze their prices, sales, and method of marketing and distribution. O*NET-SOC 13-1161.00, task 5441, importance 3.6/5.",
+      "baseExposure": 0.6,
+      "humanJudgment": 0.12,
+      "defaultShare": 16,
+      "skills": [
+        "critical-thinking",
+        "reading-comprehension",
+        "active-listening"
+      ],
+      "tryThisWeek": "Time one run of this task, then test one AI step inside it and note where it stops being reliable."
+    },
+    {
+      "id": "operations-manager-20701",
+      "roleId": "operations-manager",
+      "name": "Prepare staff work schedules and assign specific duties",
+      "description": "Prepare staff work schedules and assign specific duties. O*NET-SOC 11-1021.00, task 20701, importance 4.0/5.",
+      "baseExposure": 0.62,
+      "humanJudgment": 0.33,
+      "defaultShare": 16,
+      "skills": [
+        "active-listening",
+        "critical-thinking",
+        "monitoring"
+      ],
+      "tryThisWeek": "Time one run of this task, then test one AI step inside it and note where it stops being reliable."
+    },
+    {
+      "id": "project-manager-21479",
+      "roleId": "project-manager",
+      "name": "Request and review project updates",
+      "description": "Request and review project updates to ensure deadlines are met. O*NET-SOC 13-1082.00, task 21479, importance 4.3/5.",
+      "baseExposure": 0.74,
+      "humanJudgment": 0.08,
+      "defaultShare": 16,
+      "skills": [
+        "active-listening",
+        "critical-thinking",
+        "reading-comprehension"
+      ],
+      "tryThisWeek": "Ask an AI tool to draft this task once, then check every field against the source record."
+    }
+  ],
+  "skills": [
+    {
+      "id": "programming",
+      "name": "Programming",
+      "category": "Technical",
+      "hoursPerLevel": 12,
+      "deliverable": "A small working artifact that uses Programming on real data & analysis data."
+    },
+    {
+      "id": "active-learning",
+      "name": "Active Learning",
+      "category": "Analytical",
+      "hoursPerLevel": 10,
+      "deliverable": "A one-page analysis showing your Active Learning reasoning on a real office & admin support case."
+    },
+    {
+      "id": "complex-problem-solving",
+      "name": "Complex Problem Solving",
+      "category": "Analytical",
+      "hoursPerLevel": 10,
+      "deliverable": "A one-page analysis showing your Complex Problem Solving reasoning on a real office & admin support case."
+    },
+    {
+      "id": "critical-thinking",
+      "name": "Critical Thinking",
+      "category": "Analytical",
+      "hoursPerLevel": 10,
+      "deliverable": "A one-page analysis showing your Critical Thinking reasoning on a real office & admin support case."
+    },
+    {
+      "id": "judgment-and-decision-making",
+      "name": "Judgment and Decision Making",
+      "category": "Analytical",
+      "hoursPerLevel": 10,
+      "deliverable": "A one-page analysis showing your Judgment and Decision Making reasoning on a real business & finance case."
+    },
+    {
+      "id": "mathematics",
+      "name": "Mathematics",
+      "category": "Analytical",
+      "hoursPerLevel": 10,
+      "deliverable": "A one-page analysis showing your Mathematics reasoning on a real office & admin support case."
+    },
+    {
+      "id": "monitoring",
+      "name": "Monitoring",
+      "category": "Analytical",
+      "hoursPerLevel": 10,
+      "deliverable": "A one-page analysis showing your Monitoring reasoning on a real office & admin support case."
+    },
+    {
+      "id": "active-listening",
+      "name": "Active Listening",
+      "category": "Communication",
+      "hoursPerLevel": 8,
+      "deliverable": "A recorded five-minute walkthrough that demonstrates Active Listening with a stakeholder."
+    },
+    {
+      "id": "coordination",
+      "name": "Coordination",
+      "category": "Communication",
+      "hoursPerLevel": 8,
+      "deliverable": "A recorded five-minute walkthrough that demonstrates Coordination with a stakeholder."
+    },
+    {
+      "id": "reading-comprehension",
+      "name": "Reading Comprehension",
+      "category": "Communication",
+      "hoursPerLevel": 8,
+      "deliverable": "A recorded five-minute walkthrough that demonstrates Reading Comprehension with a stakeholder."
+    },
+    {
+      "id": "service-orientation",
+      "name": "Service Orientation",
+      "category": "Communication",
+      "hoursPerLevel": 8,
+      "deliverable": "A recorded five-minute walkthrough that demonstrates Service Orientation with a stakeholder."
+    },
+    {
+      "id": "social-perceptiveness",
+      "name": "Social Perceptiveness",
+      "category": "Communication",
+      "hoursPerLevel": 8,
+      "deliverable": "A recorded five-minute walkthrough that demonstrates Social Perceptiveness with a stakeholder."
+    },
+    {
+      "id": "speaking",
+      "name": "Speaking",
+      "category": "Communication",
+      "hoursPerLevel": 8,
+      "deliverable": "A recorded five-minute walkthrough that demonstrates Speaking with a stakeholder."
+    },
+    {
+      "id": "writing",
+      "name": "Writing",
+      "category": "Communication",
+      "hoursPerLevel": 8,
+      "deliverable": "A recorded five-minute walkthrough that demonstrates Writing with a stakeholder."
+    },
+    {
+      "id": "management-of-financial-resources",
+      "name": "Management of Financial Resources",
+      "category": "Operational",
+      "hoursPerLevel": 6,
+      "deliverable": "A tracked week where you apply Management of Financial Resources to your own workload."
+    },
+    {
+      "id": "management-of-personnel-resources",
+      "name": "Management of Personnel Resources",
+      "category": "Operational",
+      "hoursPerLevel": 6,
+      "deliverable": "A tracked week where you apply Management of Personnel Resources to your own workload."
+    },
+    {
+      "id": "time-management",
+      "name": "Time Management",
+      "category": "Operational",
+      "hoursPerLevel": 6,
+      "deliverable": "A tracked week where you apply Time Management to your own workload."
+    }
+  ],
+  "signals": [],
+  "resources": [],
+  "scenarios": [
+    {
+      "id": "normal",
+      "label": "Normal",
+      "multiplier": 1.0,
+      "description": "Current adoption: tools are available, but workflows change slowly."
+    },
+    {
+      "id": "fast",
+      "label": "Fast",
+      "multiplier": 1.25,
+      "description": "Faster adoption: automation is deployed across teams within a year."
+    }
+  ],
+  "sdgs": [
+    {
+      "id": 4,
+      "name": "Quality Education",
+      "color": "#C5192D"
+    },
+    {
+      "id": 8,
+      "name": "Decent Work and Economic Growth",
+      "color": "#A21942"
+    },
+    {
+      "id": 9,
+      "name": "Industry, Innovation and Infrastructure",
+      "color": "#FD6925"
+    },
+    {
+      "id": 10,
+      "name": "Reduced Inequalities",
+      "color": "#DD1367"
+    }
+  ],
+  "demoPersona": null
+}

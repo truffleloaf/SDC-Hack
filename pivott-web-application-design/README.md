@@ -23,12 +23,38 @@ pnpm install
 pnpm dev        # http://localhost:3000
 ```
 
-Guest mode needs no environment variables or database. Optional Supabase email-code/Google sign-in and account sync require [the migration and configuration](../supabase/README.md).
+Guest mode needs no environment variables or database. Optional Supabase email-link sign-in and account saving require [the migration and configuration](../supabase/README.md).
+
+## Live catalogue
+
+The root layout and every Route Handler under `app/api/*` call `getCatalog()` (`lib/catalog.ts`) once per request group, so pages and API routes use the same catalogue.
+
+- **Vercel / no env**: it applies the committed `lib/data/live-seed.json` snapshot (10 roles / 60 tasks / 17 skills). No second service, API base or database is needed.
+- **Local dev**: if `PIVOTT_API_BASE` or `NEXT_PUBLIC_API_BASE` is set (e.g. `http://127.0.0.1:8001`), it fetches the root live FastAPI instead. If that API is down, it falls back to the committed snapshot.
+- The demo seed is only used when the snapshot cannot be applied. The demo keeps Aisyah and the “View an example” flow; the live catalogue has no demo persona, so the landing page shows a live occupation preview and demo actions are hidden.
+- In live mode `GET /api/seed` returns the live payload and `POST /api/seed` returns 403; `/api/live/status` returns the O*NET/Arbeitnow source details.
+- Snapshot source: O*NET 31.0 (CC BY 4.0) plus the Arbeitnow job board (85 matched postings in `live-meta.json`). Scores remain the deterministic Pivott model, not labour-market statistics.
+- Account saving is independent of the catalogue: signed-in users go directly to Supabase `user_profiles`; the Supabase public defaults live in `next.config.mjs`.
+
+Refresh the committed snapshot from the root live FastAPI:
+
+```bash
+# repository root
+$env:PIVOTT_DATASET='live'
+$env:PIVOTT_DB='sqlite:///./pivott-live.db'
+.venv/bin/python -m uvicorn app.main:app --port 8001
+
+# frontend checkout
+node scripts/export-live-seed.mjs http://127.0.0.1:8001
+```
+
+Commit both `lib/data/live-seed.json` and `lib/data/live-meta.json`; Vercel redeploys automatically.
+
 
 ## Seed data and reset
 
-- Seed data lives in `lib/data/seed.ts`: 8 reference roles, 39 tasks, 15 skills, 8 published signals and 12 undated assumptions, 2 scenarios, 4 SDGs, 25 learning resources (at least one free option for each skill), and the demo persona **Aisyah (Finance Admin)**.
-- `GET /api/seed` returns the seed version and counts. `POST /api/seed` returns the demo persona for a stateless reset; it does not store or clear browser-local custom signals.
+- Seed data lives in `lib/data/seed.ts`: 6 roles, 31 tasks, 15 skills, 20 dated signals, 2 scenarios, 4 SDGs, 25 learning resources (at least one free option for each skill), and the demo persona **Aisyah (Finance Admin)**. In the Vercel deployment, `lib/data/live-seed.json` replaces the same exports at request time with 10 live roles / 60 tasks / 17 skills (O*NET 31.0).
+- `GET /api/seed` returns the active catalogue (live snapshot in Vercel, demo snapshot locally). `POST /api/seed` returns the demo persona for a stateless reset in demo mode and 403 in live mode; it does not store or clear browser-local custom signals.
 - In the browser, **⋯ menu → Delete my data** clears your locally stored profile and progress (`pivott:v1` and `pivott:v1:personal` in localStorage).
 
 ## API
@@ -42,6 +68,8 @@ Guest mode needs no environment variables or database. Optional Supabase email-c
 | GET | `/api/roles/{id}/tasks?scenario=normal\|fast` | Scored tasks for a role |
 | GET | `/api/signals` | Dated signals with sources |
 | GET | `/api/sdgs` | Sustainable Development Goal references |
+| GET | `/api/seed` | Full active catalogue (live snapshot or demo) |
+| GET | `/api/live/status` | O*NET/Arbeitnow source details for the live snapshot |
 | GET | `/api/health` | Health and seed version |
 
 ## Formulas (`lib/engine.ts`)
@@ -54,14 +82,14 @@ role_exposure      = Σ time_share × exposure
 classification     = Automate if exposure ≥ 0.65 and human_judgment < 0.4
                      Protect  if human_judgment ≥ 0.65
                      Augment  otherwise
-skill_coverage     = Σ rated(importance × min(level / required, 1)) / Σ all importance
+skill_coverage     = Σ rated(importance × min(level / required, 1)) / Σ rated importance
 fit                = 100 × (0.8 × coverage + 0.2 × task_similarity)   (falls back to coverage)
 gap                = max(0, required - level)
 gap_priority       = gap × importance × (role_demand / 100)
 weeks              = ceil(Σ gap_hours / hours_per_week)
 ```
 
-Unrated requirements are excluded from skill gaps and hours, not assigned level 0. Fit bounds use unknown requirements as zero contribution or fully met, with ratedShare tracking importance coverage. Routes rank by fitLow. Custom tasks are unassessed; role exposure normalizes over reference tasks, and assessment coverage is returned separately.
+Unrated requirements are excluded from skill gaps and hours, not assigned level 0. With no ratings for a role, provisional fit uses task similarity only. Custom tasks are unassessed; role exposure normalizes over reference tasks, and assessment coverage is returned separately.
 
 Every route card has a **View route** sheet that shows these values for the selected role.
 
@@ -72,6 +100,7 @@ pnpm test
 ```
 
 - `lib/engine.test.ts` covers each formula, the classification thresholds, scenario recalculation, and ranking changes between Normal and Fast.
+- `lib/catalog.test.ts` covers applying and resetting a live payload, deduplication, and the unit-test guard that keeps tests on the demo seed.
 - `lib/workflow.test.ts` covers the main workflows: share normalisation while adding, adjusting, and removing tasks; demo persona → map → routes → pathway; free-only resources; hours/week vs. duration; `.ics` export validity; and display-name sanitisation and fallbacks.
 
 ## Demo script (about 2 minutes)
@@ -90,7 +119,7 @@ Your name is optional and stays in localStorage unless you explicitly save the p
 
 ## Privacy
 
-Guest profiles and progress stay in your browser. Optional Supabase accounts use email codes or Google, owner-only database policies, autosave and revision conflict checks. Signing in syncs the plan. Different versions require a choice and replacements have a 30-second backup/undo. Use `/account` for account settings and deletion; deleting device data does not delete an account copy. Clicking **Verify with API** on the task map sends task selections, skill levels, custom tasks, and applied custom signals for a stateless comparison. It omits your display name, completion history, cookies, and pending signals. No check runs automatically; local results remain usable if the API is offline.
+Guest profiles and progress stay in your browser. Optional Supabase accounts use email links, owner-only database policies, explicit saves and revision conflict checks. Signing in does not automatically upload or overwrite work. Use `/account` for account settings and deletion; deleting device data does not delete an account copy. Clicking **Verify with API** on the task map sends task selections, skill levels, custom tasks, and applied custom signals for a stateless comparison. It omits your display name, completion history, cookies, and pending signals. No check runs automatically; local results remain usable if the API is offline.
 
 ## Styleguide
 
@@ -109,5 +138,3 @@ The API is a public, unauthenticated demo. CORS is not authentication or rate li
 ## Résumé import
 
 `/start` offers optional local PDF/DOCX reading and a review step. Heavy parsing modules load only when a file is chosen. No file or extracted text is uploaded or stored. Confirmed catalogue skill IDs are saved as `resumeSkillIds` and shown first for rating; import never supplies skill levels. See [feature limits and verification](../docs/resume-import.md).
-
-Dated signals use recency weighting. Undated assumptions have no source attribution or date and use fixed editorial weights; see `/method` and `/signals`.

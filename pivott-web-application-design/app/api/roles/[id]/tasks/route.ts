@@ -1,8 +1,10 @@
 import { allSignals, json } from '@/lib/api'
+import { getCatalog } from '@/lib/catalog'
 import { roleById, tasksForRole } from '@/lib/data/seed'
 import { roleExposure, scoreTasks } from '@/lib/engine'
 
 export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
+  await getCatalog()
   const { id } = await params
   const role = roleById[id]
   if (!role) return json({ error: 'Role not found' }, 404)

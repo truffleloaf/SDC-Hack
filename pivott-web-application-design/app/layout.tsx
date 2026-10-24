@@ -1,4 +1,6 @@
 import { MotionProvider } from '@/components/pivott/motion-provider'
+import { CatalogBoot } from '@/components/pivott/catalog-boot'
+import { getCatalog } from '@/lib/catalog'
 import { AccountProvider } from '@/components/account/account-provider'
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
@@ -21,6 +23,8 @@ const plex = localFont({
   variable: '--font-plex', display: 'swap',
 })
 
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = {
   title: 'Pivott: see which parts of your job AI could take on',
   description:
@@ -36,7 +40,8 @@ export const viewport: Viewport = {
   ],
 }
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const catalog = await getCatalog()
   return (
     <html
       lang="en"
@@ -44,7 +49,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       className={`${plex.variable} bg-background`}
     >
       <body className="min-h-dvh font-sans antialiased">
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem storageKey="pivott:theme">
+        <CatalogBoot payload={catalog}><ThemeProvider attribute="class" defaultTheme="system" enableSystem storageKey="pivott:theme">
           <MotionProvider><AccountProvider><TooltipProvider delay={150}>
             <a
               href="#main"
@@ -64,7 +69,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
               }}
             />
           </TooltipProvider></AccountProvider></MotionProvider>
-        </ThemeProvider>
+        </ThemeProvider></CatalogBoot>
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
