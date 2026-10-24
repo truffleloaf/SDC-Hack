@@ -60,7 +60,7 @@ docker run --rm -d --name pivott-pg -p 5433:5432 `
 
 ## CI
 
-[.github/workflows/tests.yml](../.github/workflows/tests.yml) 里加了 `postgres` job：每次 push / PR 用 `postgres:17` service 跑同一个脚本。`pytest` job 仍然用内存 SQLite，保持快。
+[.github/workflows/backend-tests.yml](../../.github/workflows/backend-tests.yml) 里加了 `postgres` job：每次 push / PR 用 `postgres:17` service 跑同一个脚本。`pytest` job 仍然用内存 SQLite，保持快。
 
 ## 边界
 

@@ -9,7 +9,7 @@ Historical log. Not maintained.
 
 ## 目标
 
-把“加一条信号 → 分数立刻变化”做成现场可演示、可解释、可回滚的闭环。字段和示例见 [`../api-design.md`](../api-design.md) 第 4.8 / 5 节。
+把“加一条信号 → 分数立刻变化”做成现场可演示、可解释、可回滚的闭环。字段和示例见 [`../../api-design.md`](../../api-design.md) 第 4.8 / 5 节。
 
 ## 范围
 

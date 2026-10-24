@@ -9,7 +9,7 @@ Historical log. Not maintained.
 
 ## 目标
 
-给前端 demo 一套稳定、可解释、与页面数字一致的 HTTP 契约。完整字段、示例和错误码以 [`../api-design.md`](../api-design.md) 为准。
+给前端 demo 一套稳定、可解释、与页面数字一致的 HTTP 契约。完整字段、示例和错误码以 [`../../api-design.md`](../../api-design.md) 为准。
 
 核心：`POST /api/analysis` 一次返回 `tasks[] + routes[] + roleExposure + confidence`；请求体是内联 `ProfileInput`，不是 `profile_id`。
 
@@ -34,7 +34,7 @@ Historical log. Not maintained.
 
 - 不在 router 里写公式。
 - 不返回 `{data, meta, sources}` 包装。
-- 本工作包不建服务端 profile/pathway；登录用户的 profile 由后续 `/api/me/profile` 接管（见 [`../auth.md`](../auth.md)），未登录 demo 不受影响。
+- 本工作包不建服务端 profile/pathway；登录用户的 profile 由后续 `/api/me/profile` 接管（见 [`../../auth.md`](../../auth.md)），未登录 demo 不受影响。
 - 不做 `/api/meta`、`/api/demo`、`/api/analysis/demo`、`/api/skills`、`/api/scenarios`、`/api/admin/*`（见 api-design 第 8 节）。
 - 不把数据库连接串或 service role key 返回给前端。
 

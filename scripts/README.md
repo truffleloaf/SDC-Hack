@@ -34,8 +34,7 @@ Browser checks expect a running production or development web server. They use `
 | Script | Purpose | Command | Environment |
 |---|---|---|---|
 | [`checks/lint-copy.mjs`](checks/lint-copy.mjs) | Reject disallowed UI phrases and native browser prompts. | `node scripts/checks/lint-copy.mjs` | None |
+| [`checks/check-links.mjs`](checks/check-links.mjs) | Check relative links, images and Markdown anchors in tracked documentation. | `node scripts/checks/check-links.mjs` | None |
 | [`checks/test-backend-schema.mjs`](checks/test-backend-schema.mjs) | Exercise backend schema and migrations in isolated PostgreSQL-compatible storage. | `node scripts/checks/test-backend-schema.mjs` | Optional `PGLITE_MODULE` |
 | [`checks/test-supabase-policies.mjs`](checks/test-supabase-policies.mjs) | Exercise web account RLS and revision behavior in isolation. | `node scripts/checks/test-supabase-policies.mjs` | Optional `PGLITE_MODULE` |
 | [`checks/smoke_vercel.py`](checks/smoke_vercel.py) | Check deployed Next.js pages, API contracts, scenarios and 404 routing. | `python scripts/checks/smoke_vercel.py http://127.0.0.1:3000` | Optional URL argument |
-
-The Markdown link checker is documented here after it is introduced in the repository-checking change.

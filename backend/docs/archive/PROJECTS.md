@@ -3,7 +3,7 @@ Historical log. Not maintained.
 # Pivott 后端：工作包与推进方式
 
 > 更新时间：2026-10-22
-> 数据模型与接口以 [`docs/data-model.md`](docs/data-model.md)、[`docs/api-design.md`](docs/api-design.md) 为准；本文只讲怎么拆、怎么推进，不重复字段细节。
+> 数据模型与接口以 [`../data-model.md`](../data-model.md)、[`../api-design.md`](../api-design.md) 为准；本文只讲怎么拆、怎么推进，不重复字段细节。
 > 范围：Pivott 后端（FastAPI + 可选 Supabase）。前端 demo 是独立仓库。
 
 ## 0. 先给结论
@@ -100,7 +100,7 @@ Next.js demo (browser)  ──可选──▶  FastAPI (Pivott API)  ──可�
 **现状**
 
 - 已实现 12 个 demo/演示控制方法；后续又加了 10 个 auth/个人数据方法（`/api/auth/*`、`/api/me/profile`），共 24 个。
-- 契约见 [`docs/api-design.md`](docs/api-design.md)；错误统一为 `{error}`。
+- 契约见 [`../api-design.md`](../api-design.md)；错误统一为 `{error}`。
 
 详见 [`issues/P0-3-api-layer.md`](issues/P0-3-api-layer.md)。
 
@@ -250,7 +250,7 @@ pivott-api/
 
 可选下一步：
 
-1. 前端接登录：方式 A 加 `@supabase/supabase-js` 直连 Supabase；方式 B 直接调 `/api/auth/signin`（当前 UI-only 前端最快）。两种方式都把 Supabase 的 anon key 填进 `.env`，再读写 `/api/me/profile`（[`docs/auth.md`](docs/auth.md)）。
+1. 前端接登录：方式 A 加 `@supabase/supabase-js` 直连 Supabase；方式 B 直接调 `/api/auth/signin`（当前 UI-only 前端最快）。两种方式都把 Supabase 的 anon key 填进 `.env`，再读写 `/api/me/profile`（[`../auth.md`](../auth.md)）。
 2. 前端把 API base 指向 FastAPI，删掉重复的 route handler 逻辑（字段不用改）。
 3. Supabase 已完成 schema + seed + 全部 migration；后续结构变更走 `supabase/migrations/`。
 4. 可选：把 schema 变更迁到 Alembic；当前靠 `supabase/schema.sql` + 手工 migration。

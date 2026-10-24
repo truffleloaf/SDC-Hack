@@ -11,7 +11,7 @@ Historical log. Not maintained.
 
 用**纯 Python、确定性**函数复刻前端 `lib/engine.ts`。引擎不碰数据库、不碰 HTTP、不调用 LLM。
 
-公式的唯一说明见 [`../data-model.md`](../data-model.md) 第 7 节。
+公式的唯一说明见 [`../../data-model.md`](../../data-model.md) 第 7 节。
 
 ## 范围
 

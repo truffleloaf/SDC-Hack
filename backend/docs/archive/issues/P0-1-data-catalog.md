@@ -11,7 +11,7 @@ Historical log. Not maintained.
 
 把“角色—任务—技能—信号—SDG—资源”这套目录做成**唯一事实来源**：空库执行一次 schema + seed，就能支撑全部 demo 页面和 3 分钟演示。
 
-字段、约束和演示档案以 [`../data-model.md`](../data-model.md) 为准。
+字段、约束和演示档案以 [`../../data-model.md`](../../data-model.md) 为准。
 
 ## 范围
 
