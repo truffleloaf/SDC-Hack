@@ -15,7 +15,7 @@ Render 的 **Web Service** 是常驻 `uvicorn` 进程，和本地启动方式一
 
 ## 方式 1：Blueprint（推荐，最少点击）
 
-仓库里已经有 [render.yaml](../render.yaml)（在 `backend/render.yaml` 也有一份）：
+仓库里已经有 [`backend/render.yaml`](../../backend/render.yaml)：
 
 1. 用 GitHub 登录 <https://dashboard.render.com/register>。
 2. 点 **New → Blueprint**，连接仓库 `truffleloaf/SDC-Hack`。

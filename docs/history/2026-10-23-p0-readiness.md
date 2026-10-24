@@ -1,3 +1,5 @@
+Historical log. Not maintained.
+
 # P0 hackathon-readiness report
 
 Scope: P0.1–P0.5 only, in order, one commit per task. P1 and P2 have not been started. The original palette, components, browser storage model and deterministic formulas are preserved.
@@ -25,7 +27,7 @@ After-task verification: 22 frontend tests, explicit TypeScript check, enforced 
 
 Confirmed Data analysis had only paid resources. Added Microsoft's free Working with Data lessons after checking the GitHub URL returned HTTP 200 and reading the module description. Resource URL: https://github.com/microsoft/Data-Science-For-Beginners/tree/main/2-Working-With-Data.
 
-Changed `lib/data/seed.ts`, generated `backend/app/data/seed.json` and `backend/tests/golden.json`, `scripts/generate-data.mjs`, the frontend workflow tests and backend engine/API tests. Updated resource/version documentation in the frontend/backend READMEs, backend seed module/docs, and `VERCEL.md`. The seed now has 25 resources and version `2026.10.2`; the scoring cut-off and all formulas are unchanged. Generation uses the TypeScript seed and engine, not hand-edited JSON. Both suites assert free-resource coverage for every skill.
+Changed `lib/data/seed.ts`, generated `backend/app/data/seed.json` and `backend/tests/golden.json`, `scripts/data/generate-data.mjs`, the frontend workflow tests and backend engine/API tests. Updated resource/version documentation in the frontend/backend READMEs, backend seed module/docs, and `docs/deployment/vercel.md`. The seed now has 25 resources and version `2026.10.2`; the scoring cut-off and all formulas are unchanged. Generation uses the TypeScript seed and engine, not hand-edited JSON. Both suites assert free-resource coverage for every skill.
 
 After-task verification: 37 frontend tests, TypeScript, build, and 46 backend tests passed. Export/golden `--check` passed. Commit: `f2b9b82`.
 
@@ -35,7 +37,7 @@ Confirmed both API implementations excluded custom tasks/applied custom signals 
 
 Updated `lib/api.ts`, new `lib/custom-inputs.ts`, the Next analysis handler, `backend/app/parsing.py`, and `backend/app/routers/analysis.py`. Both validate custom inputs, protect seed IDs, apply editor-range clamps, and force custom evidence to `user`. Aligned a pre-existing zero-hours fallback discrepancy: both parsers now use 6 hours. Expanded shared goldens and TypeScript/Python tests for custom inputs in Normal/Fast, validation, network errors and privacy of the request payload. The API omits display name, progress, cookies and pending signals and does not persist submitted profiles. The API control explains that task and skill inputs are sent when clicked.
 
-`backend/app/main.py` now has explicit deployed/local CORS origins, configurable through `PIVOTT_CORS_ORIGINS`. Updated frontend/backend READMEs and `VERCEL.md` with CORS, stateless verification, and rate-limit limitations. No internal service binding is needed because the browser calls a same-origin public API, not another service from server-side code.
+`backend/app/main.py` now has explicit deployed/local CORS origins, configurable through `PIVOTT_CORS_ORIGINS`. Updated frontend/backend READMEs and `docs/deployment/vercel.md` with CORS, stateless verification, and rate-limit limitations. No internal service binding is needed because the browser calls a same-origin public API, not another service from server-side code.
 
 After-task verification: 49 frontend tests, TypeScript, enforced build and 64 backend tests passed. Browser checks passed on standalone Next.js and combined `vercel dev --local`: default destination through passport; no automatic verification request; Normal/Fast verification with seed/custom tasks; a real signal added through Admin, recomputed and verified in both scenarios; offline error and continued use of local scenario/list controls; mobile overflow check. Combined routing smoke passed for pages/assets, FastAPI health/analysis/query parameters/pathway round trip/404.
 
@@ -43,7 +45,7 @@ Local runner note: use its printed `localhost` address. The attempted browser ch
 
 ## P0.5 — Repository front door and CI: completed
 
-Rewrote root `README.md` with pitch, owner-confirmed live address, real screenshot (`docs/pivott-desktop.png`), architecture diagram, local/combined run commands, verification, data maintenance, privacy and honest limits. Renamed the frontend package to `pivott-web`; frozen installation passed without lockfile changes.
+Rewrote root `README.md` with pitch, owner-confirmed live address, real screenshot (`docs/screenshots/home-desktop.png`), architecture diagram, local/combined run commands, verification, data maintenance, privacy and honest limits. Renamed the frontend package to `pivott-web`; frozen installation passed without lockfile changes.
 
 Added `backend/docs/architecture.en.md` and `backend/docs/demo-script.en.md`, linked English and Chinese versions from `backend/docs/README.md`, and corrected the Chinese architecture's false claim that root CI was missing. Updated stale versions/counts/default demo story and backend/frontend README descriptions. Added `.github/workflows/frontend.yml` with frozen install, tests, explicit TypeScript check and build. The existing backend workflow is retained. This report is part of the documentation task.
 

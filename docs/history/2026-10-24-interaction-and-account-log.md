@@ -1,4 +1,6 @@
-# Briefs 2 and 3 implementation log
+Historical log. Not maintained.
+
+# Interaction and account implementation log
 
 Base: `main` at `20bf696`, including résumé import (PR #7). Work branch: `codex/pivott-briefs-2-3`.
 

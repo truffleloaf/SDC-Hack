@@ -11,7 +11,7 @@
 | [live-data.md](live-data.md) | live 真实数据：O*NET 31.0 + Arbeitnow/Adzuna、映射规则、线索模型、限制 |
 | [architecture.md](architecture.md) | 架构、请求数据流、公式、安全、部署、当前实现状态 |
 | [deploy.md](deploy.md) | 部署：demo / live 两套库、Supabase、SQLite 持久卷、环境变量、安全清单 |
-| [deploy-render.md](deploy-render.md) | 前端 Vercel + 后端 Render 的部署步骤（含 `render.yaml`） |
+| [../../docs/deployment/render.md](../../docs/deployment/render.md) | 前端 Vercel + 后端 Render 的部署步骤（含 `render.yaml`） |
 | [local-postgres.md](local-postgres.md) | 本地真实 PostgreSQL 验证：schema / seed / migration / RLS / TRUNCATE |
 | [demo-script.md](demo-script.md) | 3 分钟演示脚本、准确数字、备用话术、故障预案 |
 | [issues/](issues/) | 6 个工作包的 issue 草稿（数字已按新模型更新） |

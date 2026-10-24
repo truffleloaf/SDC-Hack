@@ -1,3 +1,5 @@
+Historical log. Not maintained.
+
 # Personal workspace integration
 
 Implemented on `codex/pivott-personal-tool`, based on the merged P0 work.
@@ -31,9 +33,9 @@ Reusable optional browser scripts are under `scripts/check-*-browser.cjs`; polic
 
 Guest mode works without account configuration. To enable live accounts:
 
-1. Apply [the Supabase migration](supabase/migrations/202610230001_profiles.sql).
+1. Apply [the Supabase migration](../../supabase/migrations/202610230001_profiles.sql).
 2. Configure email authentication and allowed `/signin` callback URLs for the intended deployment origins.
 3. Set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` before rebuilding the Next.js service. Never use a service-role key in the frontend. The cloud environment draft records these variable requirements; values still need secure configuration. Saving a draft does not publish settings or configure Vercel.
-4. Follow the two-account/device live checks in [Supabase setup](supabase/README.md), including email delivery, expiry, conflict handling and deletion.
+4. Follow the two-account/device live checks in [Supabase setup](../../supabase/README.md), including email delivery, expiry, conflict handling and deletion.
 
 No live Supabase project was available for those checks. This branch does not itself merge or deploy production. Direct verification of the live Vercel site remains unavailable from this environment; the owner's earlier confirmation is separate from the local results above.
