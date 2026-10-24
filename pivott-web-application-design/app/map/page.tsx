@@ -43,7 +43,7 @@ export default function MapPage() {
   }, [changeKey])
 
   function chooseMultiplier(value: number) {
-    if (value === 1 || value === 1.25) { setPreview(undefined); const scenario = value === 1 ? 'normal' : 'fast'; if (state.scenario !== scenario) setState({ scenario }) }
+    if (value === .75 || value === 1 || value === 1.25) { setPreview(undefined); const scenario = value === .75 ? 'slow' : value === 1 ? 'normal' : 'fast'; if (state.scenario !== scenario) setState({ scenario }) }
     else setPreview(value)
   }
 
@@ -149,7 +149,7 @@ export default function MapPage() {
             </motion.div>
           </AnimatePresence>
           {unassessed.length > 0 && <section className="border-t border-border pt-4"><h2 className="text-sm font-medium">Not assessed yet</h2><ul className="mt-2 space-y-2">{unassessed.map((task) => <li key={task.taskId} className="flex justify-between gap-3 text-sm"><span>{state.taskNames[task.taskId] || task.name}</span><span className="text-muted-foreground">{Math.round(task.share)}% of your time · No estimate</span></li>)}</ul></section>}
-          {preview === undefined ? <VerifyAnalysis state={state} analysis={analysis} /> : <p className="border-t border-border pt-4 text-xs text-muted-foreground">Preview runs on this device. Choose Normal or Fast to verify a preset with the API.</p>}
+          {preview === undefined ? <VerifyAnalysis state={state} analysis={analysis} /> : <p className="border-t border-border pt-4 text-xs text-muted-foreground">Preview runs on this device. Choose Slow, Normal or Fast to verify a preset with the API.</p>}
         </section>
 
         <aside className="hidden lg:block">
@@ -165,6 +165,7 @@ export default function MapPage() {
 
       <WorkHours tasks={scored} coverage={assessmentCoverage} hours={state.workHoursPerWeek} onChange={(hours) => setState({ workHoursPerWeek: hours })} />
 
+      <p className="mt-4 text-sm text-muted-foreground">Overall exposure range {Math.round(Math.min(...analysis.exposureRange)*100)}–{Math.round(Math.max(...analysis.exposureRange)*100)}% across Slow, Normal and Fast. Estimates, not predictions.</p>
       <section className="mt-10" aria-labelledby="nearby-title"><h2 id="nearby-title" className="text-xl font-semibold">Nearby roles{preview !== undefined ? ' · Preview' : ''}</h2><p className="mt-2 text-sm text-muted-foreground">Ranked with the current adoption multiplier.</p><ol className="mt-4 divide-y divide-border">{routes.map((route) => <motion.li key={route.roleId} layout={reduce ? false : 'position'} transition={{ type: 'spring', stiffness: 240, damping: 30 }} className="flex flex-wrap justify-between gap-2 py-4"><span className="font-medium">{route.title}</span><span className="text-sm text-muted-foreground">Fit {fitLabel(route)} · Target exposure {Math.round(route.targetExposure * 100)}%</span></motion.li>)}</ol><PLink href="/routes" variant="link">Compare {preview !== undefined ? 'preset ' : ''}routes</PLink></section>
 
       <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>

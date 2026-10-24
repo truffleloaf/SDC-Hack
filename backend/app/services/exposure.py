@@ -73,7 +73,7 @@ def normalize_shares(
 
 
 def get_scenario(session: Session, scenario_id: str) -> Scenario:
-    wanted = "fast" if scenario_id == "fast" else "normal"
+    wanted = scenario_id if scenario_id in {"slow", "normal", "fast"} else "normal"
     scenario = session.get(Scenario, wanted)
     if scenario is None:
         raise ValueError(f"Unknown scenario: {scenario_id}")

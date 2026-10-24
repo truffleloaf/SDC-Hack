@@ -29,7 +29,7 @@ export async function fetchAnalysis(state: AppState, options: { signal?: AbortSi
   })
   if (!response.ok) throw new Error('API verification is unavailable')
   const body: unknown = await response.json()
-  if (!record(body) || (body.scenario !== 'normal' && body.scenario !== 'fast') || !exposure(body.roleExposure) || !Array.isArray(body.tasks) || !Array.isArray(body.routes)) throw new Error('Invalid API analysis')
+  if (!record(body) || (body.scenario !== 'slow' && body.scenario !== 'normal' && body.scenario !== 'fast') || !exposure(body.roleExposure) || !Array.isArray(body.tasks) || !Array.isArray(body.routes)) throw new Error('Invalid API analysis')
   const tasks = body.tasks.map((task: unknown) => {
     if (!record(task) || typeof task.id !== 'string' || !exposure(task.exposure)) throw new Error('Invalid API task')
     return { id: task.id, exposure: task.exposure }

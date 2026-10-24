@@ -12,7 +12,7 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
-ScenarioId = Literal["normal", "fast"]
+ScenarioId = Literal["slow", "normal", "fast"]
 Classification = Literal["Automate", "Augment", "Protect"]
 Confidence = Literal["High", "Medium", "Low"]
 Evidence = Literal["verified", "illustrative", "assumption", "user"]

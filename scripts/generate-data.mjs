@@ -36,6 +36,7 @@ const customProfile = {
 }
 const golden = {
   analysisNormal: normal,
+  analysisSlow: analysis('slow'),
   analysisFast: analysis('fast'),
   analysisPreview: analysis('normal', {}, 1.4),
   customProfile,

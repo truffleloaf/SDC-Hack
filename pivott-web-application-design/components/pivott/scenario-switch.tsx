@@ -41,6 +41,7 @@ export function ScenarioSwitch({ state, context = 'map', onPreset }: { state: Ap
       onChange={change}
       size="sm"
       options={[
+        { value: 'slow', label: 'Slow' },
         { value: 'normal', label: 'Normal', icon: <Gauge className="size-3.5" aria-hidden /> },
         { value: 'fast', label: 'Fast', icon: <Zap className="size-3.5" aria-hidden /> },
       ]}

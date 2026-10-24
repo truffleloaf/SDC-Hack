@@ -474,7 +474,7 @@ def test_import_writes_a_complete_live_catalogue(onet_catalog, live_db):
         assert len(payload["tasks"]) == 12
         assert len(payload["skills"]) == 5
         assert payload["demoPersona"] is None
-        assert len(payload["scenarios"]) == 2
+        assert len(payload["scenarios"]) == 3
         assert len(payload["sdgs"]) == 17
         assert session.get(Role, "admin-clerk") is not None
         postings = session.exec(select(JobPosting)).all()

@@ -1,4 +1,5 @@
 'use client'
+import { ScenarioTable } from '@/components/routes/scenario-comparison'
 
 import { SyncNote } from '@/components/account/sync-note'
 import { Columns3, LayoutGrid } from 'lucide-react'
@@ -22,7 +23,7 @@ import { cn } from '@/lib/utils'
 export default function RoutesPage() {
   const router = useRouter()
   const { state, hydrated } = useAppState()
-  const { routes, allRoutes, exposure, scored, assessmentCoverage } = useAnalysis(state)
+  const { comparisons, routes, allRoutes, exposure, scored, assessmentCoverage } = useAnalysis(state)
   const baseline = useAnalysis({ ...state, ignoreTrendSignals: true })
   const [mode, setMode] = useState<'cards' | 'compare'>('cards')
   const [whyId, setWhyId] = useState<string | null>(null)
@@ -93,6 +94,7 @@ export default function RoutesPage() {
           return <li key={route.roleId}>{route.title}: rank {old+1} → {index+1} · {delta>=0?'+':''}{delta.toFixed(2)} score points</li>
         })}</ul>
       </section>
+      <ScenarioTable rows={comparisons} />
       <RouteFan current={roleById[state.roleId]?.title ?? 'Current role'} count={routes.length} />
 
       <AnimatePresence mode="wait">
@@ -107,6 +109,7 @@ export default function RoutesPage() {
             {routes.map((r, i) => (
               <RouteCard
                 key={r.roleId}
+                uncertainty={comparisons.find(c=>c.roleId===r.roleId)}
                 route={r}
                 rank={i}
                 moved={moves[r.roleId]}

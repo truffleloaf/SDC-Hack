@@ -66,7 +66,7 @@ export type Signal = SignalBase & (
 )
 
 export interface Scenario {
-  id: 'normal' | 'fast'
+  id: 'slow' | 'normal' | 'fast'
   label: string
   multiplier: number
   description: string
@@ -82,17 +82,18 @@ export let DATA_AS_OF = '2026-10-01'
 export let SEED_VERSION = '2026.10.4'
 
 export let scenarios: Scenario[] = [
+  {id:'slow',label:'Slow',multiplier:0.75,description:'Team assumption: baseline exposure scaled to 0.75. Not a forecast.'},
   {
     id: 'normal',
     label: 'Normal',
     multiplier: 1,
-    description: 'AI adoption continues at the pace seen across 2025–2026.',
+    description: 'Team assumption: baseline exposure scaled to 1.00. Not a forecast.',
   },
   {
     id: 'fast',
     label: 'Fast',
     multiplier: 1.25,
-    description: 'Tools mature quickly and adoption accelerates across teams.',
+    description: 'Team assumption: baseline exposure scaled to 1.25. Not a forecast.',
   },
 ]
 

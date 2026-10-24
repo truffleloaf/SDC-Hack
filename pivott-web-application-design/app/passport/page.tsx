@@ -1,4 +1,5 @@
 'use client'
+import { ScenarioRange } from '@/components/routes/scenario-comparison'
 
 import { SdgContribution } from '@/components/pivott/sdg-contribution'
 
@@ -19,7 +20,7 @@ import { displayName, possessive, useAnalysis, useAppState } from '@/lib/store'
 
 export default function PassportPage() {
   const { state, hydrated } = useAppState()
-  const { routes, allRoutes, scored } = useAnalysis(state)
+  const { comparisons, routes, allRoutes, scored } = useAnalysis(state)
   const cardRef = useRef<HTMLDivElement>(null)
   const [busy, setBusy] = useState<'png' | 'pdf' | null>(null)
   if (!hydrated) return <PageSkeleton />
@@ -123,6 +124,7 @@ export default function PassportPage() {
         </PButton>
         <CopyButton text={summary} label="Copy summary" toastMessage="Summary copied" className="h-11 px-5" />
       </div>
+      <ScenarioRange row={comparisons.find(r=>r.roleId===targetId)} />
       <SdgContribution roleId={target.id} skillIds={[...steps.map(s=>s.skillId),...state.completedSteps.filter(id=>id.startsWith(targetId+':')).map(id=>id.split(':')[1])]} />
     </div>
   )

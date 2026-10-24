@@ -8,7 +8,8 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   const { id } = await params
   const role = roleById[id]
   if (!role) return json({ error: 'Role not found' }, 404)
-  const scenario = new URL(req.url).searchParams.get('scenario') === 'fast' ? 'fast' : 'normal'
+  const requested = new URL(req.url).searchParams.get('scenario')
+  const scenario = requested === 'slow' ? 'slow' : requested === 'fast' ? 'fast' : 'normal'
   const list = tasksForRole(id)
   const tasks = scoreTasks(
     list.map((t) => ({ taskId: t.id, share: t.defaultShare })),

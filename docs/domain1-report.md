@@ -29,3 +29,9 @@ Each step shows current→target level, estimated hours/weeks, its priority calc
 **Boundary:** OpenLearn, Harvard CS50 and HRD Corp page requests returned HTTP 403 in this environment. The live resource registry is deliberately empty, and steps say “No vetted resource yet.” No programme is falsely marked claimable. The HRD Corp link goes to the official site rather than claiming a specific verified course-list URL. The O*NET figure shown is a mapped requirement weight; learning hours are explicitly team estimates. The old snapshot did not preserve raw skill importance values, so the UI does not invent them.
 
 Validation: all frontend/backend tests, lint and production build pass; added checks cover resource source requirements and the exact priority equation. Optional FastAPI deployments must apply both new migrations before restarting.
+
+## S5: scenarios and confidence
+
+Slow (0.75×), Normal (1×) and Fast (1.25×) are explicit team assumptions. Routes display all three ranks/scores, overtaking notes, a min–max score range and “Estimates, not predictions.” Confidence opens to show rated requirements, relevant dated published signals within 180 days of the snapshot, scenario spread and the exact rules. Route cards, map overview and passport also show scenario uncertainty. The adoption preview includes Slow, and both APIs/account validation preserve it.
+
+Validation includes a new cross-language Slow golden, API Slow checks, comparison/rank consistency and identical TS/Python confidence boundary cases, plus the full lint/test/build suites.

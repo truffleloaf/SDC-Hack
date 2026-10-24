@@ -239,17 +239,18 @@ DELIVERABLES = {
 
 # Product constants, not demo rows: both datasets need the same two scenarios.
 SCENARIOS = (
+    {'id':'slow','label':'Slow','multiplier':0.75,'description':'Team assumption: 0.75× baseline exposure. Not a forecast.'},
     {
         "id": "normal",
         "label": "Normal",
         "multiplier": 1.0,
-        "description": "Current adoption: tools are available, but workflows change slowly.",
+        "description": "Team assumption: 1× baseline exposure. Not a forecast.",
     },
     {
         "id": "fast",
         "label": "Fast",
         "multiplier": 1.25,
-        "description": "Faster adoption: automation is deployed across teams within a year.",
+        "description": "Team assumption: 1.25× baseline exposure. Not a forecast.",
     },
 )
 

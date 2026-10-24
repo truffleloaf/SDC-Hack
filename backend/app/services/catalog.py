@@ -209,7 +209,7 @@ def list_resources(session: Session) -> list[Resource]:
 
 def list_scenarios(session: Session) -> list[Scenario]:
     rows = session.exec(select(Scenario)).all()
-    return sorted(rows, key=lambda row: 0 if row.id == "normal" else 1)
+    return sorted(rows, key=lambda row: {"slow":0,"normal":1,"fast":2}.get(row.id,3))
 
 
 def list_sdgs(session: Session) -> list[SDGRead]:

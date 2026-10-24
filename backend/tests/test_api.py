@@ -64,7 +64,7 @@ def test_health_and_seed_counts(client):
     assert len(data["signals"]) == 20
     assert len(data["resources"]) == 25
     assert len(data["sdgs"]) == 17
-    assert len(data["scenarios"]) == 2
+    assert len(data["scenarios"]) == 3
     assert sum(len(role["sdgs"]) for role in data["roles"]) == 13
     assert data["demoPersona"]["name"] == "Aisyah"
     assert len(data["demoPersona"]["skills"]) == 15
@@ -159,7 +159,7 @@ def test_role_tasks_and_sdgs(client):
     assert len(body["tasks"]) == 6
 
     # Unknown scenario falls back to normal.
-    fallback = client.get("/api/roles/finance-admin/tasks?scenario=slow")
+    fallback = client.get("/api/roles/finance-admin/tasks?scenario=unknown")
     assert fallback.status_code == 200
     assert fallback.json()["scenario"] == "normal"
 
@@ -497,3 +497,10 @@ def test_cors_origins_parsing(monkeypatch):
 
     monkeypatch.setenv("CORS_ORIGINS", "*")
     assert cors_origins() == ["*"]
+
+
+def test_slow_scenario_is_preserved_by_api(client):
+    slow=client.post('/api/analysis',json=aisyah('slow')).json()
+    normal=client.post('/api/analysis',json=aisyah('normal')).json()
+    assert slow['scenario']=='slow'
+    assert slow['roleExposure']<normal['roleExposure']

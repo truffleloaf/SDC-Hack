@@ -92,7 +92,7 @@ def test_seed_counts() -> None:
     assert len(SIGNALS) == 20
     assert len(SDGS) == 17
     assert len(RESOURCES) == 25
-    assert len(SCENARIOS) == 2
+    assert len(SCENARIOS) == 3
 
 
 def test_normal_analysis_matches_frontend_golden() -> None:
@@ -242,3 +242,13 @@ def test_one_rating_cannot_exceed_fully_rated_demo_fit():
 
 def test_preview_matches_typescript_golden():
     assert_close(analysis("normal", 1.4), GOLDEN["analysisPreview"])
+
+
+def test_slow_analysis_matches_frontend_golden():
+    assert_close(analysis('slow'), GOLDEN['analysisSlow'], 'slow')
+
+
+@pytest.mark.parametrize('rated,total,recent,spread,label',[(4,5,3,5,'High'),(4,5,2,5,'Medium'),(2,5,3,5,'Low'),(4,5,3,13,'Low'),(0,0,5,0,'Low')])
+def test_route_confidence(rated,total,recent,spread,label):
+    from app.engine import route_confidence
+    assert route_confidence(rated,total,recent,spread)==label

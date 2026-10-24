@@ -4,7 +4,7 @@ import { useMemo, useSyncExternalStore } from 'react'
 import { DEMO_HOURS_PER_WEEK, DEMO_SCENARIO } from './demo'
 import { demoPersona, hasDemoPersona, roleById, skills as catalogueSkills, signals as seedSignals, tasksForRole, taskById, type Signal } from './data/seed'
 import {
-  computeRoutes,
+  computeRoutes, compareScenarios,
   roleExposure,
   scoreTasks,
   type CustomTask,
@@ -281,6 +281,8 @@ export function analyze(s: AppState, previewMultiplier?: number) {
         sdgFocus: s.sdgFocus,
       })
     : []
+  const comparisons = s.roleId ? compareScenarios({currentRoleId:s.roleId,userTaskSkills,levels:s.skills,signals,hoursPerWeek:s.hoursPerWeek,sdgFocus:s.sdgFocus}) : []
+  const exposureRange = (['slow','normal','fast'] as const).map(scenario=>roleExposure(scoreTasks(s.selections,lookup,scenario,signals)))
   const lastUpdated = signals.reduce((a, b) => (b.date && b.date > a ? b.date : a), '2000-01-01')
-  return { signals, scored, exposure, routes: allRoutes.slice(0, s.routeLimit || 3), allRoutes, userTaskSkills, lastUpdated, unassessed, assessmentCoverage }
+  return { comparisons, exposureRange, signals, scored, exposure, routes: allRoutes.slice(0, s.routeLimit || 3), allRoutes, userTaskSkills, lastUpdated, unassessed, assessmentCoverage }
 }

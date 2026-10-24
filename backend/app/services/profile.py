@@ -80,7 +80,7 @@ def normalize_profile(session: Session, payload: ProfileInput) -> NormalizedProf
     hours = _round_half_up(_as_float(payload.hoursPerWeek, DEFAULT_HOURS_PER_WEEK))
     hours = max(MIN_HOURS_PER_WEEK, min(MAX_HOURS_PER_WEEK, hours))
 
-    scenario = "fast" if payload.scenario == "fast" else "normal"
+    scenario = payload.scenario if payload.scenario in {"slow", "normal", "fast"} else "normal"
 
     target_role_id = payload.targetRoleId
     if target_role_id is not None and session.get(Role, target_role_id) is None:

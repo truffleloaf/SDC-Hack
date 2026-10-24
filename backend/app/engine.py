@@ -70,7 +70,7 @@ def get_scenario(scenario_id: str) -> dict[str, Any]:
     for scenario in SCENARIOS:
         if scenario["id"] == scenario_id:
             return scenario
-    return SCENARIOS[0]
+    return next((s for s in SCENARIOS if s["id"]=="normal"),SCENARIOS[0])
 
 
 def task_exposure(base: float, multiplier: float, adjustment: float) -> float:
@@ -108,7 +108,7 @@ def score_tasks(
     signals: Sequence[dict[str, Any]] = SIGNALS,
     preview_multiplier: float | None = None,
 ) -> list[dict[str, Any]]:
-    multiplier = get_scenario(scenario_id)["multiplier"] if preview_multiplier is None else clamp(preview_multiplier, 1, 1.5)
+    multiplier = get_scenario(scenario_id)["multiplier"] if preview_multiplier is None else clamp(preview_multiplier, .75, 1.5)
     normalized = normalize_shares(
         [selection for selection in selections if selection["taskId"] in task_lookup and "roleId" in task_lookup[selection["taskId"]]]
     )
@@ -402,3 +402,12 @@ def exposure_band(exposure: float) -> str:
 
 def pct(value: float, digits: int = 0) -> str:
     return f"{value * 100:.{digits}f}%"
+
+
+def route_confidence(rated: int, required: int, recent_signals: int, spread: float) -> str:
+    share = rated / required if required else 0
+    if share >= .8 and recent_signals >= 3 and spread <= 5:
+        return 'High'
+    if share >= .5 and spread <= 12:
+        return 'Medium'
+    return 'Low'

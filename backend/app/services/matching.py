@@ -183,7 +183,7 @@ def analyze(
         sdg_focus=sdg_focus,
     )
     return AnalysisResponse(
-        scenario="fast" if scenario_id == "fast" else "normal",
+        scenario=scenario_id if scenario_id in {"slow", "normal", "fast"} else "normal",
         roleExposure=round(exposure, 6),
         confidence=confidence(scored, signals),  # type: ignore[arg-type]
         tasks=scored,

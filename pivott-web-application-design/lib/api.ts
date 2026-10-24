@@ -49,7 +49,7 @@ export function parseProfile(body: unknown): { ok: true; value: ProfileInput } |
     }
   }
 
-  const scenario: ScenarioId = b.scenario === 'fast' ? 'fast' : 'normal'
+  const scenario: ScenarioId = b.scenario === 'slow' ? 'slow' : b.scenario === 'fast' ? 'fast' : 'normal'
   const hoursPerWeek = Math.max(1, Math.min(40, Math.round(finiteNumber(b.hoursPerWeek) || 6)))
   const targetRoleId = typeof b.targetRoleId === 'string' && roleById[b.targetRoleId] && b.targetRoleId !== customRole.id ? b.targetRoleId : undefined
 

@@ -46,7 +46,7 @@ export function signalAdjustment(taskId: string, signals: Signal[], asOf: string
 }
 
 export function getScenario(id: ScenarioId) {
-  return scenarios.find((s) => s.id === id) ?? scenarios[0]
+  return scenarios.find((s) => s.id === id) ?? scenarios.find(s=>s.id==='normal') ?? scenarios[0]
 }
 
 /** exposure(task, scenario) = clamp(base_exposure × scenario.multiplier + signal_adjustment, 0, 1) */
@@ -107,7 +107,7 @@ export function scoreTasks(
   signals: Signal[],
   previewMultiplier?: number,
 ): ScoredTask[] {
-  const multiplier = previewMultiplier === undefined ? getScenario(scenarioId).multiplier : clamp(previewMultiplier, 1, 1.5)
+  const multiplier = previewMultiplier === undefined ? getScenario(scenarioId).multiplier : clamp(previewMultiplier, .75, 1.5)
   const normalized = normalizeShares(selections.filter((s) => taskLookup[s.taskId] && 'roleId' in taskLookup[s.taskId]))
   return normalized.map(({ taskId, share }) => {
     const t = taskLookup[taskId]
@@ -408,4 +408,34 @@ export const pct = (v: number, digits = 0) => `${(v * 100).toFixed(digits)}%`
 
 export function fitLabel(route: Pick<RouteResult, 'fitLow' | 'fitHigh' | 'ratedShare'>) {
   return route.ratedShare < 1 ? `${Math.round(route.fitLow)}–${Math.round(route.fitHigh)}%` : `${Math.round(route.fitLow)}%`
+}
+
+export function routeConfidence(rated:number,required:number,recentSignals:number,spread:number): 'Low'|'Medium'|'High' {
+  const share=required ? rated/required : 0
+  if(share>=.8 && recentSignals>=3 && spread<=5) return 'High'
+  if(share>=.5 && spread<=12) return 'Medium'
+  return 'Low'
+}
+export interface ScenarioComparison {
+  roleId:string
+  scores:{scenario:ScenarioId;rank:number;score:number;exposure:number}[]
+  low:number
+  high:number
+  confidence:'Low'|'Medium'|'High'
+  rated:number
+  required:number
+  recentSignals:number
+  spread:number
+}
+export function compareScenarios(params: Omit<Parameters<typeof computeRoutes>[0],'scenarioId'|'limit'|'previewMultiplier'>): ScenarioComparison[] {
+  const ids:ScenarioId[]=['slow','normal','fast']
+  const matrix=ids.map(scenarioId=>computeRoutes({...params,scenarioId,limit:roles.length}))
+  return roles.filter(r=>r.id!==params.currentRoleId).map(role=>{
+    const scores=matrix.map((list,i)=>{const rank=list.findIndex(r=>r.roleId===role.id);const row=list[rank];return {scenario:ids[i],rank:rank+1,score:row.score,exposure:row.targetExposure}})
+    const low=Math.min(...scores.map(s=>s.score)),high=Math.max(...scores.map(s=>s.score))
+    const rated=role.requirements.filter(r=>params.levels[r.skillId]!==undefined).length,required=role.requirements.length
+    const taskIds=new Set(tasksForRole(role.id).map(t=>t.id))
+    const recentSignals=params.signals.filter(s=>s.evidence==='verified' && ageDays(s.date)<=180 && s.impacts.some(i=>taskIds.has(i.taskId))).length
+    return {roleId:role.id,scores,low,high,rated,required,recentSignals,spread:high-low,confidence:routeConfidence(rated,required,recentSignals,high-low)}
+  })
 }
