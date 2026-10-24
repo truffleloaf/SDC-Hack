@@ -54,18 +54,21 @@ MIGRATIONS_DIR = ROOT / "supabase" / "migrations"
 
 DEFAULT_DATABASE = "pivott_verify"
 
+# Row counts of the built-in demo catalogue in app/data/seed.json. Update this
+# table whenever the demo seed changes; otherwise the PostgreSQL job reports a
+# seed regression that pytest (which uses its own fixtures) cannot see.
 EXPECTED_ROWS = {
     "skills": 15,
-    "roles": 6,
-    "sdgs": 4,
-    "scenarios": 2,
-    "tasks": 31,
-    "role_requirements": 36,
-    "role_sdgs": 10,
-    "task_skills": 73,
+    "roles": 8,
+    "sdgs": 17,
+    "scenarios": 3,
+    "tasks": 39,
+    "role_requirements": 50,
+    "role_sdgs": 13,
+    "task_skills": 95,
     "signals": 20,
     "signal_task_impacts": 41,
-    "resources": 24,
+    "resources": 25,
     "job_postings": 0,
     "meta": 4,
 }
@@ -882,7 +885,7 @@ def check_api(conn: psycopg.Connection) -> str:
         if health.status_code != 200:
             raise AssertionError(f"/api/health -> {health.status_code}")
         body = health.json()
-        expected_counts = {"roles": 6, "tasks": 31, "skills": 15, "signals": 20}
+        expected_counts = {"roles": 8, "tasks": 39, "skills": 15, "signals": 20}
         if body["counts"] != expected_counts:
             raise AssertionError(f"health counts {body['counts']} != {expected_counts}")
 
@@ -895,7 +898,7 @@ def check_api(conn: psycopg.Connection) -> str:
         if [route["roleId"] for route in normal_body["routes"]] != [
             "operations-coordinator",
             "finance-systems-analyst",
-            "marketing-executive",
+            "hr-operations",
         ]:
             raise AssertionError(f"unexpected route order: {normal_body['routes']}")
 

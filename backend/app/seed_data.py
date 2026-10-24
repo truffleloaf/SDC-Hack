@@ -1,7 +1,7 @@
 """SQL seed adapter for the canonical, explicitly synthetic demonstration catalogue."""
 import json
 from pathlib import Path
-D = json.loads((Path(__file__).parent / 'data/seed.json').read_text())
+D = json.loads((Path(__file__).parent / 'data/seed.json').read_text(encoding='utf-8'))
 DATA_AS_OF, SEED_VERSION = D['DATA_AS_OF'], D['SEED_VERSION']
 def snake(row):
     names = {'hoursPerLevel':'hours_per_level','roleId':'role_id','baseExposure':'base_exposure','humanJudgment':'human_judgment','defaultShare':'default_share','tryThisWeek':'try_this_week','skillId':'skill_id','requiredLevel':'required_level','sourceName':'source_name','sourceUrl':'source_url','taskId':'task_id'}
