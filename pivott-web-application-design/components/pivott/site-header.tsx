@@ -29,6 +29,7 @@ import { cn } from '@/lib/utils'
 import { Logo } from './logo'
 import { NameField } from './name-field'
 import { PButton, pButton } from './p-button'
+import { JobNotificationButton } from '@/components/jobs/job-notification-center'
 
 const noop = () => () => {}
 
@@ -101,6 +102,7 @@ export function SiteHeader() {
             {account.user ? <DropdownMenu><DropdownMenuTrigger aria-label="Account menu" className={cn(pButton({ variant: 'ghost', size: 'icon-sm' }), 'rounded-full border border-border')}>{account.user.email?.charAt(0).toUpperCase() || 'A'}</DropdownMenuTrigger><DropdownMenuContent align="end" className="max-w-[calc(100vw-2rem)]"><p className="break-words px-3 py-2 text-sm">{account.user.email}</p><p role="status" className="px-3 pb-2 text-xs text-muted-foreground">{account.status}</p><DropdownMenuItem onClick={() => router.push('/account')}>Account</DropdownMenuItem><DropdownMenuItem onClick={() => void account.signOut()}>Sign out</DropdownMenuItem></DropdownMenuContent></DropdownMenu> : account.configured && <button onClick={() => openSignIn(pathname)} className={pButton({ variant: 'ghost', size: 'sm' })}>Sign in</button>}
             <Link href="/signals" className={cn(pButton({ variant: 'ghost', size: 'sm' }), 'hidden sm:inline-flex', pathname === '/signals' && 'bg-subtle text-foreground')}>Future Skills Radar</Link>
             <span className="hidden sm:contents"><ProfileButton onClick={() => setNameOpen(true)} /></span>
+            <JobNotificationButton />
             <ThemeToggle />
             <DropdownMenu>
               <DropdownMenuTrigger
@@ -188,7 +190,7 @@ export function SiteHeader() {
           <DialogHeader>
             <DialogTitle className="font-serif text-2xl font-normal">Delete data on this device</DialogTitle>
             <DialogDescription className="leading-relaxed">
-              This removes the device profile, progress, backups and sign-in session. Your saved account copy remains. Delete the account separately in Account settings.
+              This removes the device profile, progress, backups, job-update preferences and sign-in session. Your saved account copy remains. Delete the account separately in Account settings.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="bg-subtle">

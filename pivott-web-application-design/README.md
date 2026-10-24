@@ -121,6 +121,8 @@ Your name is optional and stays in localStorage unless you explicitly save the p
 
 Guest profiles and progress stay in your browser. Optional Supabase accounts support a password, email code or Google, with owner-only database policies, explicit saves and revision conflict checks. Signing in does not automatically upload or overwrite work. Use `/account` for account settings and deletion; deleting device data does not delete an account copy. Vercel Analytics loads only after a visitor allows analytics in the consent banner. Clicking **Verify with API** on the task map sends task selections, skill levels, custom tasks, and applied custom signals for a stateless comparison. It omits your display name, completion history, cookies, and pending signals. No check runs automatically; local results remain usable if the API is offline.
 
+Job updates are optional and device-local. The bell in the header opens a notification centre where people can filter by occupation, keywords, source location and remote status, choose an in-page check frequency and optionally allow browser notifications. The first successful check creates a quiet baseline; later checks label new and changed listings. Checks and browser alerts run only while Pivott is open. Pivott does not send background push or email alerts.
+
 ## Styleguide
 
 Visit `/styleguide` to see every shared component and its states.
