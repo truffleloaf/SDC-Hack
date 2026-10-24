@@ -1,5 +1,7 @@
 # Domain 1 implementation and verification
 
+This record summarizes the implementation evidence and limitations captured during the Domain 1 work.
+
 ## S1: refreshable trend layer
 
 Count-derived role and skill signals, dated count snapshots, public observation history (90 days), a weekly/manual refresh workflow, Radar thresholds and baseline score/rank comparison are implemented. The workflow writes a reviewable data branch with the built-in GitHub token and needs no custom secret. Feed failure stops the refresh before tracked changes.

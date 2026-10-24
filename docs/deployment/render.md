@@ -1,5 +1,7 @@
 # 部署：前端 Vercel + 后端 Render
 
+本文说明如何将可选 FastAPI 服务部署到 Render，并让 Vercel 前端连接该服务。
+
 > 前端已经在 Vercel（`pivott.studio`）。后端不要放 Vercel，放 **Render**（或 Railway / Fly.io）更合适。
 > 两者通过公网 URL 连接：Vercel 页面 → `https://pivott-api.onrender.com` → Supabase。
 
