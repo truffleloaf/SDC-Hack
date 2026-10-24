@@ -6,8 +6,9 @@ import { computeRoutes, getScenario, roleExposure, type ScenarioId } from '@/lib
 import { activeSignals, computeScored, setState, type AppState } from '@/lib/store'
 import { SegmentedControl } from './segmented-control'
 
-export function ScenarioSwitch({ state, context = 'map' }: { state: AppState; context?: 'map' | 'routes' }) {
+export function ScenarioSwitch({ state, context = 'map', onPreset }: { state: AppState; context?: 'map' | 'routes'; onPreset?: () => void }) {
   function change(next: ScenarioId) {
+    onPreset?.()
     if (next === state.scenario) return
     const before = computeScored(state, state.scenario)
     const after = computeScored(state, next)
@@ -40,6 +41,7 @@ export function ScenarioSwitch({ state, context = 'map' }: { state: AppState; co
       onChange={change}
       size="sm"
       options={[
+        { value: 'slow', label: 'Slow' },
         { value: 'normal', label: 'Normal', icon: <Gauge className="size-3.5" aria-hidden /> },
         { value: 'fast', label: 'Fast', icon: <Zap className="size-3.5" aria-hidden /> },
       ]}

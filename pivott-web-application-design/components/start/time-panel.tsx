@@ -1,7 +1,7 @@
 'use client'
 
 import { ArrowRight } from 'lucide-react'
-import { motion } from 'motion/react'
+import { ShareBar } from './share-bar'
 import { PLink } from '@/components/pivott/p-button'
 import { taskLookup, type AppState } from '@/lib/store'
 
@@ -14,24 +14,12 @@ export function TimePanel({ state }: { state: AppState }) {
     <section aria-labelledby="time-title" className="card-surface flex flex-col gap-5 p-6">
       <div className="flex items-baseline justify-between">
         <h2 id="time-title" className="font-serif text-2xl">
-          Your time, your way
+          Time by task
         </h2>
         <span className="font-mono text-xs text-muted-foreground">{items.length} tasks</span>
       </div>
 
-      <div className="flex h-4 w-full overflow-hidden rounded-full bg-subtle" role="img" aria-label="Time distribution across selected tasks">
-        {items.map((s, i) => (
-          <motion.span
-            key={s.taskId}
-            layout
-            initial={false}
-            animate={{ width: `${s.share}%` }}
-            transition={{ duration: 0.25, ease: [0.2, 0.7, 0.2, 1] }}
-            className="h-full border-r-2 border-card last:border-r-0"
-            style={{ backgroundColor: `color-mix(in srgb, var(--teal) ${tints[i % tints.length] * 100}%, var(--mint))` }}
-          />
-        ))}
-      </div>
+      <ShareBar state={state} />
 
       <ul className="flex flex-col gap-2.5">
         {items.map((s, i) => (
@@ -51,7 +39,7 @@ export function TimePanel({ state }: { state: AppState }) {
       </ul>
 
       <p className="border-t border-border pt-4 text-xs leading-relaxed text-muted-foreground">
-        Shares rebalance automatically and always add up to 100%.
+        Drag a divider to move time between neighbours. Arrow keys move 1%; Shift + arrow moves 5%. Number fields and sliders rebalance the other tasks. Shares add up to 100%.
       </p>
 
       <PLink

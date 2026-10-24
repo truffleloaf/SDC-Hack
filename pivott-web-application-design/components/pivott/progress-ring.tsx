@@ -19,6 +19,7 @@ export function ProgressRing({
   className?: string
   label: string
 }) {
+  const reduce = useReducedMotion()
   const r = (size - stroke) / 2
   const c = 2 * Math.PI * r
   const v = Math.max(0, Math.min(1, value))
@@ -42,7 +43,7 @@ export function ProgressRing({
           strokeDasharray={c}
           initial={false}
           animate={{ strokeDashoffset: c * (1 - v) }}
-          transition={{ duration: 0.5, ease: [0.2, 0.7, 0.2, 1] }}
+          transition={{ duration: reduce ? 0 : 0.5, ease: [0.2, 0.7, 0.2, 1] }}
         />
       </svg>
       <div className="absolute inset-0 grid place-items-center">{children}</div>
@@ -62,20 +63,20 @@ export function CountUp({
   duration?: number
 }) {
   const reduce = useReducedMotion()
-  const [display, setDisplay] = useState(reduce ? value : 0)
-  const from = useRef(reduce ? value : 0)
+  const [display, setDisplay] = useState(value)
+  const from = useRef(value)
 
   useEffect(() => {
     if (reduce) {
       setDisplay(value)
+      from.current = value
       return
     }
     const controls = animate(from.current, value, {
       duration,
       ease: [0.2, 0.7, 0.2, 1],
-      onUpdate: (v) => setDisplay(v),
+      onUpdate: (v) => { from.current = v; setDisplay(v) },
     })
-    from.current = value
     return () => controls.stop()
   }, [value, reduce, duration])
 

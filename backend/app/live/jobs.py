@@ -71,9 +71,12 @@ def _normalise(value: str) -> str:
     return re.sub(r"\s+", " ", text).strip()
 
 
-def _posted_date(raw: object) -> str:
+def _posted_date(raw: object) -> str | None:
     if isinstance(raw, (int, float)):
-        return datetime.fromtimestamp(raw, tz=timezone.utc).date().isoformat()
+        try:
+            return datetime.fromtimestamp(raw, tz=timezone.utc).date().isoformat()
+        except (ValueError, OverflowError, OSError):
+            return None
     if isinstance(raw, str):
         text = raw.strip()
         for fmt in ("%Y-%m-%d", "%Y-%m-%dT%H:%M:%S", "%Y-%m-%d %H:%M:%S"):
@@ -85,7 +88,7 @@ def _posted_date(raw: object) -> str:
             return date.fromisoformat(text[:10]).isoformat()
         except ValueError:
             pass
-    return date.today().isoformat()
+    return None
 
 
 def postings_from_arbeitnow(payloads: list[dict]) -> list[Posting]:
@@ -96,7 +99,11 @@ def postings_from_arbeitnow(payloads: list[dict]) -> list[Posting]:
         for job in payload.get("data", []) or []:
             slug = str(job.get("slug") or "").strip()
             title = str(job.get("title") or "").strip()
-            if not slug or not title or slug in seen:
+            posted_at = _posted_date(job.get('created_at'))
+            from urllib.parse import urlparse
+            url = str(job.get('url') or '').strip()
+            parsed_url = urlparse(url)
+            if not slug or not title or slug in seen or not posted_at or parsed_url.scheme not in {'http','https'} or not parsed_url.netloc or parsed_url.username or parsed_url.password:
                 continue
             seen.add(slug)
             postings.append(
@@ -105,8 +112,8 @@ def postings_from_arbeitnow(payloads: list[dict]) -> list[Posting]:
                     title=title,
                     company=str(job.get("company_name") or "").strip(),
                     location=str(job.get("location") or "").strip(),
-                    url=str(job.get("url") or "").strip(),
-                    posted_at=_posted_date(job.get("created_at")),
+                    url=url,
+                    posted_at=posted_at,
                     remote=bool(job.get("remote")),
                     tags=tuple(
                         str(tag).strip() for tag in job.get("tags", []) if str(tag).strip()

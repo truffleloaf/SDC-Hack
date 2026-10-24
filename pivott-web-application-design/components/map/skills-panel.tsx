@@ -1,4 +1,3 @@
-import { Bot, ShieldCheck, Sparkles } from 'lucide-react'
 import { SkillChip } from '@/components/pivott/badges'
 import { skillById } from '@/lib/data/seed'
 import type { RouteResult, ScoredTask } from '@/lib/engine'
@@ -27,14 +26,14 @@ export function SkillsPanel({ stays, reinforce }: { stays: string[]; reinforce: 
     <div className="flex flex-col gap-7">
       <section aria-labelledby="stay-title" className="flex flex-col gap-3">
         <h3 id="stay-title" className="font-serif text-xl">
-          Skills that stay
+          Skills in lower-exposure tasks
         </h3>
         <p className="text-xs leading-relaxed text-muted-foreground">Strengths tied to your lower-exposure work.</p>
         <div className="flex flex-wrap gap-1.5">
           {stays.length ? (
             stays.map((s) => <SkillChip key={s} skillId={s} tone="teal" />)
           ) : (
-            <span className="text-sm text-muted-foreground">Rate more skills to see durable strengths.</span>
+            <span className="text-sm text-muted-foreground">Rate more skills to identify these overlaps.</span>
           )}
         </div>
       </section>
@@ -71,20 +70,11 @@ export function SkillsPanel({ stays, reinforce }: { stays: string[]; reinforce: 
             Higher <span className="ml-auto font-mono text-xs text-faint">{'≥ 65%'}</span>
           </li>
         </ul>
-        <ul className="mt-2 flex flex-col gap-2 text-xs leading-relaxed text-muted-foreground">
-          <li className="flex gap-2">
-            <Bot className="mt-0.5 size-3.5 shrink-0 text-foreground" aria-hidden />
-            <span><strong className="font-medium text-foreground">Automate</strong> — exposure ≥ 65% and judgment {'<'} 40%</span>
-          </li>
-          <li className="flex gap-2">
-            <Sparkles className="mt-0.5 size-3.5 shrink-0 text-foreground" aria-hidden />
-            <span><strong className="font-medium text-foreground">Augment</strong> — AI assists, you decide</span>
-          </li>
-          <li className="flex gap-2">
-            <ShieldCheck className="mt-0.5 size-3.5 shrink-0 text-foreground" aria-hidden />
-            <span><strong className="font-medium text-foreground">Protect</strong> — human judgment ≥ 65%</span>
-          </li>
-        </ul>
+        <dl className="mt-2 space-y-3 text-xs leading-relaxed text-muted-foreground">
+          <div><dt className="text-foreground">Automate</dt><dd>Exposure ≥ 65% and judgment {'<'} 40%</dd></div>
+          <div><dt className="text-foreground">Augment</dt><dd>AI assists and you decide</dd></div>
+          <div><dt className="text-foreground">Protect</dt><dd>Human judgment ≥ 65%</dd></div>
+        </dl>
       </section>
     </div>
   )

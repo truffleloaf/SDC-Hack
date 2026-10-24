@@ -54,9 +54,9 @@ export function StyleguideDemo() {
 
       <Section title="Type">
         <div className="flex w-full flex-col gap-2">
-          <p className="font-serif text-5xl tracking-[-0.02em]">Newsreader display — <em>Map the tasks.</em></p>
+          <p className="font-serif text-5xl tracking-[-0.02em]">IBM Plex Sans display</p>
           <p className="text-base leading-relaxed">Inter body text for interface copy and descriptions.</p>
-          <p className="font-mono text-sm text-muted-foreground">Geist Mono · 62% · 01 Oct 2026</p>
+          <p className="font-mono text-sm text-muted-foreground">Tabular figures · 62% · 01 Oct 2026</p>
         </div>
       </Section>
 
@@ -83,7 +83,7 @@ export function StyleguideDemo() {
         <DirectionBadge direction={1} />
         <DirectionBadge direction={-1} />
         <EvidenceBadge evidence="verified" />
-        <EvidenceBadge evidence="illustrative" />
+        <EvidenceBadge evidence="assumption" />
         <SdgBadge id={8} />
         <DemoLabel />
       </Section>
@@ -106,7 +106,7 @@ export function StyleguideDemo() {
       <Section title="Overlays">
         <Dialog>
           <DialogTrigger className={pButton({ variant: 'secondary', size: 'sm' })}>Dialog</DialogTrigger>
-          <DialogContent className="rounded-[20px]">
+          <DialogContent className="rounded-xl">
             <DialogHeader>
               <DialogTitle className="font-serif text-2xl font-normal">A calm dialog</DialogTitle>
               <DialogDescription>Used for confirmations like deleting data.</DialogDescription>
@@ -119,7 +119,7 @@ export function StyleguideDemo() {
         </Sheet>
         <Sheet>
           <SheetTrigger className={pButton({ variant: 'secondary', size: 'sm' })}>Bottom sheet</SheetTrigger>
-          <SheetContent side="bottom" className="rounded-t-[24px]"><SheetHeader><SheetTitle className="font-serif text-2xl font-normal">Bottom sheet</SheetTitle></SheetHeader></SheetContent>
+          <SheetContent side="bottom" className="rounded-t-xl"><SheetHeader><SheetTitle className="font-serif text-2xl font-normal">Bottom sheet</SheetTitle></SheetHeader></SheetContent>
         </Sheet>
       </Section>
 

@@ -17,6 +17,7 @@ create table if not exists public.skills (
     id                text primary key,
     name              text not null,
     category          text not null check (category in ('Technical', 'Analytical', 'Communication', 'Operational')),
+    sdgs              jsonb not null default '[4]'::jsonb,
     hours_per_level   integer not null check (hours_per_level > 0),
     deliverable       text not null,
     why               text not null,
@@ -32,14 +33,14 @@ create table if not exists public.roles (
 );
 
 create table if not exists public.sdgs (
-    id     integer primary key check (id in (4, 8, 9, 10)),
+    id     integer primary key check (id between 1 and 17),
     name   text not null,
     color  text not null,
     sort_order integer not null default 0 check (sort_order >= 0)
 );
 
 create table if not exists public.scenarios (
-    id           text primary key check (id in ('normal', 'fast')),
+    id           text primary key check (id in ('slow', 'normal', 'fast')),
     label        text not null,
     multiplier   numeric(4, 3) not null check (multiplier > 0),
     description  text not null
@@ -91,7 +92,7 @@ create table if not exists public.signals (
     direction     smallint not null check (direction in (-1, 1)),
     strength      numeric(4, 3) not null check (strength between 0 and 1),
     explanation   text not null,
-    evidence      text not null check (evidence in ('verified', 'illustrative', 'user'))
+    evidence      text not null check (evidence in ('verified', 'illustrative', 'assumption', 'user'))
 );
 
 create index if not exists signals_date_idx on public.signals(date);
@@ -105,6 +106,10 @@ create table if not exists public.signal_task_impacts (
 );
 
 create table if not exists public.resources (
+    cost text,
+    hrd_corp boolean not null default false,
+    verified_at text,
+    claim_source text,
     id        text primary key,
     skill_id  text not null references public.skills(id) on delete cascade,
     title     text not null,

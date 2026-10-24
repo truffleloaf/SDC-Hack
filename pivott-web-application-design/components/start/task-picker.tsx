@@ -1,15 +1,18 @@
 'use client'
 
+import { NumberField } from '@/components/pivott/number-field'
 import { useState } from 'react'
 import { toast } from 'sonner'
+import { ConfirmDialog } from '@/components/pivott/confirm-dialog'
 import { PButton } from '@/components/pivott/p-button'
 import { ValueSlider } from '@/components/pivott/value-slider'
-import { skills, tasksForRole } from '@/lib/data/seed'
+import { customRole, skills, tasksForRole } from '@/lib/data/seed'
 import { addTask, removeTask, setShare } from '@/lib/shares'
 import { getState, setState, type AppState } from '@/lib/store'
 
 export function TaskPicker({ state }: { state: AppState }) {
   const [name, setName] = useState('')
+  const [restoreOpen, setRestoreOpen] = useState(false)
   const [picked, setPicked] = useState<string[]>([])
   const tasks = [...tasksForRole(state.roleId!), ...state.customTasks]
 
@@ -24,14 +27,10 @@ export function TaskPicker({ state }: { state: AppState }) {
     } } })
   }
 
-  function restore() {
-    if (!window.confirm('Restore this role’s suggested tasks and time shares? Your custom tasks and saved skill ratings will be kept.')) return
-    setState({ selections: tasksForRole(state.roleId!).map((task) => ({ taskId: task.id, share: task.defaultShare })), taskNames: {} })
-  }
 
   return (
     <div className="flex flex-col gap-4">
-      <p className="text-sm leading-relaxed text-muted-foreground">Time shares start with the template. Changing one automatically rebalances the others to keep the total at 100%. Renaming a reference task keeps its template estimate; add a custom task for different work.</p>
+      <p className="text-sm leading-relaxed text-muted-foreground">{state.roleId === customRole.id ? 'Add the tasks you do and set their time shares. Your own tasks have no exposure estimate.' : 'Time shares start with the template. Changing one automatically rebalances the others to keep the total at 100%. Renaming a reference task keeps its template estimate; add a custom task for different work.'}</p>
       <div className="overflow-hidden rounded-xl border border-border bg-card">
         {tasks.map((task) => {
           const selected = state.selections.find((item) => item.taskId === task.id)
@@ -51,7 +50,7 @@ export function TaskPicker({ state }: { state: AppState }) {
                 <p className="text-xs text-muted-foreground">Skills: {task.skills.map((id) => skills.find((skill) => skill.id === id)?.name).join(', ') || 'Not specified'}</p>
                 {selected ? <>
                   <label className="flex items-center justify-between gap-3 text-sm">Time spent (%)
-                    <input className="pivott-input w-24" type="number" min={1} max={100} value={Math.round(selected.share)} aria-label={`Time percentage for ${title}`} onChange={(event) => { const value = event.target.valueAsNumber; if (Number.isFinite(value)) setState({ selections: setShare(state.selections, task.id, Math.min(100, Math.max(1, value))) }) }} />
+                    <NumberField className="w-24" min={1} max={100} value={Math.round(selected.share)} aria-label={`Time percentage for ${title}`} onCommit={(value) => setState({ selections: setShare(getState().selections, task.id, value) })} />
                   </label>
                   <ValueSlider label={`Time share for ${title}`} min={1} max={100} value={selected.share} onChange={(value) => setState({ selections: setShare(state.selections, task.id, value) })} />
                   <PButton size="sm" variant="ghost" className="self-start" onClick={() => remove(task.id)}>Remove task</PButton>
@@ -63,7 +62,7 @@ export function TaskPicker({ state }: { state: AppState }) {
         })}
       </div>
       <details className="rounded-xl border border-border bg-card p-4">
-        <summary className="cursor-pointer text-sm font-medium">Add your own task</summary>
+        <summary data-add-own-task className="min-h-11 cursor-pointer text-sm font-medium">Add your own task</summary>
         <form className="mt-4 flex flex-col gap-4" onSubmit={(event) => {
           event.preventDefault(); if (!name.trim()) return
           const id = `custom-${crypto.randomUUID()}`
@@ -78,7 +77,8 @@ export function TaskPicker({ state }: { state: AppState }) {
           <PButton size="sm" type="submit" className="self-start" disabled={!name.trim()}>Add task</PButton>
         </form>
       </details>
-      <PButton variant="ghost" size="sm" className="self-start" onClick={restore}>Restore defaults</PButton>
+      {state.roleId !== customRole.id && <PButton variant="ghost" size="sm" className="self-start" onClick={() => setRestoreOpen(true)}>Restore defaults</PButton>}
+      <ConfirmDialog open={restoreOpen} onOpenChange={setRestoreOpen} title="Restore template tasks" description="Replace the selected tasks, names and time shares with the role defaults. Your custom task records and skill ratings will be kept." confirmLabel="Restore defaults" onConfirm={() => setState({ selections: tasksForRole(getState().roleId!).map((task) => ({ taskId: task.id, share: task.defaultShare })), taskNames: {} })} />
     </div>
   )
 }

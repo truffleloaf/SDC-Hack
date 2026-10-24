@@ -22,13 +22,13 @@ const classMeta: Record<Classification, { icon: typeof Bot; label: string; class
   Automate: {
     icon: Bot,
     label: 'Automate',
-    className: 'bg-exp-high/35 text-foreground border-exp-high/70',
+    className: 'bg-exp-high/35 text-foreground border-exp-high/70 dark:bg-exp-high/15',
     hint: 'AI could handle much of this task.',
   },
   Augment: {
     icon: Sparkles,
     label: 'Augment',
-    className: 'bg-exp-mid/40 text-foreground border-exp-mid',
+    className: 'bg-exp-mid/40 text-foreground border-exp-mid dark:bg-exp-mid/15',
     hint: 'AI can assist while you stay in charge.',
   },
   Protect: {
@@ -70,7 +70,7 @@ export function SkillChip({
   return (
     <span
       className={cn(
-        'inline-flex items-center rounded-full border px-2.5 py-1 text-xs leading-none',
+        'inline-flex items-center rounded-md border px-2.5 py-1 text-xs leading-none',
         tone === 'neutral' && 'border-border bg-subtle text-muted-foreground',
         tone === 'teal' && 'border-teal/30 bg-mint text-accent-foreground',
         tone === 'peach' && 'border-exp-high/60 bg-exp-high/20 text-foreground',
@@ -98,10 +98,10 @@ export function DirectionBadge({ direction }: { direction: 1 | -1 }) {
   )
 }
 
-export function EvidenceBadge({ evidence }: { evidence: 'verified' | 'illustrative' | 'user' }) {
+export function EvidenceBadge({ evidence }: { evidence: 'verified' | 'assumption' | 'user' }) {
   const map = {
     verified: { icon: BadgeCheck, label: 'Published source', cls: 'text-accent-foreground' },
-    illustrative: { icon: FlaskConical, label: 'Illustrative', cls: 'text-muted-foreground' },
+    assumption: { icon: FlaskConical, label: 'Assumption', cls: 'text-muted-foreground' },
     user: { icon: UserPen, label: 'Added by you', cls: 'text-foreground' },
   }[evidence]
   const Icon = map.icon

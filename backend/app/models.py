@@ -25,6 +25,7 @@ class Skill(SQLModel, table=True):
     id: str = Field(primary_key=True)
     name: str
     category: str
+    sdgs: list[int] = Field(default_factory=list, sa_column=Column(JSON))
     hours_per_level: int = Field(ge=1)
     deliverable: str
     why: str
@@ -127,6 +128,10 @@ class SignalTaskImpact(SQLModel, table=True):
 
 
 class Resource(SQLModel, table=True):
+    cost: str | None = None
+    hrd_corp: bool = False
+    verified_at: str | None = None
+    claim_source: str | None = None
     __tablename__ = "resources"
 
     id: str = Field(primary_key=True)

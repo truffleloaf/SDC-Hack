@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils'
 export function ValueSlider({
   value,
   onChange,
+  onCommit,
   min = 0,
   max = 100,
   step = 1,
@@ -16,6 +17,7 @@ export function ValueSlider({
 }: {
   value: number
   onChange: (v: number) => void
+  onCommit?: (v: number) => void
   min?: number
   max?: number
   step?: number
@@ -32,6 +34,8 @@ export function ValueSlider({
       step={step}
       disabled={disabled}
       onValueChange={(v) => onChange(Array.isArray(v) ? v[0] : (v as number))}
+      onValueCommitted={(v, details) => { if (details.reason !== 'keyboard') onCommit?.(Array.isArray(v) ? v[0] : (v as number)) }}
+      onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget as Node | null)) onCommit?.(value) }}
       className={cn('w-full', className)}
     >
       <SliderPrimitive.Control className="relative flex h-11 w-full touch-none items-center select-none data-disabled:opacity-40">

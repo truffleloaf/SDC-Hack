@@ -27,6 +27,16 @@ const skillTerms: Record<string, string[]> = {
   coordination: ['project coordination', 'project management', 'scheduling', 'logistics', 'milestone tracking'],
 }
 const roleTerms: Record<string, string[]> = {
+  'bookkeeping-clerk': ['bookkeeper','bookkeeping clerk','accounts assistant','accounting clerk'],
+  'executive-assistant': ['executive assistant','executive secretary'],
+  'customer-service-rep': ['customer service representative','customer support specialist'],
+  'accountant': ['accountant','auditor'], 'budget-analyst':['budget analyst'],
+  'market-research-analyst':['market research analyst','marketing specialist'],
+  'bi-analyst':['business intelligence analyst'], 'data-scientist':['data scientist'],
+  'project-manager':['project manager','project management specialist'],
+  'operations-manager':['operations manager'],
+  'sales-operations': ['sales operations coordinator', 'sales operations analyst'],
+  'hr-operations': ['hr operations coordinator', 'human resources coordinator', 'hr administrator'],
   'finance-admin': ['finance admin', 'finance administrator', 'accounts executive', 'accounts assistant', 'finance assistant', 'accounts payable', 'accounting clerk', 'bookkeeper'],
   'finance-systems-analyst': ['finance systems analyst', 'financial systems analyst', 'erp analyst', 'finance systems consultant'],
   'data-analyst': ['data analyst', 'business intelligence analyst', 'analytics analyst'],

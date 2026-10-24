@@ -1,9 +1,12 @@
 'use client'
+import { HumanChoice } from '@/components/pivott/human-choice'
+import { ScenarioTable } from '@/components/routes/scenario-comparison'
 
+import { SyncNote } from '@/components/account/sync-note'
 import { Columns3, LayoutGrid } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { AnimatePresence, motion } from 'motion/react'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { SdgBadge } from '@/components/pivott/badges'
 import { PButton } from '@/components/pivott/p-button'
@@ -13,16 +16,34 @@ import { SegmentedControl } from '@/components/pivott/segmented-control'
 import { NeedsProfile, PageSkeleton } from '@/components/pivott/states'
 import { RouteCard } from '@/components/routes/route-card'
 import { WhySheet } from '@/components/routes/why-sheet'
-import { roleById } from '@/lib/data/seed'
+import { fitLabel } from '@/lib/engine'
+import { roleById, sdgs, roles } from '@/lib/data/seed'
 import { setState, useAnalysis, useAppState } from '@/lib/store'
 import { cn } from '@/lib/utils'
 
 export default function RoutesPage() {
   const router = useRouter()
   const { state, hydrated } = useAppState()
-  const { routes, exposure, scored, assessmentCoverage } = useAnalysis(state)
+  const { comparisons, routes, allRoutes, exposure, scored, assessmentCoverage } = useAnalysis(state)
+  const baseline = useAnalysis({ ...state, ignoreTrendSignals: true })
   const [mode, setMode] = useState<'cards' | 'compare'>('cards')
   const [whyId, setWhyId] = useState<string | null>(null)
+  const previousOrder = useRef<string[]>([])
+  const [moves, setMoves] = useState<Record<string, 'up' | 'down'>>({})
+  const orderKey = allRoutes.map((route) => route.roleId).join('|')
+  useEffect(() => {
+    const order = orderKey ? orderKey.split('|') : []
+    const previous = previousOrder.current
+    previousOrder.current = order
+    if (!previous.length) return
+    setMoves(Object.fromEntries(order.flatMap((id, index) => {
+      const old = previous.indexOf(id)
+      return old >= 0 && old !== index ? [[id, index < old ? 'up' : 'down']] : []
+    })))
+    const timer = setTimeout(() => setMoves({}), 3000)
+    return () => clearTimeout(timer)
+  }, [orderKey])
+
 
   if (!hydrated) return <PageSkeleton />
   if (!state.roleId || state.selections.length === 0) return <NeedsProfile step="job" />
@@ -38,7 +59,7 @@ export default function RoutesPage() {
     <div className="mx-auto w-full max-w-[1200px] px-5 pb-20 pt-10">
       <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
         <PageIntro eyebrow="Routes" title="Compare possible roles.">
-          Routes combine rated skill coverage, overlap with the skills used in your tasks, and estimated exposure in the target role. Incomplete ratings make the ordering provisional.
+          Routes combine skill coverage, overlap with your task skills and target exposure. With unknown ratings, fit is a range and routes rank by its lower bound.
         </PageIntro>
         <div className="flex flex-wrap items-center gap-2">
           <ScenarioSwitch state={state} context="routes" />
@@ -55,8 +76,26 @@ export default function RoutesPage() {
         </div>
       </div>
 
+      <fieldset className="card-surface mt-6 p-5"><legend className="px-2 text-sm font-medium">SDG focus</legend>
+        <p className="text-xs text-muted-foreground">Optional: +5 score points per matching goal, capped at +10. Team mappings; default off.</p>
+        <div className="mt-2 flex flex-wrap gap-2">{sdgs.filter(g=>roles.some(r=>r.sdgs.includes(g.id))).map(g=><label key={g.id} className="flex min-h-11 items-center gap-2 rounded-lg border border-border px-3 text-sm"><input type="checkbox" checked={state.sdgFocus.includes(g.id)} onChange={e=>setState({sdgFocus:e.target.checked?[...state.sdgFocus,g.id]:state.sdgFocus.filter(id=>id!==g.id)})} />{g.id}. {g.name}</label>)}</div>
+        {state.sdgFocus.length>0 && <p className="mt-2 text-sm">SDG focus applied. {routes.map(r=>`${r.title}: unadjusted rank ${r.unadjustedRank}, +${r.sdgBonus} points`).join('; ')}.</p>}
+        <label className="mt-4 flex min-h-11 items-center gap-3 text-sm">Show routes<select className="rounded-lg border border-border bg-card p-2" value={state.routeLimit} onChange={e=>setState({routeLimit:Number(e.target.value)})}>{[3,5,10].map(n=><option value={n} key={n}>{n}</option>)}</select></label>
+      </fieldset>
+      <SyncNote eligible={!!state.targetRoleId && state.mode === 'personal'} />
       <p className="mt-5 text-sm text-muted-foreground">You can save up to three routes. <a href="/skills" className="text-primary underline">Edit skill ratings</a></p>
       {assessmentCoverage < 1 && <p className="mt-2 text-sm text-muted-foreground">Current exposure covers assessed reference tasks only ({Math.round(assessmentCoverage * 100)}% of selected time). Custom tasks have no estimate.</p>}
+      <section className="card-surface mt-6 p-5" aria-labelledby="trend-effect">
+        <h2 id="trend-effect" className="text-lg font-semibold">What changed with trend signals</h2>
+        <label className="mt-2 flex min-h-11 items-center gap-3 text-sm"><input type="checkbox" checked={state.ignoreTrendSignals} onChange={e => setState({ignoreTrendSignals:e.target.checked})} />Ignore trend signals</label>
+        <p className="text-xs text-muted-foreground">Baseline uses the same ratings and scenario with no signal adjustments.</p>
+        <ul className="mt-3 space-y-2 text-sm">{allRoutes.map((route,index) => {
+          const old = baseline.allRoutes.findIndex(r => r.roleId===route.roleId)
+          const delta=route.score-(baseline.allRoutes[old]?.score ?? route.score)
+          return <li key={route.roleId}>{route.title}: rank {old+1} → {index+1} · {delta>=0?'+':''}{delta.toFixed(2)} score points</li>
+        })}</ul>
+      </section>
+      <ScenarioTable rows={comparisons} />
       <RouteFan current={roleById[state.roleId]?.title ?? 'Current role'} count={routes.length} />
 
       <AnimatePresence mode="wait">
@@ -71,8 +110,10 @@ export default function RoutesPage() {
             {routes.map((r, i) => (
               <RouteCard
                 key={r.roleId}
+                uncertainty={comparisons.find(c=>c.roleId===r.roleId)}
                 route={r}
                 rank={i}
+                moved={moves[r.roleId]}
                 hoursPerWeek={state.hoursPerWeek}
                 levels={state.skills}
                 saved={state.savedRouteIds.includes(r.roleId)}
@@ -90,7 +131,7 @@ export default function RoutesPage() {
           </motion.div>
         ) : (
           <motion.div key="compare" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-            <div className="card-surface overflow-x-auto p-2">
+            <div className="card-surface relative overflow-x-auto p-2">
               <table className="w-full min-w-[640px] text-sm">
                 <caption className="sr-only">Side-by-side comparison of career routes</caption>
                 <thead>
@@ -98,7 +139,7 @@ export default function RoutesPage() {
                     <td className="w-40" />
                     {routes.map((r, i) => (
                       <th key={r.roleId} scope="col" className={cn('p-4 text-left align-bottom font-normal', r.roleId === selectedId && 'bg-mint/60 rounded-t-xl')}>
-                        {i === 0 && <span className="mb-2 block font-sans text-xs font-medium text-primary">{r.unknownSkillIds.length ? 'First suggested · Incomplete ratings' : 'Closest match'}</span>}
+                        {i === 0 && <span className="mb-2 block font-sans text-xs font-medium text-primary">{r.unknownSkillIds.length ? 'First suggested' : 'Closest match'}</span>}
                         <span className="font-serif text-xl">{r.title}</span>
                       </th>
                     ))}
@@ -106,7 +147,7 @@ export default function RoutesPage() {
                 </thead>
                 <tbody className="font-mono text-sm">
                   {[
-                    { label: 'Skill match', get: (r: (typeof routes)[number]) => r.unknownSkillIds.length === roleById[r.roleId].requirements.length ? 'Not rated' : `${Math.round(r.fit)}%${r.unknownSkillIds.length ? ' · Partial' : ''}` },
+                    { label: 'Skill match', get: (r: (typeof routes)[number]) => fitLabel(r) },
                     { label: 'Weeks to prepare', get: (r: (typeof routes)[number]) => r.unknownSkillIds.length === roleById[r.roleId].requirements.length ? 'Not estimated' : `${r.unknownSkillIds.length ? 'At least ' : ''}${r.weeks}` },
                     { label: 'Skill gaps', get: (r: (typeof routes)[number]) => r.gaps.length },
                     { label: 'Target exposure', get: (r: (typeof routes)[number]) => `${Math.round(r.targetExposure * 100)}%` },
@@ -174,7 +215,7 @@ function RouteFan({ current, count }: { current: string; count: number }) {
             strokeDasharray="1 6"
             strokeLinecap="round"
             vectorEffect="non-scaling-stroke"
-            className="route-flow"
+            
           />
         ))}
       </svg>
@@ -183,6 +224,7 @@ function RouteFan({ current, count }: { current: string; count: number }) {
         <span className="text-xs font-medium">{current}</span>
         <span className="font-sans text-xs font-medium text-faint">now</span>
       </div>
+      <HumanChoice />
     </div>
   )
 }

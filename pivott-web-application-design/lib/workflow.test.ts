@@ -6,7 +6,7 @@ import { getDemoJourney } from './demo'
 import { analyze, demoState, displayName, emptyState, greetingName, possessive, sanitizeName, type AppState } from './store'
 import { buildPathway } from './engine'
 import { buildIcs } from './ics'
-import { addTask, removeTask, setShare } from './shares'
+import { addTask, removeTask, setShare, setAdjacentShare } from './shares'
 import { resources, skills, tasksForRole } from './data/seed'
 
 describe('display name', () => {
@@ -129,5 +129,17 @@ describe('end-to-end journey (demo persona)', () => {
 describe('free resource coverage', () => {
   it.each(skills)('provides a free resource for $name', (skill) => {
     expect(resources.some((resource) => resource.skillId === skill.id && resource.free)).toBe(true)
+  })
+})
+
+
+describe('adjacent time editing', () => {
+  const before = [{ taskId: 'a', share: 30 }, { taskId: 'b', share: 40 }, { taskId: 'c', share: 30 }]
+  it('preserves the pair total and unrelated task while clamping at the boundary', () => {
+    const moved = setAdjacentShare(before, 'a', 'b', 35)
+    expect(moved.map((item) => item.share)).toEqual([35, 35, 30])
+    expect(setAdjacentShare(before, 'a', 'b', 100).map((item) => item.share)).toEqual([69, 1, 30])
+    expect(before.map((item) => item.share)).toEqual([30, 40, 30])
+    expect(setAdjacentShare(before, 'a', 'missing', 10)).toBe(before)
   })
 })

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   buildPathway,
+  signalWeight,
   classify,
   computeRoutes,
   learningWeeks,
@@ -109,5 +110,64 @@ describe('pathway', () => {
     const { steps } = buildPathway({ targetRoleId: 'finance-systems-analyst', levels: demoPersona.skills, hoursPerWeek: 6, freeOnly: true })
     expect(steps.length).toBeGreaterThan(0)
     expect(steps.every((s) => s.resource === null || s.resource.free)).toBe(true)
+  })
+})
+
+
+describe('scoring assumptions', () => {
+  it('has no invented publication metadata and stays independent of the clock', () => {
+    const assumptions = signals.filter((s) => s.evidence === 'assumption')
+    expect(assumptions).toHaveLength(12)
+    for (const signal of assumptions) {
+      expect(signal).not.toHaveProperty('date')
+      expect(signal).not.toHaveProperty('sourceName')
+      expect(signal).not.toHaveProperty('sourceUrl')
+      expect(signalWeight(signal, '2030-01-01')).toBe(signalWeight(signal))
+    }
+  })
+  it('preserves the original Normal demonstration score', () => {
+    expect(roleExposure(scoreTasks(selections, lookup, 'normal', signals))).toBeCloseTo(0.6190312308415231, 12)
+  })
+})
+
+
+describe('derived learning context', () => {
+  it('returns the rated shortfall without promotional claims', () => {
+    const plan = buildPathway({ targetRoleId: 'finance-systems-analyst', levels: demoPersona.skills, hoursPerWeek: 6, freeOnly: true })
+    for (const step of plan.steps) {
+      expect(step).not.toHaveProperty('why')
+      expect(step.current).toBe(demoPersona.skills[step.skillId as keyof typeof demoPersona.skills])
+      expect(step.required).toBeGreaterThan(step.current)
+    }
+  })
+})
+
+
+describe('partial fit bounds', () => {
+  const base = { currentRoleId: 'finance-admin', userTaskSkills: taskSkills, signals, hoursPerWeek: 6, scenarioId: 'normal' as const, limit: 10 }
+  it('cannot inflate a single rated skill above the full demo fit', () => {
+    const full = computeRoutes({ ...base, levels: demoPersona.skills })
+    const partial = computeRoutes({ ...base, levels: { excel: 3 } })
+    for (const route of partial) {
+      expect(route.fitLow).toBeLessThanOrEqual(full.find((r) => r.roleId === route.roleId)!.fit)
+      expect(route.fitLow).toBeLessThanOrEqual(route.fitHigh)
+      expect(route.fit).toBe(route.fitLow)
+      expect(route.ratedShare).toBeLessThan(1)
+    }
+    for (const route of full) { expect(route.fitLow).toBeCloseTo(route.fitHigh, 12); expect(route.ratedShare).toBe(1) }
+  })
+  it('keeps unknown ratings out of learning gaps, including an entirely unrated profile', () => {
+    for (const route of computeRoutes({ ...base, levels: {} })) { expect(route.ratedShare).toBe(0); expect(route.fitHigh).toBeGreaterThan(route.fitLow); expect(route.gaps).toEqual([]) }
+  })
+})
+
+
+describe('preview multiplier', () => {
+  it('updates task exposure and route ordering without changing fit', () => {
+    const base = { currentRoleId: 'finance-admin', userTaskSkills: taskSkills, levels: demoPersona.skills, signals, hoursPerWeek: 6, scenarioId: 'normal' as const }
+    const normal = computeRoutes(base), preview = computeRoutes({ ...base, previewMultiplier: 1.4 })
+    expect(preview[0].roleId).not.toBe(normal[0].roleId)
+    for (const route of preview) { const old = normal.find((r) => r.roleId === route.roleId); if (old) { expect(route.fit).toBe(old.fit); expect(route.targetExposure).toBeGreaterThanOrEqual(old.targetExposure) } }
+    expect(roleExposure(scoreTasks(selections, lookup, 'normal', signals, 1.4))).toBeGreaterThan(roleExposure(scoreTasks(selections, lookup, 'normal', signals)))
   })
 })

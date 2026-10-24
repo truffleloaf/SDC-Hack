@@ -48,24 +48,24 @@ def test_health_and_seed_counts(client):
     assert body == {
         "status": "ok",
         "dataset": "demo",
-        "seedVersion": "2026.10.1",
+        "seedVersion": "2026.10.4",
         "dataAsOf": "2026-10-01",
-        "counts": {"roles": 6, "tasks": 31, "skills": 15, "signals": 20},
+        "counts": {"roles": 8, "tasks": 39, "skills": 15, "signals": 20},
     }
 
     seed = client.get("/api/seed")
     assert seed.status_code == 200
     data = seed.json()
-    assert data["version"] == "2026.10.1"
+    assert data["version"] == "2026.10.4"
     assert data["asOf"] == "2026-10-01"
-    assert len(data["roles"]) == 6
-    assert len(data["tasks"]) == 31
+    assert len(data["roles"]) == 8
+    assert len(data["tasks"]) == 39
     assert len(data["skills"]) == 15
     assert len(data["signals"]) == 20
-    assert len(data["resources"]) == 24
-    assert len(data["sdgs"]) == 4
-    assert len(data["scenarios"]) == 2
-    assert sum(len(role["sdgs"]) for role in data["roles"]) == 10
+    assert len(data["resources"]) == 25
+    assert len(data["sdgs"]) == 17
+    assert len(data["scenarios"]) == 3
+    assert sum(len(role["sdgs"]) for role in data["roles"]) == 13
     assert data["demoPersona"]["name"] == "Aisyah"
     assert len(data["demoPersona"]["skills"]) == 15
 
@@ -98,7 +98,7 @@ def test_analysis_normal_and_fast_match_the_demo(client):
     assert [route["roleId"] for route in body["routes"]] == [
         "operations-coordinator",
         "finance-systems-analyst",
-        "marketing-executive",
+        "hr-operations",
     ]
 
     fsa = next(route for route in body["routes"] if route["roleId"] == "finance-systems-analyst")
@@ -159,7 +159,7 @@ def test_role_tasks_and_sdgs(client):
     assert len(body["tasks"]) == 6
 
     # Unknown scenario falls back to normal.
-    fallback = client.get("/api/roles/finance-admin/tasks?scenario=slow")
+    fallback = client.get("/api/roles/finance-admin/tasks?scenario=unknown")
     assert fallback.status_code == 200
     assert fallback.json()["scenario"] == "normal"
 
@@ -170,11 +170,11 @@ def test_role_tasks_and_sdgs(client):
     sdgs = client.get("/api/sdgs")
     assert sdgs.status_code == 200
     rows = {row["id"]: row for row in sdgs.json()["sdgs"]}
-    assert set(rows) == {4, 8, 9, 10}
-    assert len(rows[8]["roles"]) == 6
+    assert set(rows) == set(range(1,18))
+    assert len(rows[8]["roles"]) == 8
     assert rows[4]["roles"] == []
     assert len(rows[9]["roles"]) == 3
-    assert sum(len(row["roles"]) for row in rows.values()) == 10
+    assert sum(len(row["roles"]) for row in rows.values()) == 13
 
 
 def test_pathway_generation_and_lookup(client):
@@ -497,3 +497,10 @@ def test_cors_origins_parsing(monkeypatch):
 
     monkeypatch.setenv("CORS_ORIGINS", "*")
     assert cors_origins() == ["*"]
+
+
+def test_slow_scenario_is_preserved_by_api(client):
+    slow=client.post('/api/analysis',json=aisyah('slow')).json()
+    normal=client.post('/api/analysis',json=aisyah('normal')).json()
+    assert slow['scenario']=='slow'
+    assert slow['roleExposure']<normal['roleExposure']

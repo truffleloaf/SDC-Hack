@@ -1,17 +1,18 @@
 'use client'
 
 import { Check, CornerDownLeft, Search } from 'lucide-react'
-import { useId, useMemo, useState, type KeyboardEvent } from 'react'
+import { useEffect, useId, useMemo, useState, type KeyboardEvent } from 'react'
 import { roles, tasksForRole } from '@/lib/data/seed'
 import { cn } from '@/lib/utils'
 
-const families = ['All', ...Array.from(new Set(roles.map((r) => r.family.split(' & ')[0])))]
 
-export function RoleSelector({ value, onSelect }: { value: string | null; onSelect: (id: string) => void }) {
+export function RoleSelector({ value, onSelect, onUnlisted, resetKey = 0 }: { value: string | null; onSelect: (id: string) => void; onUnlisted?: () => void; resetKey?: number }) {
+  const families = ['All', ...Array.from(new Set(roles.map((r) => r.family.split(' & ')[0])))]
   const [query, setQuery] = useState('')
   const [family, setFamily] = useState('All')
   const [cursor, setCursor] = useState(0)
   const listId = useId()
+  useEffect(() => { setQuery(''); setFamily('All'); setCursor(0) }, [resetKey])
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase()
@@ -74,7 +75,7 @@ export function RoleSelector({ value, onSelect }: { value: string | null; onSele
               setCursor(0)
             }}
             className={cn(
-              'h-8 shrink-0 rounded-full border px-3 text-xs font-medium transition-colors',
+              'min-h-11 shrink-0 rounded-full border px-3 text-xs font-medium transition-colors',
               family === f
                 ? 'border-teal/40 bg-mint text-accent-foreground'
                 : 'border-border text-muted-foreground hover:border-border-strong hover:text-foreground',
@@ -87,7 +88,7 @@ export function RoleSelector({ value, onSelect }: { value: string | null; onSele
 
       <ul id={listId} role="listbox" aria-label="Roles" className="max-h-80 overflow-y-auto p-2">
         {results.length === 0 && (
-          <li className="px-4 py-8 text-center text-sm text-muted-foreground">
+          <li role="option" aria-disabled="true" aria-selected="false" className="px-4 py-8 text-center text-sm text-muted-foreground">
             No matching roles yet. Try another family or a broader term.
           </li>
         )}
@@ -122,6 +123,7 @@ export function RoleSelector({ value, onSelect }: { value: string | null; onSele
           )
         })}
       </ul>
+      {onUnlisted && <button type="button" onClick={onUnlisted} className="min-h-11 w-full border-t border-border px-5 py-3 text-left text-sm text-primary">My job isn’t listed</button>}
     </div>
   )
 }

@@ -100,7 +100,7 @@ function applyBundledLive(): CatalogPayload | null {
  * makes the Vercel deployment work without environment variables.
  */
 export async function getCatalog(maxAgeMs = PAYLOAD_TTL_MS): Promise<CatalogPayload | null> {
-  if (isUnitTest) {
+  if (isUnitTest || process.env.PIVOTT_CATALOG_MODE === 'demo') {
     resetCatalog()
     return null
   }

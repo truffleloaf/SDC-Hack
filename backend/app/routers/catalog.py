@@ -65,7 +65,7 @@ def role_tasks(
     if role is None:
         raise HTTPException(status_code=404, detail="Role not found")
 
-    scenario_id = "fast" if scenario == "fast" else "normal"
+    scenario_id = scenario if scenario in {"slow", "normal", "fast"} else "normal"
     tasks = tasks_for_role(session, role.id)
     selections = [
         Selection(taskId=task.id, share=task.default_share) for task in tasks

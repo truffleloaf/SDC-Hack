@@ -8,6 +8,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { ClassificationBadge, ExposureBadge, SkillChip } from '@/components/pivott/badges'
 import { CopyButton } from '@/components/pivott/copy-button'
 import { exposureColor, type ScoredTask } from '@/lib/engine'
+import { taskById } from '@/lib/data/seed'
 import { cn } from '@/lib/utils'
 
 interface LayoutNode extends SimulationNodeDatum {
@@ -70,9 +71,11 @@ function splitLabel(name: string) {
 export function TaskMapCanvas({
   tasks,
   highlightIds = [],
+  changes = [],
 }: {
   tasks: ScoredTask[]
   highlightIds?: string[]
+  changes?: { taskId: string; before: number; after: number }[]
 }) {
   const { ref, width } = useSize<HTMLDivElement>()
   const reduce = useReducedMotion()
@@ -89,13 +92,19 @@ export function TaskMapCanvas({
     const result = layout(tasks, W, H, prevRef.current)
     prevRef.current = new Map([...result].map(([id, p]) => [id, { x: p.x, y: p.y }]))
     return result
-    // Layout depends only on ids, shares, and canvas size — not on exposure.
+    // Layout depends only on ids, shares, and canvas size, not on exposure.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [shareKey, W, H])
 
   const activeId = pinned ?? hovered
   const active = tasks.find((t) => t.id === activeId) ?? null
   const activePos = active ? positions.get(active.id) : null
+
+  const taskIds = tasks.map((task) => task.id).join('|')
+  useEffect(() => {
+    if (pinned && !tasks.some((task) => task.id === pinned)) setPinned(null)
+    if (hovered && !tasks.some((task) => task.id === hovered)) setHovered(null)
+  }, [taskIds, pinned, hovered])
 
   useEffect(() => {
     if (!pinned) return
@@ -124,7 +133,7 @@ export function TaskMapCanvas({
           <svg
             width={W}
             height={H}
-            className="absolute inset-0"
+            className="absolute inset-0 touch-manipulation"
             role="group"
             aria-label={`Task map with ${tasks.length} tasks. Bubble size shows time share; the filled core shows exposure.`}
           >
@@ -154,6 +163,8 @@ export function TaskMapCanvas({
               const lines = splitLabel(t.name)
               const inside = p.r >= 44 && Math.max(...lines.map((l) => l.length)) * 7.4 < p.r * 1.7
               const highlighted = highlightIds.includes(t.id)
+              const change = changes.find((item) => item.taskId === t.id)
+              const delta = change ? Math.round((change.after - change.before) * 1000) / 10 : 0
               return (
                 <motion.g
                   key={t.id}
@@ -165,10 +176,10 @@ export function TaskMapCanvas({
                     tabIndex={0}
                     role="button"
                     aria-pressed={pinned === t.id}
-                    aria-label={`${t.name}: ${Math.round(t.exposure * 100)}% exposure, ${t.classification}, ${Math.round(t.share * 100)}% of your time`}
+                    aria-label={`${t.name}: ${Math.round(t.exposure * 100)}% exposure, ${t.classification}, ${Math.round(t.share * 100)}% of your time${change ? `, ${delta >= 0 ? 'up' : 'down'} ${Math.abs(delta)} points after signal application` : ''}`}
                     className="cursor-pointer outline-none [&:focus-visible_.ring]:opacity-100"
-                    onMouseEnter={() => setHovered(t.id)}
-                    onMouseLeave={() => setHovered(null)}
+                    onPointerEnter={(event) => event.pointerType === 'mouse' && setHovered(t.id)}
+                    onPointerLeave={(event) => event.pointerType === 'mouse' && setHovered(null)}
                     onFocus={() => setHovered(t.id)}
                     onBlur={() => setHovered(null)}
                     onClick={(e) => {
@@ -182,7 +193,8 @@ export function TaskMapCanvas({
                       }
                     }}
                   >
-                    {highlighted && (
+                    <circle data-tap-target r={Math.max(22, p.r)} fill="transparent" />
+                    {highlighted && !change && (
                       <motion.circle
                         r={p.r + 8}
                         fill="none"
@@ -190,14 +202,14 @@ export function TaskMapCanvas({
                         strokeWidth={2}
                         initial={{ opacity: 0.9, scale: 0.95 }}
                         animate={{ opacity: 0.6, scale: 1 }}
-                        transition={{ duration: 0.2 }}
+                        transition={{ duration: reduce ? 0 : 0.2 }}
                       />
                     )}
                     <circle className="ring opacity-0 transition-opacity" r={p.r + 5} fill="none" stroke="var(--ring)" strokeWidth={2} />
                     <motion.circle
                       initial={false}
                       animate={{ r: p.r, fill: color }}
-                      transition={{ duration: 0.35 }}
+                      transition={{ duration: reduce ? 0 : 0.35 }}
                       fillOpacity={0.42}
                       stroke="var(--card)"
                       strokeWidth={2}
@@ -205,8 +217,10 @@ export function TaskMapCanvas({
                     <motion.circle
                       initial={false}
                       animate={{ r: p.r * Math.sqrt(t.exposure), fill: color }}
-                      transition={{ duration: 0.45, ease: [0.2, 0.7, 0.2, 1] }}
+                      transition={{ duration: reduce ? 0 : 0.45, ease: [0.2, 0.7, 0.2, 1] }}
                     />
+                    {change && <circle data-before-exposure={change.before} r={p.r * Math.sqrt(Math.max(0, change.before))} fill="none" stroke="var(--foreground)" strokeOpacity={0.65} strokeDasharray="3 4" strokeWidth={2} pointerEvents="none" />}
+                    {change && <g aria-hidden pointerEvents="none" transform={`translate(${p.r * 0.35} ${-p.r * 0.7})`}><rect x={-29} y={-10} width={58} height={18} rx={4} fill="var(--card)" stroke="var(--border-strong)" /><text textAnchor="middle" y={3} fontSize={11} className="fill-foreground font-mono">{delta >= 0 ? '+' : ''}{delta} pts</text></g>}
                     {inside ? (
                       <g pointerEvents="none" className="font-sans">
                         {lines.map((l, i) => (
@@ -248,7 +262,7 @@ export function TaskMapCanvas({
               className="absolute z-10"
               style={{ left: cardX, top: cardY, width: cardW }}
               onMouseEnter={() => setHovered(active.id)}
-              onMouseLeave={() => setHovered(null)}
+              onPointerLeave={(event) => event.pointerType === 'mouse' && setHovered(null)}
             >
               <TaskDetailCard task={active} pinned={pinned === active.id} onClose={() => setPinned(null)} />
             </motion.div>
@@ -266,24 +280,25 @@ export function TaskMapCanvas({
   )
 }
 
-export function TaskDetailCard({ task, pinned, onClose, surface = 'glass' }: { task: ScoredTask; pinned: boolean; onClose: () => void; surface?: 'glass' | 'solid' }) {
+export function TaskDetailCard({ task, pinned, onClose, surface = 'panel' }: { task: ScoredTask; pinned: boolean; onClose: () => void; surface?: 'panel' | 'solid' }) {
   const explanation = {
-    Automate: `High exposure and low reliance on judgment. This illustrative estimate suggests tools may assist with routine parts of ${task.name.toLowerCase()}. Outputs still need checking.`,
+    Automate: `High exposure and low reliance on judgment. Tools may assist with routine parts of ${task.name.toLowerCase()}. Outputs still need checking.`,
     Augment: `AI can speed up parts of ${task.name.toLowerCase()}, while your judgment shapes the result.`,
-    Protect: `${task.name} leans heavily on human judgment and relationships. The estimate does not establish how a particular employer will use AI.`,
+    Protect: `${task.name} leans heavily on human judgment and relationships.`,
   }[task.classification]
 
   return (
-    <div className={cn('rounded-xl p-5', surface === 'glass' ? 'glass-panel' : 'bg-card', pinned && 'border-teal/40')}>
+    <div className={cn('rounded-xl p-5', surface === 'panel' ? 'surface-panel' : 'bg-card', pinned && 'border-teal/40')}>
       <div className="flex items-start justify-between gap-2">
         <h3 className="font-serif text-xl leading-tight">{task.name}</h3>
         {pinned && (
-          <button type="button" onClick={onClose} aria-label="Close details" className="-mr-2 -mt-1 grid size-9 place-items-center rounded-lg text-faint hover:bg-subtle hover:text-foreground">
+          <button type="button" onClick={onClose} aria-label="Close details" className="-mr-2 -mt-1 grid size-11 place-items-center rounded-lg text-faint hover:bg-subtle hover:text-foreground">
             <X className="size-4" aria-hidden />
           </button>
         )}
       </div>
-      <p className="mt-2 text-sm text-muted-foreground">{Math.round(task.share * 100)}% of assessed working time · Illustrative estimate</p>
+      {taskById[task.id] && taskById[task.id].name !== task.name && <p className="mt-2 text-xs text-muted-foreground">Based on template: {taskById[task.id].name}</p>}
+      <p className="mt-2 text-sm text-muted-foreground">{Math.round(task.share * 100)}% of assessed working time</p>
       <div className="mt-3 flex flex-wrap items-center gap-2">
         <ExposureBadge value={task.exposure} />
         <ClassificationBadge value={task.classification} />

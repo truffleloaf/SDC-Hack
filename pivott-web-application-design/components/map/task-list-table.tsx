@@ -4,6 +4,7 @@ import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react'
 import { Fragment, useState } from 'react'
 import { TaskDetailCard } from './task-map-canvas'
 import { ClassificationBadge, ExposureBadge, SkillChip } from '@/components/pivott/badges'
+import { taskById } from '@/lib/data/seed'
 import type { ScoredTask } from '@/lib/engine'
 import { cn } from '@/lib/utils'
 
@@ -42,7 +43,7 @@ export function TaskListTable({ tasks, highlightIds = [] }: { tasks: ScoredTask[
   }
 
   return (
-    <div className="overflow-x-auto rounded-2xl border border-border">
+    <div className="relative min-w-0 max-w-full overflow-x-auto rounded-2xl border border-border">
       <table className="w-full min-w-[640px] text-sm">
         <caption className="sr-only">Your tasks with AI exposure and classification. Column headers are sortable.</caption>
         <thead className="border-b border-border bg-subtle">
@@ -67,6 +68,7 @@ export function TaskListTable({ tasks, highlightIds = [] }: { tasks: ScoredTask[
             >
               <th scope="row" className="px-4 py-3.5 text-left font-medium">
                 {t.name}
+                {taskById[t.id] && taskById[t.id].name !== t.name && <span className="mt-1 block text-xs font-normal text-muted-foreground">Based on template: {taskById[t.id].name}</span>}
               </th>
               <td className="px-4 py-3.5 font-mono tabular-nums text-muted-foreground">{Math.round(t.share * 100)}%</td>
               <td className="px-4 py-3.5">

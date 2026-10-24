@@ -31,3 +31,12 @@ export function removeTask(list: Selection[], taskId: string): Selection[] {
   const total = rest.reduce((a, b) => a + b.share, 0)
   return rest.map((s) => ({ ...s, share: total > 0 ? (s.share / total) * 100 : 100 / rest.length }))
 }
+
+/** Move one boundary while preserving the adjacent pair's total and every other share. */
+export function setAdjacentShare(list: Selection[], leftId: string, rightId: string, value: number): Selection[] {
+  const left = list.find((item) => item.taskId === leftId), right = list.find((item) => item.taskId === rightId)
+  if (!left || !right || leftId === rightId || !Number.isFinite(value)) return list
+  const total = left.share + right.share, minimum = Math.min(MIN, total / 2)
+  const next = Math.min(total - minimum, Math.max(minimum, value))
+  return list.map((item) => item.taskId === leftId ? { ...item, share: next } : item.taskId === rightId ? { ...item, share: total - next } : item)
+}

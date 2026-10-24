@@ -4,7 +4,7 @@ Pivott helps people examine their working week and plan a possible career move. 
 
 ## Type and colour
 
-Use the native system font stack for body and display text. Hierarchy comes from size, weight, spacing, and placement. Reserve monospace for numerical or technical content. Avoid decorative uppercase labels and italic or coloured words inserted into headlines.
+Use the four local IBM Plex Sans weights (400, 500, 600, 700) through `next/font/local` for body and display text. Hierarchy comes from size, weight, spacing, and placement. Use tabular Plex numerals for aligned numerical content. Avoid decorative uppercase labels and italic or coloured words inserted into headlines.
 
 Preserve Pivott’s original palette: light surfaces (#F8FAF9, #FFFFFF), dark ink (#1F2937), teal actions (#0F766E), mint (#E6F7F4), and sky (#EAF4FF). Dark mode uses deep charcoal surfaces and lighter teal actions. Exposure colours retain their separate data meaning, with written classifications so colour is never the only explanation.
 
@@ -12,7 +12,7 @@ Preserve Pivott’s original palette: light surfaces (#F8FAF9, #FFFFFF), dark in
 
 Preserve the original landing task-map interaction, with its illustrative task values and hover/focus details. Keep task-map interactions stable. Preserve the existing scenario, signals, API verification, comparison, calendar and passport tools. Put the initial map before skill ratings, then use Work / Routes / Plan navigation.
 
-Use borders and spacing to group content. Keep button corners compact, panels modestly rounded, and shadows quiet. Use solid forms and reading surfaces. Restrict glass to navigation, floating actions, small overlays and map details. Provide solid defaults, a backdrop-filter feature fallback and a reduced-transparency override. Avoid decorative glows and gradients. Motion should explain a user action and respect reduced motion.
+Use borders and spacing to group content. Keep button corners compact, panels modestly rounded, and shadows quiet. Use solid forms and reading surfaces. All navigation, floating actions, overlays and map details use solid surfaces. Avoid decorative glows and gradients. Motion is allowed only to show a state change, direct attention, or show data. Respect reduced motion. Do not add decorative loops, global page fades, automatic highlights or celebrations.
 
 ## Content and uncertainty
 
@@ -26,3 +26,19 @@ Reviewed 22 October 2026:
 - [Impeccable](https://github.com/pbakaus/impeccable): identifies recurring generated-interface patterns including default typography, purple-blue gradients, nested cards, and repeated icon tiles.
 
 These are practitioner heuristics, not evidence that a font or colour proves AI authorship. Choices should follow the product and its audience. Public search was blocked during this research; this is a focused synthesis of accessible primary guidance, not a survey of public opinion.
+
+## Component decisions
+
+Cards and sheets use 12px corners; inputs, buttons, menus and small labels use 8px. Pills are reserved for filters and status. Circles remain for actual graph nodes, progress markers and account avatars. Spacing follows content: compact controls, 20–24px panels and larger page gaps. Teal identifies actions, selections and graph data, without colouring a word in a headline. The hero has no eyebrow, rings or glow.
+
+The shared UI primitives use Pivott palette tokens, an 8px control radius, soft neutral shadows, a 2px teal focus outline and solid popovers. Dialog and sheet overlays are opaque black tints without blur; bottom sheets use the 12px panel radius. Tooltip arrow geometry is exempt from panel corners. The passport's white export surface remains scoped for readable image/PDF exports. Fake QR graphics were already absent; the remaining reference number was removed because it implied verification.
+
+No decorative gradients, glows, blur or icon-on-top card grids. The dot grid belongs only inside the working map canvas. Hero nodes may enter once as data appears; route cards may move when their rank changes.
+
+## Copy rules
+
+Write what the tool does in short, specific sentences. Avoid parallel “not X, Y” lines, rhetorical questions as headings, slogans and promotional claims. State the exposure disclaimer once on Map and link to Method for detail. Use names only where they help identify the person or their exported summary. Unknown ratings, coverage limits and evidence badges describe actual inputs and remain visible where needed.
+
+Run `node scripts/lint-copy.mjs` from the repository root. The checker excludes styleguide examples, permits a lone empty-value dash and ignores developer comments. Deliberate exceptions need a preceding or same-line `// copy-lint-ok: reason`; do not use exceptions for routine marketing prose. Run its `--self-test` when changing the rules.
+
+Hatching in a skill bar encodes an unknown rating. This data pattern is permitted; decorative gradients remain excluded.

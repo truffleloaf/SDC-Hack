@@ -1,0 +1,1821 @@
+{
+  "DATA_AS_OF": "2026-10-01",
+  "SEED_VERSION": "2026.10.4",
+  "scenarios": [
+    {
+      "id": "slow",
+      "label": "Slow",
+      "multiplier": 0.75,
+      "description": "Team assumption: baseline exposure scaled to 0.75. Not a forecast."
+    },
+    {
+      "id": "normal",
+      "label": "Normal",
+      "multiplier": 1,
+      "description": "Team assumption: baseline exposure scaled to 1.00. Not a forecast."
+    },
+    {
+      "id": "fast",
+      "label": "Fast",
+      "multiplier": 1.25,
+      "description": "Team assumption: baseline exposure scaled to 1.25. Not a forecast."
+    }
+  ],
+  "sdgs": [
+    {
+      "id": 1,
+      "name": "No Poverty",
+      "color": "#E5243B"
+    },
+    {
+      "id": 2,
+      "name": "Zero Hunger",
+      "color": "#DDA63A"
+    },
+    {
+      "id": 3,
+      "name": "Good Health and Well-being",
+      "color": "#4C9F38"
+    },
+    {
+      "id": 4,
+      "name": "Quality Education",
+      "color": "#C5192D"
+    },
+    {
+      "id": 5,
+      "name": "Gender Equality",
+      "color": "#FF3A21"
+    },
+    {
+      "id": 6,
+      "name": "Clean Water and Sanitation",
+      "color": "#26BDE2"
+    },
+    {
+      "id": 7,
+      "name": "Affordable and Clean Energy",
+      "color": "#FCC30B"
+    },
+    {
+      "id": 8,
+      "name": "Decent Work and Economic Growth",
+      "color": "#A21942"
+    },
+    {
+      "id": 9,
+      "name": "Industry, Innovation and Infrastructure",
+      "color": "#FD6925"
+    },
+    {
+      "id": 10,
+      "name": "Reduced Inequalities",
+      "color": "#DD1367"
+    },
+    {
+      "id": 11,
+      "name": "Sustainable Cities and Communities",
+      "color": "#FD9D24"
+    },
+    {
+      "id": 12,
+      "name": "Responsible Consumption and Production",
+      "color": "#BF8B2E"
+    },
+    {
+      "id": 13,
+      "name": "Climate Action",
+      "color": "#3F7E44"
+    },
+    {
+      "id": 14,
+      "name": "Life Below Water",
+      "color": "#0A97D9"
+    },
+    {
+      "id": 15,
+      "name": "Life on Land",
+      "color": "#56C02B"
+    },
+    {
+      "id": 16,
+      "name": "Peace, Justice and Strong Institutions",
+      "color": "#00689D"
+    },
+    {
+      "id": 17,
+      "name": "Partnerships for the Goals",
+      "color": "#19486A"
+    }
+  ],
+  "skills": [
+    {
+      "id": "excel",
+      "name": "Spreadsheet modelling",
+      "category": "Technical",
+      "sdgs": [
+        4,
+        9
+      ],
+      "hoursPerLevel": 10,
+      "deliverable": "A reusable reconciliation workbook with lookups and checks"
+    },
+    {
+      "id": "erp",
+      "name": "ERP systems",
+      "category": "Technical",
+      "sdgs": [
+        4,
+        9
+      ],
+      "hoursPerLevel": 14,
+      "deliverable": "A documented test script for one ERP workflow"
+    },
+    {
+      "id": "sql",
+      "name": "SQL",
+      "category": "Technical",
+      "sdgs": [
+        4,
+        9
+      ],
+      "hoursPerLevel": 12,
+      "deliverable": "Five queries answering real questions about a sample ledger"
+    },
+    {
+      "id": "python",
+      "name": "Python",
+      "category": "Technical",
+      "sdgs": [
+        4,
+        9
+      ],
+      "hoursPerLevel": 16,
+      "deliverable": "A small script that cleans a messy CSV export"
+    },
+    {
+      "id": "bi",
+      "name": "BI dashboards",
+      "category": "Technical",
+      "sdgs": [
+        4,
+        9
+      ],
+      "hoursPerLevel": 10,
+      "deliverable": "A one-page dashboard tracking three finance KPIs"
+    },
+    {
+      "id": "automation",
+      "name": "Process automation",
+      "category": "Technical",
+      "sdgs": [
+        4,
+        9
+      ],
+      "hoursPerLevel": 12,
+      "deliverable": "An approval flow that routes invoices automatically"
+    },
+    {
+      "id": "ai",
+      "name": "AI tool fluency",
+      "category": "Technical",
+      "sdgs": [
+        4,
+        9
+      ],
+      "hoursPerLevel": 6,
+      "deliverable": "A prompt library for three recurring tasks, with checks"
+    },
+    {
+      "id": "analysis",
+      "name": "Data analysis",
+      "category": "Analytical",
+      "sdgs": [
+        4,
+        9
+      ],
+      "hoursPerLevel": 12,
+      "deliverable": "A variance analysis memo with three clear findings"
+    },
+    {
+      "id": "stats",
+      "name": "Statistics",
+      "category": "Analytical",
+      "sdgs": [
+        4,
+        9
+      ],
+      "hoursPerLevel": 12,
+      "deliverable": "A short note explaining a trend with confidence intervals"
+    },
+    {
+      "id": "controls",
+      "name": "Financial controls",
+      "category": "Analytical",
+      "sdgs": [
+        4,
+        9
+      ],
+      "hoursPerLevel": 10,
+      "deliverable": "A control matrix for one end-to-end process"
+    },
+    {
+      "id": "stakeholder",
+      "name": "Stakeholder communication",
+      "category": "Communication",
+      "sdgs": [
+        4,
+        10
+      ],
+      "hoursPerLevel": 8,
+      "deliverable": "A requirements summary signed off by a stakeholder"
+    },
+    {
+      "id": "writing",
+      "name": "Writing & storytelling",
+      "category": "Communication",
+      "sdgs": [
+        4,
+        10
+      ],
+      "hoursPerLevel": 8,
+      "deliverable": "A one-page narrative explaining a business change"
+    },
+    {
+      "id": "empathy",
+      "name": "Customer empathy",
+      "category": "Communication",
+      "sdgs": [
+        4,
+        10
+      ],
+      "hoursPerLevel": 6,
+      "deliverable": "Three customer interview notes with specific pain points"
+    },
+    {
+      "id": "process",
+      "name": "Process design",
+      "category": "Operational",
+      "sdgs": [
+        4,
+        8
+      ],
+      "hoursPerLevel": 10,
+      "deliverable": "A swimlane map of a current process with one redesign"
+    },
+    {
+      "id": "coordination",
+      "name": "Project coordination",
+      "category": "Operational",
+      "sdgs": [
+        4,
+        10
+      ],
+      "hoursPerLevel": 8,
+      "deliverable": "A lightweight project plan with owners and milestones"
+    }
+  ],
+  "roles": [
+    {
+      "id": "finance-admin",
+      "title": "Finance Admin",
+      "family": "Finance",
+      "demand": 55,
+      "sdgs": [
+        8
+      ],
+      "requirements": [
+        {
+          "skillId": "excel",
+          "requiredLevel": 3,
+          "importance": 5
+        },
+        {
+          "skillId": "erp",
+          "requiredLevel": 3,
+          "importance": 4
+        },
+        {
+          "skillId": "controls",
+          "requiredLevel": 3,
+          "importance": 4
+        },
+        {
+          "skillId": "stakeholder",
+          "requiredLevel": 2,
+          "importance": 3
+        },
+        {
+          "skillId": "analysis",
+          "requiredLevel": 2,
+          "importance": 3
+        }
+      ]
+    },
+    {
+      "id": "finance-systems-analyst",
+      "title": "Finance Systems Analyst",
+      "family": "Finance & Technology",
+      "demand": 78,
+      "sdgs": [
+        8,
+        9
+      ],
+      "requirements": [
+        {
+          "skillId": "erp",
+          "requiredLevel": 4,
+          "importance": 5
+        },
+        {
+          "skillId": "controls",
+          "requiredLevel": 3,
+          "importance": 4
+        },
+        {
+          "skillId": "automation",
+          "requiredLevel": 3,
+          "importance": 4
+        },
+        {
+          "skillId": "sql",
+          "requiredLevel": 2,
+          "importance": 3
+        },
+        {
+          "skillId": "stakeholder",
+          "requiredLevel": 3,
+          "importance": 3
+        },
+        {
+          "skillId": "process",
+          "requiredLevel": 3,
+          "importance": 3
+        },
+        {
+          "skillId": "excel",
+          "requiredLevel": 3,
+          "importance": 2
+        }
+      ]
+    },
+    {
+      "id": "data-analyst",
+      "title": "Data Analyst",
+      "family": "Data",
+      "demand": 82,
+      "sdgs": [
+        8,
+        9
+      ],
+      "requirements": [
+        {
+          "skillId": "sql",
+          "requiredLevel": 3,
+          "importance": 5
+        },
+        {
+          "skillId": "analysis",
+          "requiredLevel": 3,
+          "importance": 5
+        },
+        {
+          "skillId": "bi",
+          "requiredLevel": 3,
+          "importance": 4
+        },
+        {
+          "skillId": "stats",
+          "requiredLevel": 2,
+          "importance": 3
+        },
+        {
+          "skillId": "python",
+          "requiredLevel": 2,
+          "importance": 2
+        },
+        {
+          "skillId": "excel",
+          "requiredLevel": 3,
+          "importance": 2
+        },
+        {
+          "skillId": "writing",
+          "requiredLevel": 2,
+          "importance": 2
+        }
+      ]
+    },
+    {
+      "id": "marketing-executive",
+      "title": "Marketing Executive",
+      "family": "Marketing",
+      "demand": 60,
+      "sdgs": [
+        8
+      ],
+      "requirements": [
+        {
+          "skillId": "writing",
+          "requiredLevel": 4,
+          "importance": 5
+        },
+        {
+          "skillId": "ai",
+          "requiredLevel": 3,
+          "importance": 4
+        },
+        {
+          "skillId": "stakeholder",
+          "requiredLevel": 3,
+          "importance": 4
+        },
+        {
+          "skillId": "analysis",
+          "requiredLevel": 2,
+          "importance": 3
+        },
+        {
+          "skillId": "bi",
+          "requiredLevel": 2,
+          "importance": 2
+        },
+        {
+          "skillId": "empathy",
+          "requiredLevel": 3,
+          "importance": 3
+        }
+      ]
+    },
+    {
+      "id": "customer-support-specialist",
+      "title": "Customer Support Specialist",
+      "family": "Customer",
+      "demand": 50,
+      "sdgs": [
+        8,
+        10
+      ],
+      "requirements": [
+        {
+          "skillId": "empathy",
+          "requiredLevel": 4,
+          "importance": 5
+        },
+        {
+          "skillId": "writing",
+          "requiredLevel": 3,
+          "importance": 3
+        },
+        {
+          "skillId": "stakeholder",
+          "requiredLevel": 3,
+          "importance": 3
+        },
+        {
+          "skillId": "ai",
+          "requiredLevel": 2,
+          "importance": 3
+        },
+        {
+          "skillId": "process",
+          "requiredLevel": 2,
+          "importance": 2
+        }
+      ]
+    },
+    {
+      "id": "operations-coordinator",
+      "title": "Operations Coordinator",
+      "family": "Operations",
+      "demand": 68,
+      "sdgs": [
+        8,
+        9
+      ],
+      "requirements": [
+        {
+          "skillId": "coordination",
+          "requiredLevel": 3,
+          "importance": 5
+        },
+        {
+          "skillId": "process",
+          "requiredLevel": 3,
+          "importance": 3
+        },
+        {
+          "skillId": "stakeholder",
+          "requiredLevel": 3,
+          "importance": 4
+        },
+        {
+          "skillId": "excel",
+          "requiredLevel": 3,
+          "importance": 3
+        },
+        {
+          "skillId": "automation",
+          "requiredLevel": 2,
+          "importance": 2
+        },
+        {
+          "skillId": "erp",
+          "requiredLevel": 2,
+          "importance": 2
+        }
+      ]
+    },
+    {
+      "id": "sales-operations",
+      "title": "Sales Operations Coordinator",
+      "family": "Sales",
+      "demand": 60,
+      "sdgs": [
+        8
+      ],
+      "requirements": [
+        {
+          "skillId": "excel",
+          "requiredLevel": 3,
+          "importance": 4
+        },
+        {
+          "skillId": "erp",
+          "requiredLevel": 3,
+          "importance": 3
+        },
+        {
+          "skillId": "stakeholder",
+          "requiredLevel": 4,
+          "importance": 5
+        },
+        {
+          "skillId": "coordination",
+          "requiredLevel": 3,
+          "importance": 4
+        },
+        {
+          "skillId": "process",
+          "requiredLevel": 3,
+          "importance": 4
+        },
+        {
+          "skillId": "ai",
+          "requiredLevel": 3,
+          "importance": 3
+        },
+        {
+          "skillId": "analysis",
+          "requiredLevel": 3,
+          "importance": 3
+        }
+      ]
+    },
+    {
+      "id": "hr-operations",
+      "title": "HR Operations Coordinator",
+      "family": "People Operations",
+      "demand": 58,
+      "sdgs": [
+        8,
+        10
+      ],
+      "requirements": [
+        {
+          "skillId": "stakeholder",
+          "requiredLevel": 4,
+          "importance": 5
+        },
+        {
+          "skillId": "empathy",
+          "requiredLevel": 3,
+          "importance": 4
+        },
+        {
+          "skillId": "writing",
+          "requiredLevel": 4,
+          "importance": 4
+        },
+        {
+          "skillId": "coordination",
+          "requiredLevel": 3,
+          "importance": 4
+        },
+        {
+          "skillId": "controls",
+          "requiredLevel": 3,
+          "importance": 3
+        },
+        {
+          "skillId": "process",
+          "requiredLevel": 3,
+          "importance": 4
+        },
+        {
+          "skillId": "ai",
+          "requiredLevel": 3,
+          "importance": 2
+        }
+      ]
+    }
+  ],
+  "customRole": {
+    "id": "other",
+    "title": "Your own tasks",
+    "family": "Custom",
+    "demand": 0,
+    "requirements": [],
+    "sdgs": []
+  },
+  "tasks": [
+    {
+      "id": "fa-invoice",
+      "roleId": "finance-admin",
+      "name": "Invoice entry",
+      "description": "Capture supplier invoices and code them to the ledger.",
+      "baseExposure": 0.78,
+      "humanJudgment": 0.15,
+      "defaultShare": 30,
+      "skills": [
+        "erp",
+        "excel"
+      ],
+      "tryThisWeek": "Batch ten invoices through your ERP’s capture feature and log every field you had to correct."
+    },
+    {
+      "id": "fa-recon",
+      "roleId": "finance-admin",
+      "name": "Bank reconciliation",
+      "description": "Match bank lines to ledger entries and clear differences.",
+      "baseExposure": 0.66,
+      "humanJudgment": 0.3,
+      "defaultShare": 20,
+      "skills": [
+        "excel",
+        "controls",
+        "erp"
+      ],
+      "tryThisWeek": "Write matching rules for your three most common transaction types and test them on last month."
+    },
+    {
+      "id": "fa-exception",
+      "roleId": "finance-admin",
+      "name": "Exception handling",
+      "description": "Investigate mismatches, duplicates, and policy breaches.",
+      "baseExposure": 0.4,
+      "humanJudgment": 0.68,
+      "defaultShare": 15,
+      "skills": [
+        "controls",
+        "stakeholder",
+        "analysis"
+      ],
+      "tryThisWeek": "Keep a short log of each exception and the judgment call you made. Patterns become playbooks."
+    },
+    {
+      "id": "fa-reporting",
+      "roleId": "finance-admin",
+      "name": "Month-end reporting",
+      "description": "Prepare month-end packs and variance commentary.",
+      "baseExposure": 0.56,
+      "humanJudgment": 0.42,
+      "defaultShare": 15,
+      "skills": [
+        "excel",
+        "analysis",
+        "writing"
+      ],
+      "tryThisWeek": "Ask an AI assistant to draft variance commentary, then edit it and note what it missed."
+    },
+    {
+      "id": "fa-comms",
+      "roleId": "finance-admin",
+      "name": "Client communication",
+      "description": "Resolve payment queries with vendors and internal teams.",
+      "baseExposure": 0.28,
+      "humanJudgment": 0.72,
+      "defaultShare": 10,
+      "skills": [
+        "stakeholder",
+        "writing",
+        "empathy"
+      ],
+      "tryThisWeek": "Draft three reusable reply templates for common payment queries and personalise each one."
+    },
+    {
+      "id": "fa-expense",
+      "roleId": "finance-admin",
+      "name": "Expense claim review",
+      "description": "Check claims against policy and approve or return them.",
+      "baseExposure": 0.62,
+      "humanJudgment": 0.38,
+      "defaultShare": 10,
+      "skills": [
+        "controls",
+        "ai"
+      ],
+      "tryThisWeek": "Turn your expense policy into a checklist an AI tool can pre-screen against, then spot-check results."
+    },
+    {
+      "id": "fsa-config",
+      "roleId": "finance-systems-analyst",
+      "name": "ERP configuration & testing",
+      "description": "Configure modules and test changes before release.",
+      "baseExposure": 0.36,
+      "humanJudgment": 0.55,
+      "defaultShare": 30,
+      "skills": [
+        "erp",
+        "process",
+        "controls"
+      ],
+      "tryThisWeek": "Shadow a configuration change and write the test cases you would have run."
+    },
+    {
+      "id": "fsa-pipeline",
+      "roleId": "finance-systems-analyst",
+      "name": "Finance data pipelines",
+      "description": "Maintain feeds between banks, ERP, and reporting.",
+      "baseExposure": 0.55,
+      "humanJudgment": 0.35,
+      "defaultShare": 20,
+      "skills": [
+        "sql",
+        "erp",
+        "excel"
+      ],
+      "tryThisWeek": "Trace one number from bank file to final report and document every hop."
+    },
+    {
+      "id": "fsa-controls",
+      "roleId": "finance-systems-analyst",
+      "name": "Control & audit design",
+      "description": "Design system controls and support audits.",
+      "baseExposure": 0.24,
+      "humanJudgment": 0.75,
+      "defaultShare": 15,
+      "skills": [
+        "controls",
+        "process"
+      ],
+      "tryThisWeek": "Pick one manual control and sketch how a system control could replace it."
+    },
+    {
+      "id": "fsa-automation",
+      "roleId": "finance-systems-analyst",
+      "name": "Automation build",
+      "description": "Build workflow automations for finance processes.",
+      "baseExposure": 0.44,
+      "humanJudgment": 0.5,
+      "defaultShare": 20,
+      "skills": [
+        "automation",
+        "process"
+      ],
+      "tryThisWeek": "Build a simple approval flow in a no-code tool for a low-risk request."
+    },
+    {
+      "id": "fsa-requirements",
+      "roleId": "finance-systems-analyst",
+      "name": "Requirements workshops",
+      "description": "Gather needs from finance users and translate them.",
+      "baseExposure": 0.2,
+      "humanJudgment": 0.8,
+      "defaultShare": 15,
+      "skills": [
+        "stakeholder",
+        "writing"
+      ],
+      "tryThisWeek": "Run a 20-minute interview with a colleague about their biggest system frustration."
+    },
+    {
+      "id": "da-clean",
+      "roleId": "data-analyst",
+      "name": "Data cleaning",
+      "description": "Prepare and validate raw datasets for analysis.",
+      "baseExposure": 0.74,
+      "humanJudgment": 0.2,
+      "defaultShare": 25,
+      "skills": [
+        "sql",
+        "python",
+        "excel"
+      ],
+      "tryThisWeek": "Use an AI assistant to write a cleaning script, then verify each rule by hand."
+    },
+    {
+      "id": "da-query",
+      "roleId": "data-analyst",
+      "name": "SQL querying",
+      "description": "Write queries to answer business questions.",
+      "baseExposure": 0.62,
+      "humanJudgment": 0.3,
+      "defaultShare": 20,
+      "skills": [
+        "sql"
+      ],
+      "tryThisWeek": "Have AI draft a query, then explain every clause in your own words."
+    },
+    {
+      "id": "da-dashboards",
+      "roleId": "data-analyst",
+      "name": "Dashboard building",
+      "description": "Design and maintain recurring dashboards.",
+      "baseExposure": 0.5,
+      "humanJudgment": 0.4,
+      "defaultShare": 20,
+      "skills": [
+        "bi",
+        "analysis"
+      ],
+      "tryThisWeek": "Cut one dashboard down to the three metrics people actually use."
+    },
+    {
+      "id": "da-story",
+      "roleId": "data-analyst",
+      "name": "Insight storytelling",
+      "description": "Turn findings into recommendations for leaders.",
+      "baseExposure": 0.3,
+      "humanJudgment": 0.72,
+      "defaultShare": 20,
+      "skills": [
+        "writing",
+        "analysis",
+        "stakeholder"
+      ],
+      "tryThisWeek": "Rewrite one report as a three-sentence recommendation."
+    },
+    {
+      "id": "da-adhoc",
+      "roleId": "data-analyst",
+      "name": "Ad-hoc analysis",
+      "description": "Respond to one-off analytical requests.",
+      "baseExposure": 0.55,
+      "humanJudgment": 0.45,
+      "defaultShare": 15,
+      "skills": [
+        "analysis",
+        "stats",
+        "excel"
+      ],
+      "tryThisWeek": "Save your last three ad-hoc requests as reusable templates."
+    },
+    {
+      "id": "me-copy",
+      "roleId": "marketing-executive",
+      "name": "Campaign copywriting",
+      "description": "Write emails, ads, and landing page copy.",
+      "baseExposure": 0.76,
+      "humanJudgment": 0.3,
+      "defaultShare": 25,
+      "skills": [
+        "writing",
+        "ai"
+      ],
+      "tryThisWeek": "Generate five variants with AI and edit the best one into your brand voice."
+    },
+    {
+      "id": "me-social",
+      "roleId": "marketing-executive",
+      "name": "Social scheduling",
+      "description": "Plan and schedule posts across channels.",
+      "baseExposure": 0.72,
+      "humanJudgment": 0.2,
+      "defaultShare": 20,
+      "skills": [
+        "ai",
+        "coordination"
+      ],
+      "tryThisWeek": "Automate one week of scheduling and spend the time saved on community replies."
+    },
+    {
+      "id": "me-reporting",
+      "roleId": "marketing-executive",
+      "name": "Performance reporting",
+      "description": "Track campaign results and summarise learnings.",
+      "baseExposure": 0.6,
+      "humanJudgment": 0.35,
+      "defaultShare": 20,
+      "skills": [
+        "analysis",
+        "bi"
+      ],
+      "tryThisWeek": "Add one “so what” line to every chart in your next report."
+    },
+    {
+      "id": "me-partners",
+      "roleId": "marketing-executive",
+      "name": "Brand partnerships",
+      "description": "Build relationships with partners and creators.",
+      "baseExposure": 0.2,
+      "humanJudgment": 0.8,
+      "defaultShare": 15,
+      "skills": [
+        "stakeholder",
+        "empathy"
+      ],
+      "tryThisWeek": "Reach out to one partner with a specific, personalised idea."
+    },
+    {
+      "id": "me-research",
+      "roleId": "marketing-executive",
+      "name": "Audience research",
+      "description": "Understand audience needs and segments.",
+      "baseExposure": 0.5,
+      "humanJudgment": 0.48,
+      "defaultShare": 20,
+      "skills": [
+        "empathy",
+        "analysis"
+      ],
+      "tryThisWeek": "Summarise ten customer reviews with AI, then validate the themes yourself."
+    },
+    {
+      "id": "cs-triage",
+      "roleId": "customer-support-specialist",
+      "name": "Ticket triage",
+      "description": "Categorise and route incoming requests.",
+      "baseExposure": 0.8,
+      "humanJudgment": 0.2,
+      "defaultShare": 25,
+      "skills": [
+        "process",
+        "ai"
+      ],
+      "tryThisWeek": "List the rules you use to route tickets. They are the spec for automation."
+    },
+    {
+      "id": "cs-faq",
+      "roleId": "customer-support-specialist",
+      "name": "FAQ responses",
+      "description": "Answer common questions by chat and email.",
+      "baseExposure": 0.82,
+      "humanJudgment": 0.15,
+      "defaultShare": 25,
+      "skills": [
+        "writing",
+        "ai"
+      ],
+      "tryThisWeek": "Review ten AI-drafted replies and note where tone needed a human touch."
+    },
+    {
+      "id": "cs-escalation",
+      "roleId": "customer-support-specialist",
+      "name": "Escalation handling",
+      "description": "Resolve complex or sensitive customer issues.",
+      "baseExposure": 0.3,
+      "humanJudgment": 0.78,
+      "defaultShare": 20,
+      "skills": [
+        "empathy",
+        "stakeholder"
+      ],
+      "tryThisWeek": "Write down how you de-escalated your hardest case this week."
+    },
+    {
+      "id": "cs-kb",
+      "roleId": "customer-support-specialist",
+      "name": "Knowledge base upkeep",
+      "description": "Keep help articles accurate and current.",
+      "baseExposure": 0.6,
+      "humanJudgment": 0.35,
+      "defaultShare": 15,
+      "skills": [
+        "writing",
+        "process"
+      ],
+      "tryThisWeek": "Find the three articles linked most in tickets and refresh them."
+    },
+    {
+      "id": "cs-feedback",
+      "roleId": "customer-support-specialist",
+      "name": "Feedback synthesis",
+      "description": "Summarise customer feedback for product teams.",
+      "baseExposure": 0.46,
+      "humanJudgment": 0.5,
+      "defaultShare": 15,
+      "skills": [
+        "analysis",
+        "empathy",
+        "writing"
+      ],
+      "tryThisWeek": "Send product one paragraph on the most repeated complaint this month."
+    },
+    {
+      "id": "oc-scheduling",
+      "roleId": "operations-coordinator",
+      "name": "Scheduling & logistics",
+      "description": "Coordinate shifts, deliveries, and resources.",
+      "baseExposure": 0.6,
+      "humanJudgment": 0.3,
+      "defaultShare": 25,
+      "skills": [
+        "coordination",
+        "excel"
+      ],
+      "tryThisWeek": "Try an AI scheduling assistant on next week’s rota and compare results."
+    },
+    {
+      "id": "oc-vendors",
+      "roleId": "operations-coordinator",
+      "name": "Vendor coordination",
+      "description": "Manage supplier relationships and service levels.",
+      "baseExposure": 0.34,
+      "humanJudgment": 0.66,
+      "defaultShare": 20,
+      "skills": [
+        "stakeholder",
+        "coordination"
+      ],
+      "tryThisWeek": "Set up a simple scorecard for your two most important vendors."
+    },
+    {
+      "id": "oc-docs",
+      "roleId": "operations-coordinator",
+      "name": "Process documentation",
+      "description": "Write and maintain standard operating procedures.",
+      "baseExposure": 0.56,
+      "humanJudgment": 0.4,
+      "defaultShare": 15,
+      "skills": [
+        "process",
+        "writing"
+      ],
+      "tryThisWeek": "Record yourself doing a task and let AI draft the SOP from the transcript."
+    },
+    {
+      "id": "oc-tracking",
+      "roleId": "operations-coordinator",
+      "name": "Order tracking",
+      "description": "Monitor inventory levels and order status.",
+      "baseExposure": 0.68,
+      "humanJudgment": 0.25,
+      "defaultShare": 20,
+      "skills": [
+        "erp",
+        "excel",
+        "automation"
+      ],
+      "tryThisWeek": "Set up one automated low-stock alert instead of a manual check."
+    },
+    {
+      "id": "oc-improve",
+      "roleId": "operations-coordinator",
+      "name": "Improvement projects",
+      "description": "Lead small projects to remove friction from operations.",
+      "baseExposure": 0.24,
+      "humanJudgment": 0.72,
+      "defaultShare": 20,
+      "skills": [
+        "process",
+        "coordination",
+        "stakeholder"
+      ],
+      "tryThisWeek": "Pick the most annoying step in a process and propose one fix to your manager."
+    },
+    {
+      "id": "sales-records",
+      "roleId": "sales-operations",
+      "name": "Update CRM records",
+      "description": "Maintain contact and deal records, checking duplicates and missing fields.",
+      "baseExposure": 0.76,
+      "humanJudgment": 0.3,
+      "defaultShare": 30,
+      "skills": [
+        "erp",
+        "excel"
+      ],
+      "tryThisWeek": "Check ten sample records against the source before accepting an automated update."
+    },
+    {
+      "id": "sales-forecast",
+      "roleId": "sales-operations",
+      "name": "Prepare sales summaries",
+      "description": "Summarise pipeline changes for the team.",
+      "baseExposure": 0.57,
+      "humanJudgment": 0.55,
+      "defaultShare": 25,
+      "skills": [
+        "analysis",
+        "excel",
+        "ai"
+      ],
+      "tryThisWeek": "Draft a summary from a sample spreadsheet, then check every number."
+    },
+    {
+      "id": "sales-handoffs",
+      "roleId": "sales-operations",
+      "name": "Coordinate deal handoffs",
+      "description": "Confirm owners, next steps and requirements between teams.",
+      "baseExposure": 0.38,
+      "humanJudgment": 0.78,
+      "defaultShare": 25,
+      "skills": [
+        "stakeholder",
+        "coordination",
+        "process"
+      ],
+      "tryThisWeek": "Use a handoff checklist for one example deal and note missing information."
+    },
+    {
+      "id": "sales-quality",
+      "roleId": "sales-operations",
+      "name": "Review pipeline quality",
+      "description": "Review inconsistent stages, dates and forecast assumptions.",
+      "baseExposure": 0.5,
+      "humanJudgment": 0.62,
+      "defaultShare": 20,
+      "skills": [
+        "analysis",
+        "process",
+        "erp"
+      ],
+      "tryThisWeek": "Write rules for three common data-quality issues and review the exceptions."
+    },
+    {
+      "id": "hr-records",
+      "roleId": "hr-operations",
+      "name": "Maintain staff records",
+      "description": "Check staff records for completeness and access permissions.",
+      "baseExposure": 0.68,
+      "humanJudgment": 0.35,
+      "defaultShare": 30,
+      "skills": [
+        "erp",
+        "controls"
+      ],
+      "tryThisWeek": "Use synthetic records to test a completeness checklist without personal data."
+    },
+    {
+      "id": "hr-onboarding",
+      "roleId": "hr-operations",
+      "name": "Coordinate onboarding",
+      "description": "Arrange access, introductions and onboarding responsibilities.",
+      "baseExposure": 0.4,
+      "humanJudgment": 0.72,
+      "defaultShare": 30,
+      "skills": [
+        "coordination",
+        "stakeholder",
+        "process"
+      ],
+      "tryThisWeek": "Map an example onboarding process and identify one unclear owner."
+    },
+    {
+      "id": "hr-questions",
+      "roleId": "hr-operations",
+      "name": "Handle staff questions",
+      "description": "Explain policies and route sensitive questions to the appropriate person.",
+      "baseExposure": 0.44,
+      "humanJudgment": 0.75,
+      "defaultShare": 25,
+      "skills": [
+        "empathy",
+        "writing",
+        "stakeholder"
+      ],
+      "tryThisWeek": "Draft answers to three fictional policy questions and check them against the policy."
+    },
+    {
+      "id": "hr-policy",
+      "roleId": "hr-operations",
+      "name": "Review policy exceptions",
+      "description": "Review cases that require interpretation or approval.",
+      "baseExposure": 0.3,
+      "humanJudgment": 0.85,
+      "defaultShare": 15,
+      "skills": [
+        "controls",
+        "stakeholder",
+        "analysis"
+      ],
+      "tryThisWeek": "Document an example exception with the information and approval it would need."
+    }
+  ],
+  "resources": [
+    {
+      "id": "r-excel-gcf",
+      "skillId": "excel",
+      "title": "Excel Tutorials",
+      "provider": "GCFGlobal",
+      "url": "https://edu.gcfglobal.org/en/excel/",
+      "free": true
+    },
+    {
+      "id": "r-erp-sap",
+      "skillId": "erp",
+      "title": "SAP Learning Journeys",
+      "provider": "SAP Learning",
+      "url": "https://learning.sap.com/",
+      "free": true
+    },
+    {
+      "id": "r-sql-bolt",
+      "skillId": "sql",
+      "title": "Interactive SQL Lessons",
+      "provider": "SQLBolt",
+      "url": "https://sqlbolt.com/",
+      "free": true
+    },
+    {
+      "id": "r-sql-khan",
+      "skillId": "sql",
+      "title": "Intro to SQL: Querying and managing data",
+      "provider": "Khan Academy",
+      "url": "https://www.khanacademy.org/computing/computer-programming/sql",
+      "free": true
+    },
+    {
+      "id": "r-python-py4e",
+      "skillId": "python",
+      "title": "Python for Everybody",
+      "provider": "PY4E",
+      "url": "https://www.py4e.com/",
+      "free": true
+    },
+    {
+      "id": "r-bi-ms",
+      "skillId": "bi",
+      "title": "Power BI training",
+      "provider": "Microsoft Learn",
+      "url": "https://learn.microsoft.com/en-us/training/powerplatform/power-bi",
+      "free": true
+    },
+    {
+      "id": "r-bi-gda",
+      "skillId": "bi",
+      "title": "Google Data Analytics Certificate",
+      "provider": "Coursera",
+      "url": "https://www.coursera.org/professional-certificates/google-data-analytics",
+      "free": false
+    },
+    {
+      "id": "r-auto-ms",
+      "skillId": "automation",
+      "title": "Power Automate training",
+      "provider": "Microsoft Learn",
+      "url": "https://learn.microsoft.com/en-us/training/powerplatform/power-automate",
+      "free": true
+    },
+    {
+      "id": "r-auto-uipath",
+      "skillId": "automation",
+      "title": "UiPath Academy",
+      "provider": "UiPath",
+      "url": "https://academy.uipath.com/",
+      "free": true
+    },
+    {
+      "id": "r-ai-elements",
+      "skillId": "ai",
+      "title": "Elements of AI",
+      "provider": "University of Helsinki",
+      "url": "https://www.elementsofai.com/",
+      "free": true
+    },
+    {
+      "id": "r-ai-prompting",
+      "skillId": "ai",
+      "title": "Learn Prompting",
+      "provider": "Learn Prompting",
+      "url": "https://learnprompting.org/",
+      "free": true
+    },
+    {
+      "id": "r-analysis-gda",
+      "skillId": "analysis",
+      "title": "Google Data Analytics Certificate",
+      "provider": "Coursera",
+      "url": "https://www.coursera.org/professional-certificates/google-data-analytics",
+      "free": false
+    },
+    {
+      "id": "r-analysis-cfi",
+      "skillId": "analysis",
+      "title": "Financial analysis courses",
+      "provider": "Corporate Finance Institute",
+      "url": "https://corporatefinanceinstitute.com/",
+      "free": false
+    },
+    {
+      "id": "r-stats-khan",
+      "skillId": "stats",
+      "title": "Statistics and probability",
+      "provider": "Khan Academy",
+      "url": "https://www.khanacademy.org/math/statistics-probability",
+      "free": true
+    },
+    {
+      "id": "r-analysis-ms",
+      "skillId": "analysis",
+      "title": "Working with Data",
+      "provider": "Microsoft",
+      "url": "https://github.com/microsoft/Data-Science-For-Beginners/tree/main/2-Working-With-Data",
+      "free": true
+    },
+    {
+      "id": "r-controls-cfi",
+      "skillId": "controls",
+      "title": "Accounting & controls courses",
+      "provider": "Corporate Finance Institute",
+      "url": "https://corporatefinanceinstitute.com/",
+      "free": false
+    },
+    {
+      "id": "r-controls-open",
+      "skillId": "controls",
+      "title": "OpenLearn free courses",
+      "provider": "The Open University",
+      "url": "https://www.open.edu/openlearn/",
+      "free": true
+    },
+    {
+      "id": "r-stakeholder-open",
+      "skillId": "stakeholder",
+      "title": "OpenLearn free courses",
+      "provider": "The Open University",
+      "url": "https://www.open.edu/openlearn/",
+      "free": true
+    },
+    {
+      "id": "r-stakeholder-gpm",
+      "skillId": "stakeholder",
+      "title": "Google Project Management Certificate",
+      "provider": "Coursera",
+      "url": "https://www.coursera.org/professional-certificates/google-project-management",
+      "free": false
+    },
+    {
+      "id": "r-writing-open",
+      "skillId": "writing",
+      "title": "OpenLearn free courses",
+      "provider": "The Open University",
+      "url": "https://www.open.edu/openlearn/",
+      "free": true
+    },
+    {
+      "id": "r-empathy-hubspot",
+      "skillId": "empathy",
+      "title": "HubSpot Academy",
+      "provider": "HubSpot",
+      "url": "https://academy.hubspot.com/",
+      "free": true
+    },
+    {
+      "id": "r-process-gpm",
+      "skillId": "process",
+      "title": "Google Project Management Certificate",
+      "provider": "Coursera",
+      "url": "https://www.coursera.org/professional-certificates/google-project-management",
+      "free": false
+    },
+    {
+      "id": "r-process-open",
+      "skillId": "process",
+      "title": "OpenLearn free courses",
+      "provider": "The Open University",
+      "url": "https://www.open.edu/openlearn/",
+      "free": true
+    },
+    {
+      "id": "r-coord-gpm",
+      "skillId": "coordination",
+      "title": "Google Project Management Certificate",
+      "provider": "Coursera",
+      "url": "https://www.coursera.org/professional-certificates/google-project-management",
+      "free": false
+    },
+    {
+      "id": "r-coord-open",
+      "skillId": "coordination",
+      "title": "OpenLearn free courses",
+      "provider": "The Open University",
+      "url": "https://www.open.edu/openlearn/",
+      "free": true
+    }
+  ],
+  "signals": [
+    {
+      "id": "s01",
+      "headline": "Built-in invoice capture",
+      "direction": 1,
+      "strength": 0.7,
+      "impacts": [
+        {
+          "taskId": "fa-invoice",
+          "impact": 0.045
+        },
+        {
+          "taskId": "oc-tracking",
+          "impact": 0.04
+        }
+      ],
+      "explanation": "Assume tools can extract invoice line items inside finance workflows.",
+      "evidence": "assumption",
+      "assumptionWeight": 0.6658202274413345
+    },
+    {
+      "id": "s02",
+      "headline": "People review exceptions after routine entry is automated",
+      "direction": -1,
+      "strength": 0.5,
+      "impacts": [
+        {
+          "taskId": "fa-exception",
+          "impact": 0.07
+        },
+        {
+          "taskId": "fsa-controls",
+          "impact": 0.05
+        }
+      ],
+      "explanation": "Assume exception handling continues to require human judgment.",
+      "evidence": "assumption",
+      "assumptionWeight": 0.44716801031556647
+    },
+    {
+      "id": "s03",
+      "headline": "Rules match bank transactions",
+      "direction": 1,
+      "strength": 0.6,
+      "impacts": [
+        {
+          "taskId": "fa-recon",
+          "impact": 0.05
+        },
+        {
+          "taskId": "fsa-pipeline",
+          "impact": 0.05
+        }
+      ],
+      "explanation": "Assume matching rules reduce manual reconciliation work.",
+      "evidence": "assumption",
+      "assumptionWeight": 0.5123695442245741
+    },
+    {
+      "id": "s04",
+      "headline": "AI drafts routine support replies",
+      "direction": 1,
+      "strength": 0.6,
+      "impacts": [
+        {
+          "taskId": "cs-faq",
+          "impact": 0.1
+        },
+        {
+          "taskId": "cs-triage",
+          "impact": 0.08
+        }
+      ],
+      "explanation": "Assume routine replies and triage can be assisted by AI.",
+      "evidence": "assumption",
+      "assumptionWeight": 0.48175372911802583
+    },
+    {
+      "id": "s05",
+      "headline": "People design and govern automated processes",
+      "direction": -1,
+      "strength": 0.5,
+      "impacts": [
+        {
+          "taskId": "fsa-automation",
+          "impact": 0.1
+        },
+        {
+          "taskId": "oc-improve",
+          "impact": 0.08
+        }
+      ],
+      "explanation": "Assume process owners remain responsible for automated workflows.",
+      "evidence": "assumption",
+      "assumptionWeight": 0.3688512707566328
+    },
+    {
+      "id": "s06",
+      "headline": "AI drafts commentary from ledger data",
+      "direction": 1,
+      "strength": 0.5,
+      "impacts": [
+        {
+          "taskId": "fa-reporting",
+          "impact": 0.07
+        },
+        {
+          "taskId": "me-reporting",
+          "impact": 0.05
+        }
+      ],
+      "explanation": "Assume AI can prepare a first draft from structured numbers.",
+      "evidence": "assumption",
+      "assumptionWeight": 0.3494924835447548
+    },
+    {
+      "id": "s07",
+      "headline": "Tools screen expenses against policy",
+      "direction": 1,
+      "strength": 0.55,
+      "impacts": [
+        {
+          "taskId": "fa-expense",
+          "impact": 0.11
+        }
+      ],
+      "explanation": "Assume policy screening can flag claims for a reviewer.",
+      "evidence": "assumption",
+      "assumptionWeight": 0.35594487791342755
+    },
+    {
+      "id": "s08",
+      "headline": "AI drafts marketing copy for human review",
+      "direction": 1,
+      "strength": 0.6,
+      "impacts": [
+        {
+          "taskId": "me-copy",
+          "impact": 0.1
+        },
+        {
+          "taskId": "me-social",
+          "impact": 0.08
+        }
+      ],
+      "explanation": "Assume people review AI drafts for accuracy and brand requirements.",
+      "evidence": "assumption",
+      "assumptionWeight": 0.35813860900748107
+    },
+    {
+      "id": "s09",
+      "headline": "AI handles some multi-step data and scheduling work",
+      "direction": 1,
+      "strength": 0.4,
+      "impacts": [
+        {
+          "taskId": "da-clean",
+          "impact": 0.08
+        },
+        {
+          "taskId": "da-query",
+          "impact": 0.08
+        },
+        {
+          "taskId": "oc-scheduling",
+          "impact": 0.05
+        }
+      ],
+      "explanation": "Assume some data preparation, querying and scheduling steps can be automated.",
+      "evidence": "assumption",
+      "assumptionWeight": 0.2086537878410323
+    },
+    {
+      "id": "s10",
+      "headline": "People handle stakeholder and partner conversations",
+      "direction": -1,
+      "strength": 0.4,
+      "impacts": [
+        {
+          "taskId": "fa-comms",
+          "impact": 0.11
+        },
+        {
+          "taskId": "me-partners",
+          "impact": 0.08
+        },
+        {
+          "taskId": "oc-vendors",
+          "impact": 0.06
+        }
+      ],
+      "explanation": "Assume relationship work continues to need human involvement.",
+      "evidence": "assumption",
+      "assumptionWeight": 0.1830480268372381
+    },
+    {
+      "id": "s11",
+      "headline": "People own complex customer escalations",
+      "direction": -1,
+      "strength": 0.45,
+      "impacts": [
+        {
+          "taskId": "cs-escalation",
+          "impact": 0.1
+        },
+        {
+          "taskId": "fa-exception",
+          "impact": 0.05
+        }
+      ],
+      "explanation": "Assume complex cases need a human owner.",
+      "evidence": "assumption",
+      "assumptionWeight": 0.1792716332325769
+    },
+    {
+      "id": "s12",
+      "headline": "Process logs help draft procedures",
+      "direction": 1,
+      "strength": 0.4,
+      "impacts": [
+        {
+          "taskId": "oc-docs",
+          "impact": 0.08
+        },
+        {
+          "taskId": "cs-kb",
+          "impact": 0.05
+        }
+      ],
+      "explanation": "Assume event logs can support a first draft of a procedure.",
+      "evidence": "assumption",
+      "assumptionWeight": 0.11800834541119304
+    },
+    {
+      "id": "s13",
+      "date": "2025-09-15",
+      "headline": "Usage data shows AI concentrated in writing, coding, and analysis",
+      "sourceName": "Anthropic Economic Index",
+      "sourceUrl": "https://www.anthropic.com/economic-index",
+      "direction": 1,
+      "strength": 0.5,
+      "impacts": [
+        {
+          "taskId": "da-clean",
+          "impact": 0.1
+        },
+        {
+          "taskId": "me-copy",
+          "impact": 0.1
+        },
+        {
+          "taskId": "fa-reporting",
+          "impact": 0.05
+        }
+      ],
+      "explanation": "Reported usage clusters in text and data-heavy tasks.",
+      "evidence": "verified"
+    },
+    {
+      "id": "s14",
+      "date": "2025-06-03",
+      "headline": "AI-exposed industries see faster productivity growth",
+      "sourceName": "PwC Global AI Jobs Barometer",
+      "sourceUrl": "https://www.pwc.com/gx/en/issues/artificial-intelligence/ai-jobs-barometer.html",
+      "direction": 1,
+      "strength": 0.4,
+      "impacts": [
+        {
+          "taskId": "fa-invoice",
+          "impact": 0.05
+        },
+        {
+          "taskId": "da-query",
+          "impact": 0.05
+        }
+      ],
+      "explanation": "Productivity gains are strongest where tasks are most exposed.",
+      "evidence": "verified"
+    },
+    {
+      "id": "s15",
+      "date": "2025-05-20",
+      "headline": "Refined index finds clerical work most exposed to generative AI",
+      "sourceName": "International Labour Organization",
+      "sourceUrl": "https://www.ilo.org/publications/generative-ai-and-jobs-refined-global-index-occupational-exposure",
+      "direction": 1,
+      "strength": 0.6,
+      "impacts": [
+        {
+          "taskId": "fa-invoice",
+          "impact": 0.1
+        },
+        {
+          "taskId": "fa-recon",
+          "impact": 0.05
+        },
+        {
+          "taskId": "cs-faq",
+          "impact": 0.05
+        }
+      ],
+      "explanation": "Clerical support occupations show the highest exposure.",
+      "evidence": "verified"
+    },
+    {
+      "id": "s16",
+      "date": "2025-04-23",
+      "headline": "Organisations plan for “agent bosses” who manage AI agents",
+      "sourceName": "Microsoft Work Trend Index",
+      "sourceUrl": "https://www.microsoft.com/en-us/worklab/work-trend-index",
+      "direction": -1,
+      "strength": 0.35,
+      "impacts": [
+        {
+          "taskId": "fsa-automation",
+          "impact": 0.1
+        },
+        {
+          "taskId": "fsa-requirements",
+          "impact": 0.05
+        }
+      ],
+      "explanation": "New oversight work emerges around AI agents.",
+      "evidence": "verified"
+    },
+    {
+      "id": "s17",
+      "date": "2025-01-07",
+      "headline": "Employers expect AI and big data to be the fastest-growing skills",
+      "sourceName": "World Economic Forum",
+      "sourceUrl": "https://www.weforum.org/publications/the-future-of-jobs-report-2025/",
+      "direction": -1,
+      "strength": 0.4,
+      "impacts": [
+        {
+          "taskId": "da-story",
+          "impact": 0.05
+        },
+        {
+          "taskId": "fsa-config",
+          "impact": 0.05
+        }
+      ],
+      "explanation": "Analytical and technical skills top growth forecasts.",
+      "evidence": "verified"
+    },
+    {
+      "id": "s18",
+      "date": "2024-01-14",
+      "headline": "Almost 40% of global employment exposed to AI",
+      "sourceName": "International Monetary Fund",
+      "sourceUrl": "https://www.imf.org/en/Publications/Staff-Discussion-Notes/Issues/2024/01/14/Gen-AI-Artificial-Intelligence-and-the-Future-of-Work-542379",
+      "direction": 1,
+      "strength": 0.5,
+      "impacts": [
+        {
+          "taskId": "fa-reporting",
+          "impact": 0.05
+        }
+      ],
+      "explanation": "Exposure is higher in advanced economies and cognitive roles.",
+      "evidence": "verified"
+    },
+    {
+      "id": "s19",
+      "date": "2023-06-14",
+      "headline": "Generative AI could automate activities absorbing 60–70% of time",
+      "sourceName": "McKinsey & Company",
+      "sourceUrl": "https://www.mckinsey.com/capabilities/mckinsey-digital/our-insights/the-economic-potential-of-generative-ai-the-next-productivity-frontier",
+      "direction": 1,
+      "strength": 0.5,
+      "impacts": [
+        {
+          "taskId": "me-copy",
+          "impact": 0.05
+        },
+        {
+          "taskId": "cs-faq",
+          "impact": 0.05
+        }
+      ],
+      "explanation": "Technical potential, not a forecast of adoption.",
+      "evidence": "verified"
+    },
+    {
+      "id": "s20",
+      "date": "2023-03-17",
+      "headline": "Around 80% of US workers have at least 10% of tasks exposed to LLMs",
+      "sourceName": "Eloundou et al. (arXiv)",
+      "sourceUrl": "https://arxiv.org/abs/2303.10130",
+      "direction": 1,
+      "strength": 0.4,
+      "impacts": [
+        {
+          "taskId": "da-query",
+          "impact": 0.05
+        }
+      ],
+      "explanation": "Early task-level estimate of exposure across occupations.",
+      "evidence": "verified"
+    }
+  ],
+  "demoPersona": {
+    "name": "Aisyah",
+    "roleId": "finance-admin",
+    "skills": {
+      "excel": 3,
+      "erp": 3,
+      "controls": 3,
+      "stakeholder": 2,
+      "analysis": 2,
+      "writing": 2,
+      "empathy": 2,
+      "coordination": 2,
+      "process": 1,
+      "automation": 1,
+      "bi": 1,
+      "ai": 1,
+      "stats": 1,
+      "sql": 0,
+      "python": 0
+    }
+  }
+}

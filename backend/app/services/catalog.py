@@ -136,13 +136,14 @@ def skill_ids_for_role_tasks(session: Session, role_id: str) -> set[str]:
 
 
 def serialize_skill(skill: Skill) -> SkillRead:
+    from app.sdg import tags
     return SkillRead(
+        sdgs=skill.sdgs or tags("skills", skill.id),
         id=skill.id,
         name=skill.name,
         category=skill.category,
         hoursPerLevel=skill.hours_per_level,
         deliverable=skill.deliverable,
-        why=skill.why,
     )
 
 
@@ -183,6 +184,7 @@ def serialize_role(session: Session, role: Role) -> RoleRead:
 
 def serialize_resource(resource: Resource) -> ResourceRead:
     return ResourceRead(
+        cost=resource.cost,hrdCorp=resource.hrd_corp,verifiedAt=resource.verified_at,claimSource=resource.claim_source,
         id=resource.id,
         skillId=resource.skill_id,
         title=resource.title,
@@ -207,7 +209,7 @@ def list_resources(session: Session) -> list[Resource]:
 
 def list_scenarios(session: Session) -> list[Scenario]:
     rows = session.exec(select(Scenario)).all()
-    return sorted(rows, key=lambda row: 0 if row.id == "normal" else 1)
+    return sorted(rows, key=lambda row: {"slow":0,"normal":1,"fast":2}.get(row.id,3))
 
 
 def list_sdgs(session: Session) -> list[SDGRead]:
@@ -268,12 +270,16 @@ def _impacts_by_signal(
 def serialize_signal(
     signal: Signal, impacts: list[SignalTaskImpact]
 ) -> SignalRead:
+    assumption = signal.evidence in {"assumption", "illustrative"}
+    from app.reference_seed import SIGNALS
+    original = next((s for s in SIGNALS if s["id"] == signal.id), {}) if assumption else {}
     return SignalRead(
         id=signal.id,
-        date=signal.date,
-        headline=signal.headline,
-        sourceName=signal.source_name,
-        sourceUrl=signal.source_url,
+        date=None if assumption else signal.date,
+        headline=original.get("headline", signal.headline),
+        sourceName=None if assumption else signal.source_name,
+        sourceUrl=None if assumption else signal.source_url,
+        assumptionWeight=original.get("assumptionWeight", signal.strength) if assumption else None,
         direction=signal.direction,
         strength=signal.strength,
         impacts=[
@@ -281,8 +287,8 @@ def serialize_signal(
             for row in impacts
         ],
         explanation=signal.explanation,
-        evidence=signal.evidence,  # type: ignore[arg-type]
-        recency=round(recency_weight(signal.date), 4),
+        evidence="assumption" if assumption else signal.evidence,  # type: ignore[arg-type]
+        recency=None if assumption else round(recency_weight(signal.date), 4),
     )
 
 
@@ -342,7 +348,7 @@ def seed_payload(session: Session) -> dict:
             serialize_skill(skill).model_dump() for skill in list_skills(session)
         ],
         "signals": [
-            row.model_dump(exclude={"recency"}) for row in seed_signals(session)
+            row.model_dump(exclude={"recency"}, exclude_none=True) for row in seed_signals(session)
         ],
         "resources": [
             serialize_resource(resource).model_dump()

@@ -28,20 +28,25 @@ export function recency(age: number) {
   return Math.pow(0.5, age / 180)
 }
 
+/** Assumptions use a fixed editorial weight, without pretending to have a publication date. */
+export function signalWeight(signal: Signal, asOf: string = DATA_AS_OF) {
+  return signal.evidence === 'assumption' ? signal.assumptionWeight : signal.strength * recency(ageDays(signal.date, asOf))
+}
+
 /** signal_adjustment(task) = clamp(sum(strength × direction × recency × impact), -0.2, 0.2) */
 export function signalAdjustment(taskId: string, signals: Signal[], asOf: string = DATA_AS_OF) {
   let sum = 0
   for (const s of signals) {
     for (const i of s.impacts) {
       if (i.taskId !== taskId) continue
-      sum += s.strength * s.direction * recency(ageDays(s.date, asOf)) * i.impact
+      sum += signalWeight(s, asOf) * s.direction * i.impact
     }
   }
   return clamp(sum, -0.2, 0.2)
 }
 
 export function getScenario(id: ScenarioId) {
-  return scenarios.find((s) => s.id === id) ?? scenarios[0]
+  return scenarios.find((s) => s.id === id) ?? scenarios.find(s=>s.id==='normal') ?? scenarios[0]
 }
 
 /** exposure(task, scenario) = clamp(base_exposure × scenario.multiplier + signal_adjustment, 0, 1) */
@@ -100,8 +105,9 @@ export function scoreTasks(
   taskLookup: Record<string, Task | CustomTask>,
   scenarioId: ScenarioId,
   signals: Signal[],
+  previewMultiplier?: number,
 ): ScoredTask[] {
-  const { multiplier } = getScenario(scenarioId)
+  const multiplier = previewMultiplier === undefined ? getScenario(scenarioId).multiplier : clamp(previewMultiplier, .75, 1.5)
   const normalized = normalizeShares(selections.filter((s) => taskLookup[s.taskId] && 'roleId' in taskLookup[s.taskId]))
   return normalized.map(({ taskId, share }) => {
     const t = taskLookup[taskId]
@@ -135,10 +141,10 @@ export function assessmentSummary(selections: ShareInput[], lookup: Record<strin
   return { assessmentCoverage: valid.filter((item) => 'roleId' in lookup[item.taskId]).reduce((sum, item) => sum + item.share, 0), unassessedTasks }
 }
 
-/** Coverage uses rated requirements only, preserving unknown separately from explicit zero. */
+/** Conservative coverage includes all requirements in the denominator; unknowns remain separate. */
 export function skillCoverage(role: Role, levels: Record<string, number>) {
   const rated = role.requirements.filter((r) => levels[r.skillId] !== undefined)
-  const totalImportance = rated.reduce((a, r) => a + r.importance, 0)
+  const totalImportance = role.requirements.reduce((a, r) => a + r.importance, 0)
   if (!totalImportance) return 0
   const covered = rated.reduce(
     (a, r) => a + r.importance * Math.min((levels[r.skillId] ?? 0) / r.requiredLevel, 1),
@@ -205,7 +211,7 @@ export function learningWeeks(totalHours: number, hoursPerWeek: number) {
 }
 
 /** Default-time-share exposure for a role under a scenario. */
-export function targetRoleExposure(roleId: string, scenarioId: ScenarioId, signals: Signal[]) {
+export function targetRoleExposure(roleId: string, scenarioId: ScenarioId, signals: Signal[], previewMultiplier?: number) {
   const list = tasksForRole(roleId)
   const lookup = Object.fromEntries(list.map((t) => [t.id, t]))
   const scored = scoreTasks(
@@ -213,11 +219,12 @@ export function targetRoleExposure(roleId: string, scenarioId: ScenarioId, signa
     lookup,
     scenarioId,
     signals,
+    previewMultiplier,
   )
   return roleExposure(scored)
 }
 
-/** route_score = 0.7 × fit + 0.3 × 100 × (1 − target_exposure) — ranks lower-risk adjacent roles. */
+/** route_score = 0.7 × fit + 0.3 × 100 × (1 − target_exposure). Ranks lower-risk adjacent roles. */
 export function routeScore(fit: number, targetExposure: number) {
   return 0.7 * fit + 0.3 * 100 * (1 - targetExposure)
 }
@@ -230,12 +237,18 @@ export interface RouteResult {
   coverage: number
   similarity: number | null
   fit: number
+  fitLow: number
+  fitHigh: number
+  ratedShare: number
   targetExposure: number
   score: number
   gaps: SkillGap[]
   totalGapHours: number
   weeks: number
   sdgs: number[]
+  unadjustedScore: number
+  unadjustedRank: number
+  sdgBonus: number
   unknownSkillIds: string[]
 }
 
@@ -247,16 +260,22 @@ export function computeRoutes(params: {
   signals: Signal[]
   hoursPerWeek: number
   limit?: number
+  previewMultiplier?: number
+  sdgFocus?: number[]
 }): RouteResult[] {
-  const { currentRoleId, userTaskSkills, levels, scenarioId, signals, hoursPerWeek, limit = 3 } = params
+  const { currentRoleId, userTaskSkills, levels, scenarioId, signals, hoursPerWeek, limit = 3, previewMultiplier } = params
   return roles
     .filter((r) => r.id !== currentRoleId)
     .map((role) => {
       const coverage = skillCoverage(role, levels)
       const similarity = taskSimilarity(userTaskSkills, role.id)
       const unknownSkillIds = role.requirements.filter((r) => levels[r.skillId] === undefined).map((r) => r.skillId)
-      const fit = unknownSkillIds.length === role.requirements.length ? 100 * (similarity ?? 0) : roleFit(coverage, similarity)
-      const exposure = targetRoleExposure(role.id, scenarioId, signals)
+      const totalImportance = role.requirements.reduce((sum, r) => sum + r.importance, 0)
+      const ratedShare = totalImportance ? role.requirements.filter((r) => levels[r.skillId] !== undefined).reduce((sum, r) => sum + r.importance, 0) / totalImportance : 1
+      const fitLow = roleFit(coverage, similarity)
+      const fitHigh = roleFit(Math.min(1, coverage + 1 - ratedShare), similarity)
+      const fit = fitLow
+      const exposure = targetRoleExposure(role.id, scenarioId, signals, previewMultiplier)
       const gaps = skillGaps(role, levels)
       const totalGapHours = gaps.reduce((a, g) => a + g.hours, 0)
       return {
@@ -266,7 +285,7 @@ export function computeRoutes(params: {
         demand: role.demand,
         coverage,
         similarity,
-        fit,
+        fit, fitLow, fitHigh, ratedShare,
         targetExposure: exposure,
         score: routeScore(fit, exposure),
         gaps,
@@ -277,6 +296,11 @@ export function computeRoutes(params: {
       }
     })
     .sort((a, b) => b.score - a.score || a.title.localeCompare(b.title))
+    .map((route,index) => {
+      const sdgBonus=Math.min(10,5 * route.sdgs.filter(id => params.sdgFocus?.includes(id)).length)
+      return {...route,unadjustedRank:index+1,unadjustedScore:route.score,sdgBonus,score:route.score+sdgBonus}
+    })
+    .sort((a,b)=>b.score-a.score || a.title.localeCompare(b.title))
     .slice(0, limit)
 }
 
@@ -285,12 +309,15 @@ export interface PathwayStep {
   skillId: string
   title: string
   skills: string[]
-  resource: { title: string; provider: string; url: string; free: boolean } | null
+  resource: { title: string; provider: string; url: string; free: boolean; cost?: string; hrdCorp?: boolean } | null
   hours: number
   startWeek: number
   endWeek: number
   deliverable: string
-  why: string
+  priority: number
+  importance: number
+  current: number
+  required: number
 }
 
 export function buildPathway(params: {
@@ -315,13 +342,15 @@ export function buildPathway(params: {
       title: `${g.current === 0 ? 'Start' : 'Level up'}: ${g.name}`,
       skills: [g.skillId],
       resource: resource
-        ? { title: resource.title, provider: resource.provider, url: resource.url, free: resource.free }
+        ? { title: resource.title, provider: resource.provider, url: resource.url, free: resource.free, ...(resource.cost ? {cost:resource.cost}:{}), ...(resource.hrdCorp ? {hrdCorp:true}:{}) }
         : null,
       hours: g.hours,
       startWeek: Math.floor(startHours / Math.max(1, params.hoursPerWeek)) + 1,
       endWeek: Math.max(1, Math.ceil(cursor / Math.max(1, params.hoursPerWeek))),
       deliverable: skill?.deliverable ?? 'A small practical project',
-      why: skill?.why ?? '',
+      priority: g.priority, importance:g.importance,
+      current: g.current,
+      required: g.required,
     }
   })
   return { steps, totalHours: cursor, weeks: learningWeeks(cursor, params.hoursPerWeek) }
@@ -363,7 +392,7 @@ export function confidence(tasks: ScoredTask[], signals: Signal[]): 'High' | 'Me
   for (const s of signals) {
     for (const i of s.impacts) {
       if (!ids.has(i.taskId)) continue
-      const w = s.strength * recency(ageDays(s.date)) * i.impact
+      const w = signalWeight(s) * i.impact
       total += w
       if (s.evidence === 'verified') verified += w
     }
@@ -375,3 +404,38 @@ export function confidence(tasks: ScoredTask[], signals: Signal[]): 'High' | 'Me
 }
 
 export const pct = (v: number, digits = 0) => `${(v * 100).toFixed(digits)}%`
+
+
+export function fitLabel(route: Pick<RouteResult, 'fitLow' | 'fitHigh' | 'ratedShare'>) {
+  return route.ratedShare < 1 ? `${Math.round(route.fitLow)}–${Math.round(route.fitHigh)}%` : `${Math.round(route.fitLow)}%`
+}
+
+export function routeConfidence(rated:number,required:number,recentSignals:number,spread:number): 'Low'|'Medium'|'High' {
+  const share=required ? rated/required : 0
+  if(share>=.8 && recentSignals>=3 && spread<=5) return 'High'
+  if(share>=.5 && spread<=12) return 'Medium'
+  return 'Low'
+}
+export interface ScenarioComparison {
+  roleId:string
+  scores:{scenario:ScenarioId;rank:number;score:number;exposure:number}[]
+  low:number
+  high:number
+  confidence:'Low'|'Medium'|'High'
+  rated:number
+  required:number
+  recentSignals:number
+  spread:number
+}
+export function compareScenarios(params: Omit<Parameters<typeof computeRoutes>[0],'scenarioId'|'limit'|'previewMultiplier'>): ScenarioComparison[] {
+  const ids:ScenarioId[]=['slow','normal','fast']
+  const matrix=ids.map(scenarioId=>computeRoutes({...params,scenarioId,limit:roles.length}))
+  return roles.filter(r=>r.id!==params.currentRoleId).map(role=>{
+    const scores=matrix.map((list,i)=>{const rank=list.findIndex(r=>r.roleId===role.id);const row=list[rank];return {scenario:ids[i],rank:rank+1,score:row.score,exposure:row.targetExposure}})
+    const low=Math.min(...scores.map(s=>s.score)),high=Math.max(...scores.map(s=>s.score))
+    const rated=role.requirements.filter(r=>params.levels[r.skillId]!==undefined).length,required=role.requirements.length
+    const taskIds=new Set(tasksForRole(role.id).map(t=>t.id))
+    const recentSignals=params.signals.filter(s=>s.evidence==='verified' && ageDays(s.date)<=180 && s.impacts.some(i=>taskIds.has(i.taskId))).length
+    return {roleId:role.id,scores,low,high,rated,required,recentSignals,spread:high-low,confidence:routeConfidence(rated,required,recentSignals,high-low)}
+  })
+}

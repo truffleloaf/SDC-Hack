@@ -32,6 +32,8 @@ def slugify(value: str) -> str:
 
 @dataclass
 class LiveCatalog:
+    observations: list[dict] = field(default_factory=list)
+    signals: list[dict] = field(default_factory=list)
     roles: list[dict] = field(default_factory=list)
     tasks: list[dict] = field(default_factory=list)
     skills: list[dict] = field(default_factory=list)
@@ -253,6 +255,7 @@ def build_catalog(
         skills.append(
             {
                 "id": skill_id,
+                "sdgs": __import__("app.sdg",fromlist=["tags"]).tags("skills",skill_id),
                 "name": name,
                 "category": category,
                 "hours_per_level": role_config.HOURS_PER_LEVEL[category],

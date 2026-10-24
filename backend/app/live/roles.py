@@ -239,26 +239,23 @@ DELIVERABLES = {
 
 # Product constants, not demo rows: both datasets need the same two scenarios.
 SCENARIOS = (
+    {'id':'slow','label':'Slow','multiplier':0.75,'description':'Team assumption: 0.75× baseline exposure. Not a forecast.'},
     {
         "id": "normal",
         "label": "Normal",
         "multiplier": 1.0,
-        "description": "Current adoption: tools are available, but workflows change slowly.",
+        "description": "Team assumption: 1× baseline exposure. Not a forecast.",
     },
     {
         "id": "fast",
         "label": "Fast",
         "multiplier": 1.25,
-        "description": "Faster adoption: automation is deployed across teams within a year.",
+        "description": "Team assumption: 1.25× baseline exposure. Not a forecast.",
     },
 )
 
-SDGS = (
-    {"id": 4, "name": "Quality Education", "color": "#C5192D"},
-    {"id": 8, "name": "Decent Work and Economic Growth", "color": "#A21942"},
-    {"id": 9, "name": "Industry, Innovation and Infrastructure", "color": "#FD6925"},
-    {"id": 10, "name": "Reduced Inequalities", "color": "#DD1367"},
-)
+from app.sdg import MAPPING
+SDGS = MAPPING['goals']
 
 SOURCE_CATALOG = {
     "name": f"O*NET {ONET_VERSION} Database",

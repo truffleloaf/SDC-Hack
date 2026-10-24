@@ -12,10 +12,10 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
-ScenarioId = Literal["normal", "fast"]
+ScenarioId = Literal["slow", "normal", "fast"]
 Classification = Literal["Automate", "Augment", "Protect"]
 Confidence = Literal["High", "Medium", "Low"]
-Evidence = Literal["verified", "illustrative", "user"]
+Evidence = Literal["verified", "illustrative", "assumption", "user"]
 
 
 # ---------------------------------------------------------------------------
@@ -37,6 +37,9 @@ class ProfileInput(BaseModel):
     scenario: str = "normal"
     hoursPerWeek: Any = 6
     freeOnly: bool = False
+    routeLimit: int = 3
+    ignoreTrendSignals: bool = False
+    sdgFocus: list[int] = Field(default_factory=list)
     targetRoleId: str | None = None
 
 
@@ -52,6 +55,9 @@ class NormalizedProfile(BaseModel):
     scenario: ScenarioId
     hoursPerWeek: int
     freeOnly: bool
+    routeLimit: int = 3
+    ignoreTrendSignals: bool = False
+    sdgFocus: list[int] = Field(default_factory=list)
     targetRoleId: str | None = None
 
 
@@ -82,12 +88,12 @@ class RecomputeRequest(BaseModel):
 
 
 class SkillRead(BaseModel):
+    sdgs: list[int]
     id: str
     name: str
     category: str
     hoursPerLevel: int
     deliverable: str
-    why: str
 
 
 class RoleRequirementRead(BaseModel):
@@ -118,6 +124,10 @@ class TaskRead(BaseModel):
 
 
 class ResourceRead(BaseModel):
+    cost: str | None = None
+    hrdCorp: bool = False
+    verifiedAt: str | None = None
+    claimSource: str | None = None
     id: str
     skillId: str
     title: str
@@ -147,16 +157,17 @@ class SignalImpactRead(BaseModel):
 
 class SignalRead(BaseModel):
     id: str
-    date: date_type
+    date: date_type | None = None
     headline: str
-    sourceName: str
-    sourceUrl: str
+    sourceName: str | None = None
+    sourceUrl: str | None = None
+    assumptionWeight: float | None = None
     direction: int
     strength: float
     impacts: list[SignalImpactRead]
     explanation: str
     evidence: Evidence
-    recency: float
+    recency: float | None = None
 
 
 class DemoPersonaRead(BaseModel):
@@ -204,8 +215,15 @@ class RouteResult(BaseModel):
     coverage: float
     similarity: float | None
     fit: float
+    fitLow: float
+    fitHigh: float
+    ratedShare: float
+    unknownSkillIds: list[str]
     targetExposure: float
     score: float
+    unadjustedScore: float
+    unadjustedRank: int
+    sdgBonus: float
     gaps: list[SkillGap]
     totalGapHours: int
     weeks: int
@@ -264,6 +282,9 @@ class SavedProfileResponse(BaseModel):
     scenario: ScenarioId
     hoursPerWeek: int
     freeOnly: bool
+    routeLimit: int = 3
+    ignoreTrendSignals: bool = False
+    sdgFocus: list[int] = Field(default_factory=list)
     targetRoleId: str | None = None
     completedSteps: list[str]
     customTasks: list[dict[str, Any]]
@@ -278,6 +299,8 @@ class DeleteProfileResponse(BaseModel):
 
 
 class ResourceLink(BaseModel):
+    cost: str | None = None
+    hrdCorp: bool = False
     title: str
     provider: str
     url: str
@@ -285,6 +308,8 @@ class ResourceLink(BaseModel):
 
 
 class PathwayStep(BaseModel):
+    priority: float
+    importance: int
     id: str
     skillId: str
     title: str
@@ -294,7 +319,8 @@ class PathwayStep(BaseModel):
     startWeek: int
     endWeek: int
     deliverable: str
-    why: str
+    current: int
+    required: int
 
 
 class PathwayResponse(BaseModel):
@@ -477,3 +503,4 @@ class LiveStatusResponse(BaseModel):
     catalog: dict[str, Any] | None = None
     demand: dict[str, Any] | None = None
     model: dict[str, Any] | None = None
+    trends: dict[str, Any] | None = None

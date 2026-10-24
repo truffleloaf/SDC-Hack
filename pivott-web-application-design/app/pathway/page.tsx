@@ -1,7 +1,12 @@
 'use client'
+import { HumanChoice } from '@/components/pivott/human-choice'
 
+import { SdgContribution } from '@/components/pivott/sdg-contribution'
+
+import { useState } from 'react'
+import { SyncNote } from '@/components/account/sync-note'
 import { ArrowRight, CalendarPlus } from 'lucide-react'
-import { AnimatePresence, motion } from 'motion/react'
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { toast } from 'sonner'
 import { StepCard } from '@/components/pathway/step-card'
 import { LogoMark } from '@/components/pivott/logo'
@@ -12,13 +17,16 @@ import { PageIntro } from '@/components/pivott/route-stepper'
 import { NeedsProfile, PageSkeleton } from '@/components/pivott/states'
 import { ValueSlider } from '@/components/pivott/value-slider'
 import { Switch } from '@/components/ui/switch'
-import { hasDemoPersona, roleById } from '@/lib/data/seed'
+import { catalogSource, resources, roleById, skillById } from '@/lib/data/seed'
+import { planProgress } from '@/lib/plan-progress'
 import { buildPathway } from '@/lib/engine'
 import { buildIcs, downloadFile } from '@/lib/ics'
-import { displayName, greetingName, possessive, setState, useAnalysis, useAppState } from '@/lib/store'
+import { setState, taskLookup, useAnalysis, useAppState } from '@/lib/store'
 
 export default function PathwayPage() {
   const { state, hydrated } = useAppState()
+  const reduce = useReducedMotion()
+  const [ratingOffer, setRatingOffer] = useState<{ skillId: string; from: number; to: number; stepId: string } | null>(null)
   const { routes } = useAnalysis(state)
 
   if (!hydrated) return <PageSkeleton />
@@ -31,19 +39,23 @@ export default function PathwayPage() {
     targetRoleId: targetId,
     levels: state.skills,
     hoursPerWeek: state.hoursPerWeek,
-    freeOnly: hasDemoPersona ? state.freeOnly : false,
+    freeOnly: state.freeOnly,
   })
   const doneIds = new Set(state.completedSteps.filter((id) => steps.some((s) => s.id === id)))
-  const progress = steps.length ? doneIds.size / steps.length : 0
+  const summary = planProgress(role, steps, state.completedSteps, state.skills)
+  const progress = summary.progress
   const unknown = role.requirements.filter((requirement) => state.skills[requirement.skillId] === undefined)
-  const complete = unknown.length === 0 && steps.length > 0 && doneIds.size === steps.length
+  const complete = summary.complete
 
-  const fill = steps.length ? doneIds.size / steps.length : 0
+  const fill = progress
 
   function toggle(id: string) {
-    setState((s) => ({
-      completedSteps: s.completedSteps.includes(id) ? s.completedSteps.filter((x) => x !== id) : [...s.completedSteps, id],
-    }))
+    const step = steps.find((item) => item.id === id)
+    const wasDone = state.completedSteps.includes(id)
+    setState((s) => ({ completedSteps: wasDone ? s.completedSteps.filter((x) => x !== id) : [...s.completedSteps, id] }))
+    if (wasDone) { if (ratingOffer?.stepId === id) setRatingOffer(null); return }
+    const requirement = role.requirements.find((item) => item.skillId === step?.skillId)
+    if (step && requirement && state.skills[step.skillId] !== undefined && state.skills[step.skillId] < requirement.requiredLevel) setRatingOffer({ skillId: step.skillId, from: state.skills[step.skillId], to: requirement.requiredLevel, stepId: id })
   }
 
   function exportIcs() {
@@ -53,10 +65,14 @@ export default function PathwayPage() {
 
   return (
     <div className="mx-auto w-full max-w-[1200px] px-5 pb-32 pt-10 lg:pb-20">
-      <PageIntro eyebrow={`Step 5 · ${possessive(displayName(state))} route to ${role.title}`} title="Your route, one step at a time.">
-        Hi {greetingName(state)} — steps are ordered by gap priority, so the skills that matter most for this role come first.
+      <PageIntro eyebrow="Learning plan" title={`Plan for ${role.title}`}>
+        Steps are ordered by how much each skill matters for this role and the size of your rated gap.
       </PageIntro>
 
+      {resources.length === 0 && <p className="mt-5 text-sm text-muted-foreground">No vetted resources yet for this catalogue. The plan uses rated gaps, team hour estimates and practice deliverables.</p>}
+      <p className="mt-3 text-sm text-muted-foreground">For local training, check <a href="https://hrdcorp.gov.my/" target="_blank" rel="noreferrer" className="underline">HRD Corp’s official programme listings</a>. Eligibility depends on your employer’s registration and the specific programme. No claimability is implied by this plan.</p>
+      <SyncNote eligible={state.mode === 'personal'} />
+      {ratingOffer && <div role="status" className="mt-5 rounded-lg border border-primary p-4 text-sm"><p>Raise your {skillById[ratingOffer.skillId]?.name} rating from {ratingOffer.from} to {ratingOffer.to}?</p><p className="mt-2 text-xs text-muted-foreground">Choose Yes only if you can now work at that level. You can review the level descriptions on Skills.</p><div className="mt-3 flex gap-3"><PButton size="sm" onClick={() => { setState((current) => current.skills[ratingOffer.skillId] === ratingOffer.from ? { skills: { ...current.skills, [ratingOffer.skillId]: ratingOffer.to } } : {}); setRatingOffer(null) }}>Yes</PButton><PButton size="sm" variant="secondary" onClick={() => setRatingOffer(null)}>Not yet</PButton></div></div>}
       {unknown.length > 0 && <div className="mt-5 rounded-lg border border-border bg-card p-4 text-sm"><p>Partial plan: rate {unknown.length} more skills to estimate the remaining learning needs. Unrated skills are not treated as gaps or zero ability.</p><PLink href="/skills" variant="link" className="mt-2">Continue skill ratings</PLink></div>}
       <div className="mt-12 grid gap-10 lg:grid-cols-[1fr_340px]">
         <div className="relative">
@@ -66,11 +82,11 @@ export default function PathwayPage() {
             className="absolute left-5 top-10 border-l-2 border-dotted border-teal sm:left-7"
             initial={false}
             animate={{ height: `calc(${fill * 100}% - ${fill * 80}px)` }}
-            transition={{ duration: 0.45, ease: [0.2, 0.7, 0.2, 1] }}
+            transition={{ duration: reduce ? 0 : 0.45, ease: [0.2, 0.7, 0.2, 1] }}
           />
           <ol className="flex flex-col gap-5" aria-label="Learning steps">
             {steps.map((s) => (
-              <StepCard key={s.id} step={s} done={doneIds.has(s.id)} onToggle={() => toggle(s.id)} />
+              <StepCard key={s.id} step={s} roleTitle={role.title} taskNames={state.selections.filter((item) => taskLookup(state)[item.taskId]?.skills.includes(s.skillId)).map((item) => state.taskNames[item.taskId] || taskLookup(state)[item.taskId].name)} done={doneIds.has(s.id)} onToggle={() => toggle(s.id)} />
             ))}
             <li className="relative grid grid-cols-[40px_1fr] gap-4 sm:grid-cols-[56px_1fr]">
               <div className="relative z-10 flex justify-center pt-5">
@@ -82,15 +98,15 @@ export default function PathwayPage() {
                 {complete ? (
                   <motion.div
                     key="done"
-                    initial={{ opacity: 0, y: 8 }}
+                    initial={reduce ? false : { opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="flex items-center gap-5 rounded-[20px] border border-teal/30 bg-mint p-6"
+                    className="flex items-center gap-5 rounded-xl border border-teal/30 bg-mint p-6"
                   >
-                    <LogoMark animated className="size-14 shrink-0 text-foreground" />
+                    <LogoMark className="size-14 shrink-0 text-foreground" />
                     <div className="flex flex-col gap-1">
-                      <p className="font-serif text-2xl">Plan steps complete.</p>
+                      <p className="font-serif text-2xl">{summary.doneCount ? 'All steps done.' : 'No rated gaps remain.'}</p>
                       <p className="text-sm leading-relaxed text-muted-foreground">
-                        You’ve marked every estimated learning step complete. Your Skill Passport is a personal summary, not a qualification.
+                        {summary.doneCount ? 'You’ve marked every learning step complete. Review your skill ratings to update the comparison.' : 'Your ratings meet the stored requirements. Review them when your experience changes.'}
                       </p>
                     </div>
                   </motion.div>
@@ -109,14 +125,14 @@ export default function PathwayPage() {
           <div className="card-surface flex flex-col gap-6 p-6">
             <div className="flex items-center gap-4">
               <ProgressRing value={progress} size={76} stroke={6} label="Pathway progress">
-                <span className="font-mono text-sm">{steps.length ? `${Math.round(progress * 100)}%` : '—'}</span>
+                <span className="font-mono text-sm">{unknown.length ? `${summary.doneCount} done` : `${Math.round(progress * 100)}%`}</span>
               </ProgressRing>
               <div className="flex flex-col">
                 <span className="font-serif text-3xl leading-none">
                   {unknown.length && !steps.length ? 'Not estimated' : <>{unknown.length ? '≥ ' : ''}{weeks} <span className="font-sans text-sm text-muted-foreground">weeks</span></>}
                 </span>
                 <span className="mt-1 font-mono text-xs text-muted-foreground">
-                  {unknown.length ? 'Rated gaps only · ' : ''}{totalHours} h · {doneIds.size}/{steps.length} done
+                  {unknown.length ? 'Rated gaps only · ' : ''}{totalHours} h · {summary.doneCount}/{summary.totalCount} recorded done
                 </span>
               </div>
             </div>
@@ -139,19 +155,13 @@ export default function PathwayPage() {
               </p>
             </div>
 
-            {hasDemoPersona ? (
-              <label className="flex min-h-11 cursor-pointer items-center justify-between gap-3 border-t border-border pt-5">
-                <span className="flex flex-col">
-                  <span className="text-sm font-medium">Free resources only</span>
-                  <span className="text-xs text-muted-foreground">Swap paid courses for free ones</span>
-                </span>
-                <Switch checked={state.freeOnly} onCheckedChange={(v) => setState({ freeOnly: v })} />
-              </label>
-            ) : (
-              <p className="border-t border-border pt-5 text-xs leading-relaxed text-muted-foreground">
-                Live catalogue: study hours are estimated from O*NET task importance. Curated course links are not available yet, so the free/paid filter is hidden.
-              </p>
-            )}
+            <label className="flex min-h-11 cursor-pointer items-center justify-between gap-3 border-t border-border pt-5">
+              <span className="flex flex-col">
+                <span className="text-sm font-medium">Free resources only</span>
+                <span className="text-xs text-muted-foreground">Show free resources when vetted options exist</span>
+              </span>
+              <Switch checked={state.freeOnly} onCheckedChange={(v) => setState({ freeOnly: v })} />
+            </label>
 
             <div className="flex flex-col gap-3 border-t border-border pt-5">
               <PButton variant="secondary" onClick={exportIcs} disabled={!steps.length}>
@@ -173,6 +183,8 @@ export default function PathwayPage() {
           <ArrowRight aria-hidden />
         </PLink>
       </MobileActionBar>
+      <SdgContribution roleId={role.id} skillIds={steps.map(s=>s.skillId)} />
+      <HumanChoice />
     </div>
   )
 }

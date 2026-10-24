@@ -1,0 +1,42 @@
+name: Refresh dated public catalogue
+on:
+  schedule:
+    - cron: '23 6 * * 1'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: refresh-live
+  cancel-in-progress: false
+jobs:
+  refresh:
+    if: github.repository == 'truffleloaf/SDC-Hack'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r backend/requirements.txt
+      - name: Recover prior public observation history
+        run: |
+          if git ls-remote --exit-code --heads origin data/live-snapshot; then
+            git fetch origin data/live-snapshot:refs/remotes/origin/data/live-snapshot
+            git checkout origin/data/live-snapshot -- backend/data
+          fi
+      - name: Fetch and validate public sources before writing outputs
+        working-directory: backend
+        env:
+          PIVOTT_DATASET: live
+          PIVOTT_DB: sqlite:////tmp/pivott-refresh.db
+          PYTHONPATH: .
+        run: python scripts/refresh_snapshot.py
+      - name: Publish reviewable data branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add pivott-web-application-design/lib/data/*.json backend/data/*.json backend/data/snapshots/*.json
+          git diff --cached --quiet && exit 0
+          git checkout -B data/live-snapshot
+          git commit -m 'Refresh dated public job catalogue and trend counts'
+          git push origin data/live-snapshot --force-with-lease

@@ -65,7 +65,7 @@ export function SegmentedControl<T extends string>({
             {active && (
               <motion.span
                 layoutId={`seg-${id}`}
-                className="absolute inset-0 -z-10 rounded-lg border border-border bg-card shadow-soft"
+                className="pointer-events-none absolute inset-0 -z-10 rounded-lg border border-border bg-card shadow-soft"
                 transition={{ type: 'spring', stiffness: 500, damping: 38 }}
               />
             )}

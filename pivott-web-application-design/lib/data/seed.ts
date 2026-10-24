@@ -1,12 +1,14 @@
+import sdgMap from './sdg-map.json'
+import vettedResources from './resources.live.json'
 export type SkillCategory = 'Technical' | 'Analytical' | 'Communication' | 'Operational'
 
 export interface Skill {
+  sdgs: number[]
   id: string
   name: string
   category: SkillCategory
   hoursPerLevel: number
   deliverable: string
-  why: string
 }
 
 export interface Task {
@@ -37,6 +39,10 @@ export interface Role {
 }
 
 export interface Resource {
+  cost?: string
+  hrdCorp?: boolean
+  verifiedAt?: string
+  claimSource?: string
   id: string
   skillId: string
   title: string
@@ -45,21 +51,22 @@ export interface Resource {
   free: boolean
 }
 
-export interface Signal {
+interface SignalBase {
   id: string
-  date: string
   headline: string
-  sourceName: string
-  sourceUrl: string
   direction: 1 | -1
   strength: number
   impacts: { taskId: string; impact: number }[]
   explanation: string
-  evidence: 'verified' | 'illustrative' | 'user'
 }
 
+export type Signal = SignalBase & (
+  | { evidence: 'assumption'; assumptionWeight: number; date?: never; sourceName?: never; sourceUrl?: never }
+  | { evidence: 'verified' | 'user'; date: string; sourceName: string; sourceUrl: string; assumptionWeight?: never }
+)
+
 export interface Scenario {
-  id: 'normal' | 'fast'
+  id: 'slow' | 'normal' | 'fast'
   label: string
   multiplier: number
   description: string
@@ -72,46 +79,42 @@ export interface Sdg {
 }
 
 export let DATA_AS_OF = '2026-10-01'
-export let SEED_VERSION = '2026.10.2'
+export let SEED_VERSION = '2026.10.4'
 
 export let scenarios: Scenario[] = [
+  {id:'slow',label:'Slow',multiplier:0.75,description:'Team assumption: baseline exposure scaled to 0.75. Not a forecast.'},
   {
     id: 'normal',
     label: 'Normal',
     multiplier: 1,
-    description: 'AI adoption continues at the pace seen across 2025–2026.',
+    description: 'Team assumption: baseline exposure scaled to 1.00. Not a forecast.',
   },
   {
     id: 'fast',
     label: 'Fast',
     multiplier: 1.25,
-    description: 'Tools mature quickly and adoption accelerates across teams.',
+    description: 'Team assumption: baseline exposure scaled to 1.25. Not a forecast.',
   },
 ]
 
-export let sdgs: Sdg[] = [
-  { id: 4, name: 'Quality Education', color: '#C5192D' },
-  { id: 8, name: 'Decent Work and Economic Growth', color: '#A21942' },
-  { id: 9, name: 'Industry, Innovation and Infrastructure', color: '#FD6925' },
-  { id: 10, name: 'Reduced Inequalities', color: '#DD1367' },
-]
+export let sdgs: Sdg[] = sdgMap.goals
 
 export let skills: Skill[] = [
-  { id: 'excel', name: 'Spreadsheet modelling', category: 'Technical', hoursPerLevel: 10, deliverable: 'A reusable reconciliation workbook with lookups and checks', why: 'Spreadsheets remain the lingua franca of finance and ops teams.' },
-  { id: 'erp', name: 'ERP systems', category: 'Technical', hoursPerLevel: 14, deliverable: 'A documented test script for one ERP workflow', why: 'Knowing how the system is configured moves you from user to owner.' },
-  { id: 'sql', name: 'SQL', category: 'Technical', hoursPerLevel: 12, deliverable: 'Five queries answering real questions about a sample ledger', why: 'SQL lets you pull the data yourself instead of waiting for exports.' },
-  { id: 'python', name: 'Python', category: 'Technical', hoursPerLevel: 16, deliverable: 'A small script that cleans a messy CSV export', why: 'Light scripting turns repetitive cleanup into a one-click job.' },
-  { id: 'bi', name: 'BI dashboards', category: 'Technical', hoursPerLevel: 10, deliverable: 'A one-page dashboard tracking three finance KPIs', why: 'Dashboards make your analysis visible to decision makers.' },
-  { id: 'automation', name: 'Process automation', category: 'Technical', hoursPerLevel: 12, deliverable: 'An approval flow that routes invoices automatically', why: 'Building automations positions you as the person who designs the work.' },
-  { id: 'ai', name: 'AI tool fluency', category: 'Technical', hoursPerLevel: 6, deliverable: 'A prompt library for three recurring tasks, with checks', why: 'Using AI well is quickly becoming a baseline expectation.' },
-  { id: 'analysis', name: 'Data analysis', category: 'Analytical', hoursPerLevel: 12, deliverable: 'A variance analysis memo with three clear findings', why: 'Interpreting numbers is where human judgment adds the most value.' },
-  { id: 'stats', name: 'Statistics', category: 'Analytical', hoursPerLevel: 12, deliverable: 'A short note explaining a trend with confidence intervals', why: 'Statistics helps you tell signal from noise.' },
-  { id: 'controls', name: 'Financial controls', category: 'Analytical', hoursPerLevel: 10, deliverable: 'A control matrix for one end-to-end process', why: 'Controls expertise is durable: automation still needs oversight.' },
-  { id: 'stakeholder', name: 'Stakeholder communication', category: 'Communication', hoursPerLevel: 8, deliverable: 'A requirements summary signed off by a stakeholder', why: 'Translating between teams is hard to automate and highly valued.' },
-  { id: 'writing', name: 'Writing & storytelling', category: 'Communication', hoursPerLevel: 8, deliverable: 'A one-page narrative explaining a business change', why: 'Clear writing turns analysis into action.' },
-  { id: 'empathy', name: 'Customer empathy', category: 'Communication', hoursPerLevel: 6, deliverable: 'Three customer journey notes with pain points', why: 'Understanding people keeps your work anchored to real needs.' },
-  { id: 'process', name: 'Process design', category: 'Operational', hoursPerLevel: 10, deliverable: 'A swimlane map of a current process with one redesign', why: 'Redesigning processes is central to every AI rollout.' },
-  { id: 'coordination', name: 'Project coordination', category: 'Operational', hoursPerLevel: 8, deliverable: 'A lightweight project plan with owners and milestones', why: 'Coordinating change keeps people and tools moving together.' },
+  { id: 'excel', name: 'Spreadsheet modelling', category: 'Technical', sdgs: [4, 9], hoursPerLevel: 10, deliverable: 'A reusable reconciliation workbook with lookups and checks' },
+  { id: 'erp', name: 'ERP systems', category: 'Technical', sdgs: [4, 9], hoursPerLevel: 14, deliverable: 'A documented test script for one ERP workflow' },
+  { id: 'sql', name: 'SQL', category: 'Technical', sdgs: [4, 9], hoursPerLevel: 12, deliverable: 'Five queries answering real questions about a sample ledger' },
+  { id: 'python', name: 'Python', category: 'Technical', sdgs: [4, 9], hoursPerLevel: 16, deliverable: 'A small script that cleans a messy CSV export' },
+  { id: 'bi', name: 'BI dashboards', category: 'Technical', sdgs: [4, 9], hoursPerLevel: 10, deliverable: 'A one-page dashboard tracking three finance KPIs' },
+  { id: 'automation', name: 'Process automation', category: 'Technical', sdgs: [4, 9], hoursPerLevel: 12, deliverable: 'An approval flow that routes invoices automatically' },
+  { id: 'ai', name: 'AI tool fluency', category: 'Technical', sdgs: [4, 9], hoursPerLevel: 6, deliverable: 'A prompt library for three recurring tasks, with checks' },
+  { id: 'analysis', name: 'Data analysis', category: 'Analytical', sdgs: [4, 9], hoursPerLevel: 12, deliverable: 'A variance analysis memo with three clear findings' },
+  { id: 'stats', name: 'Statistics', category: 'Analytical', sdgs: [4, 9], hoursPerLevel: 12, deliverable: 'A short note explaining a trend with confidence intervals' },
+  { id: 'controls', name: 'Financial controls', category: 'Analytical', sdgs: [4, 9], hoursPerLevel: 10, deliverable: 'A control matrix for one end-to-end process' },
+  { id: 'stakeholder', name: 'Stakeholder communication', category: 'Communication', sdgs: [4, 10], hoursPerLevel: 8, deliverable: 'A requirements summary signed off by a stakeholder' },
+  { id: 'writing', name: 'Writing & storytelling', category: 'Communication', sdgs: [4, 10], hoursPerLevel: 8, deliverable: 'A one-page narrative explaining a business change' },
+  { id: 'empathy', name: 'Customer empathy', category: 'Communication', sdgs: [4, 10], hoursPerLevel: 6, deliverable: 'Three customer interview notes with specific pain points' },
+  { id: 'process', name: 'Process design', category: 'Operational', sdgs: [4, 8], hoursPerLevel: 10, deliverable: 'A swimlane map of a current process with one redesign' },
+  { id: 'coordination', name: 'Project coordination', category: 'Operational', sdgs: [4, 10], hoursPerLevel: 8, deliverable: 'A lightweight project plan with owners and milestones' },
 ]
 
 export let roles: Role[] = [
@@ -205,6 +208,8 @@ export let roles: Role[] = [
       { skillId: 'erp', requiredLevel: 2, importance: 2 },
     ],
   },
+  {"id": "sales-operations", "title": "Sales Operations Coordinator", "family": "Sales", "demand": 60, "sdgs": [8], "requirements": [{"skillId": "excel", "requiredLevel": 3, "importance": 4}, {"skillId": "erp", "requiredLevel": 3, "importance": 3}, {"skillId": "stakeholder", "requiredLevel": 4, "importance": 5}, {"skillId": "coordination", "requiredLevel": 3, "importance": 4}, {"skillId": "process", "requiredLevel": 3, "importance": 4}, {"skillId": "ai", "requiredLevel": 3, "importance": 3}, {"skillId": "analysis", "requiredLevel": 3, "importance": 3}]},
+  {"id": "hr-operations", "title": "HR Operations Coordinator", "family": "People Operations", "demand": 58, "sdgs": [8, 10], "requirements": [{"skillId": "stakeholder", "requiredLevel": 4, "importance": 5}, {"skillId": "empathy", "requiredLevel": 3, "importance": 4}, {"skillId": "writing", "requiredLevel": 4, "importance": 4}, {"skillId": "coordination", "requiredLevel": 3, "importance": 4}, {"skillId": "controls", "requiredLevel": 3, "importance": 3}, {"skillId": "process", "requiredLevel": 3, "importance": 4}, {"skillId": "ai", "requiredLevel": 3, "importance": 2}]},
 ]
 
 export let tasks: Task[] = [
@@ -245,6 +250,14 @@ export let tasks: Task[] = [
   { id: 'oc-docs', roleId: 'operations-coordinator', name: 'Process documentation', description: 'Write and maintain standard operating procedures.', baseExposure: 0.56, humanJudgment: 0.4, defaultShare: 15, skills: ['process', 'writing'], tryThisWeek: 'Record yourself doing a task and let AI draft the SOP from the transcript.' },
   { id: 'oc-tracking', roleId: 'operations-coordinator', name: 'Order tracking', description: 'Monitor inventory levels and order status.', baseExposure: 0.68, humanJudgment: 0.25, defaultShare: 20, skills: ['erp', 'excel', 'automation'], tryThisWeek: 'Set up one automated low-stock alert instead of a manual check.' },
   { id: 'oc-improve', roleId: 'operations-coordinator', name: 'Improvement projects', description: 'Lead small projects to remove friction from operations.', baseExposure: 0.24, humanJudgment: 0.72, defaultShare: 20, skills: ['process', 'coordination', 'stakeholder'], tryThisWeek: 'Pick the most annoying step in a process and propose one fix to your manager.' },
+  {"id": "sales-records", "roleId": "sales-operations", "name": "Update CRM records", "description": "Maintain contact and deal records, checking duplicates and missing fields.", "baseExposure": 0.76, "humanJudgment": 0.3, "defaultShare": 30, "skills": ["erp", "excel"], "tryThisWeek": "Check ten sample records against the source before accepting an automated update."},
+  {"id": "sales-forecast", "roleId": "sales-operations", "name": "Prepare sales summaries", "description": "Summarise pipeline changes for the team.", "baseExposure": 0.57, "humanJudgment": 0.55, "defaultShare": 25, "skills": ["analysis", "excel", "ai"], "tryThisWeek": "Draft a summary from a sample spreadsheet, then check every number."},
+  {"id": "sales-handoffs", "roleId": "sales-operations", "name": "Coordinate deal handoffs", "description": "Confirm owners, next steps and requirements between teams.", "baseExposure": 0.38, "humanJudgment": 0.78, "defaultShare": 25, "skills": ["stakeholder", "coordination", "process"], "tryThisWeek": "Use a handoff checklist for one example deal and note missing information."},
+  {"id": "sales-quality", "roleId": "sales-operations", "name": "Review pipeline quality", "description": "Review inconsistent stages, dates and forecast assumptions.", "baseExposure": 0.5, "humanJudgment": 0.62, "defaultShare": 20, "skills": ["analysis", "process", "erp"], "tryThisWeek": "Write rules for three common data-quality issues and review the exceptions."},
+  {"id": "hr-records", "roleId": "hr-operations", "name": "Maintain staff records", "description": "Check staff records for completeness and access permissions.", "baseExposure": 0.68, "humanJudgment": 0.35, "defaultShare": 30, "skills": ["erp", "controls"], "tryThisWeek": "Use synthetic records to test a completeness checklist without personal data."},
+  {"id": "hr-onboarding", "roleId": "hr-operations", "name": "Coordinate onboarding", "description": "Arrange access, introductions and onboarding responsibilities.", "baseExposure": 0.4, "humanJudgment": 0.72, "defaultShare": 30, "skills": ["coordination", "stakeholder", "process"], "tryThisWeek": "Map an example onboarding process and identify one unclear owner."},
+  {"id": "hr-questions", "roleId": "hr-operations", "name": "Handle staff questions", "description": "Explain policies and route sensitive questions to the appropriate person.", "baseExposure": 0.44, "humanJudgment": 0.75, "defaultShare": 25, "skills": ["empathy", "writing", "stakeholder"], "tryThisWeek": "Draft answers to three fictional policy questions and check them against the policy."},
+  {"id": "hr-policy", "roleId": "hr-operations", "name": "Review policy exceptions", "description": "Review cases that require interpretation or approval.", "baseExposure": 0.3, "humanJudgment": 0.85, "defaultShare": 15, "skills": ["controls", "stakeholder", "analysis"], "tryThisWeek": "Document an example exception with the information and approval it would need."},
 ]
 
 export let resources: Resource[] = [
@@ -276,18 +289,18 @@ export let resources: Resource[] = [
 ]
 
 export let signals: Signal[] = [
-  { id: 's01', date: '2026-09-18', headline: 'Invoice-capture agents reach general availability in major ERPs', sourceName: 'SAP Business AI', sourceUrl: 'https://www.sap.com/products/artificial-intelligence.html', direction: 1, strength: 0.7, impacts: [{ taskId: 'fa-invoice', impact: 0.045 }, { taskId: 'oc-tracking', impact: 0.04 }], explanation: 'Line-item extraction now ships inside core finance modules.', evidence: 'illustrative' },
-  { id: 's02', date: '2026-09-02', headline: 'Finance teams report more time on exception review after automation', sourceName: 'Microsoft Work Trend Index', sourceUrl: 'https://www.microsoft.com/en-us/worklab/work-trend-index', direction: -1, strength: 0.5, impacts: [{ taskId: 'fa-exception', impact: 0.07 }, { taskId: 'fsa-controls', impact: 0.05 }], explanation: 'Judgment-heavy review grows as routine entry shrinks.', evidence: 'illustrative' },
-  { id: 's03', date: '2026-08-21', headline: 'Bank-feed matching rules become a standard accounting feature', sourceName: 'Microsoft Copilot', sourceUrl: 'https://www.microsoft.com/en-us/microsoft-365/copilot', direction: 1, strength: 0.6, impacts: [{ taskId: 'fa-recon', impact: 0.05 }, { taskId: 'fsa-pipeline', impact: 0.05 }], explanation: 'Rule-based reconciliation is moving into default workflows.', evidence: 'illustrative' },
-  { id: 's04', date: '2026-08-05', headline: 'Support teams pair AI drafts with human escalation paths', sourceName: 'HubSpot', sourceUrl: 'https://www.hubspot.com/', direction: 1, strength: 0.6, impacts: [{ taskId: 'cs-faq', impact: 0.1 }, { taskId: 'cs-triage', impact: 0.08 }], explanation: 'Routine replies are increasingly drafted automatically.', evidence: 'illustrative' },
-  { id: 's05', date: '2026-07-14', headline: 'Demand rises for people who can design and govern automations', sourceName: 'TalentCorp Malaysia', sourceUrl: 'https://www.talentcorp.com.my/', direction: -1, strength: 0.5, impacts: [{ taskId: 'fsa-automation', impact: 0.1 }, { taskId: 'oc-improve', impact: 0.08 }], explanation: 'Organisations need owners for new automated processes.', evidence: 'illustrative' },
-  { id: 's06', date: '2026-06-30', headline: 'Generative tools draft month-end commentary from ledger data', sourceName: 'Anthropic Economic Index', sourceUrl: 'https://www.anthropic.com/economic-index', direction: 1, strength: 0.5, impacts: [{ taskId: 'fa-reporting', impact: 0.07 }, { taskId: 'me-reporting', impact: 0.05 }], explanation: 'Narrative drafting is a common professional AI use.', evidence: 'illustrative' },
-  { id: 's07', date: '2026-06-10', headline: 'Expense tools add policy pre-screening by default', sourceName: 'SAP Concur', sourceUrl: 'https://www.concur.com/', direction: 1, strength: 0.55, impacts: [{ taskId: 'fa-expense', impact: 0.11 }], explanation: 'Claims are flagged against policy before a reviewer sees them.', evidence: 'illustrative' },
-  { id: 's08', date: '2026-05-20', headline: 'Marketing teams scale AI copy while tightening brand review', sourceName: 'HubSpot', sourceUrl: 'https://www.hubspot.com/state-of-marketing', direction: 1, strength: 0.6, impacts: [{ taskId: 'me-copy', impact: 0.1 }, { taskId: 'me-social', impact: 0.08 }], explanation: 'Draft volume rises; editing and approval become the bottleneck.', evidence: 'illustrative' },
-  { id: 's09', date: '2026-04-15', headline: 'AI Index tracks rapid gains in agentic task completion', sourceName: 'Stanford HAI AI Index', sourceUrl: 'https://hai.stanford.edu/ai-index', direction: 1, strength: 0.4, impacts: [{ taskId: 'da-clean', impact: 0.08 }, { taskId: 'da-query', impact: 0.08 }, { taskId: 'oc-scheduling', impact: 0.05 }], explanation: 'Benchmarks show models completing longer multi-step tasks.', evidence: 'illustrative' },
-  { id: 's10', date: '2026-03-12', headline: 'Employers prize communication and relationship skills alongside AI', sourceName: 'LinkedIn Economic Graph', sourceUrl: 'https://economicgraph.linkedin.com/', direction: -1, strength: 0.4, impacts: [{ taskId: 'fa-comms', impact: 0.11 }, { taskId: 'me-partners', impact: 0.08 }, { taskId: 'oc-vendors', impact: 0.06 }], explanation: 'Interpersonal work is valued more as routine work shifts.', evidence: 'illustrative' },
-  { id: 's11', date: '2026-02-04', headline: 'Escalations handled by people show higher customer satisfaction', sourceName: 'Zendesk CX Trends', sourceUrl: 'https://www.zendesk.com/customer-experience-trends/', direction: -1, strength: 0.45, impacts: [{ taskId: 'cs-escalation', impact: 0.1 }, { taskId: 'fa-exception', impact: 0.05 }], explanation: 'Complex cases still benefit from a human owner.', evidence: 'illustrative' },
-  { id: 's12', date: '2025-11-18', headline: 'Process mining makes SOP drafting faster', sourceName: 'Celonis', sourceUrl: 'https://www.celonis.com/process-mining/', direction: 1, strength: 0.4, impacts: [{ taskId: 'oc-docs', impact: 0.08 }, { taskId: 'cs-kb', impact: 0.05 }], explanation: 'Event logs can generate first-draft procedures.', evidence: 'illustrative' },
+  { id: 's01', headline: "Built-in invoice capture", direction: 1, strength: 0.7, impacts: [{ taskId: 'fa-invoice', impact: 0.045 }, { taskId: 'oc-tracking', impact: 0.04 }], explanation: "Assume tools can extract invoice line items inside finance workflows.", evidence: 'assumption', assumptionWeight: 0.6658202274413345 },
+  { id: 's02', headline: "People review exceptions after routine entry is automated", direction: -1, strength: 0.5, impacts: [{ taskId: 'fa-exception', impact: 0.07 }, { taskId: 'fsa-controls', impact: 0.05 }], explanation: "Assume exception handling continues to require human judgment.", evidence: 'assumption', assumptionWeight: 0.44716801031556647 },
+  { id: 's03', headline: "Rules match bank transactions", direction: 1, strength: 0.6, impacts: [{ taskId: 'fa-recon', impact: 0.05 }, { taskId: 'fsa-pipeline', impact: 0.05 }], explanation: "Assume matching rules reduce manual reconciliation work.", evidence: 'assumption', assumptionWeight: 0.5123695442245741 },
+  { id: 's04', headline: "AI drafts routine support replies", direction: 1, strength: 0.6, impacts: [{ taskId: 'cs-faq', impact: 0.1 }, { taskId: 'cs-triage', impact: 0.08 }], explanation: "Assume routine replies and triage can be assisted by AI.", evidence: 'assumption', assumptionWeight: 0.48175372911802583 },
+  { id: 's05', headline: "People design and govern automated processes", direction: -1, strength: 0.5, impacts: [{ taskId: 'fsa-automation', impact: 0.1 }, { taskId: 'oc-improve', impact: 0.08 }], explanation: "Assume process owners remain responsible for automated workflows.", evidence: 'assumption', assumptionWeight: 0.3688512707566328 },
+  { id: 's06', headline: "AI drafts commentary from ledger data", direction: 1, strength: 0.5, impacts: [{ taskId: 'fa-reporting', impact: 0.07 }, { taskId: 'me-reporting', impact: 0.05 }], explanation: "Assume AI can prepare a first draft from structured numbers.", evidence: 'assumption', assumptionWeight: 0.3494924835447548 },
+  { id: 's07', headline: "Tools screen expenses against policy", direction: 1, strength: 0.55, impacts: [{ taskId: 'fa-expense', impact: 0.11 }], explanation: "Assume policy screening can flag claims for a reviewer.", evidence: 'assumption', assumptionWeight: 0.35594487791342755 },
+  { id: 's08', headline: "AI drafts marketing copy for human review", direction: 1, strength: 0.6, impacts: [{ taskId: 'me-copy', impact: 0.1 }, { taskId: 'me-social', impact: 0.08 }], explanation: "Assume people review AI drafts for accuracy and brand requirements.", evidence: 'assumption', assumptionWeight: 0.35813860900748107 },
+  { id: 's09', headline: "AI handles some multi-step data and scheduling work", direction: 1, strength: 0.4, impacts: [{ taskId: 'da-clean', impact: 0.08 }, { taskId: 'da-query', impact: 0.08 }, { taskId: 'oc-scheduling', impact: 0.05 }], explanation: "Assume some data preparation, querying and scheduling steps can be automated.", evidence: 'assumption', assumptionWeight: 0.2086537878410323 },
+  { id: 's10', headline: "People handle stakeholder and partner conversations", direction: -1, strength: 0.4, impacts: [{ taskId: 'fa-comms', impact: 0.11 }, { taskId: 'me-partners', impact: 0.08 }, { taskId: 'oc-vendors', impact: 0.06 }], explanation: "Assume relationship work continues to need human involvement.", evidence: 'assumption', assumptionWeight: 0.1830480268372381 },
+  { id: 's11', headline: "People own complex customer escalations", direction: -1, strength: 0.45, impacts: [{ taskId: 'cs-escalation', impact: 0.1 }, { taskId: 'fa-exception', impact: 0.05 }], explanation: "Assume complex cases need a human owner.", evidence: 'assumption', assumptionWeight: 0.1792716332325769 },
+  { id: 's12', headline: "Process logs help draft procedures", direction: 1, strength: 0.4, impacts: [{ taskId: 'oc-docs', impact: 0.08 }, { taskId: 'cs-kb', impact: 0.05 }], explanation: "Assume event logs can support a first draft of a procedure.", evidence: 'assumption', assumptionWeight: 0.11800834541119304 },
   { id: 's13', date: '2025-09-15', headline: 'Usage data shows AI concentrated in writing, coding, and analysis', sourceName: 'Anthropic Economic Index', sourceUrl: 'https://www.anthropic.com/economic-index', direction: 1, strength: 0.5, impacts: [{ taskId: 'da-clean', impact: 0.1 }, { taskId: 'me-copy', impact: 0.1 }, { taskId: 'fa-reporting', impact: 0.05 }], explanation: 'Reported usage clusters in text and data-heavy tasks.', evidence: 'verified' },
   { id: 's14', date: '2025-06-03', headline: 'AI-exposed industries see faster productivity growth', sourceName: 'PwC Global AI Jobs Barometer', sourceUrl: 'https://www.pwc.com/gx/en/issues/artificial-intelligence/ai-jobs-barometer.html', direction: 1, strength: 0.4, impacts: [{ taskId: 'fa-invoice', impact: 0.05 }, { taskId: 'da-query', impact: 0.05 }], explanation: 'Productivity gains are strongest where tasks are most exposed.', evidence: 'verified' },
   { id: 's15', date: '2025-05-20', headline: 'Refined index finds clerical work most exposed to generative AI', sourceName: 'International Labour Organization', sourceUrl: 'https://www.ilo.org/publications/generative-ai-and-jobs-refined-global-index-occupational-exposure', direction: 1, strength: 0.6, impacts: [{ taskId: 'fa-invoice', impact: 0.1 }, { taskId: 'fa-recon', impact: 0.05 }, { taskId: 'cs-faq', impact: 0.05 }], explanation: 'Clerical support occupations show the highest exposure.', evidence: 'verified' },
@@ -321,9 +334,10 @@ export let demoPersona = {
 }
 
 export let skillById = Object.fromEntries(skills.map((s) => [s.id, s]))
-export let roleById = Object.fromEntries(roles.map((r) => [r.id, r]))
+export const customRole: Role = { id: 'other', title: 'Your own tasks', family: 'Custom', demand: 0, requirements: [], sdgs: [] }
+export let roleById = Object.fromEntries([...roles, customRole].map((r) => [r.id, r]))
 export let taskById = Object.fromEntries(tasks.map((t) => [t.id, t]))
-export const tasksForRole = (roleId: string) => tasks.filter((t) => t.roleId === roleId)
+export let tasksForRole = (roleId: string) => tasks.filter((t) => t.roleId === roleId)
 
 // ---------------------------------------------------------------------------
 // Live catalogue overlay (FastAPI `GET /api/seed`)
@@ -393,7 +407,7 @@ export function resetCatalog(): void {
   demoPersona = DEMO_CATALOG.demoPersona
   hasDemoPersona = true
   catalogSource = 'demo'
-  roleById = Object.fromEntries(roles.map((r) => [r.id, r]))
+  roleById = Object.fromEntries([...roles, customRole].map((r) => [r.id, r]))
   skillById = Object.fromEntries(skills.map((s) => [s.id, s]))
   taskById = Object.fromEntries(tasks.map((t) => [t.id, t]))
 }
@@ -421,17 +435,18 @@ export function applyCatalog(payload: CatalogPayload): boolean {
 
   roles = payload.roles
   tasks = payload.tasks
-  skills = payload.skills
-  signals = payload.signals ?? []
-  resources = payload.resources ?? []
+  skills = payload.skills.map(({ id, name, category, hoursPerLevel, deliverable }) => ({ id, name, category, hoursPerLevel, deliverable, sdgs: (sdgMap.skills as Record<string,{sdgs:number[]}>)[id]?.sdgs ?? [4] }))
+  signals = (payload.signals ?? []).map((signal) => signal.evidence === 'assumption' ? { id: signal.id, headline: signal.headline, direction: signal.direction, strength: signal.strength, impacts: signal.impacts, explanation: signal.explanation, evidence: 'assumption', assumptionWeight: signal.assumptionWeight } : signal)
+  resources = payload.resources?.length ? payload.resources : vettedResources as Resource[]
   scenarios = payload.scenarios ?? DEMO_CATALOG.scenarios
-  sdgs = payload.sdgs ?? DEMO_CATALOG.sdgs
+  sdgs = sdgMap.goals ?? DEMO_CATALOG.sdgs
   DATA_AS_OF = payload.asOf
   SEED_VERSION = payload.version
-  demoPersona = payload.demoPersona ?? DEMO_CATALOG.demoPersona
-  hasDemoPersona = payload.demoPersona != null
-  catalogSource = hasDemoPersona ? 'demo' : 'live'
-  roleById = Object.fromEntries(roles.map((r) => [r.id, r]))
+  const sampleRole = payload.roles.find(r=>r.id==='bookkeeping-clerk')
+  demoPersona = payload.demoPersona ?? (sampleRole ? {name:'Aisyah',roleId:sampleRole.id,skills:Object.fromEntries(sampleRole.requirements.map(r=>[r.skillId,2]))} : DEMO_CATALOG.demoPersona)
+  hasDemoPersona = payload.demoPersona != null || !!sampleRole
+  catalogSource = payload.demoPersona ? 'demo' : 'live'
+  roleById = Object.fromEntries([...roles, customRole].map((r) => [r.id, r]))
   skillById = Object.fromEntries(skills.map((s) => [s.id, s]))
   taskById = Object.fromEntries(tasks.map((t) => [t.id, t]))
   return true

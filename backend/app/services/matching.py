@@ -65,7 +65,9 @@ def skill_gaps(session: Session, role: Role, levels: dict[str, int]) -> list[Ski
     rows = requirements_for_role(session, role.id)
     gaps: list[SkillGap] = []
     for req, skill in rows:
-        current = levels.get(req.skill_id, 0)
+        if req.skill_id not in levels:
+            continue
+        current = levels[req.skill_id]
         gap = max(0, req.required_level - current)
         if gap == 0:
             continue
@@ -107,6 +109,7 @@ def compute_routes(
     scenario_id: str,
     signals: Sequence[LoadedSignal],
     hours_per_week: int,
+    sdg_focus: list[int] | None = None,
     limit: int = ROUTE_LIMIT,
 ) -> list[RouteResult]:
     results: list[RouteResult] = []
@@ -115,7 +118,12 @@ def compute_routes(
             continue
         coverage = skill_coverage(session, role.id, levels)
         similarity = task_similarity(user_task_skills, role.id, session)
+        requirements = requirements_for_role(session, role.id)
+        total = sum(req.importance for req, _ in requirements)
+        rated_share = sum(req.importance for req, _ in requirements if req.skill_id in levels) / total if total else 1.0
+        unknown = [req.skill_id for req, _ in requirements if req.skill_id not in levels]
         fit = role_fit(coverage, similarity)
+        fit_high = role_fit(min(1, coverage + 1 - rated_share), similarity)
         exposure = target_role_exposure(session, role.id, scenario_id, signals)
         gaps = skill_gaps(session, role, levels)
         total_hours = sum(gap.hours for gap in gaps)
@@ -128,8 +136,11 @@ def compute_routes(
                 coverage=round(coverage, 6),
                 similarity=round(similarity, 6) if similarity is not None else None,
                 fit=round(fit, 6),
+                fitLow=round(fit, 6), fitHigh=round(fit_high, 6),
+                ratedShare=round(rated_share, 6), unknownSkillIds=unknown,
                 targetExposure=round(exposure, 6),
                 score=round(route_score(fit, exposure), 6),
+                unadjustedScore=round(route_score(fit, exposure), 6), unadjustedRank=0, sdgBonus=0,
                 gaps=gaps,
                 totalGapHours=total_hours,
                 weeks=learning_weeks(total_hours, hours_per_week),
@@ -137,6 +148,11 @@ def compute_routes(
             )
         )
     results.sort(key=lambda row: (-row.score, row.title))
+    for index, route in enumerate(results):
+        route.unadjustedRank=index+1
+        route.sdgBonus=min(10,5*len(set(route.sdgs)&set(sdg_focus or [])))
+        route.score+=route.sdgBonus
+    results.sort(key=lambda row:(-row.score,row.title))
     return results[:limit]
 
 
@@ -149,6 +165,7 @@ def analyze(
     scenario_id: str,
     signals: Sequence[LoadedSignal],
     hours_per_week: int,
+    sdg_focus: list[int] | None = None,
     limit: int = ROUTE_LIMIT,
 ) -> AnalysisResponse:
     scored = score_tasks(session, selections, scenario_id, signals)
@@ -163,9 +180,10 @@ def analyze(
         signals=signals,
         hours_per_week=hours_per_week,
         limit=limit,
+        sdg_focus=sdg_focus,
     )
     return AnalysisResponse(
-        scenario="fast" if scenario_id == "fast" else "normal",
+        scenario=scenario_id if scenario_id in {"slow", "normal", "fast"} else "normal",
         roleExposure=round(exposure, 6),
         confidence=confidence(scored, signals),  # type: ignore[arg-type]
         tasks=scored,

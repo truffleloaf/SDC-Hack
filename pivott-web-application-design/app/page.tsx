@@ -1,94 +1,51 @@
 import Link from 'next/link'
-import { ArrowRight, Lock, Scale } from 'lucide-react'
+import { getCatalog } from '@/lib/catalog'
+import { catalogSource, hasDemoPersona, resources } from '@/lib/data/seed'
+import { ArrowRight } from 'lucide-react'
 import { LivingTaskMap } from '@/components/landing/living-task-map'
 import { ResumeWork } from '@/components/pivott/resume-work'
-import { LogoMark } from '@/components/pivott/logo'
 import { PLink } from '@/components/pivott/p-button'
-import { hasDemoPersona, roles, SEED_VERSION } from '@/lib/data/seed'
 
-const steps = [
-  { title: 'Pick your job', body: 'Start with the tasks you actually perform.' },
-  { title: 'See your tasks', body: 'Understand which tasks AI may automate, augment, or leave to human judgment.' },
-  { title: 'Find your route', body: 'Discover adjacent roles and the skills needed to move forward.' },
-]
-
-function LiveCatalogueCard() {
-  const preview = roles.slice(0, 4)
-  return (
-    <div className="rounded-[28px] border border-border bg-card p-6 shadow-soft sm:p-8">
-      <p className="text-xs font-medium uppercase tracking-[0.18em] text-primary">Live catalogue</p>
-      <h2 className="mt-3 font-serif text-3xl font-normal">Real occupations, mapped by task.</h2>
-      <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-        {SEED_VERSION} · O*NET 31.0 tasks and skills, ranked with live job-board demand. Pick a role to see its task map.
-      </p>
-      <ul className="mt-5 flex flex-col gap-2">
-        {preview.map((role) => (
-          <li key={role.id} className="flex items-center justify-between gap-3 rounded-xl border border-border bg-subtle px-3 py-2 text-sm">
-            <span className="truncate">{role.title}</span>
-            <span className="shrink-0 font-mono text-xs text-muted-foreground">demand {role.demand}</span>
-          </li>
-        ))}
-      </ul>
-      <PLink href="/start" className="mt-6" variant="secondary">Choose a live role</PLink>
-    </div>
-  )
-}
-
-
-export default function LandingPage() {
+export default async function LandingPage() {
+  await getCatalog()
   return (
     <>
       <ResumeWork />
       <section className="landing-hero relative overflow-hidden">
-        <div aria-hidden className="hero-contour pointer-events-none absolute -right-32 -top-64 size-[880px] rounded-full border border-border/60" />
         <div className="relative mx-auto grid w-full max-w-[1240px] items-center gap-12 px-5 pb-16 pt-12 sm:px-8 lg:grid-cols-[0.95fr_1.05fr] lg:gap-14 lg:pb-20 lg:pt-16">
           <div className="flex flex-col items-start">
-            <p className="mb-6 flex items-center gap-3 text-sm font-medium text-primary"><span className="h-px w-8 bg-primary" aria-hidden />Understand your work</p>
             <h1 className="max-w-xl text-[3rem] font-semibold leading-[1.06] tracking-[-0.045em] text-balance sm:text-[4rem] lg:text-[4.5rem]">
-              Don&apos;t predict the job.<br /><span className="text-primary">Map the tasks.</span>
+              Plan your next move from the work you do.
             </h1>
             <p className="mt-7 max-w-md text-lg leading-relaxed text-muted-foreground text-pretty">
-              See where AI could change your daily work, which skills carry into other roles, and what you could learn next.
+              For clerical and finance workers in Malaysia: compare your daily tasks, nearby roles and skills to practise, then leave with a learning plan.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
               <PLink href="/start" size="lg">Map my work<ArrowRight aria-hidden /></PLink>
-              {hasDemoPersona ? (
-                <Link href="/example" className="group inline-flex min-h-11 items-center gap-2.5 rounded-lg text-sm font-medium text-foreground underline-offset-4 hover:underline">
-                  <span className="grid size-8 place-items-center rounded-full border border-border-strong bg-card transition-colors group-hover:border-primary"><span className="ml-0.5 size-0 border-y-[4px] border-l-[6px] border-y-transparent border-l-primary" aria-hidden /></span>
-                  View an example
-                </Link>
-              ) : (
-                <Link href="/start" className="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-foreground underline-offset-4 hover:underline">
-                  Browse live occupations <ArrowRight className="size-4" aria-hidden />
-                </Link>
+              {hasDemoPersona && (
+              <Link href="/example" className="group inline-flex min-h-11 items-center gap-2.5 rounded-lg text-sm font-medium text-foreground underline-offset-4 hover:underline">
+                <span className="grid size-8 place-items-center rounded-full border border-border-strong bg-card transition-colors group-hover:border-primary"><span className="ml-0.5 size-0 border-y-[4px] border-l-[6px] border-y-transparent border-l-primary" aria-hidden /></span>
+                View an example
+              </Link>
               )}
             </div>
-            <p className="mt-6 flex items-center gap-2 text-xs text-muted-foreground"><Lock className="size-3.5" aria-hidden />No account needed to start.</p>
+            <p className="mt-6 text-xs text-muted-foreground">Fresh graduates can start with tasks from study, placements or a sample profile. No account needed.</p>
           </div>
-          {hasDemoPersona ? <LivingTaskMap /> : <LiveCatalogueCard />}
+          <LivingTaskMap />
         </div>
       </section>
 
-      <section aria-labelledby="how-title" className="mx-auto w-full max-w-[1240px] px-5 py-14 sm:px-8 lg:py-20">
-        <div className="flex flex-wrap items-end justify-between gap-4">
-          <h2 id="how-title" className="max-w-lg text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">Understand, compare, plan.</h2>
-          <p className="max-w-xs text-sm leading-relaxed text-muted-foreground">From the tasks you do today to the skills you can use tomorrow.</p>
-        </div>
-        <ol className="mt-9 grid gap-8 md:grid-cols-3 md:gap-10">
-          {steps.map((step, index) => (
-            <li key={step.title} className="relative border-t border-border-strong pt-5">
-              <span className="inline-flex size-8 items-center justify-center rounded-full bg-mint text-sm font-semibold text-accent-foreground" aria-hidden>{index + 1}</span>
-              <h3 className="mt-4 text-xl font-semibold tracking-tight">{step.title}</h3>
-              <p className="mt-2 max-w-sm text-sm leading-relaxed text-muted-foreground">{step.body}</p>
-            </li>
-          ))}
-        </ol>
+      <section className="mx-auto max-w-[1240px] px-5 py-10 sm:px-8" aria-labelledby="sample-walkthrough"><h2 id="sample-walkthrough" className="text-2xl font-semibold">A sample walkthrough</h2><p className="mt-3 text-sm text-muted-foreground">Aisyah is a sample profile, not a real person. Her ratings are fictional.</p><ol className="mt-5 max-w-3xl list-decimal space-y-4 pl-5 text-sm"><li>Profile: review bookkeeping tasks and edit the sample ratings.</li><li>Radar: check dated public-feed trends, or see which data threshold is missing.</li><li>Route: compare scenarios, choose your priorities and build a plan from rated gaps.</li></ol><h2 className="mt-8 text-xl font-semibold">Malaysia is the focus; the data has limits</h2><p className="mt-3 max-w-3xl text-sm text-muted-foreground">The current reference catalogue describes US occupations, and the posting feed mainly covers Germany. Use it to explore skills and questions for your next conversation, not as a forecast of Malaysian vacancies.</p><Link href="/method" className="mt-2 inline-flex min-h-11 items-center text-sm underline">Sources, dates and limitations</Link><Link href="/jobs" className="ml-5 inline-flex min-h-11 items-center text-sm underline">Browse public job listings</Link></section>
+      <section aria-labelledby="tools-title" className="mx-auto w-full max-w-[1240px] px-5 py-12 sm:px-8">
+        <h2 id="tools-title" className="text-2xl font-semibold">What you can use</h2>
+        <ul className="mt-5 max-w-2xl list-disc space-y-3 pl-5 text-muted-foreground">
+          <li>A task map showing time spent and estimated AI exposure.</li>
+          <li>Choose three, five or ten nearby roles to compare, with skill gaps, scenarios and optional SDG priorities.</li>
+          <li>A week-by-week study plan with project deliverables and a calendar file.{resources.length > 0 ? " Catalogue resources can be filtered to free options." : " Learning resources have not been added to this catalogue yet."}</li>
+        </ul>
       </section>
 
-      <footer className="mx-auto flex w-full max-w-[1240px] flex-col justify-between gap-5 border-t border-border px-5 py-8 text-sm text-muted-foreground sm:flex-row sm:px-8">
-        <span className="flex items-center gap-2 self-start"><LogoMark className="size-6 text-primary" title="" /><span className="text-base font-semibold text-foreground">Pivott</span></span>
-        <p className="flex max-w-xl items-start gap-3 text-xs leading-relaxed"><Scale className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden />Task exposure describes work AI could potentially handle. It does not predict whether anyone will lose their job. {hasDemoPersona ? 'Illustrative demo data; scores are deterministic.' : 'Live catalogue data; scores are deterministic.'}</p>
-      </footer>
+
     </>
   )
 }

@@ -73,7 +73,7 @@ def normalize_shares(
 
 
 def get_scenario(session: Session, scenario_id: str) -> Scenario:
-    wanted = "fast" if scenario_id == "fast" else "normal"
+    wanted = scenario_id if scenario_id in {"slow", "normal", "fast"} else "normal"
     scenario = session.get(Scenario, wanted)
     if scenario is None:
         raise ValueError(f"Unknown scenario: {scenario_id}")
@@ -120,6 +120,14 @@ def load_signals(
     ]
 
 
+def signal_weight(signal: Signal) -> float:
+    if signal.evidence in {"assumption", "illustrative"}:
+        from app.reference_seed import SIGNALS
+        original = next((s for s in SIGNALS if s['id'] == signal.id), {})
+        return original.get('assumptionWeight', signal.strength)
+    return signal.strength * recency(signal.date)
+
+
 def signal_adjustment(task_id: str, signals: Sequence[LoadedSignal]) -> float:
     adjustment = 0.0
     as_of = as_of_date()
@@ -128,9 +136,8 @@ def signal_adjustment(task_id: str, signals: Sequence[LoadedSignal]) -> float:
             if impact.task_id != task_id:
                 continue
             adjustment += (
-                loaded.signal.strength
+                signal_weight(loaded.signal)
                 * loaded.signal.direction
-                * recency(loaded.signal.date, as_of)
                 * impact.impact
             )
     return clamp(adjustment, -MAX_SIGNAL_ADJUSTMENT, MAX_SIGNAL_ADJUSTMENT)
@@ -221,8 +228,7 @@ def confidence(tasks: Sequence[ScoredTask], signals: Sequence[LoadedSignal]) -> 
             if impact.task_id not in task_ids:
                 continue
             weight = (
-                loaded.signal.strength
-                * recency(loaded.signal.date, as_of)
+                signal_weight(loaded.signal)
                 * impact.impact
             )
             total_weight += weight

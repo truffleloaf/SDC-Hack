@@ -4,7 +4,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { Database, FlaskConical, LogOut } from 'lucide-react'
 import { toast } from 'sonner'
 import { exitDemo, useAppState } from '@/lib/store'
-import { hasDemoPersona, SEED_VERSION } from '@/lib/data/seed'
+import { catalogSource, hasDemoPersona, SEED_VERSION } from '@/lib/data/seed'
 import { pButton } from './p-button'
 
 export function DemoBanner() {
@@ -13,7 +13,7 @@ export function DemoBanner() {
   const router = useRouter()
 
   // Live catalogue: no demo persona exists, so advertise the real source instead.
-  if (!hasDemoPersona) {
+  if (catalogSource === 'live' && (!hydrated || state.mode !== 'demo')) {
     if (pathname === '/' || pathname === '/example') return null
     return (
       <div className="px-3 pt-2 sm:px-5">
@@ -24,7 +24,7 @@ export function DemoBanner() {
           <p className="flex items-center gap-2 text-muted-foreground">
             <Database aria-hidden className="size-3.5 shrink-0 text-primary" />
             <span>
-              <span className="font-medium text-foreground">Live catalogue</span> · O*NET 31.0 + live demand ·{' '}
+              <span className="font-medium text-foreground">Dated catalogue</span> · O*NET 31.0 + posting sample ·{' '}
               <span className="font-mono">{SEED_VERSION}</span>
             </span>
           </p>
@@ -58,7 +58,7 @@ export function DemoBanner() {
         <p className="flex items-center gap-2 text-muted-foreground">
           <FlaskConical aria-hidden className="size-4 shrink-0 text-primary" />
           <span>
-            <span className="font-medium text-foreground">Demo profile</span> · illustrative data. Your own profile is kept separately.
+            <span className="font-medium text-foreground">Sample profile, not a real person</span>. Your own profile is kept separately.
           </span>
         </p>
         <button type="button" onClick={leave} className={pButton({ variant: 'ghost', size: 'sm' })}>

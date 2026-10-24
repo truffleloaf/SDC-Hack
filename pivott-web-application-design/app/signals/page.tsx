@@ -11,9 +11,10 @@ import { PageIntro } from '@/components/pivott/route-stepper'
 import { SegmentedControl } from '@/components/pivott/segmented-control'
 import { EmptyState, PageSkeleton } from '@/components/pivott/states'
 import { AdminSheet } from '@/components/signals/admin-sheet'
-import { DATA_AS_OF, hasDemoPersona, signals as seedSignals, taskById } from '@/lib/data/seed'
+import { catalogSource, DATA_AS_OF, signals as seedSignals, taskById } from '@/lib/data/seed'
 import { ageDays, recency, roleExposure } from '@/lib/engine'
 import { activeSignals, computeScored, setState, useAppState } from '@/lib/store'
+import liveMeta from '@/lib/data/live-meta.json'
 import { cn } from '@/lib/utils'
 
 type Dir = 'all' | 'up' | 'down'
@@ -26,33 +27,12 @@ export default function SignalsPage() {
   const [dir, setDir] = useState<Dir>('all')
   const [rec, setRec] = useState<Rec>('all')
   const [adminOpen, setAdminOpen] = useState(false)
-  const [computing, setComputing] = useState(false)
-
-  // The live snapshot intentionally has no curated signals yet. Render this
-  // before hydration so the server HTML and the first client paint agree.
-  if (!hasDemoPersona && seedSignals.length === 0 && state.customSignals.length === 0) {
-    return (
-      <div className="mx-auto w-full max-w-[1200px] px-5 pb-20 pt-10">
-        <PageIntro eyebrow="Signals" title="What’s changing around your work?">
-          Dated evidence that nudges task exposure up or down.
-        </PageIntro>
-        <EmptyState
-          className="mt-10"
-          title="No curated live signals yet"
-          description="The live catalogue currently includes O*NET roles, tasks, skills and real job postings. Dated signals are still a demo-only feature."
-        />
-        <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-          Switch to the demo catalogue to explore the signal timeline, or add your own signals locally from the demo workspace.
-        </p>
-      </div>
-    )
-  }
 
   if (!hydrated) return <PageSkeleton />
 
   const pending = state.customSignals.filter((s) => !state.appliedSignalIds.includes(s.id))
-  const all = [...seedSignals, ...state.customSignals].sort((a, b) => b.date.localeCompare(a.date))
-
+  const assumptions = seedSignals.filter((s) => s.evidence === 'assumption' && (dir === 'all' || (dir === 'up' ? s.direction === 1 : s.direction === -1)))
+  const all = [...seedSignals, ...state.customSignals].filter((s) => s.evidence !== 'assumption').sort((a, b) => b.date.localeCompare(a.date))
   const mine = new Set(state.selections.map((s) => s.taskId))
   const filtered = all.filter(
     (s) =>
@@ -60,10 +40,8 @@ export default function SignalsPage() {
       (rec === 'all' || ageDays(s.date) <= Number(rec)),
   )
 
-  async function recompute() {
-    setComputing(true)
+  function recompute() {
     const beforeScored = computeScored(state)
-    await new Promise((r) => setTimeout(r, 900))
     const appliedSignalIds = [...state.appliedSignalIds, ...pending.map((p) => p.id)]
     const next = { ...state, appliedSignalIds }
     const afterScored = computeScored(next, next.scenario, activeSignals(next))
@@ -71,13 +49,12 @@ export default function SignalsPage() {
       .map((t, i) => ({ taskId: t.id, before: beforeScored[i]?.exposure ?? t.exposure, after: t.exposure }))
       .filter((c) => Math.abs(c.after - c.before) > 0.0005)
     setState({ appliedSignalIds, recentlyChanged: changed })
-    setComputing(false)
     const b = roleExposure(beforeScored)
     const a = roleExposure(afterScored)
     toast.success('Task map recomputed', {
       description: changed.length
         ? `${changed.length} of your tasks changed. Overall exposure ${Math.round(b * 100)}% → ${Math.round(a * 100)}%.`
-        : 'No change for your tasks — they’re not referenced, or already at the 0–100% bounds in this scenario.',
+        : 'None of your tasks changed. No signal refers to them, or they are already at 0% or 100%.',
     })
   }
 
@@ -94,14 +71,30 @@ export default function SignalsPage() {
   return (
     <div className="mx-auto w-full max-w-[1200px] px-5 pb-20 pt-10">
       <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
-        <PageIntro eyebrow="Signals" title="What’s changing around your work?">
-          Dated evidence that nudges task exposure up or down. Older signals fade with a 180-day half-life.
+        <PageIntro eyebrow="Signals" title="Future Skills Radar">
+          Each dated item moves task exposure up or down. Older items count for less (half-life 180 days).
         </PageIntro>
         <PButton variant="secondary" onClick={() => setAdminOpen(true)}>
           <ShieldPlus aria-hidden />
           Admin
         </PButton>
       </div>
+
+      {catalogSource === 'live' && <section className="card-surface mt-6 p-5" aria-label="Job posting trends">
+        <p className="text-sm">Data as of {liveMeta.dataAsOf} · Source: <a className="underline" href={liveMeta.demand.url} target="_blank" rel="noreferrer">{liveMeta.demand.name}</a></p>
+        <p className="mt-2 text-xs text-muted-foreground">Posting demand, not a measure of AI adoption. A rise reduces modeled exposure by a documented team assumption.</p>
+        {(() => {
+          const trends=liveMeta.trends as {status:string;minimumPostings:number;totals: {recent:number;baseline:number}|null;sincePrevious?:{asOf:string;counts:Record<string,{recent:number;baseline:number}>}}
+          return <>
+            {trends.totals ? <p className="mt-2 text-sm">Recent window: {trends.totals.recent} postings · Baseline: {trends.totals.baseline}. Minimum {trends.minimumPostings} in each window; five percentage point change and ten total mentions required.</p> : <p className="mt-2 text-sm">Window counts have not been computed for this older snapshot. Trends require at least {trends.minimumPostings} postings in each of the recent 30-day and prior 60-day windows. No trend is inferred.</p>}
+            {trends.sincePrevious && <details className="mt-3 text-sm"><summary className="cursor-pointer">Change since snapshot {trends.sincePrevious.asOf}</summary><ul>{Object.entries(trends.sincePrevious.counts).filter(([,c])=>c.recent || c.baseline).map(([id,c])=><li key={id}>{id}: recent {c.recent>=0?'+':''}{c.recent}, baseline {c.baseline>=0?'+':''}{c.baseline} mentions</li>)}</ul></details>}
+          </>
+        })()}
+        <div className="mt-5 grid gap-5 md:grid-cols-2">{(['Rising','Declining'] as const).map(label => <div key={label}><h2 className="text-lg font-semibold">{label}</h2>{(['skill','role'] as const).map(kind => {
+          const rows=seedSignals.filter(s=>s.id.startsWith(`trend-${kind}-`) && s.direction===(label==='Rising'?-1:1))
+          return <div key={kind} className="mt-3"><h3 className="font-medium">{kind==='skill'?'Skills':'Roles'}</h3>{rows.length ? rows.map(s=><article key={s.id} className="mt-2 border-t border-border pt-3 text-sm"><p>{s.headline}</p>{s.evidence!=='assumption' && <p className="mt-1 text-xs"><a href={s.sourceUrl} className="underline" target="_blank" rel="noreferrer">{s.sourceName}</a> · {s.date} · Computed from source counts</p>}<p className="mt-2 text-xs text-muted-foreground">{s.explanation}</p><EvidenceBadge evidence={s.evidence} /></article>) : <p className="mt-1 text-sm text-muted-foreground">No {label.toLowerCase()} {kind} trend meets the data thresholds.</p>}</div>
+        })}</div>)}</div>
+      </section>}
 
       <AnimatePresence>
         {(pending.length > 0 || state.recentlyChanged.length > 0) && (
@@ -111,15 +104,15 @@ export default function SignalsPage() {
             exit={{ opacity: 0, height: 0 }}
             className="overflow-hidden"
           >
-            <div className="mt-8 flex flex-col gap-4 rounded-[20px] border border-teal/30 bg-mint p-5 md:flex-row md:items-center md:justify-between">
+            <div className="mt-8 flex flex-col gap-4 rounded-xl border border-teal/30 bg-mint p-5 md:flex-row md:items-center md:justify-between">
               {pending.length > 0 ? (
                 <>
                   <p className="text-sm">
                     <span className="font-medium">{pending.length} new signal{pending.length > 1 ? 's' : ''}</span> ready to apply to your task map.
                   </p>
-                  <PButton onClick={recompute} loading={computing} disabled={computing}>
-                    {!computing && <RefreshCw aria-hidden />}
-                    {computing ? 'Recomputing…' : 'Recompute task map'}
+                  <PButton onClick={recompute}>
+                    <RefreshCw aria-hidden />
+                    Recompute task map
                   </PButton>
                 </>
               ) : (
@@ -175,11 +168,11 @@ export default function SignalsPage() {
 
       <p className="mt-4 max-w-3xl text-xs leading-relaxed text-muted-foreground">
         <span className="font-medium text-foreground">Published source</span> signals summarise public reports.{' '}
-        <span className="font-medium text-foreground">Illustrative</span> signals are seeded demo records linked to related product or research pages; their strengths and task mappings are not verified evidence.
+        Task mappings and numeric weights are model inputs. Undated assumptions are listed separately below.
       </p>
 
       {filtered.length === 0 ? (
-        <EmptyState className="mt-10" title="No signals match these filters" description="Try widening the time range or showing both directions." />
+        <EmptyState className="mt-10" title={catalogSource === 'live' && all.length === 0 ? "No published signals in this catalogue" : "No signals match these filters"} description={catalogSource === 'live' && all.length === 0 ? "Scores currently use the catalogue baselines. You can add a dated source for your own task map." : "Try widening the time range or showing both directions."} />
       ) : (
         <ol className="relative mt-10 flex flex-col gap-4">
           <span aria-hidden className="absolute bottom-4 left-[84px] top-4 hidden border-l-2 border-dotted border-border-strong sm:block" />
@@ -271,6 +264,18 @@ export default function SignalsPage() {
           })}
         </ol>
       )}
+
+      {assumptions.length > 0 && <section className="mt-12" aria-labelledby="assumptions-title">
+        <h2 id="assumptions-title" className="font-serif text-2xl">Assumptions behind the scores</h2>
+        <p className="mt-2 max-w-2xl text-sm text-muted-foreground">These are editorial inputs, with fixed weights. They are not published news and are independent of the date filter.</p>
+        <ul className="mt-5 grid gap-4 md:grid-cols-2">
+          {assumptions.map((s) => <li key={s.id} className="card-surface p-5">
+            <div className="flex flex-wrap justify-between gap-2"><EvidenceBadge evidence="assumption" /><DirectionBadge direction={s.direction} /></div>
+            <h3 className="mt-3 font-medium">{s.headline}</h3><p className="mt-2 text-sm text-muted-foreground">{s.explanation}</p>
+            <ul className="mt-3 space-y-1 text-sm">{s.impacts.map((i) => <li key={i.taskId}>{taskById[i.taskId]?.name}: {s.direction > 0 ? '+' : '−'}{(s.assumptionWeight! * i.impact * 100).toFixed(2)} points before the combined adjustment cap</li>)}</ul>
+          </li>)}
+        </ul>
+      </section>}
 
       <AdminSheet open={adminOpen} onOpenChange={setAdminOpen} state={state} />
     </div>

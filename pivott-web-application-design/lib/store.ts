@@ -4,7 +4,7 @@ import { useMemo, useSyncExternalStore } from 'react'
 import { DEMO_HOURS_PER_WEEK, DEMO_SCENARIO } from './demo'
 import { demoPersona, hasDemoPersona, roleById, skills as catalogueSkills, signals as seedSignals, tasksForRole, taskById, type Signal } from './data/seed'
 import {
-  computeRoutes,
+  computeRoutes, compareScenarios,
   roleExposure,
   scoreTasks,
   type CustomTask,
@@ -27,9 +27,13 @@ export interface AppState {
   customTasks: CustomTask[]
   resumeSkillIds: string[]
   skills: Record<string, number>
+  sdgFocus: number[]
+  routeLimit: number
+  ignoreTrendSignals: boolean
   scenario: ScenarioId
   targetRoleId: string | null
   hoursPerWeek: number
+  workHoursPerWeek: number
   freeOnly: boolean
   completedSteps: string[]
   customSignals: Signal[]
@@ -51,9 +55,12 @@ export const emptyState: AppState = {
   customTasks: [],
   resumeSkillIds: [],
   skills: {},
+  sdgFocus: [], routeLimit: 3,
+  ignoreTrendSignals: false,
   scenario: 'normal',
   targetRoleId: null,
   hoursPerWeek: 6,
+  workHoursPerWeek: 40,
   freeOnly: false,
   completedSteps: [],
   customSignals: [],
@@ -62,8 +69,6 @@ export const emptyState: AppState = {
 }
 
 export function demoState(): AppState {
-  // The live catalogue has no demo persona; keep the app on the personal flow.
-  if (!hasDemoPersona) return { ...emptyState }
   return {
     ...emptyState,
     mode: 'demo',
@@ -80,10 +85,21 @@ let state: AppState = emptyState
 let loaded = false
 let saveStatus: 'saved' | 'error' = 'saved'
 const listeners = new Set<() => void>()
+let persistenceTimer: ReturnType<typeof setTimeout> | null = null
+let persistenceBound = false
+function cancelPersistence() { if (persistenceTimer) clearTimeout(persistenceTimer); persistenceTimer = null }
+export function flushPersistence() {
+  cancelPersistence()
+  const previous = saveStatus
+  try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); saveStatus = 'saved' }
+  catch { saveStatus = 'error' }
+  if (previous !== saveStatus) emit()
+}
 
 function load() {
   if (loaded || typeof window === 'undefined') return
   loaded = true
+  if (!persistenceBound) { window.addEventListener('pagehide', () => { if (persistenceTimer) flushPersistence() }); persistenceBound = true }
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY)
     if (raw) state = parseStored(raw)
@@ -94,19 +110,18 @@ function load() {
 
 export function parseStored(raw: string): AppState {
   const parsed = JSON.parse(raw) as Partial<AppState>
-  // A profile saved against the demo seed can point at roles/tasks that do not
-  // exist in the live catalogue; start clean instead of crashing on lookup.
+  const legacyDemo = hasDemoPersona && !parsed.mode && parsed.name === demoPersona.name && parsed.roleId === demoPersona.roleId
   if (parsed.roleId && !Object.hasOwn(roleById, parsed.roleId)) return { ...emptyState }
-  const legacyDemo =
-    hasDemoPersona &&
-    !parsed.mode &&
-    parsed.name === demoPersona.name &&
-    parsed.roleId === demoPersona.roleId
   const demoMode = (parsed.mode === 'demo' || legacyDemo) && hasDemoPersona
   return {
     ...emptyState,
     ...parsed,
     mode: demoMode ? 'demo' : 'personal',
+    workHoursPerWeek: typeof parsed.workHoursPerWeek === 'number' && Number.isFinite(parsed.workHoursPerWeek) ? Math.max(1, Math.min(168, Math.round(parsed.workHoursPerWeek))) : 40,
+    sdgFocus: Array.isArray(parsed.sdgFocus) ? [...new Set(parsed.sdgFocus.filter(id=>Number.isInteger(id)&&id>=1&&id<=17))] : [],
+    routeLimit: [3,5,10].includes(parsed.routeLimit ?? 0) ? parsed.routeLimit! : 3,
+    ignoreTrendSignals: parsed.ignoreTrendSignals === true,
+    scenario: ['slow','normal','fast'].includes(parsed.scenario ?? '') ? parsed.scenario! : 'normal',
     name: sanitizeName(typeof parsed.name === 'string' ? parsed.name : ''),
     resumeSkillIds: Array.isArray(parsed.resumeSkillIds) ? [...new Set(parsed.resumeSkillIds)].filter((id) => catalogueSkills.some((skill) => skill.id === id)) : [],
   }
@@ -146,7 +161,6 @@ export function getState() {
 /** Loads the demo persona, stashing the personal profile so it can be restored untouched. */
 export function enterDemo() {
   load()
-  if (!hasDemoPersona) return
   if (state.mode !== 'demo') {
     try {
       window.localStorage.setItem(PERSONAL_KEY, JSON.stringify(state))
@@ -174,37 +188,38 @@ export function setState(next: Partial<AppState> | ((s: AppState) => Partial<App
   const patch = typeof next === 'function' ? next(state) : next
   const changedProfile = Object.keys(patch).some((key) => key !== 'recentlyChanged')
   state = { ...state, ...patch, ...(changedProfile ? { updatedAt: new Date().toISOString() } : {}) }
-  try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
-    saveStatus = 'saved'
-  } catch { saveStatus = 'error' }
+  cancelPersistence()
+  persistenceTimer = setTimeout(flushPersistence, 150)
   emit()
 }
 
 export function replaceState(next: AppState) {
   loaded = true
   state = next
-  try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
-    saveStatus = 'saved'
-  } catch { saveStatus = 'error' }
+  flushPersistence()
   emit()
 }
 
 export function clearAllData() {
+  cancelPersistence()
+  let cleared = true
   try {
     window.localStorage.removeItem(STORAGE_KEY)
     window.localStorage.removeItem(PERSONAL_KEY)
-  } catch {}
+    for (const key of Object.keys(window.localStorage)) if (key === 'pivott:v1:backup' || key.startsWith('pivott:sync:') || key.startsWith('sb-')) window.localStorage.removeItem(key)
+  } catch { cleared = false }
   loaded = true
   state = emptyState
+  saveStatus = cleared ? 'saved' : 'error'
   emit()
+  return cleared
 }
 
 function subscribe(l: () => void) {
   listeners.add(l)
   const onStorage = (e: StorageEvent) => {
     if (e.key === STORAGE_KEY) {
+      cancelPersistence()
       loaded = false
       load()
       l()
@@ -223,7 +238,7 @@ let clientSnapshot: StoreSnapshot = { state, hydrated: true, saveStatus }
 
 function getSnapshot() {
   load()
-  if (clientSnapshot.state !== state) clientSnapshot = { state, hydrated: true, saveStatus }
+  if (clientSnapshot.state !== state || clientSnapshot.saveStatus !== saveStatus) clientSnapshot = { state, hydrated: true, saveStatus }
   return clientSnapshot
 }
 
@@ -243,14 +258,14 @@ export function computeScored(s: AppState, scenario: ScenarioId = s.scenario, si
   return scoreTasks(s.selections, taskLookup(s), scenario, signals)
 }
 
-export function useAnalysis(s: AppState) {
-  return useMemo(() => analyze(s), [s])
+export function useAnalysis(s: AppState, previewMultiplier?: number) {
+  return useMemo(() => analyze(s, previewMultiplier), [s, previewMultiplier])
 }
 
-export function analyze(s: AppState) {
-  const signals = activeSignals(s)
+export function analyze(s: AppState, previewMultiplier?: number) {
+  const signals = s.ignoreTrendSignals ? [] : activeSignals(s)
   const lookup = taskLookup(s)
-  const scored = scoreTasks(s.selections, lookup, s.scenario, signals).map((task) => ({ ...task, name: s.taskNames?.[task.id] || task.name }))
+  const scored = scoreTasks(s.selections, lookup, s.scenario, signals, previewMultiplier).map((task) => ({ ...task, name: s.taskNames?.[task.id] || task.name }))
   const unassessed = s.selections.filter((selection) => lookup[selection.taskId] && !('roleId' in lookup[selection.taskId])).map((selection) => ({ ...selection, name: lookup[selection.taskId].name }))
   const totalShare = s.selections.reduce((sum, task) => sum + task.share, 0)
   const assessedShare = s.selections.filter((selection) => lookup[selection.taskId] && 'roleId' in lookup[selection.taskId]).reduce((sum, task) => sum + task.share, 0)
@@ -266,8 +281,12 @@ export function analyze(s: AppState) {
         signals,
         hoursPerWeek: s.hoursPerWeek,
         limit: 10,
+        previewMultiplier,
+        sdgFocus: s.sdgFocus,
       })
     : []
-  const lastUpdated = signals.reduce((a, b) => (b.date > a ? b.date : a), '2000-01-01')
-  return { signals, scored, exposure, routes: allRoutes.slice(0, 3), allRoutes, userTaskSkills, lastUpdated, unassessed, assessmentCoverage }
+  const comparisons = s.roleId ? compareScenarios({currentRoleId:s.roleId,userTaskSkills,levels:s.skills,signals,hoursPerWeek:s.hoursPerWeek,sdgFocus:s.sdgFocus}) : []
+  const exposureRange = (['slow','normal','fast'] as const).map(scenario=>roleExposure(scoreTasks(s.selections,lookup,scenario,signals)))
+  const lastUpdated = signals.reduce((a, b) => (b.date && b.date > a ? b.date : a), '2000-01-01')
+  return { comparisons, exposureRange, signals, scored, exposure, routes: allRoutes.slice(0, s.routeLimit || 3), allRoutes, userTaskSkills, lastUpdated, unassessed, assessmentCoverage }
 }

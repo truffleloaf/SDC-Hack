@@ -1,4 +1,5 @@
-import { roleById, signals as seedSignals, skillById, taskById, type Signal } from './data/seed'
+import { getCatalog } from './catalog'
+import { customRole, roleById, signals as seedSignals, skills, taskById, type Signal } from './data/seed'
 import { parseCustomInputs } from './custom-inputs'
 import type { CustomTask, ScenarioId } from './engine'
 
@@ -11,6 +12,9 @@ export interface ProfileInput {
   freeOnly: boolean
   customTasks?: CustomTask[]
   customSignals?: Signal[]
+  routeLimit?: number
+  ignoreTrendSignals?: boolean
+  sdgFocus?: number[]
   targetRoleId?: string
 }
 
@@ -19,8 +23,11 @@ function finiteNumber(value: unknown) {
   return Number.isFinite(number) ? number : 0
 }
 
+
+
 export function parseProfile(body: unknown): { ok: true; value: ProfileInput } | { ok: false; error: string } {
   if (!body || typeof body !== 'object' || Array.isArray(body)) return { ok: false, error: 'Body must be a JSON object' }
+  const skillIds = new Set(skills.map((s) => s.id))
   const b = body as Record<string, unknown>
   const roleId = typeof b.roleId === 'string' ? b.roleId : ''
   if (!Object.hasOwn(roleById, roleId)) return { ok: false, error: 'Unknown roleId' }
@@ -38,17 +45,19 @@ export function parseProfile(body: unknown): { ok: true; value: ProfileInput } |
   const levels: Record<string, number> = {}
   if (b.skills && typeof b.skills === 'object') {
     for (const [k, v] of Object.entries(b.skills as Record<string, unknown>)) {
-      if (Object.hasOwn(skillById, k)) levels[k] = Math.max(0, Math.min(4, Math.round(finiteNumber(v))))
+      if (skillIds.has(k)) levels[k] = Math.max(0, Math.min(4, Math.round(finiteNumber(v))))
     }
   }
 
-  const scenario: ScenarioId = b.scenario === 'fast' ? 'fast' : 'normal'
+  const scenario: ScenarioId = b.scenario === 'slow' ? 'slow' : b.scenario === 'fast' ? 'fast' : 'normal'
   const hoursPerWeek = Math.max(1, Math.min(40, Math.round(finiteNumber(b.hoursPerWeek) || 6)))
-  const targetRoleId = typeof b.targetRoleId === 'string' && roleById[b.targetRoleId] ? b.targetRoleId : undefined
+  const targetRoleId = typeof b.targetRoleId === 'string' && roleById[b.targetRoleId] && b.targetRoleId !== customRole.id ? b.targetRoleId : undefined
 
   return {
     ok: true,
     value: {
+      routeLimit: typeof b.routeLimit === 'number' ? Math.max(3,Math.min(10,Math.round(b.routeLimit))) : 3, ignoreTrendSignals: b.ignoreTrendSignals === true,
+      sdgFocus: Array.isArray(b.sdgFocus) ? [...new Set(b.sdgFocus.filter((id): id is number => typeof id === 'number' && Number.isInteger(id) && id>=1 && id<=17))] : [],
       roleId, selections, skills: levels, scenario, hoursPerWeek, freeOnly: b.freeOnly === true, targetRoleId,
       ...(b.customTasks !== undefined ? { customTasks: custom.customTasks } : {}),
       ...(b.customSignals !== undefined ? { customSignals: custom.customSignals } : {}),
@@ -72,3 +81,5 @@ export function decodeId(id: string): unknown {
 
 export const json = (data: unknown, status = 200) =>
   Response.json(data, { status, headers: { 'Cache-Control': 'no-store' } })
+
+export { getCatalog }
