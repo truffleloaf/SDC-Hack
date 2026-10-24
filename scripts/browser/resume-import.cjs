@@ -2,7 +2,7 @@ const assert = require('node:assert/strict')
 const { launchBrowser } = require('./helpers.cjs')
 const origin = process.env.PIVOTT_TEST_ORIGIN || 'http://127.0.0.1:3007'
 const path = require('node:path')
-const frontendRequire = require('node:module').createRequire(path.resolve(__dirname, '../../pivott-web-application-design/package.json'))
+const frontendRequire = require('node:module').createRequire(path.resolve(__dirname, '../../web/package.json'))
 const { jsPDF } = frontendRequire('jspdf')
 const { zipSync, strToU8 } = frontendRequire('fflate')
 // Synthetic documents only. No private résumé fixtures are retained on disk.

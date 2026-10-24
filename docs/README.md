@@ -60,7 +60,7 @@ Current and retained review captures are stored in [`docs/screenshots/`](screens
 
 Keep changes small enough to review and use focused commits. Update documentation when behavior or operations change.
 
-- To change demo seed data, edit [`lib/data/seed.ts`](../pivott-web-application-design/lib/data/seed.ts), run `node scripts/data/generate-data.mjs`, and commit the generated backend fixtures with the source change.
+- To change demo seed data, edit [`lib/data/seed.ts`](../web/lib/data/seed.ts), run `node scripts/data/generate-data.mjs`, and commit the generated backend fixtures with the source change.
 - When changing a scoring formula, update the TypeScript and Python engines together and add equivalent assertions to both test suites.
 - Before opening a pull request, run frontend lint, tests and build; backend pytest; the generated-data check; copy lint; and `node scripts/checks/check-links.mjs`.
 - Use public or clearly synthetic data, retain source URLs and dates, and do not add invented jobs, courses or statistics.

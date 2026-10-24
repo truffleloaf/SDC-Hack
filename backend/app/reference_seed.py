@@ -1,7 +1,7 @@
 """Canonical Pivott seed data.
 
 The JSON in ``app/data/seed.json`` is a 1:1 export of the frontend's
-``pivott-web-application-design/lib/data/seed.ts``. It is the single source
+``web/lib/data/seed.ts``. It is the single source
 of truth for this backend:
 
 - 8 reference roles and an unassessed own-task path

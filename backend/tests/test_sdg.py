@@ -6,7 +6,7 @@ from app.engine import compute_routes
 
 def test_canonical_mapping_and_tags():
     root=Path(__file__).resolve().parents[2]
-    assert MAPPING==json.loads((root/'pivott-web-application-design/lib/data/sdg-map.json').read_text())
+    assert MAPPING==json.loads((root/'web/lib/data/sdg-map.json').read_text())
     assert len(MAPPING['goals'])==17
     for row in SKILLS+ROLES:
         assert row['sdgs'] and set(row['sdgs'])<=set(range(1,18))

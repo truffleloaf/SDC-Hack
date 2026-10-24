@@ -5,7 +5,7 @@ import { dirname, join, relative } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import assert from 'node:assert/strict'
 const root = fileURLToPath(new URL('../../', import.meta.url))
-const require = createRequire(join(root, 'pivott-web-application-design/package.json'))
+const require = createRequire(join(root, 'web/package.json'))
 const ts = require('typescript')
 const phrases = /\b(?:seamless|unlock|elevate|empower|journey|leverage|tailored|robust|streamline|delve|let's|it's not|isn't just)\b/i
 
@@ -49,7 +49,7 @@ if (process.argv.includes('--self-test')) {
   for (const sample of ['<p>Task map</p>', 'const empty = "—"', '// unlock — is a developer comment\nconst n = 1', '// copy-lint-ok: deliberate example\nconst x = "Unlock"']) assert.equal(checkCopy(sample).length, 0, sample)
   console.log('PASS: copy lint detects prose and native prompts, permits placeholders and reasoned exceptions.')
 } else {
-  const problems = files(join(root, 'pivott-web-application-design/app')).concat(files(join(root, 'pivott-web-application-design/components'))).flatMap(name => checkCopy(readFileSync(name, 'utf8'), name).map(issue => `${relative(root, name)}:${issue.line}:${issue.column} ${issue.message}`))
+  const problems = files(join(root, 'web/app')).concat(files(join(root, 'web/components'))).flatMap(name => checkCopy(readFileSync(name, 'utf8'), name).map(issue => `${relative(root, name)}:${issue.line}:${issue.column} ${issue.message}`))
   if (problems.length) { console.error(problems.join('\n')); process.exitCode = 1 }
   else console.log('PASS: UI copy and dialog checks.')
 }
