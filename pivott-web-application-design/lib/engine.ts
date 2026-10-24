@@ -309,11 +309,13 @@ export interface PathwayStep {
   skillId: string
   title: string
   skills: string[]
-  resource: { title: string; provider: string; url: string; free: boolean } | null
+  resource: { title: string; provider: string; url: string; free: boolean; cost?: string; hrdCorp?: boolean } | null
   hours: number
   startWeek: number
   endWeek: number
   deliverable: string
+  priority: number
+  importance: number
   current: number
   required: number
 }
@@ -340,12 +342,13 @@ export function buildPathway(params: {
       title: `${g.current === 0 ? 'Start' : 'Level up'}: ${g.name}`,
       skills: [g.skillId],
       resource: resource
-        ? { title: resource.title, provider: resource.provider, url: resource.url, free: resource.free }
+        ? { title: resource.title, provider: resource.provider, url: resource.url, free: resource.free, ...(resource.cost ? {cost:resource.cost}:{}), ...(resource.hrdCorp ? {hrdCorp:true}:{}) }
         : null,
       hours: g.hours,
       startWeek: Math.floor(startHours / Math.max(1, params.hoursPerWeek)) + 1,
       endWeek: Math.max(1, Math.ceil(cursor / Math.max(1, params.hoursPerWeek))),
       deliverable: skill?.deliverable ?? 'A small practical project',
+      priority: g.priority, importance:g.importance,
       current: g.current,
       required: g.required,
     }

@@ -60,6 +60,7 @@ def build_pathway(
                 skills=[gap.skillId],
                 resource=(
                     ResourceLink(
+                        cost=resource.cost,hrdCorp=resource.hrd_corp,
                         title=resource.title,
                         provider=resource.provider,
                         url=resource.url,
@@ -72,6 +73,7 @@ def build_pathway(
                 startWeek=floor(start_hours / weekly) + 1,
                 endWeek=max(1, ceil(cursor / weekly)),
                 deliverable=skill.deliverable if skill else "A small practical project",
+                priority=gap.priority, importance=gap.importance,
                 current=gap.current,
                 required=gap.required,
             )

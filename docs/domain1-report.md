@@ -21,3 +21,11 @@ The challenge brief supplies Malaysian figures attributed to Hays and MOSTI. The
 All 17 official goals are included. Every live and sample role/skill is tagged through one canonical mapping and a generated frontend copy. The mapping rationale is documented in `docs/sdg-mapping.md` and explicitly represents team judgment. Routes support an optional capped focus bonus and show unadjusted ranks; pathway/passport aggregate the selected role and skills. The optional SQL backend needs the included skill-SDG migration before deployment.
 
 Validation: 109 frontend tests, 129 backend tests, lint and production build; mapping completeness/identity, aggregate counts and focus-driven rank changes are checked.
+
+## S4: pathway provenance and resources
+
+Each step shows current→target level, estimated hours/weeks, its priority calculation, mapped O*NET importance and the resource provider/link when present. Free filtering works in live mode. The resource schema supports cost, verified date and HRD Corp badges backed by an explicit claim source; the importer rejects unverified entries. The HRD Corp note explains employer/programme eligibility.
+
+**Boundary:** OpenLearn, Harvard CS50 and HRD Corp page requests returned HTTP 403 in this environment. The live resource registry is deliberately empty, and steps say “No vetted resource yet.” No programme is falsely marked claimable. The HRD Corp link goes to the official site rather than claiming a specific verified course-list URL. The O*NET figure shown is a mapped requirement weight; learning hours are explicitly team estimates. The old snapshot did not preserve raw skill importance values, so the UI does not invent them.
+
+Validation: all frontend/backend tests, lint and production build pass; added checks cover resource source requirements and the exact priority equation. Optional FastAPI deployments must apply both new migrations before restarting.

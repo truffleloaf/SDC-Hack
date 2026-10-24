@@ -128,6 +128,10 @@ class SignalTaskImpact(SQLModel, table=True):
 
 
 class Resource(SQLModel, table=True):
+    cost: str | None = None
+    hrd_corp: bool = False
+    verified_at: str | None = None
+    claim_source: str | None = None
     __tablename__ = "resources"
 
     id: str = Field(primary_key=True)

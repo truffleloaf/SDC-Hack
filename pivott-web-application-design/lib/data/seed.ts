@@ -1,4 +1,5 @@
 import sdgMap from './sdg-map.json'
+import vettedResources from './resources.live.json'
 export type SkillCategory = 'Technical' | 'Analytical' | 'Communication' | 'Operational'
 
 export interface Skill {
@@ -38,6 +39,10 @@ export interface Role {
 }
 
 export interface Resource {
+  cost?: string
+  hrdCorp?: boolean
+  verifiedAt?: string
+  claimSource?: string
   id: string
   skillId: string
   title: string
@@ -431,7 +436,7 @@ export function applyCatalog(payload: CatalogPayload): boolean {
   tasks = payload.tasks
   skills = payload.skills.map(({ id, name, category, hoursPerLevel, deliverable }) => ({ id, name, category, hoursPerLevel, deliverable, sdgs: (sdgMap.skills as Record<string,{sdgs:number[]}>)[id]?.sdgs ?? [4] }))
   signals = (payload.signals ?? []).map((signal) => signal.evidence === 'assumption' ? { id: signal.id, headline: signal.headline, direction: signal.direction, strength: signal.strength, impacts: signal.impacts, explanation: signal.explanation, evidence: 'assumption', assumptionWeight: signal.assumptionWeight } : signal)
-  resources = payload.resources ?? []
+  resources = payload.resources?.length ? payload.resources : vettedResources as Resource[]
   scenarios = payload.scenarios ?? DEMO_CATALOG.scenarios
   sdgs = sdgMap.goals ?? DEMO_CATALOG.sdgs
   DATA_AS_OF = payload.asOf

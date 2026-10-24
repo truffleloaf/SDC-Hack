@@ -20,6 +20,7 @@ export function loadFrontendModules() {
       }).outputText)
     }
     writeFileSync(join(temporary,'data/sdg-map.json'), readFileSync(join(root,'pivott-web-application-design/lib/data/sdg-map.json')))
+    writeFileSync(join(temporary,'data/resources.live.json'), readFileSync(join(root,'pivott-web-application-design/lib/data/resources.live.json')))
     return { seed: require(join(temporary, 'data/seed.js')), engine: require(join(temporary, 'engine.js')) }
   } finally {
     rmSync(temporary, { recursive: true, force: true })

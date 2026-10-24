@@ -1843,6 +1843,8 @@
         "startWeek": 1,
         "endWeek": 3,
         "deliverable": "An approval flow that routes invoices automatically",
+        "priority": 6.24,
+        "importance": 4,
         "current": 1,
         "required": 3
       },
@@ -1863,6 +1865,8 @@
         "startWeek": 4,
         "endWeek": 6,
         "deliverable": "A swimlane map of a current process with one redesign",
+        "priority": 4.68,
+        "importance": 3,
         "current": 1,
         "required": 3
       },
@@ -1883,6 +1887,8 @@
         "startWeek": 6,
         "endWeek": 9,
         "deliverable": "Five queries answering real questions about a sample ledger",
+        "priority": 4.68,
+        "importance": 3,
         "current": 0,
         "required": 2
       },
@@ -1903,6 +1909,8 @@
         "startWeek": 9,
         "endWeek": 11,
         "deliverable": "A documented test script for one ERP workflow",
+        "priority": 3.9000000000000004,
+        "importance": 5,
         "current": 3,
         "required": 4
       },
@@ -1923,6 +1931,8 @@
         "startWeek": 11,
         "endWeek": 12,
         "deliverable": "A requirements summary signed off by a stakeholder",
+        "priority": 2.34,
+        "importance": 3,
         "current": 2,
         "required": 3
       }
@@ -1949,6 +1959,8 @@
         "startWeek": 1,
         "endWeek": 3,
         "deliverable": "An approval flow that routes invoices automatically",
+        "priority": 6.24,
+        "importance": 4,
         "current": 1,
         "required": 3
       },
@@ -1969,6 +1981,8 @@
         "startWeek": 4,
         "endWeek": 6,
         "deliverable": "A swimlane map of a current process with one redesign",
+        "priority": 4.68,
+        "importance": 3,
         "current": 1,
         "required": 3
       },
@@ -1989,6 +2003,8 @@
         "startWeek": 6,
         "endWeek": 9,
         "deliverable": "Five queries answering real questions about a sample ledger",
+        "priority": 4.68,
+        "importance": 3,
         "current": 0,
         "required": 2
       },
@@ -2009,6 +2025,8 @@
         "startWeek": 9,
         "endWeek": 11,
         "deliverable": "A documented test script for one ERP workflow",
+        "priority": 3.9000000000000004,
+        "importance": 5,
         "current": 3,
         "required": 4
       },
@@ -2029,6 +2047,8 @@
         "startWeek": 11,
         "endWeek": 12,
         "deliverable": "A requirements summary signed off by a stakeholder",
+        "priority": 2.34,
+        "importance": 3,
         "current": 2,
         "required": 3
       }

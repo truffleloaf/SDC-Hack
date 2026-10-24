@@ -3,7 +3,8 @@
 import { Clock, ExternalLink, FileCheck2 } from 'lucide-react'
 import { motion, useReducedMotion } from 'motion/react'
 import { SkillChip } from '@/components/pivott/badges'
-import { hasDemoPersona } from '@/lib/data/seed'
+import liveMeta from '@/lib/data/live-meta.json'
+import { catalogSource, hasDemoPersona } from '@/lib/data/seed'
 import type { PathwayStep } from '@/lib/engine'
 import { cn } from '@/lib/utils'
 
@@ -72,6 +73,9 @@ export function StepCard({
           <h3 className={cn('font-serif text-2xl leading-tight', done && 'text-muted-foreground line-through decoration-teal/60 decoration-1')}>
             {step.title}
           </h3>
+          <p className="text-xs text-muted-foreground">Priority {step.priority.toFixed(1)} = gap {step.required-step.current} × requirement weight {step.importance}/5 × role demand. Higher priorities come first; ties use the skill name.</p>
+          <p className="text-xs text-muted-foreground">Level {step.current} → {step.required} · {step.hours} estimated hours. Learning hours are team planning estimates, not O*NET measurements.</p>
+          {catalogSource==='live' && <a href={liveMeta.catalog.docsUrl} target="_blank" rel="noreferrer" className="text-xs underline">Requirement source: O*NET {liveMeta.catalog.version}, mapped importance {step.importance}/5</a>}
           <p className="text-sm leading-relaxed text-muted-foreground">{taskNames.length ? `Used in ${taskNames.length} of your tasks (${taskNames.join(', ')}). ` : 'Not listed in your selected tasks. '}{roleTitle} needs level {step.required}; you are at level {step.current}.</p>
         </div>
 
@@ -92,15 +96,13 @@ export function StepCard({
               <ExternalLink className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden />
               <span className="flex flex-col">
                 <span className="font-medium group-hover:underline">{step.resource.title}</span>
-                <span className="text-xs text-muted-foreground">{step.resource.provider}</span>
+                <span className="text-xs text-muted-foreground">{step.resource.provider}{step.resource.cost ? ` · ${step.resource.cost}` : ''}{step.resource.hrdCorp && <span className="ml-2 rounded border border-border px-2 py-1">HRD Corp claimable</span>}</span>
               </span>
               <span className="sr-only">(opens in a new tab)</span>
             </a>
           ) : (
             <p className="text-sm text-muted-foreground">
-              {hasDemoPersona
-                ? 'No resource stored for this skill yet.'
-                : 'The live catalogue has no curated learning resource for this skill yet.'}
+              No vetted resource yet.
             </p>
           )}
           <p className="flex items-start gap-2 text-sm">

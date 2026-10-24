@@ -124,6 +124,10 @@ class TaskRead(BaseModel):
 
 
 class ResourceRead(BaseModel):
+    cost: str | None = None
+    hrdCorp: bool = False
+    verifiedAt: str | None = None
+    claimSource: str | None = None
     id: str
     skillId: str
     title: str
@@ -295,6 +299,8 @@ class DeleteProfileResponse(BaseModel):
 
 
 class ResourceLink(BaseModel):
+    cost: str | None = None
+    hrdCorp: bool = False
     title: str
     provider: str
     url: str
@@ -302,6 +308,8 @@ class ResourceLink(BaseModel):
 
 
 class PathwayStep(BaseModel):
+    priority: float
+    importance: int
     id: str
     skillId: str
     title: str

@@ -217,6 +217,14 @@ def write_catalog(
     session.add_all([Task(**row) for row in catalog.tasks])
     session.flush()
     session.add_all([TaskSkill(**row) for row in catalog.task_skills])
+    resources = json.loads((Path(__file__).resolve().parents[1]/'data/resources.live.json').read_text())
+    for resource in resources:
+        if not resource.get('verifiedAt') or not resource['url'].startswith('https://'):
+            raise LiveImportError('Resource needs a verified HTTPS page and date')
+        if resource.get('hrdCorp') and not resource.get('claimSource'):
+            raise LiveImportError('Claimable badge needs an official programme source')
+        row=dict(resource);row['skill_id']=row.pop('skillId');row['verified_at']=row.pop('verifiedAt');row['hrd_corp']=row.pop('hrdCorp',False);row['claim_source']=row.pop('claimSource',None)
+        session.add(Resource(**row))
     session.add_all([JobPosting(**row) for row in catalog.postings])
     for signal in catalog.signals:
         row = dict(signal)

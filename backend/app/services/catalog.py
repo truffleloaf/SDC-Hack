@@ -184,6 +184,7 @@ def serialize_role(session: Session, role: Role) -> RoleRead:
 
 def serialize_resource(resource: Resource) -> ResourceRead:
     return ResourceRead(
+        cost=resource.cost,hrdCorp=resource.hrd_corp,verifiedAt=resource.verified_at,claimSource=resource.claim_source,
         id=resource.id,
         skillId=resource.skill_id,
         title=resource.title,

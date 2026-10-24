@@ -344,6 +344,7 @@ def build_pathway(
                 "startWeek": math.floor(start_hours / max(1.0, hours_per_week)) + 1,
                 "endWeek": max(1, math.ceil(cursor / max(1.0, hours_per_week))),
                 "deliverable": skill.get("deliverable", "A small practical project"),
+                "priority": gap["priority"], "importance": gap["importance"],
                 "current": gap["current"],
                 "required": gap["required"],
             }
