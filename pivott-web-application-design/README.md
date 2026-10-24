@@ -1,142 +1,93 @@
-# Pivott
+# Pivott web application
 
-> Don't predict the job. Map the tasks. Route the skills.
+This directory contains the Next.js application, browser state, deterministic scoring engine and same-origin API route handlers. Start with the [repository README](../README.md) for the product, sources and limits.
 
-Pivott shows how AI may affect the individual **tasks** in a job, then routes your existing skills toward possible adjacent roles with a practical learning pathway. All scores are deterministic and computed from stored seed data. Nothing comes from an LLM.
+## Requirements
 
-**Important:** task exposure measures how much of the work AI could potentially handle. It does **not** predict job loss. All seeded roles, tasks, and signals are **illustrative demo data**.
+- Node.js 24
+- pnpm 12.3.4, pinned in `package.json`
 
-## Stack
-
-- Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS v4
-- Framer Motion (motion), D3 force simulation (task map), Radix primitives, Lucide icons
-- `html-to-image` (PNG) and `jspdf` (PDF) for Skill Passport export
-- Next.js Route Handlers under `app/api/*` act as the API layer. They share the same scoring engine (`lib/engine.ts`) with the client, with parity checks against the FastAPI port, including validated custom tasks and applied signals.
-- Vitest for unit and workflow tests
-
-> The repository includes a FastAPI port in `backend/`. In the multi-service Vercel deployment, `/api/*` routes to FastAPI; standalone `pnpm dev` uses the Next.js handlers. Browser scoring remains local, with an opt-in Verify with API control on the map.
-
-## Setup
+## Development
 
 ```bash
-pnpm install
-pnpm dev        # http://localhost:3000
+pnpm install --frozen-lockfile
+pnpm dev
 ```
 
-Guest mode needs no environment variables or database. Optional Supabase email-link sign-in and account saving require [the migration and configuration](../supabase/README.md).
+Open [http://localhost:3000](http://localhost:3000). Guest use requires no environment variables or database.
 
-## Live catalogue
-
-The root layout and every Route Handler under `app/api/*` call `getCatalog()` (`lib/catalog.ts`) once per request group, so pages and API routes use the same catalogue.
-
-- **Vercel / no env**: it applies the committed O*NET snapshot plus the reviewed engineering, science, health and design supplement (20 roles / 100 tasks / 18 skills). No second service, API base or database is needed.
-- **Local dev**: if `PIVOTT_API_BASE` or `NEXT_PUBLIC_API_BASE` is set (e.g. `http://127.0.0.1:8001`), it fetches the root live FastAPI instead. If that API is down, it falls back to the committed snapshot.
-- The demo seed is only used when the snapshot cannot be applied. The demo keeps Aisyah and the “View an example” flow; the live catalogue has no demo persona, so the landing page shows a live occupation preview and demo actions are hidden.
-- In live mode `GET /api/seed` returns the live payload and `POST /api/seed` returns 403; `/api/live/status` returns the O*NET/Arbeitnow source details.
-- Snapshot source: O*NET 31.0 (CC BY 4.0) plus the Arbeitnow job board (85 matched postings in `live-meta.json`). Scores remain the deterministic Pivott model, not labour-market statistics.
-- Account saving is independent of the catalogue: signed-in users go directly to Supabase `user_profiles`; the Supabase public defaults live in `next.config.mjs`.
-
-Refresh the committed snapshot from the root live FastAPI:
+## Checks
 
 ```bash
-# repository root
-$env:PIVOTT_DATASET='live'
-$env:PIVOTT_DB='sqlite:///./pivott-live.db'
-.venv/bin/python -m uvicorn app.main:app --port 8001
-
-# frontend checkout
-node scripts/export-live-seed.mjs http://127.0.0.1:8001
+pnpm lint
+pnpm test
+pnpm build
 ```
 
-Commit both `lib/data/live-seed.json` and `lib/data/live-meta.json`; Vercel redeploys automatically.
+`pnpm lint` runs TypeScript and the repository copy checks. Vitest covers the engine, workflows, catalogue overlay, persistence, authentication, résumé matching, public-job parsing and notification matching.
 
+## Runtime catalogue
 
-## Seed data and reset
+`app/layout.tsx` calls `getCatalog()` in `lib/catalog.ts`, and `CatalogBoot` applies the same payload before pages render.
 
-- Seed data lives in `lib/data/seed.ts`: 6 roles, 31 tasks, 15 skills, 20 dated signals, 2 scenarios, 4 SDGs, 25 learning resources (at least one free option for each skill), and the demo persona **Aisyah (Finance Admin)**. In the Vercel deployment, `lib/data/live-seed.json` replaces the same exports at request time with 10 live roles / 60 tasks / 17 skills (O*NET 31.0).
-- `GET /api/seed` returns the active catalogue (live snapshot in Vercel, demo snapshot locally). `POST /api/seed` returns the demo persona for a stateless reset in demo mode and 403 in live mode; it does not store or clear browser-local custom signals.
-- In the browser, **⋯ menu → Delete my data** clears your locally stored profile and progress (`pivott:v1` and `pivott:v1:personal` in localStorage).
+- The normal Vercel deployment uses the committed `lib/data/live-seed.json` snapshot plus `lib/data/catalog-supplement.ts`: 20 roles, 100 tasks, 18 skills, 3 scenarios and 17 SDGs as of 24 October 2026.
+- The imported snapshot itself contains 10 O*NET roles, 60 tasks and 17 skills. The supplement adds 10 engineering, science, health and digital-design roles and one skill.
+- `lib/data/jobs.live.json` contains 347 matched public listings from the dated Arbeitnow snapshot.
+- If the server-only `PIVOTT_API_BASE` is configured, the app can read a separately deployed FastAPI catalogue. A failed request falls back to the committed catalogue.
+- `PIVOTT_CATALOG_MODE=demo` selects the built-in deterministic demo during local work. The demo has 8 roles, 39 tasks, 15 skills, 20 signals, 25 resources, 3 scenarios and 17 SDGs as of 1 October 2026.
 
-## API
+Refresh the public-data snapshot through the backend importer and scheduled workflow; see the [root data-source notes](../README.md#data-sources-and-licences). Do not hand-edit generated JSON.
+
+## Main code paths
+
+| Path | Responsibility |
+| --- | --- |
+| `app/` | Pages and Next.js route handlers |
+| `components/` | Product flows and shared UI |
+| `lib/data/seed.ts` | Built-in demo catalogue and catalogue contract |
+| `lib/catalog.ts` | Committed snapshot and optional FastAPI loading |
+| `lib/engine.ts` | Deterministic exposure, fit and pathway formulas |
+| `lib/store.ts` | Device profile and progress persistence |
+| `lib/resume/` | Local PDF/DOCX extraction and catalogue matching |
+| `lib/jobs.ts` | Public listing validation, matching and filters |
+| `lib/job-notifications.ts` | Device-local listing-change detection and preferences |
+
+## API route handlers
+
+The Vercel project contains one Next.js service. These handlers run in that service:
 
 | Method | Path | Purpose |
 | --- | --- | --- |
-| POST | `/api/profiles` | Validate and echo a profile (role, tasks, skills) |
-| POST | `/api/analysis` | Task exposure, classifications, and ranked routes |
-| POST | `/api/pathways` | Build a learning pathway for a target role |
-| GET | `/api/pathways/{id}` | Fetch a pathway (`{targetRoleId}`) with query params |
-| GET | `/api/roles/{id}/tasks?scenario=normal\|fast` | Scored tasks for a role |
-| GET | `/api/signals` | Dated signals with sources |
-| GET | `/api/sdgs` | Sustainable Development Goal references |
-| GET | `/api/seed` | Full active catalogue (live snapshot or demo) |
-| GET | `/api/live/status` | O*NET/Arbeitnow source details for the live snapshot |
-| GET | `/api/health` | Health and seed version |
+| `POST` | `/api/analysis` | Validate inputs and calculate task and route results |
+| `POST` | `/api/pathways` | Build a learning pathway |
+| `GET` | `/api/roles/{id}/tasks` | Return scored tasks for a role |
+| `GET` | `/api/signals` | Return dated signals and assumptions |
+| `GET` | `/api/sdgs` | Return the SDG catalogue |
+| `GET` | `/api/seed` | Return the active catalogue |
+| `GET` | `/api/live/status` | Return source and snapshot metadata |
+| `GET` | `/api/live/jobs` | Return or refresh matched public listings |
+| `GET` | `/api/health` | Return status and catalogue version |
 
-## Formulas (`lib/engine.ts`)
+The handlers and browser use `lib/engine.ts`. The optional FastAPI service mirrors formulas for parity checks.
 
-```
-recency            = 0.5 ^ (age_days / 180)
-signal_adjustment  = clamp(Σ strength × direction × recency × impact, -0.2, 0.2)
-exposure           = clamp(base_exposure × scenario.multiplier + signal_adjustment, 0, 1)
-role_exposure      = Σ time_share × exposure
-classification     = Automate if exposure ≥ 0.65 and human_judgment < 0.4
-                     Protect  if human_judgment ≥ 0.65
-                     Augment  otherwise
-skill_coverage     = Σ rated(importance × min(level / required, 1)) / Σ rated importance
-fit                = 100 × (0.8 × coverage + 0.2 × task_similarity)   (falls back to coverage)
-gap                = max(0, required - level)
-gap_priority       = gap × importance × (role_demand / 100)
-weeks              = ceil(Σ gap_hours / hours_per_week)
-```
+## Accounts and privacy
 
-Unrated requirements are excluded from skill gaps and hours, not assigned level 0. With no ratings for a role, provisional fit uses task similarity only. Custom tasks are unassessed; role exposure normalizes over reference tasks, and assessment coverage is returned separately.
+Guest profiles remain in browser storage. Optional Supabase accounts support password, email-code and Google sign-in with owner-only row policies. Follow the [Supabase setup](../supabase/README.md) for migrations, redirect URLs and live provider checks.
 
-Every route card has a **View route** sheet that shows these values for the selected role.
+Résumé files are parsed locally and discarded after review. Job-update preferences and listing fingerprints are device-local. Vercel Analytics loads only after consent. The complete policy is available at `/privacy`.
 
-## Tests
+## Data changes
+
+After changing `lib/data/seed.ts`, run from the repository root:
 
 ```bash
-pnpm test
+node scripts/generate-data.mjs
 ```
 
-- `lib/engine.test.ts` covers each formula, the classification thresholds, scenario recalculation, and ranking changes between Normal and Fast.
-- `lib/catalog.test.ts` covers applying and resetting a live payload, deduplication, and the unit-test guard that keeps tests on the demo seed.
-- `lib/workflow.test.ts` covers the main workflows: share normalisation while adding, adjusting, and removing tasks; demo persona → map → routes → pathway; free-only resources; hours/week vs. duration; `.ics` export validity; and display-name sanitisation and fallbacks.
+This regenerates `backend/app/data/seed.json` and `backend/tests/golden.json`. Formula changes must be implemented in both TypeScript and Python before regenerating and running both test suites.
 
-## Demo script (about 2 minutes)
+## Design and component reference
 
-1. **Landing**: hover the living task map. Click **View an example** to load Aisyah. A banner marks demo mode, and your own profile is kept aside untouched.
-2. **Task map**: switch **Normal → Fast** and watch bubbles, the headline exposure, and classifications recalculate. Click a bubble to pin its details, then copy the "Try this week" tip. Toggle **List** to see the sortable table.
-3. **Routes**: switch scenarios to watch the ranking reorder. Open **Why this score?** and try **Compare**.
-4. **Pathway**: drag hours/week, toggle free-only, check off steps, then use **Add to calendar** to download the `.ics` file.
-5. **Passport**: edit the name, then download a PNG or PDF, or copy the summary.
-6. **Signals**: use **Admin → add a signal → Recompute map**. Changed tasks are highlighted on the map.
-7. Leave the demo with **Exit demo** in the banner, or start fresh from **Map my work**.
-
-## Display name
-
-Your name is optional and stays in localStorage unless you explicitly save the profile to an account. You can set or edit it on the onboarding screen, in the header menu, or on the passport. When no name is set, greetings say "Hi there". Names are sanitised (no angle brackets or control characters, 40 characters max) and always rendered as text, never as HTML.
-
-## Privacy
-
-Guest profiles and progress stay in your browser. Optional Supabase accounts support a password, email code or Google, with owner-only database policies, explicit saves and revision conflict checks. Signing in does not automatically upload or overwrite work. Use `/account` for account settings and deletion; deleting device data does not delete an account copy. Vercel Analytics loads only after a visitor allows analytics in the consent banner. Clicking **Verify with API** on the task map sends task selections, skill levels, custom tasks, and applied custom signals for a stateless comparison. It omits your display name, completion history, cookies, and pending signals. No check runs automatically; local results remain usable if the API is offline.
-
-Job updates are optional and device-local. The bell in the header opens a notification centre where people can filter by occupation, keywords, source location and remote status, choose an in-page check frequency and optionally allow browser notifications. The first successful check creates a quiet baseline; later checks label new and changed listings. Checks and browser alerts run only while Pivott is open. Pivott does not send background push or email alerts.
-
-## Styleguide
-
-Visit `/styleguide` to see every shared component and its states.
-
-Regenerate backend seed and golden outputs after a seed change with `node scripts/generate-data.mjs` from the repository root. Use `--check` to verify the exports are current.
-
-## Verify with API
-
-On `/map`, click **Verify with API**. It checks task exposures, weighted role exposure, and ranked role IDs against same-origin `POST /api/analysis` (FastAPI under Vercel services; the Next handler under `pnpm dev`). A tolerance of `1e-9` accommodates JavaScript/Python floating-point differences. Failed checks do not change your results. Changing inputs invalidates an old verification result.
-
-The API accepts up to 100 custom tasks, 100 selected tasks, and 100 applied custom signals, with at most 100 impacts per signal. Custom task IDs must start `custom-`; custom signal IDs must start `user-`. Seed IDs cannot be overridden. Legacy custom exposure/judgment fields are accepted and clamped to 0–1 but never used to assess custom tasks; signal strength to 0.1–1 and impact to 0.05–0.4, rounded to two decimals as in the editor. Dates must be real ISO dates no later than the seed cut-off, source URLs must use HTTPS, and custom evidence is always `user`. The same validation is implemented in both APIs.
-
-The API is a public, unauthenticated demo. CORS is not authentication or rate limiting: configure abuse/rate controls at the hosting edge before wider use. The backend allows the deployed origin and localhost by default; see `backend/README.md` for explicit CORS configuration.
-
-## Résumé import
-
-`/start` offers optional local PDF/DOCX reading and a review step. Heavy parsing modules load only when a file is chosen. No file or extracted text is uploaded or stored. Confirmed catalogue skill IDs are saved as `resumeSkillIds` and shown first for rating; import never supplies skill levels. See [feature limits and verification](../docs/resume-import.md).
+- [`DESIGN.md`](DESIGN.md) defines visual and copy rules.
+- `/styleguide` renders shared components and states.
+- The [documentation index](../docs/README.md) links architecture, deployment and verification notes.

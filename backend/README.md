@@ -1,5 +1,17 @@
 # Pivott
 
+## English summary
+
+This directory contains the optional FastAPI service, Python scoring engine, O*NET/Arbeitnow importer and PostgreSQL/Supabase schema. The Vercel site does not require this service: production normally uses the Next.js route handlers and committed catalogue. Deploy FastAPI separately when you need live imports, database-backed APIs or cross-engine verification.
+
+```bash
+python -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+PYTHONPATH=. .venv/bin/python -m uvicorn app.main:app --reload --port 8001
+```
+
+Run the test suite with `PYTHONPATH=. .venv/bin/python -m pytest -q`. Use the [backend documentation index](docs/README.md) for architecture, API, authentication, live-data and deployment details. The remainder of this README is the original Chinese operational guide.
+
 > **Don't predict the job. Map the tasks. Route the skills.**
 
 Pivott 把岗位拆成任务，估算 AI 对每个任务的暴露度，再把现有技能路由到更低风险的相邻岗位，并给出按周的学习路径。所有分数都是确定性公式算出来的，不调用 LLM。
