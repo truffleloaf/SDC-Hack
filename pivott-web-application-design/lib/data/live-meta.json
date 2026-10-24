@@ -1,14 +1,14 @@
 {
   "dataset": "live",
   "imported": true,
-  "seedVersion": "onet-31.0+arbeitnow-2026-10-23",
-  "dataAsOf": "2026-10-23",
+  "seedVersion": "onet-31.0+arbeitnow-2026-10-24",
+  "dataAsOf": "2026-10-24",
   "counts": {
     "roles": 10,
     "tasks": 60,
     "skills": 17,
     "signals": 0,
-    "postings": 85
+    "postings": 347
   },
   "catalog": {
     "docsUrl": "https://www.onetcenter.org/dictionary/31.0/text/",
@@ -75,37 +75,37 @@
   },
   "demand": {
     "counts": {
-      "accountant": 9,
-      "bi-analyst": 35,
-      "bookkeeping-clerk": 6,
-      "budget-analyst": 8,
-      "customer-service-rep": 35,
-      "data-scientist": 57,
-      "executive-assistant": 2,
-      "market-research-analyst": 10,
-      "operations-manager": 15,
-      "project-manager": 11
+      "accountant": 17,
+      "bi-analyst": 49,
+      "bookkeeping-clerk": 11,
+      "budget-analyst": 13,
+      "customer-service-rep": 63,
+      "data-scientist": 94,
+      "executive-assistant": 4,
+      "market-research-analyst": 34,
+      "operations-manager": 34,
+      "project-manager": 28
     },
     "demand": {
-      "accountant": 16,
-      "bi-analyst": 61,
-      "bookkeeping-clerk": 11,
+      "accountant": 18,
+      "bi-analyst": 52,
+      "bookkeeping-clerk": 12,
       "budget-analyst": 14,
-      "customer-service-rep": 61,
+      "customer-service-rep": 67,
       "data-scientist": 100,
       "executive-assistant": 4,
-      "market-research-analyst": 18,
-      "operations-manager": 26,
-      "project-manager": 19
+      "market-research-analyst": 36,
+      "operations-manager": 36,
+      "project-manager": 30
     },
-    "fetchedAt": "2026-10-22T16:24:19+00:00",
-    "matched": 188,
+    "fetchedAt": "2026-10-24T06:03:59+00:00",
+    "matched": 347,
     "method": "longest reported O*NET job title or alias in the posting title/tags",
     "name": "Arbeitnow job board",
-    "pages": 5,
-    "postings": 1481,
+    "pages": 10,
+    "postings": 2694,
     "status": "live",
-    "unmatched": 1293,
+    "unmatched": 2347,
     "url": "https://www.arbeitnow.com/api/job-board-api"
   },
   "model": {
@@ -116,13 +116,135 @@
     "taskSkills": "O*NET crosswalk task -> detailed work activity -> generalized work activity -> essential skill (top 3)"
   },
   "trends": {
-    "status": "not computed",
-    "asOf": "2026-10-23",
+    "asOf": "2026-10-24",
+    "counts": {
+      "role:accountant": {
+        "baseline": 0,
+        "recent": 17
+      },
+      "role:bi-analyst": {
+        "baseline": 0,
+        "recent": 49
+      },
+      "role:bookkeeping-clerk": {
+        "baseline": 0,
+        "recent": 11
+      },
+      "role:budget-analyst": {
+        "baseline": 0,
+        "recent": 13
+      },
+      "role:customer-service-rep": {
+        "baseline": 0,
+        "recent": 63
+      },
+      "role:data-scientist": {
+        "baseline": 0,
+        "recent": 94
+      },
+      "role:executive-assistant": {
+        "baseline": 0,
+        "recent": 4
+      },
+      "role:market-research-analyst": {
+        "baseline": 0,
+        "recent": 34
+      },
+      "role:operations-manager": {
+        "baseline": 0,
+        "recent": 34
+      },
+      "role:project-manager": {
+        "baseline": 0,
+        "recent": 28
+      },
+      "skill:active-learning": {
+        "baseline": 0,
+        "recent": 5
+      },
+      "skill:active-listening": {
+        "baseline": 0,
+        "recent": 0
+      },
+      "skill:complex-problem-solving": {
+        "baseline": 0,
+        "recent": 26
+      },
+      "skill:coordination": {
+        "baseline": 0,
+        "recent": 39
+      },
+      "skill:critical-thinking": {
+        "baseline": 0,
+        "recent": 3
+      },
+      "skill:judgment-and-decision-making": {
+        "baseline": 0,
+        "recent": 35
+      },
+      "skill:management-of-financial-resources": {
+        "baseline": 0,
+        "recent": 54
+      },
+      "skill:management-of-personnel-resources": {
+        "baseline": 0,
+        "recent": 7
+      },
+      "skill:mathematics": {
+        "baseline": 0,
+        "recent": 22
+      },
+      "skill:monitoring": {
+        "baseline": 0,
+        "recent": 35
+      },
+      "skill:programming": {
+        "baseline": 0,
+        "recent": 108
+      },
+      "skill:reading-comprehension": {
+        "baseline": 0,
+        "recent": 0
+      },
+      "skill:service-orientation": {
+        "baseline": 0,
+        "recent": 70
+      },
+      "skill:social-perceptiveness": {
+        "baseline": 0,
+        "recent": 6
+      },
+      "skill:speaking": {
+        "baseline": 0,
+        "recent": 97
+      },
+      "skill:time-management": {
+        "baseline": 0,
+        "recent": 6
+      },
+      "skill:writing": {
+        "baseline": 0,
+        "recent": 46
+      }
+    },
+    "minimumChange": 0.05,
+    "minimumPostings": 10,
     "sourceName": "Arbeitnow job board API",
     "sourceUrl": "https://www.arbeitnow.com/api/job-board-api",
-    "minimumPostings": 10,
-    "minimumChange": 0.05,
-    "totals": null,
-    "counts": {}
+    "status": "insufficient data",
+    "totals": {
+      "baseline": 0,
+      "recent": 347
+    },
+    "windows": {
+      "baseline": {
+        "end": "2026-09-24",
+        "start": "2026-07-27"
+      },
+      "recent": {
+        "end": "2026-10-24",
+        "start": "2026-09-25"
+      }
+    }
   }
 }

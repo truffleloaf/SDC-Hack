@@ -1,12 +1,12 @@
 {
-  "version": "onet-31.0+arbeitnow-2026-10-23",
-  "asOf": "2026-10-23",
+  "version": "onet-31.0+arbeitnow-2026-10-24",
+  "asOf": "2026-10-24",
   "roles": [
     {
       "id": "bookkeeping-clerk",
       "title": "Bookkeeping, Accounting, and Auditing Clerks",
       "family": "Office & Admin Support",
-      "demand": 11,
+      "demand": 12,
       "sdgs": [
         8,
         10
@@ -110,7 +110,7 @@
       "id": "customer-service-rep",
       "title": "Customer Service Representatives",
       "family": "Office & Admin Support",
-      "demand": 61,
+      "demand": 67,
       "sdgs": [
         8,
         10
@@ -162,7 +162,7 @@
       "id": "accountant",
       "title": "Accountants and Auditors",
       "family": "Business & Finance",
-      "demand": 16,
+      "demand": 18,
       "sdgs": [
         8
       ],
@@ -265,7 +265,7 @@
       "id": "market-research-analyst",
       "title": "Market Research Analysts and Marketing Specialists",
       "family": "Business & Finance",
-      "demand": 18,
+      "demand": 36,
       "sdgs": [
         8,
         9
@@ -317,7 +317,7 @@
       "id": "bi-analyst",
       "title": "Business Intelligence Analysts",
       "family": "Data & Analysis",
-      "demand": 61,
+      "demand": 52,
       "sdgs": [
         8,
         9
@@ -421,7 +421,7 @@
       "id": "project-manager",
       "title": "Project Management Specialists",
       "family": "Management",
-      "demand": 19,
+      "demand": 30,
       "sdgs": [
         8,
         9
@@ -473,7 +473,7 @@
       "id": "operations-manager",
       "title": "General and Operations Managers",
       "family": "Management",
-      "demand": 26,
+      "demand": 36,
       "sdgs": [
         8,
         9
@@ -596,7 +596,7 @@
     {
       "id": "data-scientist-21823",
       "roleId": "data-scientist",
-      "name": "Analyze, manipulate, or process large sets of data using statistical\u00e2\u0080\u00a6",
+      "name": "Analyze, manipulate, or process large sets of data using statistical…",
       "description": "Analyze, manipulate, or process large sets of data using statistical software. O*NET-SOC 15-2051.00, task 21823, importance 4.3/5.",
       "baseExposure": 0.6,
       "humanJudgment": 0.12,
@@ -623,7 +623,7 @@
     {
       "id": "market-research-analyst-5434",
       "roleId": "market-research-analyst",
-      "name": "Prepare reports of findings, illustrating data graphically and\u00e2\u0080\u00a6",
+      "name": "Prepare reports of findings, illustrating data graphically and…",
       "description": "Prepare reports of findings, illustrating data graphically and translating complex findings into written text. O*NET-SOC 13-1161.00, task 5434, importance 4.1/5.",
       "baseExposure": 0.6,
       "humanJudgment": 0.12,
@@ -679,7 +679,7 @@
     {
       "id": "bi-analyst-16139",
       "roleId": "bi-analyst",
-      "name": "Maintain or update business intelligence tools, databases, dashboards\u00e2\u0080\u00a6",
+      "name": "Maintain or update business intelligence tools, databases, dashboards…",
       "description": "Maintain or update business intelligence tools, databases, dashboards, systems, or methods. O*NET-SOC 15-2051.01, task 16139, importance 4.4/5.",
       "baseExposure": 0.74,
       "humanJudgment": 0.08,
@@ -707,7 +707,7 @@
     {
       "id": "budget-analyst-3398",
       "roleId": "budget-analyst",
-      "name": "Provide advice and technical assistance with cost analysis, fiscal\u00e2\u0080\u00a6",
+      "name": "Provide advice and technical assistance with cost analysis, fiscal…",
       "description": "Provide advice and technical assistance with cost analysis, fiscal allocation, and budget preparation. O*NET-SOC 13-2031.00, task 3398, importance 4.3/5.",
       "baseExposure": 0.46,
       "humanJudgment": 0.16,
@@ -778,7 +778,7 @@
     {
       "id": "operations-manager-933",
       "roleId": "operations-manager",
-      "name": "Direct and coordinate activities of businesses or departments concerned\u00e2\u0080\u00a6",
+      "name": "Direct and coordinate activities of businesses or departments concerned…",
       "description": "Direct and coordinate activities of businesses or departments concerned with the production, pricing, sales, or distribution of products. O*NET-SOC 11-1021.00, task 933, importance 4.1/5.",
       "baseExposure": 0.22,
       "humanJudgment": 0.66,
@@ -864,7 +864,7 @@
     {
       "id": "customer-service-rep-2580",
       "roleId": "customer-service-rep",
-      "name": "Check to ensure that appropriate changes were made to resolve\u00e2\u0080\u00a6",
+      "name": "Check to ensure that appropriate changes were made to resolve…",
       "description": "Check to ensure that appropriate changes were made to resolve customers' problems. O*NET-SOC 43-4051.00, task 2580, importance 4.4/5.",
       "baseExposure": 0.48,
       "humanJudgment": 0.28,
@@ -920,7 +920,7 @@
     {
       "id": "operations-manager-20708",
       "roleId": "operations-manager",
-      "name": "Manage the movement of goods into and out of production facilities to\u00e2\u0080\u00a6",
+      "name": "Manage the movement of goods into and out of production facilities to…",
       "description": "Manage the movement of goods into and out of production facilities to ensure efficiency, effectiveness, or sustainability of operations. O*NET-SOC 11-1021.00, task 20708, importance 4.0/5.",
       "baseExposure": 0.34,
       "humanJudgment": 0.41,
@@ -935,7 +935,7 @@
     {
       "id": "project-manager-21481",
       "roleId": "project-manager",
-      "name": "Submit project deliverables to clients, ensuring adherence to quality\u00e2\u0080\u00a6",
+      "name": "Submit project deliverables to clients, ensuring adherence to quality…",
       "description": "Submit project deliverables to clients, ensuring adherence to quality standards. O*NET-SOC 13-1082.00, task 21481, importance 4.4/5.",
       "baseExposure": 0.46,
       "humanJudgment": 0.16,
@@ -1009,7 +1009,7 @@
     {
       "id": "customer-service-rep-2581",
       "roleId": "customer-service-rep",
-      "name": "Contact customers to respond to inquiries or to notify them of claim\u00e2\u0080\u00a6",
+      "name": "Contact customers to respond to inquiries or to notify them of claim…",
       "description": "Contact customers to respond to inquiries or to notify them of claim investigation results or any planned adjustments. O*NET-SOC 43-4051.00, task 2581, importance 4.2/5.",
       "baseExposure": 0.6,
       "humanJudgment": 0.05,
@@ -1024,7 +1024,7 @@
     {
       "id": "data-scientist-21829",
       "roleId": "data-scientist",
-      "name": "Deliver oral or written presentations of the results of mathematical\u00e2\u0080\u00a6",
+      "name": "Deliver oral or written presentations of the results of mathematical…",
       "description": "Deliver oral or written presentations of the results of mathematical modeling and data analysis to management or other end users. O*NET-SOC 15-2051.00, task 21829, importance 4.2/5.",
       "baseExposure": 0.46,
       "humanJudgment": 0.16,
@@ -1037,7 +1037,7 @@
     {
       "id": "executive-assistant-2771",
       "roleId": "executive-assistant",
-      "name": "Prepare invoices, reports, memos, letters, financial statements, and\u00e2\u0080\u00a6",
+      "name": "Prepare invoices, reports, memos, letters, financial statements, and…",
       "description": "Prepare invoices, reports, memos, letters, financial statements, and other documents, using word processing, spreadsheet, database, or presentation software. O*NET-SOC 43-6011.00, task 2771, importance 4.2/5.",
       "baseExposure": 0.88,
       "humanJudgment": 0.05,
@@ -1109,7 +1109,7 @@
     {
       "id": "bi-analyst-16141",
       "roleId": "bi-analyst",
-      "name": "Identify and analyze industry or geographic trends with business\u00e2\u0080\u00a6",
+      "name": "Identify and analyze industry or geographic trends with business…",
       "description": "Identify and analyze industry or geographic trends with business strategy implications. O*NET-SOC 15-2051.01, task 16141, importance 3.9/5.",
       "baseExposure": 0.46,
       "humanJudgment": 0.16,
@@ -1182,7 +1182,7 @@
     {
       "id": "executive-assistant-18576",
       "roleId": "executive-assistant",
-      "name": "Coordinate and direct office services, such as records, departmental\u00e2\u0080\u00a6",
+      "name": "Coordinate and direct office services, such as records, departmental…",
       "description": "Coordinate and direct office services, such as records, departmental finances, budget preparation, personnel issues, and housekeeping, to aid executives. O*NET-SOC 43-6011.00, task 18576, importance 4.1/5.",
       "baseExposure": 0.36,
       "humanJudgment": 0.56,
@@ -1256,7 +1256,7 @@
     {
       "id": "bi-analyst-16142",
       "roleId": "bi-analyst",
-      "name": "Document specifications for business intelligence or information\u00e2\u0080\u00a6",
+      "name": "Document specifications for business intelligence or information…",
       "description": "Document specifications for business intelligence or information technology reports, dashboards, or other outputs. O*NET-SOC 15-2051.01, task 16142, importance 3.7/5.",
       "baseExposure": 0.6,
       "humanJudgment": 0.12,
@@ -1315,7 +1315,7 @@
     {
       "id": "data-scientist-21831",
       "roleId": "data-scientist",
-      "name": "Identify business problems or management objectives that can be\u00e2\u0080\u00a6",
+      "name": "Identify business problems or management objectives that can be…",
       "description": "Identify business problems or management objectives that can be addressed through data analysis. O*NET-SOC 15-2051.00, task 21831, importance 4.1/5.",
       "baseExposure": 0.46,
       "humanJudgment": 0.16,
@@ -1390,191 +1390,191 @@
   ],
   "skills": [
     {
+      "sdgs": [
+        4,
+        9
+      ],
       "id": "programming",
       "name": "Programming",
       "category": "Technical",
       "hoursPerLevel": 12,
-      "deliverable": "A small working artifact that uses Programming on real data & analysis data.",
+      "deliverable": "A small working artifact that uses Programming on real data & analysis data."
+    },
+    {
       "sdgs": [
         4,
         9
-      ]
-    },
-    {
+      ],
       "id": "active-learning",
       "name": "Active Learning",
       "category": "Analytical",
       "hoursPerLevel": 10,
-      "deliverable": "A one-page analysis showing your Active Learning reasoning on a real office & admin support case.",
+      "deliverable": "A one-page analysis showing your Active Learning reasoning on a real office & admin support case."
+    },
+    {
       "sdgs": [
         4,
         9
-      ]
-    },
-    {
+      ],
       "id": "complex-problem-solving",
       "name": "Complex Problem Solving",
       "category": "Analytical",
       "hoursPerLevel": 10,
-      "deliverable": "A one-page analysis showing your Complex Problem Solving reasoning on a real office & admin support case.",
+      "deliverable": "A one-page analysis showing your Complex Problem Solving reasoning on a real office & admin support case."
+    },
+    {
       "sdgs": [
         4,
         9
-      ]
-    },
-    {
+      ],
       "id": "critical-thinking",
       "name": "Critical Thinking",
       "category": "Analytical",
       "hoursPerLevel": 10,
-      "deliverable": "A one-page analysis showing your Critical Thinking reasoning on a real office & admin support case.",
+      "deliverable": "A one-page analysis showing your Critical Thinking reasoning on a real office & admin support case."
+    },
+    {
       "sdgs": [
         4,
         9
-      ]
-    },
-    {
+      ],
       "id": "judgment-and-decision-making",
       "name": "Judgment and Decision Making",
       "category": "Analytical",
       "hoursPerLevel": 10,
-      "deliverable": "A one-page analysis showing your Judgment and Decision Making reasoning on a real business & finance case.",
+      "deliverable": "A one-page analysis showing your Judgment and Decision Making reasoning on a real business & finance case."
+    },
+    {
       "sdgs": [
         4,
         9
-      ]
-    },
-    {
+      ],
       "id": "mathematics",
       "name": "Mathematics",
       "category": "Analytical",
       "hoursPerLevel": 10,
-      "deliverable": "A one-page analysis showing your Mathematics reasoning on a real office & admin support case.",
+      "deliverable": "A one-page analysis showing your Mathematics reasoning on a real office & admin support case."
+    },
+    {
       "sdgs": [
         4,
         9
-      ]
-    },
-    {
+      ],
       "id": "monitoring",
       "name": "Monitoring",
       "category": "Analytical",
       "hoursPerLevel": 10,
-      "deliverable": "A one-page analysis showing your Monitoring reasoning on a real office & admin support case.",
-      "sdgs": [
-        4,
-        9
-      ]
+      "deliverable": "A one-page analysis showing your Monitoring reasoning on a real office & admin support case."
     },
     {
+      "sdgs": [
+        4,
+        10
+      ],
       "id": "active-listening",
       "name": "Active Listening",
       "category": "Communication",
       "hoursPerLevel": 8,
-      "deliverable": "A recorded five-minute walkthrough that demonstrates Active Listening with a stakeholder.",
+      "deliverable": "A recorded five-minute walkthrough that demonstrates Active Listening with a stakeholder."
+    },
+    {
       "sdgs": [
         4,
         10
-      ]
-    },
-    {
+      ],
       "id": "coordination",
       "name": "Coordination",
       "category": "Communication",
       "hoursPerLevel": 8,
-      "deliverable": "A recorded five-minute walkthrough that demonstrates Coordination with a stakeholder.",
+      "deliverable": "A recorded five-minute walkthrough that demonstrates Coordination with a stakeholder."
+    },
+    {
       "sdgs": [
         4,
         10
-      ]
-    },
-    {
+      ],
       "id": "reading-comprehension",
       "name": "Reading Comprehension",
       "category": "Communication",
       "hoursPerLevel": 8,
-      "deliverable": "A recorded five-minute walkthrough that demonstrates Reading Comprehension with a stakeholder.",
+      "deliverable": "A recorded five-minute walkthrough that demonstrates Reading Comprehension with a stakeholder."
+    },
+    {
       "sdgs": [
         4,
         10
-      ]
-    },
-    {
+      ],
       "id": "service-orientation",
       "name": "Service Orientation",
       "category": "Communication",
       "hoursPerLevel": 8,
-      "deliverable": "A recorded five-minute walkthrough that demonstrates Service Orientation with a stakeholder.",
+      "deliverable": "A recorded five-minute walkthrough that demonstrates Service Orientation with a stakeholder."
+    },
+    {
       "sdgs": [
         4,
         10
-      ]
-    },
-    {
+      ],
       "id": "social-perceptiveness",
       "name": "Social Perceptiveness",
       "category": "Communication",
       "hoursPerLevel": 8,
-      "deliverable": "A recorded five-minute walkthrough that demonstrates Social Perceptiveness with a stakeholder.",
+      "deliverable": "A recorded five-minute walkthrough that demonstrates Social Perceptiveness with a stakeholder."
+    },
+    {
       "sdgs": [
         4,
         10
-      ]
-    },
-    {
+      ],
       "id": "speaking",
       "name": "Speaking",
       "category": "Communication",
       "hoursPerLevel": 8,
-      "deliverable": "A recorded five-minute walkthrough that demonstrates Speaking with a stakeholder.",
+      "deliverable": "A recorded five-minute walkthrough that demonstrates Speaking with a stakeholder."
+    },
+    {
       "sdgs": [
         4,
         10
-      ]
-    },
-    {
+      ],
       "id": "writing",
       "name": "Writing",
       "category": "Communication",
       "hoursPerLevel": 8,
-      "deliverable": "A recorded five-minute walkthrough that demonstrates Writing with a stakeholder.",
-      "sdgs": [
-        4,
-        10
-      ]
+      "deliverable": "A recorded five-minute walkthrough that demonstrates Writing with a stakeholder."
     },
     {
+      "sdgs": [
+        4,
+        8
+      ],
       "id": "management-of-financial-resources",
       "name": "Management of Financial Resources",
       "category": "Operational",
       "hoursPerLevel": 6,
-      "deliverable": "A tracked week where you apply Management of Financial Resources to your own workload.",
+      "deliverable": "A tracked week where you apply Management of Financial Resources to your own workload."
+    },
+    {
       "sdgs": [
         4,
         8
-      ]
-    },
-    {
+      ],
       "id": "management-of-personnel-resources",
       "name": "Management of Personnel Resources",
       "category": "Operational",
       "hoursPerLevel": 6,
-      "deliverable": "A tracked week where you apply Management of Personnel Resources to your own workload.",
+      "deliverable": "A tracked week where you apply Management of Personnel Resources to your own workload."
+    },
+    {
       "sdgs": [
         4,
         8
-      ]
-    },
-    {
+      ],
       "id": "time-management",
       "name": "Time Management",
       "category": "Operational",
       "hoursPerLevel": 6,
-      "deliverable": "A tracked week where you apply Time Management to your own workload.",
-      "sdgs": [
-        4,
-        8
-      ]
+      "deliverable": "A tracked week where you apply Time Management to your own workload."
     }
   ],
   "signals": [],
@@ -1584,19 +1584,19 @@
       "id": "slow",
       "label": "Slow",
       "multiplier": 0.75,
-      "description": "Team assumption: 0.75\u00d7 baseline exposure. Not a forecast."
+      "description": "Team assumption: 0.75× baseline exposure. Not a forecast."
     },
     {
       "id": "normal",
       "label": "Normal",
-      "multiplier": 1,
-      "description": "Team assumption: 1\u00d7 baseline exposure. Not a forecast."
+      "multiplier": 1.0,
+      "description": "Team assumption: 1× baseline exposure. Not a forecast."
     },
     {
       "id": "fast",
       "label": "Fast",
       "multiplier": 1.25,
-      "description": "Team assumption: 1.25\u00d7 baseline exposure. Not a forecast."
+      "description": "Team assumption: 1.25× baseline exposure. Not a forecast."
     }
   ],
   "sdgs": [
