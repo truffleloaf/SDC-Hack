@@ -9,3 +9,9 @@ Count-derived role and skill signals, dated count snapshots, public observation 
 **Verification:** lint, frontend tests, production build and backend tests. Fixture tests cover exact counts, direction, strength, equal windows, thin windows, future postings and duplicate IDs. Frontend scoring tests prove signals can change scores.
 
 GitHub REST/GraphQL API calls are blocked (Forbidden), while git push works. Section branches are published for review; PR creation must be completed from GitHub's compare page if API access remains blocked.
+
+## S2: source integrity
+
+The twelve invented publication attributions had already been removed in Brief 3: they are undated assumptions, without publisher names or URLs, and appear in their own section. Regression tests now reject every verified signal missing its date or source URL. Remaining UI percentages are calculated model outputs, with the method linked; they are not population statistics.
+
+The challenge brief supplies Malaysian figures attributed to Hays and MOSTI. Their source pages cannot be opened from this environment. In accordance with the brief's global rule to omit unverified statistics, those figures are **not** presented as verified website facts. The eight pre-existing published demo references retain their original source URLs/dates; this work does not claim they were independently reverified. Live mode uses only count-derived feed signals.
