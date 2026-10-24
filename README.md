@@ -23,7 +23,7 @@ Don't predict the job. Map the tasks. Route the skills.
 | **GitHub Repository** | [Tudou-Pivott](https://github.com/truffleloaf/Tudou-Pivott) |
 | **Live Demo** | [Open Pivott on Replit](https://pivott.replit.app/workspace) |
 | **RunPod Endpoint** | - |
-| **Slide Deck** | [(https://drive.google.com/file/d/1atC76KmzC__ldC8ABnpGl03yC5ITC6DP/view?usp=sharing)] |
+| **Slide Deck** | [**Pitch deck (PDF):** [View on Google Drive](https://drive.google.com/file/d/1atC76KmzC__ldC8ABnpGl03yC5ITC6DP/view?usp=sharing)] |
 | **Demo Video** | [Add your demo video link] |
 
 **Live demo:** [pivottstudio.vercel.app](https://pivottstudio.vercel.app)
