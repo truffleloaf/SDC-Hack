@@ -26,7 +26,7 @@ Pivott helps clerical and finance workers in Malaysia examine the tasks in their
 
 Pivott uses synthetic demo data and attributed public data. Recommendations link to their source where one exists. The app does not invent job listings, courses or statistics, and people remain responsible for career decisions. See the [Domain 1 verification record](docs/verification.md).
 
-## Quick start
+## How to run
 
 Install Node.js 24 and pnpm 12.3.4, then run these commands from the repository root:
 
