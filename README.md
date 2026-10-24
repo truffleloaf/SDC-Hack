@@ -116,3 +116,16 @@ Presentation: Present in an incognito window, or open `/?welcome=1`. Returning v
 ## Current deployment
 
 Vercel serves the Next.js application and its route handlers. It uses the committed, dated O*NET/Arbeitnow catalogue when no optional external FastAPI URL is configured. FastAPI remains available for catalogue imports, PostgreSQL APIs and independent scoring checks. Demo fixtures are synthetic and separate from live data. See `docs/briefs-2-3-report.md` for the interaction and authentication changes.
+
+## Domain 1 must-haves
+
+| Requirement | Implementation | Current boundary |
+| --- | --- | --- |
+| Skills intake | `/start`, local PDF/DOCX/text review, `/skills` | Demo uses synthetic profiles only |
+| Updatable signals | `/signals`, `backend/app/live/trends.py`, weekly/manual `refresh-live.yml` | Existing snapshot has no window history; real feed refresh must meet minimum counts |
+| Explainable matching | `/routes`, fit bounds, baseline comparison, 3/5/10 choices | Model estimates, not hiring decisions |
+| Reskilling | `/pathway`, priorities, hours/weeks, free filter and resource provenance | No live courses added without verifying exact pages; “No vetted resource yet” |
+| SDGs | 17 goals, every role/skill tagged, focus bonus and contribution panels | Team mapping, not UN classification or measured impact |
+| Uncertainty | Slow/Normal/Fast table, ranges, confidence inputs | Team assumptions, not predictions |
+
+`docs/domain1-report.md` records validation and source limitations. The Vercel application works with committed snapshots and no FastAPI deployment. Optional FastAPI deployments must apply the new migrations before restarting. Configure the Supabase email template in `supabase/templates/magic-link-code.html` to send the six-digit sign-in code; UI changes cannot update project email templates without project-management access.

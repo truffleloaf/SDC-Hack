@@ -1,4 +1,5 @@
 'use client'
+import { HumanChoice } from '@/components/pivott/human-choice'
 
 import { SdgContribution } from '@/components/pivott/sdg-contribution'
 
@@ -183,6 +184,7 @@ export default function PathwayPage() {
         </PLink>
       </MobileActionBar>
       <SdgContribution roleId={role.id} skillIds={steps.map(s=>s.skillId)} />
+      <HumanChoice />
     </div>
   )
 }

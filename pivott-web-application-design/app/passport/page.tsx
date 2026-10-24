@@ -1,4 +1,5 @@
 'use client'
+import { HumanChoice } from '@/components/pivott/human-choice'
 import { ScenarioRange } from '@/components/routes/scenario-comparison'
 
 import { SdgContribution } from '@/components/pivott/sdg-contribution'
@@ -126,6 +127,7 @@ export default function PassportPage() {
       </div>
       <ScenarioRange row={comparisons.find(r=>r.roleId===targetId)} />
       <SdgContribution roleId={target.id} skillIds={[...steps.map(s=>s.skillId),...state.completedSteps.filter(id=>id.startsWith(targetId+':')).map(id=>id.split(':')[1])]} />
+      <HumanChoice />
     </div>
   )
 }

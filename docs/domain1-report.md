@@ -41,3 +41,9 @@ Validation includes a new cross-language Slow golden, API Slow checks, compariso
 The landing page focuses on clerical/finance workers in Malaysia and gives fresh graduates a separate entry point. Aisyah is an explicitly synthetic bookkeeping profile using live catalogue IDs; it remains separate from personal work and never syncs to an account. The sample walkthrough is profile→radar→route. Local résumé privacy and synthetic-only demo guidance are visible. `/method` explains the sources, dates, deterministic scoring, geographic limits and hardest risk/fallback.
 
 Job browsing supports keyword, role, location, remote and sorting filters. The refresh exports up to 100 genuine public postings per matched role. The old repository snapshot contains no posting records, only aggregate counts, so this environment cannot populate the listing page without the blocked feed; the page says so. Route count (3/5/10), SDG priorities, ratings, editable tasks, work/study hours and resource filters provide customization without introducing recruitment or payment features.
+
+## S7: human choice and fairness
+
+Routes, pathway and passport state that suggestions inform the user's own decision and do not make hiring decisions. The method explains excluded demographic inputs and the remaining limits of source/model bias. Regression tests check the scoring request schema, name/demographic invariance in TS and FastAPI, and a fully synthetic résumé fixture whose demographic fields never enter saved profile state. These checks do not claim population-level fairness.
+
+S8 is intentionally deferred: verified live trend history and course resources remain dependent on network/source access. No unreviewed Malay translation or employer view was added.

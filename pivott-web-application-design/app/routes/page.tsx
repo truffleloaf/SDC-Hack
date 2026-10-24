@@ -1,4 +1,5 @@
 'use client'
+import { HumanChoice } from '@/components/pivott/human-choice'
 import { ScenarioTable } from '@/components/routes/scenario-comparison'
 
 import { SyncNote } from '@/components/account/sync-note'
@@ -223,6 +224,7 @@ function RouteFan({ current, count }: { current: string; count: number }) {
         <span className="text-xs font-medium">{current}</span>
         <span className="font-sans text-xs font-medium text-faint">now</span>
       </div>
+      <HumanChoice />
     </div>
   )
 }
