@@ -12,7 +12,7 @@ import { PageIntro } from '@/components/pivott/route-stepper'
 import { NeedsProfile, PageSkeleton } from '@/components/pivott/states'
 import { ValueSlider } from '@/components/pivott/value-slider'
 import { Switch } from '@/components/ui/switch'
-import { roleById } from '@/lib/data/seed'
+import { hasDemoPersona, roleById } from '@/lib/data/seed'
 import { buildPathway } from '@/lib/engine'
 import { buildIcs, downloadFile } from '@/lib/ics'
 import { displayName, greetingName, possessive, setState, useAnalysis, useAppState } from '@/lib/store'
@@ -31,7 +31,7 @@ export default function PathwayPage() {
     targetRoleId: targetId,
     levels: state.skills,
     hoursPerWeek: state.hoursPerWeek,
-    freeOnly: state.freeOnly,
+    freeOnly: hasDemoPersona ? state.freeOnly : false,
   })
   const doneIds = new Set(state.completedSteps.filter((id) => steps.some((s) => s.id === id)))
   const progress = steps.length ? doneIds.size / steps.length : 0
@@ -139,13 +139,19 @@ export default function PathwayPage() {
               </p>
             </div>
 
-            <label className="flex min-h-11 cursor-pointer items-center justify-between gap-3 border-t border-border pt-5">
-              <span className="flex flex-col">
-                <span className="text-sm font-medium">Free resources only</span>
-                <span className="text-xs text-muted-foreground">Swap paid courses for free ones</span>
-              </span>
-              <Switch checked={state.freeOnly} onCheckedChange={(v) => setState({ freeOnly: v })} />
-            </label>
+            {hasDemoPersona ? (
+              <label className="flex min-h-11 cursor-pointer items-center justify-between gap-3 border-t border-border pt-5">
+                <span className="flex flex-col">
+                  <span className="text-sm font-medium">Free resources only</span>
+                  <span className="text-xs text-muted-foreground">Swap paid courses for free ones</span>
+                </span>
+                <Switch checked={state.freeOnly} onCheckedChange={(v) => setState({ freeOnly: v })} />
+              </label>
+            ) : (
+              <p className="border-t border-border pt-5 text-xs leading-relaxed text-muted-foreground">
+                Live catalogue: study hours are estimated from O*NET task importance. Curated course links are not available yet, so the free/paid filter is hidden.
+              </p>
+            )}
 
             <div className="flex flex-col gap-3 border-t border-border pt-5">
               <PButton variant="secondary" onClick={exportIcs} disabled={!steps.length}>
