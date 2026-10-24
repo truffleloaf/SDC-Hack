@@ -1,5 +1,7 @@
 import {describe,it,expect} from 'vitest'
-import {filterJobs,type PublicJob} from './jobs'
+import {filterJobs,parsePublicJobs,type PublicJob} from './jobs'
 const rows:PublicJob[]=[{id:'fixture-1',roleId:'role-a',title:'Synthetic test role A',company:'Fixture B',location:'Berlin',url:'https://example.invalid/a',postedAt:'2026-10-23',remote:true,tags:['Python']},{id:'fixture-2',roleId:'role-b',title:'Synthetic test role B',company:'Fixture A',location:'Munich',url:'https://example.invalid/b',postedAt:'2026-10-21',remote:false,tags:[]}]
 const all={query:'',role:'',location:'',remote:false,sort:'newest' as const}
 describe('public listing filters',()=>{it('combines keyword role location and remote filters',()=>{expect(filterJobs(rows,{...all,query:'python',role:'role-a',location:'ber',remote:true}).map(j=>j.id)).toEqual(['fixture-1']);expect(filterJobs(rows,{...all,query:'python',role:'role-b'})).toEqual([])});it('sorts and handles empty feeds honestly',()=>{expect(filterJobs(rows,{...all,sort:'company'})[0].company).toBe('Fixture A');expect(filterJobs([],all)).toEqual([])})})
+
+it('accepts only actual source rows with a date, safe URL and matched title',()=>{const row={slug:'fixture',title:'Synthetic analyst',url:'https://example.invalid/job',created_at:'2026-10-20',tags:[]};const aliases={'role-a':['analyst']};expect(parsePublicJobs([{data:[row,row]}],aliases)).toHaveLength(1);for(const bad of [{...row,created_at:null},{...row,url:'javascript:alert(1)'},{...row,title:'unmatched'}])expect(parsePublicJobs([{data:[bad]}],aliases)).toEqual([]);expect(()=>parsePublicJobs([{}],aliases)).toThrow()})

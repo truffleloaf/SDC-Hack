@@ -58,3 +58,9 @@ Supabase 不自动回滚。每个 migration 在 PR 描述里写清楚：
 - `202610230045_job_postings.sql`：live 在招职位表（demo 为空）。
 - `202610231200_profiles.sql`：登录用户的 `profiles`（1 行 / `auth.users` 用户）+ 4 条 owner RLS policy + `authenticated` grant + `updated_at` trigger。依赖 Supabase 的 `auth` schema，跑完共 14 张表。
 - 新结构变更仍按上面的规则新增 migration；`schema.sql` 只保存建库基线，全新库也要在它之后跑完本目录 migration，才能和已部署库一致。
+
+## Domain 1 upgrade (2026-10-24)
+
+Apply `202610240500_skill_sdgs.sql`, `202610240510_resource_provenance.sql`, then `202610240520_domain1_constraints.sql` before restarting the optional FastAPI service. These add skill tags/resource provenance, allow all 17 goals, Slow and labelled assumptions, and populate the new product constants/canonical skill tags without deleting user profiles. The public JSON-profile sync used by Next.js is a separate migration under the repository-root `supabase/` directory.
+
+Run `PGLITE_MODULE=/path/to/@electric-sql/pglite node scripts/test-backend-schema.mjs` from the repository root for the isolated PostgreSQL check; it never connects to a live project.

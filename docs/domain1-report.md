@@ -50,8 +50,10 @@ S8 is intentionally deferred: verified live trend history and course resources r
 
 ## Final integration verification
 
-- 122 frontend tests, 139 backend tests, type/copy lint and production build pass. Generated seed/golden fixtures are current.
+- 123 frontend tests, 139 backend tests, type/copy lint and production build pass. Generated seed/golden fixtures are current.
 - Live production browser checks: 36 page/width/theme combinations (375/1280, light/dark), Axe WCAG 2A/AA and 2.1AA, no horizontal page overflow or browser exceptions. Sample profile, SDG focus, 3/5/10 route control, baseline toggle and listing filters were exercised. Screenshots were inspected.
 - An isolated PostgreSQL test executes the schema and migrations, verifies all-goal/Slow/assumption support, and rejects invalid goal IDs. No live database was changed.
 - Malformed feed dates are skipped rather than replaced with today; unsafe listing URLs are skipped. Refresh recovers prior observation history from the data branch before fetching, so baseline coverage can accumulate across weekly runs.
 - The source-access and email-template boundaries above remain. The site has not been claimed deployed or tested against live SMTP.
+
+The listing page also supports a user-triggered runtime fetch of five public board pages through the same-origin API. No profile data is sent. Successful public rows replace the in-memory listing view; failed requests preserve it and show an error. Parser tests and browser fixtures cover deduplication, source dates/URLs, successful refresh and failure retention. Real feed retrieval remains blocked in this development environment; no live-posting count is claimed.

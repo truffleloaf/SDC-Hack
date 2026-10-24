@@ -1,0 +1,83 @@
+{
+  "bookkeeping-clerk": [
+    "buchhalter",
+    "buchhaltung",
+    "bilanzbuchhaltung",
+    "accounts payable",
+    "accounts receivable",
+    "bookkeeper",
+    "accounting clerk",
+    "finance clerk"
+  ],
+  "executive-assistant": [
+    "executive assistant",
+    "assistenz der geschaeftsfuehrung",
+    "vorstandsassistenz",
+    "teamassistenz",
+    "office manager",
+    "management assistant"
+  ],
+  "customer-service-rep": [
+    "customer service",
+    "kundenservice",
+    "kundenbetreuung",
+    "customer support",
+    "call center",
+    "callcenter",
+    "kundenberater"
+  ],
+  "accountant": [
+    "accountant",
+    "bilanzbuchhalter",
+    "steuerfachangestellte",
+    "steuerfachangestellter",
+    "wirtschaftspruefer",
+    "auditor"
+  ],
+  "budget-analyst": [
+    "budget analyst",
+    "controller",
+    "controlling",
+    "finanzcontroller",
+    "planungscontroller"
+  ],
+  "market-research-analyst": [
+    "market research",
+    "marketing analyst",
+    "market analyst",
+    "marketing specialist",
+    "marketingreferent",
+    "marktforschung"
+  ],
+  "bi-analyst": [
+    "business intelligence",
+    "bi analyst",
+    "business analyst",
+    "data analyst",
+    "datenanalyst",
+    "reporting analyst"
+  ],
+  "data-scientist": [
+    "data scientist",
+    "datenwissenschaftler",
+    "machine learning",
+    "analytics engineer",
+    "statistician",
+    "statistiker"
+  ],
+  "project-manager": [
+    "project manager",
+    "projektmanager",
+    "projektleitung",
+    "project lead",
+    "it-projektleiter"
+  ],
+  "operations-manager": [
+    "operations manager",
+    "betriebsleiter",
+    "niederlassungsleiter",
+    "general manager",
+    "standortleiter",
+    "bereichsleiter"
+  ]
+}

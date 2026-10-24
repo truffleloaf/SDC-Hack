@@ -23,7 +23,17 @@ const origin=process.env.PIVOTT_TEST_ORIGIN || 'http://localhost:3002'
     await page.getByLabel(/9\. Industry/).check();await page.getByText(/SDG focus applied/).waitFor()
     await page.getByLabel('Ignore trend signals').check();await page.getByRole('heading',{name:'Slow / Normal / Fast'}).waitFor()
    }
-   if(route==='/jobs'){await page.getByLabel('Title, company or keyword').fill('sample test');assert((await page.locator('body').innerText()).includes('No posting records'))}
+   if(route==='/jobs'){
+    await page.getByLabel('Title, company or keyword').fill('sample test');assert((await page.locator('body').innerText()).includes('No posting records'))
+    await page.getByRole('button',{name:'Reset filters'}).click()
+    const fixture={id:'synthetic-browser-fixture',roleId:'accountant',title:'Synthetic browser listing',company:'Fixture company',location:'Fixture location',url:'https://example.invalid/job',postedAt:'2026-10-24',remote:true,tags:[]}
+    await page.route('**/api/live/jobs?refresh=1',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({asOf:'2026-10-24',postings:[fixture]})}))
+    await page.getByRole('button',{name:'Get latest public listings'}).click();await page.getByRole('link',{name:fixture.title}).waitFor()
+    await page.unroute('**/api/live/jobs?refresh=1')
+    await page.route('**/api/live/jobs?refresh=1',route=>route.fulfill({status:503,contentType:'application/json',body:'{}'}))
+    await page.getByRole('button',{name:'Get latest public listings'}).click();await page.getByRole('alert').waitFor()
+    assert.equal(await page.getByRole('link',{name:fixture.title}).count(),1)
+   }
    await page.screenshot({path:`/tmp/pivott-domain1-screenshots/${route.slice(1)||'home'}-${width}-${theme}.png`,fullPage:true})
    console.log(`PASS ${route} ${width}px ${theme}`)
   }
