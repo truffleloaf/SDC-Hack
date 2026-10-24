@@ -40,7 +40,7 @@ const nodes: HeroNode[] = scoreTasks(
 }))
 
 const skills = [
-  { label: 'Controls', x: 378, y: 200 },
+  { label: 'Controls', x: 365, y: 227 },
   { label: 'Spreadsheets', x: 170, y: 196 },
   { label: 'Stakeholders', x: 236, y: 330 },
 ]

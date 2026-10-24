@@ -129,7 +129,7 @@ const session = {access_token:token,refresh_token:'synthetic-refresh',expires_at
  await page.getByRole('checkbox',{name:/ERP systems/}).click()
  await page.getByRole('button',{name:'Not yet',exact:true}).click();assert.equal((await learning.device()).skills.erp,3)
  await page.getByRole('checkbox',{name:/ERP systems/}).click();await page.getByRole('checkbox',{name:/ERP systems/}).click()
- await page.getByRole('button',{name:'Yes',exact:true}).click();assert.equal((await learning.device()).skills.erp,4)
+ await page.getByRole('button',{name:'Yes',exact:true}).click();await page.waitForFunction(()=>JSON.parse(localStorage.getItem('pivott:v1')).skills.erp===4);assert.equal((await learning.device()).skills.erp,4)
  await learning.done();console.log('PASS learning completion never changes a rating until accepted')
  const conflict=await fixture({account:{...cloud,profile}});page=conflict.page;state=conflict.state
  await page.goto(`${origin}/workspace`);await page.getByRole('status').filter({hasText:/^Saved$/}).waitFor()

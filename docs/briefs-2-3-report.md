@@ -203,3 +203,11 @@ Added Sales Operations Coordinator and HR Operations Coordinator with eight samp
 Method was implemented in T4 and linked from Map/footer/passport. The fake QR was already absent in the base; T2 removed the remaining reference number. Mobile details already used a sheet; D4 enlarged targets. No duplicates of those tools were added.
 
 D6 cleanup also removed the unused passport reference-code field and replaced remaining travel/strength labels with Rated skills, Target role and Learning steps. Existing passport exports remain available.
+
+## Part D and pre-integration verification
+
+All D changes passed on the brief's original backend: frontend **99 passed**, backend **69 passed**, TypeScript, production build, copy lint, freshness and local PostgreSQL policy checks passed. Browser matrix: 48 page/theme/width combinations plus four List views; D interaction flows at 375/1280px in light/dark; résumé extraction/error/privacy regression; email-code/Google, sync, conflicts, backup/undo, deletion and offline fixture tests all passed. Screenshots were manually reviewed; adjusted one colliding hero label. Role changes now render immediately so dialog focus returns to the new own-task control. Skill legends retain headings for navigation.
+
+Latest user steering asks for authentication numbers instead of email links. The six-digit email-code flow is implemented and tested; `supabase/templates/magic-link-code.html` is a link-free template for the owner to apply. Live SMTP/provider configuration remains unverified.
+
+Before publishing, fetched GitHub and found main advanced from `20bf696` to `7b5f60b` through PRs #8–#14, replacing the backend and introducing a live catalogue/committed snapshot. The preceding counts describe the tested original baseline. Integration with the new backend/live catalogue is now required so this work does not revert those updates. Final verification will be recorded separately.

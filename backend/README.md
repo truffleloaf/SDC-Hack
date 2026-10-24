@@ -13,7 +13,7 @@ frontend can point its API base URL at this service without UI changes.
 - Versioned seed dataset exported from
   [`pivott-web-application-design/lib/data/seed.ts`](../pivott-web-application-design/lib/data/seed.ts)
 - 10 `/api` endpoints across 8 route groups; Swagger at `/docs`
-- **64 tests**, including golden-output parity with the frontend engine
+- **Engine and API tests**, including golden-output parity with the frontend engine
 - Stateless by design (same as the frontend API): no login, no database, no secrets
 
 ## Data
@@ -134,7 +134,7 @@ pytest -q
 ```
 
 ```text
-64 passed
+69 passed
 ```
 
 [`tests/golden.json`](tests/golden.json) is generated from the frontend

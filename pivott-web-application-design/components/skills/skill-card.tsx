@@ -8,7 +8,7 @@ const examples = ['I have not used this skill yet.', 'I can follow a worked exam
 export function SkillCard({ skill, level, onChange }: { skill: Skill; level: number | undefined; suggested: boolean; onChange: (value: number | undefined) => void }) {
   const id = useId()
   return <fieldset className="min-w-0 border-b border-border py-5" aria-describedby={`${id}-example ${id}-help`}>
-    <legend className="pt-5 font-medium">{skill.name}</legend>
+    <legend className="pt-5"><h3 className="font-medium">{skill.name}</h3></legend>
     <p id={`${id}-example`} className="mt-2 text-xs text-muted-foreground">For example: {skill.deliverable}.</p>
     <div className="mt-4 flex flex-wrap gap-2">{[0, 1, 2, 3, 4, undefined].map((value) => <label key={value ?? 'unknown'} className="relative cursor-pointer">
       <input className="peer sr-only" type="radio" name={id} value={value ?? 'unknown'} checked={level === value} onChange={() => onChange(value)} aria-label={value === undefined ? 'Not sure' : `${value} · ${levels[value]}`} />

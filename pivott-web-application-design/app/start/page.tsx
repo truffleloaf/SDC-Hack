@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { UnlistedRoleDialog } from '@/components/start/unlisted-role-dialog'
 import { ArrowRight } from 'lucide-react'
-import { AnimatePresence, motion } from 'motion/react'
 import { MobileActionBar } from '@/components/pivott/mobile-action-bar'
 import { PLink } from '@/components/pivott/p-button'
 import { PageIntro } from '@/components/pivott/route-stepper'
@@ -54,14 +53,10 @@ export default function StartPage() {
           <RoleSelector value={state.roleId} onSelect={selectRole} onUnlisted={() => setUnlisted(true)} resetKey={searchReset} />
           <UnlistedRoleDialog open={unlisted} onOpenChange={setUnlisted} onUseOwnTasks={() => selectRole(customRole.id)} onReference={() => setSearchReset((value) => value + 1)} />
 
-          <AnimatePresence mode="wait">
+          <>
             {role && (
-              <motion.section
+              <section
                 key={role.id}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.3 }}
                 aria-labelledby="tasks-title"
                 className="flex flex-col gap-4"
               >
@@ -72,9 +67,9 @@ export default function StartPage() {
                   <span className="font-mono text-xs text-muted-foreground">{role.family}</span>
                 </div>
                 <TaskPicker state={state} />
-              </motion.section>
+              </section>
             )}
-          </AnimatePresence>
+          </>
         </div>
 
         {role && (
