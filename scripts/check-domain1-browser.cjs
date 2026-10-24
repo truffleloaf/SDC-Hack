@@ -16,6 +16,7 @@ const origin=process.env.PIVOTT_TEST_ORIGIN || 'http://localhost:3002'
   for(const route of ['/','/start','/map','/routes','/pathway','/passport','/signals','/jobs','/method']){
    await page.goto(origin+route);await page.getByRole('heading',{level:1}).waitFor();await page.evaluate(()=>document.fonts.ready)
    assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),`Overflow ${route} ${width}/${theme}`)
+   await page.waitForFunction(()=>[...document.querySelectorAll('article')].every(a=>{for(let el=a;el&&el!==document.body;el=el.parentElement)if(Number(getComputedStyle(el).opacity)<.999)return false;return true}))
    const audit=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();assert.deepEqual(audit.violations.map(v=>({id:v.id,nodes:v.nodes.map(n=>n.target)})),[],`Axe ${route} ${width}/${theme}`)
    if(route==='/routes'){
     await page.getByLabel('Show routes').selectOption('5');await page.waitForFunction(()=>document.querySelectorAll('article[aria-labelledby^="route-"]').length===5)

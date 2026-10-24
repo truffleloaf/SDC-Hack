@@ -18,6 +18,12 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install -r backend/requirements.txt
+      - name: Recover prior public observation history
+        run: |
+          if git ls-remote --exit-code --heads origin data/live-snapshot; then
+            git fetch origin data/live-snapshot:refs/remotes/origin/data/live-snapshot
+            git checkout origin/data/live-snapshot -- backend/data
+          fi
       - name: Fetch and validate public sources before writing outputs
         working-directory: backend
         env:

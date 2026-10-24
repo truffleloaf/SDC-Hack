@@ -23,3 +23,11 @@ def test_thin_single_and_equal_windows():
 def test_boundary_future_and_duplicates():
     rows=fixture()+[dict(id='future',posted_at='2026-10-25',role_id='analyst',title='Python')]
     assert compute(rows+rows)[1]['totals']==dict(recent=20,baseline=20)
+
+def test_feed_never_invents_publication_dates_or_unsafe_urls():
+    from app.live.jobs import postings_from_arbeitnow
+    base=dict(slug='fixture',title='Synthetic fixture',url='https://example.invalid/job',created_at='2026-10-24')
+    assert len(postings_from_arbeitnow([dict(data=[base])]))==1
+    for raw in [None,'not-a-date',float('inf')]:
+        assert postings_from_arbeitnow([dict(data=[dict(base,created_at=raw)])])==[]
+    assert postings_from_arbeitnow([dict(data=[dict(base,url='javascript:alert(1)')])])==[]

@@ -47,3 +47,11 @@ Job browsing supports keyword, role, location, remote and sorting filters. The r
 Routes, pathway and passport state that suggestions inform the user's own decision and do not make hiring decisions. The method explains excluded demographic inputs and the remaining limits of source/model bias. Regression tests check the scoring request schema, name/demographic invariance in TS and FastAPI, and a fully synthetic résumé fixture whose demographic fields never enter saved profile state. These checks do not claim population-level fairness.
 
 S8 is intentionally deferred: verified live trend history and course resources remain dependent on network/source access. No unreviewed Malay translation or employer view was added.
+
+## Final integration verification
+
+- 122 frontend tests, 139 backend tests, type/copy lint and production build pass. Generated seed/golden fixtures are current.
+- Live production browser checks: 36 page/width/theme combinations (375/1280, light/dark), Axe WCAG 2A/AA and 2.1AA, no horizontal page overflow or browser exceptions. Sample profile, SDG focus, 3/5/10 route control, baseline toggle and listing filters were exercised. Screenshots were inspected.
+- An isolated PostgreSQL test executes the schema and migrations, verifies all-goal/Slow/assumption support, and rejects invalid goal IDs. No live database was changed.
+- Malformed feed dates are skipped rather than replaced with today; unsafe listing URLs are skipped. Refresh recovers prior observation history from the data branch before fetching, so baseline coverage can accumulate across weekly runs.
+- The source-access and email-template boundaries above remain. The site has not been claimed deployed or tested against live SMTP.
