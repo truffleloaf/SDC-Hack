@@ -11,7 +11,7 @@ import { PageIntro } from '@/components/pivott/route-stepper'
 import { SegmentedControl } from '@/components/pivott/segmented-control'
 import { EmptyState, PageSkeleton } from '@/components/pivott/states'
 import { AdminSheet } from '@/components/signals/admin-sheet'
-import { DATA_AS_OF, signals as seedSignals, taskById } from '@/lib/data/seed'
+import { DATA_AS_OF, hasDemoPersona, signals as seedSignals, taskById } from '@/lib/data/seed'
 import { ageDays, recency, roleExposure } from '@/lib/engine'
 import { activeSignals, computeScored, setState, useAppState } from '@/lib/store'
 import { cn } from '@/lib/utils'
@@ -28,10 +28,31 @@ export default function SignalsPage() {
   const [adminOpen, setAdminOpen] = useState(false)
   const [computing, setComputing] = useState(false)
 
+  // The live snapshot intentionally has no curated signals yet. Render this
+  // before hydration so the server HTML and the first client paint agree.
+  if (!hasDemoPersona && seedSignals.length === 0 && state.customSignals.length === 0) {
+    return (
+      <div className="mx-auto w-full max-w-[1200px] px-5 pb-20 pt-10">
+        <PageIntro eyebrow="Signals" title="What’s changing around your work?">
+          Dated evidence that nudges task exposure up or down.
+        </PageIntro>
+        <EmptyState
+          className="mt-10"
+          title="No curated live signals yet"
+          description="The live catalogue currently includes O*NET roles, tasks, skills and real job postings. Dated signals are still a demo-only feature."
+        />
+        <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+          Switch to the demo catalogue to explore the signal timeline, or add your own signals locally from the demo workspace.
+        </p>
+      </div>
+    )
+  }
+
   if (!hydrated) return <PageSkeleton />
 
   const pending = state.customSignals.filter((s) => !state.appliedSignalIds.includes(s.id))
   const all = [...seedSignals, ...state.customSignals].sort((a, b) => b.date.localeCompare(a.date))
+
   const mine = new Set(state.selections.map((s) => s.taskId))
   const filtered = all.filter(
     (s) =>

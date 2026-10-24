@@ -96,15 +96,17 @@ export function SiteHeader() {
           <div className="ml-auto flex min-w-0 flex-wrap items-center justify-end gap-1">
             <Link href="/workspace" className={cn(pButton({ variant: 'ghost', size: 'sm' }), 'hidden sm:inline-flex')}>Your work</Link>
             {account.user ? <DropdownMenu><DropdownMenuTrigger className={pButton({ variant: 'ghost', size: 'sm' })}>Account</DropdownMenuTrigger><DropdownMenuContent align="end"><DropdownMenuItem onClick={() => router.push('/account')}>Account settings</DropdownMenuItem><DropdownMenuItem onClick={() => router.push('/workspace')}>Your plan</DropdownMenuItem><DropdownMenuItem onClick={() => void account.signOut()}>Sign out · Keep device work</DropdownMenuItem></DropdownMenuContent></DropdownMenu> : <Link href={`/signin?next=${encodeURIComponent(pathname)}`} className={pButton({ variant: 'ghost', size: 'sm' })}>Sign in</Link>}
-            <Link
-              href="/signals"
-              className={cn(
-                pButton({ variant: 'ghost', size: 'sm' }),
-                pathname === '/signals' && 'bg-subtle text-foreground',
-              )}
-            >
-              Signals
-            </Link>
+            {hasDemoPersona && (
+              <Link
+                href="/signals"
+                className={cn(
+                  pButton({ variant: 'ghost', size: 'sm' }),
+                  pathname === '/signals' && 'bg-subtle text-foreground',
+                )}
+              >
+                Signals
+              </Link>
+            )}
             <span className="hidden sm:contents"><ProfileButton onClick={() => setNameOpen(true)} /></span>
             <ThemeToggle />
             <DropdownMenu>
