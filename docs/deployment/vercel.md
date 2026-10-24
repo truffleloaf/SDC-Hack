@@ -6,11 +6,11 @@ set to the repository root (leave it blank in the dashboard). The root
 
 | Service | Framework | Public paths |
 | --- | --- | --- |
-| `pivott-web-application-design` | Next.js | All paths, including `/` and `/api/*` |
+| `web` | Next.js | All paths, including `/` and `/api/*` |
 
 There is no FastAPI service in this deployment. `vercel.json` only has a
 catch-all rewrite to the Next service, so `/api/*` is handled by the Route
-Handlers in `pivott-web-application-design/app/api/*`.
+Handlers in `web/app/api/*`.
 
 ## Live snapshot, not a second backend
 
@@ -18,8 +18,8 @@ The root layout and every Route Handler call `getCatalog()`. When
 `PIVOTT_API_BASE` is unset (the Vercel case), it applies the committed snapshot:
 
 ```text
-pivott-web-application-design/lib/data/live-seed.json
-pivott-web-application-design/lib/data/live-meta.json
+web/lib/data/live-seed.json
+web/lib/data/live-meta.json
 ```
 
 This is the code-only deployment path: no private Vercel environment variables,
@@ -50,7 +50,7 @@ that setting is in the Supabase dashboard, not in this repository.
 
 ## Local development
 
-Use Node.js 24 and pnpm 12.3.4. From `pivott-web-application-design`:
+Use Node.js 24 and pnpm 12.3.4. From `web`:
 
 ```bash
 pnpm install --frozen-lockfile
@@ -68,7 +68,7 @@ deployed separately, but it is not part of the Vercel service in `vercel.json`.
 ## Checks
 
 ```bash
-cd pivott-web-application-design
+cd web
 pnpm test
 pnpm exec tsc --noEmit --incremental false
 pnpm build

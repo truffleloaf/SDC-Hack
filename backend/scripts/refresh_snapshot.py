@@ -22,7 +22,7 @@ if older:
     current=meta['trends']
     if previous['asOf']!=current['asOf']:
         current['sincePrevious']={'asOf':previous['asOf'],'counts':{k:{w:v[w]-previous.get('counts',{}).get(k,{}).get(w,0) for w in ('recent','baseline')} for k,v in current['counts'].items()}}
-outputs={root/'pivott-web-application-design/lib/data/job-aliases.json':{s.slug:list(s.aliases) for s in __import__('app.live.roles',fromlist=['ROLES']).ROLES},root/'backend/data/postings.json':result.catalog.observations,root/'pivott-web-application-design/lib/data/live-seed.json':seed,root/'pivott-web-application-design/lib/data/live-meta.json':meta,root/'pivott-web-application-design/lib/data/jobs.live.json':postings,snapshots/f'{result.as_of}.json':meta['trends']}
+outputs={root/'web/lib/data/job-aliases.json':{s.slug:list(s.aliases) for s in __import__('app.live.roles',fromlist=['ROLES']).ROLES},root/'backend/data/postings.json':result.catalog.observations,root/'web/lib/data/live-seed.json':seed,root/'web/lib/data/live-meta.json':meta,root/'web/lib/data/jobs.live.json':postings,snapshots/f'{result.as_of}.json':meta['trends']}
 # Serialize every payload before replacing any output. A source/validation failure changes nothing.
 encoded={p:json.dumps(value,default=str,ensure_ascii=False,indent=2)+'\n' for p,value in outputs.items()}
 for p,text in encoded.items():

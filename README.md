@@ -17,12 +17,12 @@ Pivott helps clerical and finance workers in Malaysia examine the tasks in their
 
 | Requirement | In the app | In the repository | Status and limit |
 | --- | --- | --- | --- |
-| Skills intake | [`/start`](https://pivottstudio.vercel.app/start), [`/skills`](https://pivottstudio.vercel.app/skills) | [`components/start`](pivott-web-application-design/components/start), [`lib/resume`](pivott-web-application-design/lib/resume) | Manual and local PDF/DOCX intake; demo profiles are synthetic and no real CV is stored. |
-| AI trend signals | [`/signals`](https://pivottstudio.vercel.app/signals) | [`app/signals`](pivott-web-application-design/app/signals), [`backend/app/live/trends.py`](backend/app/live/trends.py) | Dated public sources and explicit assumptions; the current history is too short for a supported trend signal. |
-| Future-role matching | [`/routes`](https://pivottstudio.vercel.app/routes) | [`lib/engine.ts`](pivott-web-application-design/lib/engine.ts) | Explainable fit bounds and scenarios; estimates do not make hiring decisions. |
-| Reskilling pathway | [`/pathway`](https://pivottstudio.vercel.app/pathway) | [`app/pathway`](pivott-web-application-design/app/pathway), [`components/pathway`](pivott-web-application-design/components/pathway) | Rated gaps produce steps and estimated hours; an empty resource catalogue is shown honestly. |
+| Skills intake | [`/start`](https://pivottstudio.vercel.app/start), [`/skills`](https://pivottstudio.vercel.app/skills) | [`components/start`](web/components/start), [`lib/resume`](web/lib/resume) | Manual and local PDF/DOCX intake; demo profiles are synthetic and no real CV is stored. |
+| AI trend signals | [`/signals`](https://pivottstudio.vercel.app/signals) | [`app/signals`](web/app/signals), [`backend/app/live/trends.py`](backend/app/live/trends.py) | Dated public sources and explicit assumptions; the current history is too short for a supported trend signal. |
+| Future-role matching | [`/routes`](https://pivottstudio.vercel.app/routes) | [`lib/engine.ts`](web/lib/engine.ts) | Explainable fit bounds and scenarios; estimates do not make hiring decisions. |
+| Reskilling pathway | [`/pathway`](https://pivottstudio.vercel.app/pathway) | [`app/pathway`](web/app/pathway), [`components/pathway`](web/components/pathway) | Rated gaps produce steps and estimated hours; an empty resource catalogue is shown honestly. |
 | SDG mapping | [`/routes`](https://pivottstudio.vercel.app/routes), [`/pathway`](https://pivottstudio.vercel.app/pathway) | [`backend/app/data/sdg-map.json`](backend/app/data/sdg-map.json), [`docs/sdg-mapping.md`](docs/sdg-mapping.md) | All 17 goals are available; mappings are team judgement, not an official UN classification or measured impact. |
-| Uncertainty | [`/map`](https://pivottstudio.vercel.app/map), [`/routes`](https://pivottstudio.vercel.app/routes) | [`lib/engine.ts`](pivott-web-application-design/lib/engine.ts), [`app/method`](pivott-web-application-design/app/method) | Slow, Normal and Fast scenarios expose assumptions; they are not forecasts. |
+| Uncertainty | [`/map`](https://pivottstudio.vercel.app/map), [`/routes`](https://pivottstudio.vercel.app/routes) | [`lib/engine.ts`](web/lib/engine.ts), [`app/method`](web/app/method) | Slow, Normal and Fast scenarios expose assumptions; they are not forecasts. |
 
 Pivott uses synthetic demo data and attributed public data. Recommendations link to their source where one exists. The app does not invent job listings, courses or statistics, and people remain responsible for career decisions. See the [Domain 1 verification record](docs/verification.md).
 
@@ -31,7 +31,7 @@ Pivott uses synthetic demo data and attributed public data. Recommendations link
 Install Node.js 24 and pnpm 12.3.4, then run these commands from the repository root:
 
 ```bash
-cd pivott-web-application-design
+cd web
 pnpm install --frozen-lockfile
 pnpm dev
 ```
@@ -56,7 +56,7 @@ On Windows, use `.venv\Scripts\python.exe`. See the [backend README](backend/REA
 Run from the repository root after installing the frontend and backend dependencies:
 
 ```bash
-(cd pivott-web-application-design && pnpm lint && pnpm test && pnpm build)
+(cd web && pnpm lint && pnpm test && pnpm build)
 (cd backend && PYTHONPATH=. .venv/bin/python -m pytest -q)
 node scripts/data/generate-data.mjs --check
 node scripts/checks/lint-copy.mjs
@@ -106,7 +106,7 @@ The built-in demo is separate: **8 roles, 39 tasks, 15 skills, 20 signals, 25 le
 
 | Path | Purpose |
 | --- | --- |
-| [`pivott-web-application-design/`](pivott-web-application-design) | Next.js web app, route handlers, deterministic engine and frontend tests |
+| [`web/`](web) | Next.js web app, route handlers, deterministic engine and frontend tests |
 | [`backend/`](backend) | Optional FastAPI service, importer, Python engine and backend tests |
 | [`docs/`](docs) | Product evidence, data notes, screenshots and verification records |
 | [`scripts/`](scripts) | Data generation, repository checks and browser verification |

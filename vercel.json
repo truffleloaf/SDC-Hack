@@ -1,8 +1,8 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "services": {
-    "pivott-web-application-design": {
-      "root": "pivott-web-application-design",
+    "web": {
+      "root": "web",
       "framework": "nextjs",
       "installCommand": "npx --yes pnpm@12.3.4 install --frozen-lockfile",
       "buildCommand": "npx --yes pnpm@12.3.4 build"
@@ -12,7 +12,7 @@
     {
       "source": "/(.*)",
       "destination": {
-        "service": "pivott-web-application-design"
+        "service": "web"
       }
     }
   ]

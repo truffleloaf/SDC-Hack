@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
     paths:
-      - "pivott-web-application-design/**"
+      - "web/**"
       - "backend/tests/golden.json"
       - "scripts/**"
       - "docs/**"
@@ -12,7 +12,7 @@ on:
       - ".github/workflows/frontend.yml"
   pull_request:
     paths:
-      - "pivott-web-application-design/**"
+      - "web/**"
       - "backend/tests/golden.json"
       - "scripts/**"
       - "docs/**"
@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: pivott-web-application-design
+        working-directory: web
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

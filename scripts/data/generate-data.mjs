@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url'
 import { loadFrontendModules } from './frontend-modules.mjs'
 
 const canonicalSdg = readFileSync(fileURLToPath(new URL('../../backend/app/data/sdg-map.json',import.meta.url)))
-const frontendSdgPath = fileURLToPath(new URL('../../pivott-web-application-design/lib/data/sdg-map.json',import.meta.url))
+const frontendSdgPath = fileURLToPath(new URL('../../web/lib/data/sdg-map.json',import.meta.url))
 if (process.argv.includes('--check')) {
   if (!readFileSync(frontendSdgPath).equals(canonicalSdg)) throw new Error('Generated SDG mapping is stale')
 } else writeFileSync(frontendSdgPath,canonicalSdg)

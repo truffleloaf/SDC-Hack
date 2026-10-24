@@ -1,6 +1,6 @@
 """Deterministic scoring engine.
 
-This is a Python port of ``pivott-web-application-design/lib/engine.ts``.
+This is a Python port of ``web/lib/engine.ts``.
 Every function keeps the same name, formula and output shape as the
 TypeScript version, so the FastAPI responses can be diffed against the
 frontend's Next.js API.
