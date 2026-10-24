@@ -23,19 +23,17 @@ This index gives judges, developers and project owners a direct path to every ma
 
 ## Backend documentation
 
-The [bilingual backend index](../backend/docs/README.md) is the complete entry point for FastAPI documentation.
+The [backend index](../backend/docs/README.md) is the complete entry point for FastAPI documentation.
 
 | Document | Description | Audience |
 |---|---|---|
 | [Backend README](../backend/README.md) | Setup, test commands and API summary, with an English introduction | Developer |
-| [Data model](../backend/docs/data-model.md) | Canonical backend entities, fields and constraints, in Chinese | Developer |
-| [API design](../backend/docs/api-design.md) | Canonical request and response contracts, in Chinese | Developer |
-| [Authentication](../backend/docs/auth.md) | Supabase JWT, personal-data endpoints and RLS, in Chinese | Developer, owner |
+| [Data model](../backend/docs/data-model.md) | Canonical backend entities, fields, and constraints | Developer |
+| [API design](../backend/docs/api-design.md) | Canonical request and response contracts | Developer |
+| [Authentication](../backend/docs/auth.md) | Supabase JWT, personal-data endpoints, and RLS | Developer, owner |
 | [Live data](../backend/docs/live-data.md) | O*NET and job-feed import behavior and limits | Developer |
-| [Architecture, English](../backend/docs/architecture.en.md) | English translation of the detailed backend architecture | Developer, judge |
-| [Architecture, Chinese](../backend/docs/architecture.md) | Source detailed backend architecture document | Developer |
-| [Demo script, English](../backend/docs/demo-script.en.md) | English translation of the three-minute demo script | Judge, presenter |
-| [Demo script, Chinese](../backend/docs/demo-script.md) | Source three-minute demo script | Judge, presenter |
+| [Architecture](../backend/docs/architecture.md) | Detailed backend architecture | Developer, judge |
+| [Demo script](../backend/docs/demo-script.md) | Three-minute walkthrough with checked figures | Judge, presenter |
 | [Backend deployment](../backend/docs/deploy.md) | Demo/live databases, environment variables and security | Developer, owner |
 | [Local PostgreSQL](../backend/docs/local-postgres.md) | Schema, migrations, RLS and seed verification | Developer |
 | [Auth client example](../backend/docs/examples/auth-client.ts) | Copyable TypeScript client for optional FastAPI auth endpoints | Developer |
@@ -50,7 +48,7 @@ These files explain earlier implementation decisions and are not maintained as c
 | [P0 readiness](history/2026-10-23-p0-readiness.md) | Historical hackathon-readiness implementation log | Developer |
 | [Personal workspace](history/2026-10-23-personal-workspace.md) | Historical personal workspace integration log | Developer |
 | [Interaction and account](history/2026-10-24-interaction-and-account-log.md) | Historical interaction, authentication and account work log | Developer |
-| [Backend project archive](../backend/docs/archive/PROJECTS.md) | Historical Chinese backend work plan and linked issue drafts | Developer |
+| [Backend project archive](../backend/docs/archive/project-plan.md) | Historical backend work plan and linked issue drafts | Developer |
 
 ## Screenshots
 
