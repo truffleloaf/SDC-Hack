@@ -442,9 +442,10 @@ export function applyCatalog(payload: CatalogPayload): boolean {
   sdgs = sdgMap.goals ?? DEMO_CATALOG.sdgs
   DATA_AS_OF = payload.asOf
   SEED_VERSION = payload.version
-  demoPersona = payload.demoPersona ?? DEMO_CATALOG.demoPersona
-  hasDemoPersona = payload.demoPersona != null
-  catalogSource = hasDemoPersona ? 'demo' : 'live'
+  const sampleRole = payload.roles.find(r=>r.id==='bookkeeping-clerk')
+  demoPersona = payload.demoPersona ?? (sampleRole ? {name:'Aisyah',roleId:sampleRole.id,skills:Object.fromEntries(sampleRole.requirements.map(r=>[r.skillId,2]))} : DEMO_CATALOG.demoPersona)
+  hasDemoPersona = payload.demoPersona != null || !!sampleRole
+  catalogSource = payload.demoPersona ? 'demo' : 'live'
   roleById = Object.fromEntries([...roles, customRole].map((r) => [r.id, r]))
   skillById = Object.fromEntries(skills.map((s) => [s.id, s]))
   taskById = Object.fromEntries(tasks.map((t) => [t.id, t]))

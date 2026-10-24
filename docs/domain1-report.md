@@ -35,3 +35,9 @@ Validation: all frontend/backend tests, lint and production build pass; added ch
 Slow (0.75×), Normal (1×) and Fast (1.25×) are explicit team assumptions. Routes display all three ranks/scores, overtaking notes, a min–max score range and “Estimates, not predictions.” Confidence opens to show rated requirements, relevant dated published signals within 180 days of the snapshot, scenario spread and the exact rules. Route cards, map overview and passport also show scenario uncertainty. The adoption preview includes Slow, and both APIs/account validation preserve it.
 
 Validation includes a new cross-language Slow golden, API Slow checks, comparison/rank consistency and identical TS/Python confidence boundary cases, plus the full lint/test/build suites.
+
+## S6: audience, sample and options
+
+The landing page focuses on clerical/finance workers in Malaysia and gives fresh graduates a separate entry point. Aisyah is an explicitly synthetic bookkeeping profile using live catalogue IDs; it remains separate from personal work and never syncs to an account. The sample walkthrough is profile→radar→route. Local résumé privacy and synthetic-only demo guidance are visible. `/method` explains the sources, dates, deterministic scoring, geographic limits and hardest risk/fallback.
+
+Job browsing supports keyword, role, location, remote and sorting filters. The refresh exports up to 100 genuine public postings per matched role. The old repository snapshot contains no posting records, only aggregate counts, so this environment cannot populate the listing page without the blocked feed; the page says so. Route count (3/5/10), SDG priorities, ratings, editable tasks, work/study hours and resource filters provide customization without introducing recruitment or payment features.

@@ -118,6 +118,10 @@ export function parseStored(raw: string): AppState {
     ...parsed,
     mode: demoMode ? 'demo' : 'personal',
     workHoursPerWeek: typeof parsed.workHoursPerWeek === 'number' && Number.isFinite(parsed.workHoursPerWeek) ? Math.max(1, Math.min(168, Math.round(parsed.workHoursPerWeek))) : 40,
+    sdgFocus: Array.isArray(parsed.sdgFocus) ? [...new Set(parsed.sdgFocus.filter(id=>Number.isInteger(id)&&id>=1&&id<=17))] : [],
+    routeLimit: [3,5,10].includes(parsed.routeLimit ?? 0) ? parsed.routeLimit! : 3,
+    ignoreTrendSignals: parsed.ignoreTrendSignals === true,
+    scenario: ['slow','normal','fast'].includes(parsed.scenario ?? '') ? parsed.scenario! : 'normal',
     name: sanitizeName(typeof parsed.name === 'string' ? parsed.name : ''),
     resumeSkillIds: Array.isArray(parsed.resumeSkillIds) ? [...new Set(parsed.resumeSkillIds)].filter((id) => catalogueSkills.some((skill) => skill.id === id)) : [],
   }
