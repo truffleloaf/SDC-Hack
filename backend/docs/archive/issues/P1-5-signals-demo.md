@@ -1,3 +1,5 @@
+Historical log. Not maintained.
+
 # [P1-5] 信号与演示控制：add signal + diff + reset
 
 **Labels:** `backend`, `p1`, `demo`  

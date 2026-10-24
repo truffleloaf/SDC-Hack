@@ -1,3 +1,5 @@
+Historical log. Not maintained.
+
 # Pivott 后端：工作包与推进方式
 
 > 更新时间：2026-10-22
@@ -60,7 +62,7 @@ Next.js demo (browser)  ──可选──▶  FastAPI (Pivott API)  ──可�
 - `app/seed_data.py` 已替换为 15 技能、20 信号、4 SDG、24 资源、31 任务。
 - `pytest -q` 中的 seed/health 测试覆盖计数与 Aisyah share。
 
-详见 [`docs/issues/P0-1-data-catalog.md`](docs/issues/P0-1-data-catalog.md)。
+详见 [`issues/P0-1-data-catalog.md`](issues/P0-1-data-catalog.md)。
 
 ### P0-2 评分引擎
 
@@ -79,7 +81,7 @@ Next.js demo (browser)  ──可选──▶  FastAPI (Pivott API)  ──可�
 - Python 引擎已复刻 TS 公式；`tests/test_formulas.py` + `test_api.py` 覆盖。
 - 黄金用例：Normal 0.619031、Fast 0.763981；Normal 第一名 Ops、Fast 第一名 FSA。
 
-详见 [`docs/issues/P0-2-scoring-engine.md`](docs/issues/P0-2-scoring-engine.md)。
+详见 [`issues/P0-2-scoring-engine.md`](issues/P0-2-scoring-engine.md)。
 
 ### P0-3 API 服务层
 
@@ -100,7 +102,7 @@ Next.js demo (browser)  ──可选──▶  FastAPI (Pivott API)  ──可�
 - 已实现 12 个 demo/演示控制方法；后续又加了 10 个 auth/个人数据方法（`/api/auth/*`、`/api/me/profile`），共 24 个。
 - 契约见 [`docs/api-design.md`](docs/api-design.md)；错误统一为 `{error}`。
 
-详见 [`docs/issues/P0-3-api-layer.md`](docs/issues/P0-3-api-layer.md)。
+详见 [`issues/P0-3-api-layer.md`](issues/P0-3-api-layer.md)。
 
 ### P1-4 路径与资源
 
@@ -116,7 +118,7 @@ Next.js demo (browser)  ──可选──▶  FastAPI (Pivott API)  ──可�
 - 资源全部有免费/付费标记；FSA 5 步、90 小时。
 - 勾选步骤后进度环和路线动画更新（前端配合）。
 
-详见 [`docs/issues/P1-4-pathway-resources.md`](docs/issues/P1-4-pathway-resources.md)。
+详见 [`issues/P1-4-pathway-resources.md`](issues/P1-4-pathway-resources.md)。
 
 ### P1-5 信号与演示控制
 
@@ -136,7 +138,7 @@ Next.js demo (browser)  ──可选──▶  FastAPI (Pivott API)  ──可�
 - 已实现：`GET/POST /api/signals`、`POST /api/analysis/recompute`、`POST /api/seed`。
 - 旧 `/api/admin/*` 已删除；diff 返回 `before / after / delta / changed`。
 
-详见 [`docs/issues/P1-5-signals-demo.md`](docs/issues/P1-5-signals-demo.md)。
+详见 [`issues/P1-5-signals-demo.md`](issues/P1-5-signals-demo.md)。
 
 ### P1-6 质量与交付
 
@@ -154,7 +156,7 @@ Next.js demo (browser)  ──可选──▶  FastAPI (Pivott API)  ──可�
 - 新环境按 README 能跑起来；README 不再写 16 skills / 15 signals / 17 SDGs / 18 resources。
 - CI 在 PR 上运行并通过。
 
-详见 [`docs/issues/P1-6-quality-delivery.md`](docs/issues/P1-6-quality-delivery.md)。
+详见 [`issues/P1-6-quality-delivery.md`](issues/P1-6-quality-delivery.md)。
 
 ## 3. 推荐：1 个后端仓库
 

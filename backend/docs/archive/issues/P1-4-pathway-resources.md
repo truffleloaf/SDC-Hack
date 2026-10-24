@@ -1,3 +1,5 @@
+Historical log. Not maintained.
+
 # [P1-4] 路径与资源：即时计算 / 可勾选 / 可导出
 
 **Labels:** `backend`, `p1`, `engine`  

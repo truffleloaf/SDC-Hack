@@ -1,3 +1,5 @@
+Historical log. Not maintained.
+
 # [P1-6] 质量与交付：tests + README + CI
 
 **Labels:** `backend`, `p1`, `docs`  

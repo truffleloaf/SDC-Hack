@@ -1,3 +1,5 @@
+Historical log. Not maintained.
+
 # [P0-2] 评分引擎：公式与单测
 
 **Labels:** `backend`, `p0`, `engine`  

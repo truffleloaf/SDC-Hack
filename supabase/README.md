@@ -1,5 +1,11 @@
 # Account sync setup
 
+## Which folder is which
+
+The root [`supabase/`](.) folder supports account sync for the Next.js web app. Its `user_profiles` table stores the complete browser profile as versioned JSON, and its template configures email sign-in codes.
+
+The [`backend/supabase/`](../backend/supabase/) folder defines the optional FastAPI database, including catalogue tables and a structured `profiles` table. The two profile migrations serve different applications and do not create the same table: the web migration creates `public.user_profiles`, while the backend migration creates `public.profiles`. Keep both folders and preserve applied migration filenames.
+
 Guest use and local résumé import need no Supabase connection. Sign-in controls appear only when the public connection settings are supplied. The app supports email/password accounts, password reset, email codes and Google, and syncs profile changes after sign-in. The sign-in dialog states that behaviour before authentication.
 
 ## Project owner checklist (required for live sign-in)

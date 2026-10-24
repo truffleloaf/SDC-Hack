@@ -283,7 +283,7 @@ supabase.auth.onAuthStateChange(async (_event, session) => {
 
 ### 5.2 方式 B：调后端登录桥（UI-only 前端）
 
-可以直接把 [`auth-client.ts`](auth-client.ts) 复制到前端（例如 `lib/auth-client.ts`），它封装了下面所有端点、token 存取和 404 处理：
+可以直接把 [`examples/auth-client.ts`](examples/auth-client.ts) 复制到前端（例如 `lib/auth-client.ts`），它封装了下面所有端点、token 存取和 404 处理：
 
 ```ts
 import { createPivottAuth } from "@/lib/auth-client";

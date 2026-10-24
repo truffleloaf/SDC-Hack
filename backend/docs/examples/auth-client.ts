@@ -1,7 +1,7 @@
 /**
  * Drop-in client for the Pivott sign-in bridge (way B in docs/auth.md).
  *
- * Copy this file into the frontend (for example `lib/auth-client.ts`) when the
+ * Copy this example into the frontend (for example `lib/auth-client.ts`) when the
  * sign-in UI is ready but adding @supabase/supabase-js is not. It uses the
  * backend's /api/auth/* and /api/me/profile endpoints; the access token never
  * needs to be built by hand.

@@ -1,3 +1,5 @@
+Historical log. Not maintained.
+
 # [P0-1] 数据与目录层：schema + seed
 
 **Labels:** `backend`, `p0`, `db`  

@@ -1,3 +1,5 @@
+Historical log. Not maintained.
+
 # [P0-3] API 服务层：demo 契约
 
 **Labels:** `backend`, `p0`, `api`  
