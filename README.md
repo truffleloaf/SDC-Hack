@@ -2,8 +2,8 @@
 
 > **Don't predict the job. Map the tasks. Route the skills.**
 
-[![Frontend checks](https://github.com/truffleloaf/SDC-Hack/actions/workflows/frontend.yml/badge.svg)](https://github.com/truffleloaf/SDC-Hack/actions/workflows/frontend.yml)
-[![Backend checks](https://github.com/truffleloaf/SDC-Hack/actions/workflows/backend-tests.yml/badge.svg)](https://github.com/truffleloaf/SDC-Hack/actions/workflows/backend-tests.yml)
+[![Frontend checks](https://github.com/truffleloaf/Tudou-Pivott/actions/workflows/frontend.yml/badge.svg)](https://github.com/truffleloaf/Tudou-Pivott/actions/workflows/frontend.yml)
+[![Backend checks](https://github.com/truffleloaf/Tudou-Pivott/actions/workflows/backend-tests.yml/badge.svg)](https://github.com/truffleloaf/Tudou-Pivott/actions/workflows/backend-tests.yml)
 
 **Live demo:** [pivottstudio.vercel.app](https://pivottstudio.vercel.app)
 
