@@ -1,6 +1,6 @@
 const assert=require('node:assert/strict')
 const fs=require('node:fs')
-const {launchBrowser}=require('./browser-test-helpers.cjs')
+const {launchBrowser}=require('./helpers.cjs')
 const {default:AxeBuilder}=require(process.env.AXE_PLAYWRIGHT_MODULE || '@axe-core/playwright')
 const origin=process.env.PIVOTT_TEST_ORIGIN || 'http://localhost:3002'
 ;(async()=>{

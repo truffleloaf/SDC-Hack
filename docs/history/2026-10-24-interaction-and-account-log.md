@@ -72,7 +72,7 @@ Deleted placeholder images and unused legacy app icons; retained the referenced 
 
 ## Part T verification
 
-Frontend **89 passed**, backend **66 passed**, TypeScript and production build passed, seed/golden freshness passed. New `scripts/check-briefs-browser.cjs` checks ten affected pages at 375/1280px in light/dark with Axe, overflow checks, screenshots and browser-error collection: **all 40 page/theme/width combinations passed**. Manual screenshot review caught a wrapping percentage; made it non-wrapping. Axe caught low contrast on mint/subtle surfaces; darkened the existing slate text token slightly to meet 4.5:1. Rebuilt and reran the full browser matrix after those fixes. No new source claims, decorative motion or credential graphics were added. Part T complete; proceeding to U.
+Frontend **89 passed**, backend **66 passed**, TypeScript and production build passed, seed/golden freshness passed. The current `scripts/browser/responsive-pages.cjs` checks ten affected pages at 375/1280px in light/dark with Axe, overflow checks, screenshots and browser-error collection: **all 40 page/theme/width combinations passed**. Manual screenshot review caught a wrapping percentage; made it non-wrapping. Axe caught low contrast on mint/subtle surfaces; darkened the existing slate text token slightly to meet 4.5:1. Rebuilt and reran the full browser matrix after those fixes. No new source claims, decorative motion or credential graphics were added. Part T complete; proceeding to U.
 
 ## U1: design rules
 

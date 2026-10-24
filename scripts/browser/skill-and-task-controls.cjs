@@ -1,7 +1,7 @@
 const assert = require('node:assert/strict')
-const { launchBrowser } = require('./browser-test-helpers.cjs')
+const { launchBrowser } = require('./helpers.cjs')
 const AxeBuilder = require(process.env.AXE_PLAYWRIGHT_MODULE || '@axe-core/playwright').default
-const seed = require('../backend/app/data/seed.json')
+const seed = require('../../backend/app/data/seed.json')
 const origin = process.env.PIVOTT_TEST_ORIGIN || 'http://localhost:3002'
 ;(async()=>{
  const browser=await launchBrowser();await browser.newPage()

@@ -1,7 +1,7 @@
 const assert = require('node:assert/strict')
-const { launchBrowser } = require('./browser-test-helpers.cjs')
-const seed = require('../backend/app/data/seed.json')
-const golden = require('../backend/tests/golden.json')
+const { launchBrowser } = require('./helpers.cjs')
+const seed = require('../../backend/app/data/seed.json')
+const golden = require('../../backend/tests/golden.json')
 const origin = process.env.PIVOTT_TEST_ORIGIN || 'http://localhost:3002'
 ;(async()=>{
  const browser=await launchBrowser();await browser.newPage()

@@ -15,7 +15,7 @@ try {
     grant usage on schema public, auth to anon, authenticated;
     insert into auth.users values ('00000000-0000-0000-0000-000000000001'), ('00000000-0000-0000-0000-000000000002');
   `)
-  await database.exec(readFileSync(new URL('../supabase/migrations/202610230001_profiles.sql', import.meta.url), 'utf8'))
+  await database.exec(readFileSync(new URL('../../supabase/migrations/202610230001_profiles.sql', import.meta.url), 'utf8'))
   await database.exec(`insert into public.user_profiles(user_id, profile) values ('00000000-0000-0000-0000-000000000002', '{"version":1}'); set role authenticated; select set_config('request.jwt.claim.sub','00000000-0000-0000-0000-000000000001',false);`)
   await database.exec(`insert into public.user_profiles(user_id, profile, revision) values ('00000000-0000-0000-0000-000000000001', '{"version":1}', 99);`)
   let result = await database.query('select user_id, revision from public.user_profiles')

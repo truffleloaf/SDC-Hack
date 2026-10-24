@@ -6,7 +6,7 @@ import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 export function loadFrontendModules() {
-  const root = fileURLToPath(new URL('../', import.meta.url))
+  const root = fileURLToPath(new URL('../../', import.meta.url))
   const require = createRequire(join(root, 'pivott-web-application-design/package.json'))
   const ts = require('typescript')
   const temporary = mkdtempSync(join(tmpdir(), 'pivott-engine-'))

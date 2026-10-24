@@ -39,6 +39,6 @@ No decorative gradients, glows, blur or icon-on-top card grids. The dot grid bel
 
 Write what the tool does in short, specific sentences. Avoid parallel “not X, Y” lines, rhetorical questions as headings, slogans and promotional claims. State the exposure disclaimer once on Map and link to Method for detail. Use names only where they help identify the person or their exported summary. Unknown ratings, coverage limits and evidence badges describe actual inputs and remain visible where needed.
 
-Run `node scripts/lint-copy.mjs` from the repository root. The checker excludes styleguide examples, permits a lone empty-value dash and ignores developer comments. Deliberate exceptions need a preceding or same-line `// copy-lint-ok: reason`; do not use exceptions for routine marketing prose. Run its `--self-test` when changing the rules.
+Run `node scripts/checks/lint-copy.mjs` from the repository root. The checker excludes styleguide examples, permits a lone empty-value dash and ignores developer comments. Deliberate exceptions need a preceding or same-line `// copy-lint-ok: reason`; do not use exceptions for routine marketing prose. Run its `--self-test` when changing the rules.
 
 Hatching in a skill bar encodes an unknown rating. This data pattern is permitted; decorative gradients remain excluded.

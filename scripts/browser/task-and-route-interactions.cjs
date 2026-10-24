@@ -1,6 +1,6 @@
 const assert = require('node:assert/strict')
-const { launchBrowser } = require('./browser-test-helpers.cjs')
-const seed = require('../backend/app/data/seed.json')
+const { launchBrowser } = require('./helpers.cjs')
+const seed = require('../../backend/app/data/seed.json')
 const origin = process.env.PIVOTT_TEST_ORIGIN || 'http://localhost:3002'
 const initial = {version:1,mode:'personal',name:'',jobTitle:'Accounts Executive',taskNames:{'fa-invoice':'Invoice checks'},careerGoal:'',savedRouteIds:[],updatedAt:null,roleId:'finance-admin',selections:seed.tasks.filter(t=>t.roleId==='finance-admin').map(t=>({taskId:t.id,share:t.defaultShare})),customTasks:[],resumeSkillIds:[],skills:{excel:3},scenario:'normal',targetRoleId:'finance-systems-analyst',hoursPerWeek:6,freeOnly:false,completedSteps:[],customSignals:[],appliedSignalIds:[],recentlyChanged:[]}
 ;(async()=>{

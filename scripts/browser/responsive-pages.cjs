@@ -1,9 +1,9 @@
 const assert = require('node:assert/strict')
 const fs = require('node:fs')
 const path = require('node:path')
-const { launchBrowser } = require('./browser-test-helpers.cjs')
+const { launchBrowser } = require('./helpers.cjs')
 const AxeBuilder = require(process.env.AXE_PLAYWRIGHT_MODULE || '@axe-core/playwright').default
-const seed = require('../backend/app/data/seed.json')
+const seed = require('../../backend/app/data/seed.json')
 const origin = process.env.PIVOTT_TEST_ORIGIN || 'http://localhost:3002'
 const out = process.env.PIVOTT_SCREENSHOT_DIR || '/tmp/pivott-briefs-screenshots'
 const profile = { version:1,mode:'personal',name:'Sample',jobTitle:'Accounts Executive',taskNames:{},careerGoal:'',savedRouteIds:[],updatedAt:null,roleId:'finance-admin',selections:seed.tasks.filter(t=>t.roleId==='finance-admin').map(t=>({taskId:t.id,share:t.defaultShare})),customTasks:[],resumeSkillIds:[],skills:seed.demoPersona.skills,scenario:'normal',targetRoleId:'finance-systems-analyst',hoursPerWeek:6,freeOnly:false,completedSteps:[],customSignals:[],appliedSignalIds:[],recentlyChanged:[] }

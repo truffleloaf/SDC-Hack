@@ -3,8 +3,8 @@
  * Refresh the committed live snapshot used by the code-only Vercel build.
  *
  * Start the root FastAPI in live mode, then:
- *   node scripts/export-live-seed.mjs
- *   node scripts/export-live-seed.mjs http://127.0.0.1:8001
+ *   node scripts/data/export-live-seed.mjs
+ *   node scripts/data/export-live-seed.mjs http://127.0.0.1:8001
  *
  * The output files are:
  *   pivott-web-application-design/lib/data/live-seed.json
@@ -15,7 +15,7 @@ import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const base = (process.argv[2] || process.env.PIVOTT_API_BASE || process.env.NEXT_PUBLIC_API_BASE || 'http://127.0.0.1:8001').replace(/\/+$/, '')
-const root = dirname(dirname(fileURLToPath(import.meta.url)))
+const root = dirname(dirname(dirname(fileURLToPath(import.meta.url))))
 const outDir = join(root, 'pivott-web-application-design', 'lib', 'data')
 
 async function get(path) {

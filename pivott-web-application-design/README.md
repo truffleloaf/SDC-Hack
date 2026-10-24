@@ -81,7 +81,7 @@ Résumé files are parsed locally and discarded after review. Job-update prefere
 After changing `lib/data/seed.ts`, run from the repository root:
 
 ```bash
-node scripts/generate-data.mjs
+node scripts/data/generate-data.mjs
 ```
 
 This regenerates `backend/app/data/seed.json` and `backend/tests/golden.json`. Formula changes must be implemented in both TypeScript and Python before regenerating and running both test suites.

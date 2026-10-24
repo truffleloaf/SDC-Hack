@@ -1,7 +1,7 @@
 const assert = require('node:assert/strict')
-const { launchBrowser } = require('./browser-test-helpers.cjs')
+const { launchBrowser } = require('./helpers.cjs')
 const origin = process.env.PIVOTT_TEST_ORIGIN || 'http://localhost:3002'
-const out = process.env.PIVOTT_SCREENSHOT_DIR || require('node:path').resolve(__dirname, '../docs')
+const out = process.env.PIVOTT_SCREENSHOT_DIR || require('node:path').resolve(__dirname, '../../docs/screenshots')
 ;(async () => {
  const browser = await launchBrowser()
  const context = await browser.newContext({ viewport: { width: 1440, height: 1000 }, colorScheme: 'light', reducedMotion: 'reduce' })

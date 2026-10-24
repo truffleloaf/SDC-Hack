@@ -6,14 +6,14 @@ Scope: P0.1–P0.5 only, in order, one commit per task. P1 and P2 have not been 
 
 ## P0.1 — Demo story: completed
 
-Confirmed the mismatch by executing the TypeScript `computeRoutes` implementation using the actual demo persona in both scenarios (`node scripts/demo-rankings.mjs`):
+Confirmed the mismatch by executing the TypeScript `computeRoutes` implementation using the actual demo persona in both scenarios (`node scripts/data/demo-rankings.mjs`):
 
 | Scenario | First route / score | Second route / score |
 | --- | --- | --- |
 | Normal | Operations Coordinator / 58.78912 | Finance Systems Analyst / 58.28684 |
 | Fast | Finance Systems Analyst / 55.49684 | Operations Coordinator / 55.14412 |
 
-Changed `lib/demo.ts`, `lib/store.ts`, `components/landing/career-route.tsx`, `lib/workflow.test.ts`, `vitest.config.ts`, `scripts/demo-rankings.mjs`, and `scripts/frontend-modules.mjs`. The landing destination and demo use shared defaults. The regression test checks the rendered landing story against the top route. The default journey through `/example`, `/map`, `/routes`, `/pathway`, and `/passport` was also checked in a browser: Normal consistently leads to Operations Coordinator unless a different route is intentionally selected.
+Changed `lib/demo.ts`, `lib/store.ts`, `components/landing/career-route.tsx`, `lib/workflow.test.ts`, `vitest.config.ts`, `scripts/data/demo-rankings.mjs`, and `scripts/data/frontend-modules.mjs`. The landing destination and demo use shared defaults. The regression test checks the rendered landing story against the top route. The default journey through `/example`, `/map`, `/routes`, `/pathway`, and `/passport` was also checked in a browser: Normal consistently leads to Operations Coordinator unless a different route is intentionally selected.
 
 After-task verification: 22 frontend tests passed; explicit TypeScript check and build passed; 31 backend tests passed. No score formula or seed change was needed. Commit: `4bfdb75`.
 

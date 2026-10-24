@@ -1,6 +1,6 @@
 // Synthetic SDK responses only. Run against a dev server with the documented fixture settings.
 const assert = require('node:assert/strict')
-const { launchBrowser } = require('./browser-test-helpers.cjs')
+const { launchBrowser } = require('./helpers.cjs')
 const AxeBuilder = require(process.env.AXE_PLAYWRIGHT_MODULE || '@axe-core/playwright').default
 const origin = process.env.PIVOTT_TEST_ORIGIN || 'http://localhost:3003'
 const remote = 'https://pivott-account-test.supabase.co'

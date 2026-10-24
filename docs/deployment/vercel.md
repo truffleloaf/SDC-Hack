@@ -31,7 +31,7 @@ matched Arbeitnow postings in `jobs.live.json` and metadata.
 To refresh it, start the root FastAPI in live mode and run:
 
 ```bash
-node scripts/export-live-seed.mjs http://127.0.0.1:8001
+node scripts/data/export-live-seed.mjs http://127.0.0.1:8001
 ```
 
 Commit both JSON files and push; Vercel redeploys automatically.

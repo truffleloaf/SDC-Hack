@@ -1,5 +1,5 @@
 const assert = require('node:assert/strict')
-const { launchBrowser } = require('./browser-test-helpers.cjs')
+const { launchBrowser } = require('./helpers.cjs')
 const AxeBuilder = require(process.env.AXE_PLAYWRIGHT_MODULE || '@axe-core/playwright').default
 const base = process.env.PIVOTT_BASE_URL || 'http://127.0.0.1:3000'
 

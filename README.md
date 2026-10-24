@@ -58,8 +58,8 @@ Run from the repository root after installing the frontend and backend dependenc
 ```bash
 (cd pivott-web-application-design && pnpm lint && pnpm test && pnpm build)
 (cd backend && PYTHONPATH=. .venv/bin/python -m pytest -q)
-node scripts/generate-data.mjs --check
-node scripts/lint-copy.mjs
+node scripts/data/generate-data.mjs --check
+node scripts/checks/lint-copy.mjs
 ```
 
 ## How it fits together

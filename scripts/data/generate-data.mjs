@@ -3,8 +3,8 @@ import { readFileSync, writeFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { loadFrontendModules } from './frontend-modules.mjs'
 
-const canonicalSdg = readFileSync(fileURLToPath(new URL('../backend/app/data/sdg-map.json',import.meta.url)))
-const frontendSdgPath = fileURLToPath(new URL('../pivott-web-application-design/lib/data/sdg-map.json',import.meta.url))
+const canonicalSdg = readFileSync(fileURLToPath(new URL('../../backend/app/data/sdg-map.json',import.meta.url)))
+const frontendSdgPath = fileURLToPath(new URL('../../pivott-web-application-design/lib/data/sdg-map.json',import.meta.url))
 if (process.argv.includes('--check')) {
   if (!readFileSync(frontendSdgPath).equals(canonicalSdg)) throw new Error('Generated SDG mapping is stale')
 } else writeFileSync(frontendSdgPath,canonicalSdg)
@@ -52,10 +52,10 @@ const golden = {
   roleTasks: { role: seed.roleById['finance-admin'], scenario: 'normal', roleExposure: normal.roleExposure, tasks: normal.tasks },
 }
 for (const [name, value] of [['backend/app/data/seed.json', data], ['backend/tests/golden.json', golden]]) {
-  const path = fileURLToPath(new URL(`../${name}`, import.meta.url))
+  const path = fileURLToPath(new URL(`../../${name}`, import.meta.url))
   const output = JSON.stringify(value, null, 2) + '\n'
   if (process.argv.includes('--check')) {
-    if (readFileSync(path, 'utf8') !== output) throw new Error(`${name} is out of date; run node scripts/generate-data.mjs`)
+    if (readFileSync(path, 'utf8') !== output) throw new Error(`${name} is out of date; run node scripts/data/generate-data.mjs`)
     console.log(`Current: ${name}`)
   } else {
     writeFileSync(path, output)

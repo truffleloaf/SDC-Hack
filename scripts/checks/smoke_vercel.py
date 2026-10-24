@@ -1,4 +1,4 @@
-"""Check the single-service Vercel/Next router: python scripts/smoke_vercel.py [origin]."""
+"""Check the single-service Vercel/Next router: python scripts/checks/smoke_vercel.py [origin]."""
 
 import json
 import sys

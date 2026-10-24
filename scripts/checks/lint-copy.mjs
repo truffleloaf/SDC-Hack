@@ -4,7 +4,7 @@ import { readFileSync, readdirSync } from 'node:fs'
 import { dirname, join, relative } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import assert from 'node:assert/strict'
-const root = fileURLToPath(new URL('../', import.meta.url))
+const root = fileURLToPath(new URL('../../', import.meta.url))
 const require = createRequire(join(root, 'pivott-web-application-design/package.json'))
 const ts = require('typescript')
 const phrases = /\b(?:seamless|unlock|elevate|empower|journey|leverage|tailored|robust|streamline|delve|let's|it's not|isn't just)\b/i

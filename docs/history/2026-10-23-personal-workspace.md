@@ -27,7 +27,7 @@ The TypeScript and Python engines were changed together. Seed contents/cut-off a
 - The actual SQL migration passed isolated PGlite checks for owner-only access, anonymous denial, revision stamping, stale updates and own-account deletion/cascade.
 - Browser tests using the real Supabase SDK with **synthetic intercepted responses** passed explicit saving, deferred/conflicting profiles, stale revision recovery, offline save/retry, deletion, email request/cooldown, callback return path and sign-out. These are not live Supabase tests.
 
-Reusable optional browser scripts are under `scripts/check-*-browser.cjs`; policy checks are in `scripts/test-supabase-policies.mjs`. Screenshots under `docs/` show the production build. Browser checks are local headless checks, not physical-device, email-delivery or performance benchmarks.
+Reusable optional browser scripts are under `scripts/browser/`; policy checks are in `scripts/checks/test-supabase-policies.mjs`. Screenshots under `docs/screenshots/` show the production build. Browser checks are local headless checks, not physical-device, email-delivery or performance benchmarks.
 
 ## Deployment prerequisites
 
