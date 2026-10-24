@@ -29,7 +29,7 @@ Guest mode needs no environment variables or database. Optional Supabase email-l
 
 The root layout and every Route Handler under `app/api/*` call `getCatalog()` (`lib/catalog.ts`) once per request group, so pages and API routes use the same catalogue.
 
-- **Vercel / no env**: it applies the committed `lib/data/live-seed.json` snapshot (10 roles / 60 tasks / 17 skills). No second service, API base or database is needed.
+- **Vercel / no env**: it applies the committed O*NET snapshot plus the reviewed engineering, science, health and design supplement (20 roles / 100 tasks / 18 skills). No second service, API base or database is needed.
 - **Local dev**: if `PIVOTT_API_BASE` or `NEXT_PUBLIC_API_BASE` is set (e.g. `http://127.0.0.1:8001`), it fetches the root live FastAPI instead. If that API is down, it falls back to the committed snapshot.
 - The demo seed is only used when the snapshot cannot be applied. The demo keeps Aisyah and the “View an example” flow; the live catalogue has no demo persona, so the landing page shows a live occupation preview and demo actions are hidden.
 - In live mode `GET /api/seed` returns the live payload and `POST /api/seed` returns 403; `/api/live/status` returns the O*NET/Arbeitnow source details.
@@ -119,7 +119,7 @@ Your name is optional and stays in localStorage unless you explicitly save the p
 
 ## Privacy
 
-Guest profiles and progress stay in your browser. Optional Supabase accounts use email links, owner-only database policies, explicit saves and revision conflict checks. Signing in does not automatically upload or overwrite work. Use `/account` for account settings and deletion; deleting device data does not delete an account copy. Clicking **Verify with API** on the task map sends task selections, skill levels, custom tasks, and applied custom signals for a stateless comparison. It omits your display name, completion history, cookies, and pending signals. No check runs automatically; local results remain usable if the API is offline.
+Guest profiles and progress stay in your browser. Optional Supabase accounts support a password, email code or Google, with owner-only database policies, explicit saves and revision conflict checks. Signing in does not automatically upload or overwrite work. Use `/account` for account settings and deletion; deleting device data does not delete an account copy. Vercel Analytics loads only after a visitor allows analytics in the consent banner. Clicking **Verify with API** on the task map sends task selections, skill levels, custom tasks, and applied custom signals for a stateless comparison. It omits your display name, completion history, cookies, and pending signals. No check runs automatically; local results remain usable if the API is offline.
 
 ## Styleguide
 

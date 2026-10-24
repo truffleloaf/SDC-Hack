@@ -18,7 +18,7 @@ O*NET 文本库是一个约 13 MB 的 zip（`db_31_0_text.zip`），下载后缓
 
 ## 2. 选了哪些职业
 
-`app/live/roles.py` 固定 10 个 O*NET-SOC 职业，覆盖 demo 里的三段路径
+`app/live/roles.py` 固定 20 个 O*NET-SOC 职业，覆盖办公、财务、数据、管理、工程、科学、健康和数字设计
 （行政/支持 → 财务/分析 → 数据/管理）：
 
 | role id | O*NET-SOC | 官方职业名 | family |
@@ -90,7 +90,7 @@ $env:PIVOTT_DATASET = 'live'
 $env:PIVOTT_DB      = 'sqlite:///./pivott-live.db'   # live 必须显式给库
 .\.venv\Scripts\python.exe -m app.live sync          # 下载 + 构建 + 写入
 .\.venv\Scripts\python.exe -m app.live status        # 看上次导入的来源和计数
-.\.venv\Scripts\python.exe -m app.live roles         # 列出配置的 10 个职业
+.\.venv\Scripts\python.exe -m app.live roles         # 列出配置的 20 个职业
 
 .\.venv\Scripts\python.exe -m uvicorn app.main:app --port 8001
 ```
@@ -131,7 +131,7 @@ $env:ADZUNA_COUNTRY = 'de'   # us / gb / de / fr / nl / au ...
 `dataAsOf` 为导入当天。原有 `/api/seed`、`/api/analysis`、`/api/pathways` 等契约不变，
 只是数据来自 live 库。
 
-示例（10 个职业 / 60 任务 / 17 技能 / 85 条职位）：
+示例（20 个职业 / 120 任务；技能和职位数取决于当次公开数据）：
 
 ```jsonc
 // GET /api/live/status

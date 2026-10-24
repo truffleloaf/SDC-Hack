@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 import { authMessage, initialSignIn, maskedEmail, safeReturnPath, SignInFlow, type AuthGateway } from './flow'
-function gateway(): AuthGateway { return { signInWithOtp: vi.fn().mockResolvedValue({ error: null }), verifyOtp: vi.fn().mockResolvedValue({ error: null, data: { session: { access_token: 'synthetic' } } }), signInWithOAuth: vi.fn().mockResolvedValue({ error: null }) } }
+function gateway(): AuthGateway { return { signInWithOtp: vi.fn().mockResolvedValue({ error: null }), verifyOtp: vi.fn().mockResolvedValue({ error: null, data: { session: { access_token: 'synthetic' } } }), signInWithOAuth: vi.fn().mockResolvedValue({ error: null }), signInWithPassword: vi.fn().mockResolvedValue({ error: null, data: { session: { access_token: 'synthetic' } } }), signUp: vi.fn().mockResolvedValue({ error: null, data: { user: { id: 'fixture' }, session: null } }), resetPasswordForEmail: vi.fn().mockResolvedValue({ error: null }), updateUser: vi.fn().mockResolvedValue({ error: null }) } }
 describe('sign-in flow', () => {
   it('sends a code, enforces per-address resend time and verifies six digits', async () => {
     const auth = gateway(), changed = vi.fn(); let now = 1000
@@ -49,5 +49,18 @@ describe('sign-in flow', () => {
     expect(safeReturnPath('https://evil.example')).toBe('/workspace')
     expect(safeReturnPath('//evil.example')).toBe('/workspace')
     expect(safeReturnPath('/pathway')).toBe('/pathway')
+    expect(safeReturnPath('/')).toBe('/')
+  })
+  it('supports password sign-in, account creation and recovery without revealing whether an address exists', async () => {
+    const auth = gateway(), flow = new SignInFlow(auth, () => {})
+    await flow.password('PERSON@example.com', 'long passphrase', false, 'https://pivott.test/signin')
+    expect(auth.signInWithPassword).toHaveBeenCalledWith({ email: 'person@example.com', password: 'long passphrase' })
+    expect(flow.snapshot.step).toBe('done')
+    flow.reset(); await flow.password('person@example.com', 'long passphrase', true, 'https://pivott.test/signin')
+    expect(flow.snapshot.notice).toContain('Account created')
+    flow.reset(); await flow.resetPassword('person@example.com', 'https://pivott.test/signin?reset=1')
+    expect(flow.snapshot.notice).toContain('If an account')
+    await flow.updatePassword('a new passphrase')
+    expect(auth.updateUser).toHaveBeenCalledWith({ password: 'a new passphrase' })
   })
 })

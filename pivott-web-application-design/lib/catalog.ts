@@ -1,4 +1,5 @@
 import liveSeed from './data/live-seed.json'
+import { addCatalogSupplement } from './data/catalog-supplement'
 import {
   applyCatalog,
   resetCatalog,
@@ -27,7 +28,7 @@ const MISS_TTL_MS = 30_000
 // Unit tests must be deterministic and must not depend on a running FastAPI.
 const isUnitTest = process.env.NODE_ENV === 'test' || Boolean(process.env.VITEST)
 
-const BUNDLED_LIVE = liveSeed as unknown as CatalogPayload
+const BUNDLED_LIVE = addCatalogSupplement(liveSeed as unknown as CatalogPayload)
 
 let cached: { payload: CatalogPayload | null; at: number } | null = null
 let inFlight: Promise<CatalogPayload | null> | null = null
@@ -44,7 +45,7 @@ function validCatalog(payload: Partial<CatalogPayload> | null | undefined): payl
 }
 
 function normalizeCatalog(payload: CatalogPayload): CatalogPayload {
-  return {
+  return addCatalogSupplement({
     version: payload.version,
     asOf: payload.asOf,
     roles: payload.roles,
@@ -55,7 +56,7 @@ function normalizeCatalog(payload: CatalogPayload): CatalogPayload {
     scenarios: payload.scenarios ?? [],
     sdgs: payload.sdgs ?? [],
     demoPersona: payload.demoPersona ?? null,
-  }
+  })
 }
 
 /**

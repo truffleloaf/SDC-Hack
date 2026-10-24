@@ -1,10 +1,9 @@
 import Link from 'next/link'
 import { getCatalog } from '@/lib/catalog'
-import { catalogSource, hasDemoPersona, resources } from '@/lib/data/seed'
-import { ArrowRight } from 'lucide-react'
+import { resources } from '@/lib/data/seed'
 import { LivingTaskMap } from '@/components/landing/living-task-map'
+import { PrimaryCta } from '@/components/landing/primary-cta'
 import { ResumeWork } from '@/components/pivott/resume-work'
-import { PLink } from '@/components/pivott/p-button'
 
 export default async function LandingPage() {
   await getCatalog()
@@ -18,16 +17,10 @@ export default async function LandingPage() {
               Plan your next move from the work you do.
             </h1>
             <p className="mt-7 max-w-md text-lg leading-relaxed text-muted-foreground text-pretty">
-              For clerical and finance workers in Malaysia: compare your daily tasks, nearby roles and skills to practise, then leave with a learning plan.
+              Compare your daily tasks with 20 roles across business, engineering, science, health and digital work, then leave with a practical learning plan.
             </p>
-            <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
-              <PLink href="/start" size="lg">Map my work<ArrowRight aria-hidden /></PLink>
-              {hasDemoPersona && (
-              <Link href="/example" className="group inline-flex min-h-11 items-center gap-2.5 rounded-lg text-sm font-medium text-foreground underline-offset-4 hover:underline">
-                <span className="grid size-8 place-items-center rounded-full border border-border-strong bg-card transition-colors group-hover:border-primary"><span className="ml-0.5 size-0 border-y-[4px] border-l-[6px] border-y-transparent border-l-primary" aria-hidden /></span>
-                View an example
-              </Link>
-              )}
+            <div className="mt-8">
+              <PrimaryCta />
             </div>
             <p className="mt-6 text-xs text-muted-foreground">Fresh graduates can start with tasks from study, placements or a sample profile. No account needed.</p>
           </div>
