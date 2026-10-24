@@ -206,8 +206,9 @@ export function clearAllData() {
   try {
     window.localStorage.removeItem(STORAGE_KEY)
     window.localStorage.removeItem(PERSONAL_KEY)
-    for (const key of Object.keys(window.localStorage)) if (key === 'pivott:v1:backup' || key.startsWith('pivott:sync:') || key.startsWith('sb-')) window.localStorage.removeItem(key)
+    for (const key of Object.keys(window.localStorage)) if (key === 'pivott:v1:backup' || key.startsWith('pivott:sync:') || key.startsWith('pivott:job-notifications:') || key.startsWith('sb-')) window.localStorage.removeItem(key)
   } catch { cleared = false }
+  if (typeof window.dispatchEvent === 'function') window.dispatchEvent(new Event('pivott:clear-device-data'))
   loaded = true
   state = emptyState
   saveStatus = cleared ? 'saved' : 'error'

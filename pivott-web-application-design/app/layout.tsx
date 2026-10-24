@@ -3,6 +3,7 @@ import { CatalogBoot } from '@/components/pivott/catalog-boot'
 import { getCatalog } from '@/lib/catalog'
 import { AccountProvider } from '@/components/account/account-provider'
 import { ConsentControls, CookieSettingsButton } from '@/components/privacy/consent-controls'
+import { JobNotificationProvider } from '@/components/jobs/job-notification-center'
 import type { Metadata, Viewport } from 'next'
 import { ThemeProvider } from 'next-themes'
 import { Toaster } from 'sonner'
@@ -51,7 +52,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     >
       <body className="min-h-dvh font-sans antialiased">
         <CatalogBoot payload={catalog}><ThemeProvider attribute="class" defaultTheme="system" enableSystem storageKey="pivott:theme">
-          <MotionProvider><AccountProvider><TooltipProvider delay={150}>
+          <MotionProvider><AccountProvider><TooltipProvider delay={150}><JobNotificationProvider>
             <a
               href="#main"
               className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-card focus:px-3 focus:py-2"
@@ -69,7 +70,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
                 className: '!rounded-2xl !border-border !bg-card !text-foreground !shadow-lift !font-sans',
               }}
             />
-          </TooltipProvider></AccountProvider></MotionProvider>
+          </JobNotificationProvider></TooltipProvider></AccountProvider></MotionProvider>
         </ThemeProvider></CatalogBoot>
         <ConsentControls />
       </body>

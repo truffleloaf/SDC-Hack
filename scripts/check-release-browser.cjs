@@ -43,14 +43,33 @@ async function run() {
   assert.equal(await page.getByRole('button', { name: 'Sign in with password' }).count(), 1)
   assert.equal(await page.getByRole('button', { name: 'Create an account' }).count(), 1)
   assert.equal(await page.getByRole('button', { name: 'Forgot password?' }).count(), 1)
-  await page.route('**/api/live/jobs?refresh=1', route => route.fulfill({ status:200, contentType:'application/json', body:JSON.stringify({ asOf:'2026-10-24', postings:[{ id:'release-fixture', roleId:'software-developer', title:'Software Developer', company:'Fixture company', location:'Kuala Lumpur, Malaysia', url:'https://example.invalid/job', postedAt:'2026-10-24', remote:false, tags:['Engineering'] }] }) }))
+  let jobChecks = 0
+  const originalJob = { id:'release-fixture', roleId:'software-developer', title:'Software Developer', company:'Fixture company', location:'Kuala Lumpur, Malaysia', url:'https://example.invalid/job', postedAt:'2026-10-24', remote:false, tags:['Engineering'] }
+  await page.route('**/api/live/jobs?refresh=1', route => {
+    jobChecks++
+    const postings = jobChecks === 1 ? [originalJob] : [{ ...originalJob, location:'Penang, Malaysia' }, { ...originalJob, id:'release-fixture-new', title:'Frontend Developer', url:'https://example.invalid/new' }]
+    return route.fulfill({ status:200, contentType:'application/json', body:JSON.stringify({ asOf:'2026-10-24', postings }) })
+  })
   await page.goto(`${base}/jobs`, { waitUntil: 'networkidle' })
-  await page.getByRole('button', { name: 'Refresh public listings' }).click()
   assert.equal(await page.getByLabel('Work arrangement').count(), 1)
+  await page.getByRole('button', { name: 'Customize job updates' }).click()
+  assert.equal(await page.getByRole('checkbox', { name:'Enable job updates' }).count(), 1)
+  assert.equal(await page.getByRole('checkbox').count() >= 21, true)
+  await page.getByRole('checkbox', { name:'Enable job updates' }).check()
+  await page.getByRole('button', { name:'Save preferences' }).click()
+  await page.getByText(/1 matching listing in the latest feed/).waitFor()
+  await page.getByRole('button', { name:'Check now' }).click()
+  await page.getByText('New listing', { exact:true }).waitFor()
+  await page.getByText('Listing changed', { exact:true }).waitFor()
+  const notificationViolations = (await new AxeBuilder({ page }).analyze()).violations.filter(item => ['serious', 'critical'].includes(item.impact))
+  assert.deepEqual(notificationViolations.map(item => `${item.id}: ${item.help}`), [])
+  await page.getByRole('button', { name:'Close' }).click()
+  assert.equal(await page.getByRole('button', { name:/Job updates, 2 unread/ }).count(), 1)
+  await page.getByRole('button', { name: 'Refresh public listings' }).click()
   await page.getByText('Place', { exact: true }).first().waitFor()
   assert.equal(await page.getByText('Place', { exact: true }).first().isVisible(), true)
   assert.deepEqual(browserErrors, [])
   await context.close(); await browser.close()
-  console.log(`PASS: mobile/legal/auth/jobs/404/accessibility and performance budgets ${JSON.stringify(metrics)}`)
+  console.log(`PASS: mobile/legal/auth/job notifications/jobs/404/accessibility and performance budgets ${JSON.stringify(metrics)}`)
 }
 run().catch(error => { console.error(error); process.exitCode = 1 })
