@@ -15,7 +15,7 @@ import { NeedsProfile, PageSkeleton } from '@/components/pivott/states'
 import { RouteCard } from '@/components/routes/route-card'
 import { WhySheet } from '@/components/routes/why-sheet'
 import { fitLabel } from '@/lib/engine'
-import { roleById } from '@/lib/data/seed'
+import { roleById, sdgs, roles } from '@/lib/data/seed'
 import { setState, useAnalysis, useAppState } from '@/lib/store'
 import { cn } from '@/lib/utils'
 
@@ -74,6 +74,12 @@ export default function RoutesPage() {
         </div>
       </div>
 
+      <fieldset className="card-surface mt-6 p-5"><legend className="px-2 text-sm font-medium">SDG focus</legend>
+        <p className="text-xs text-muted-foreground">Optional: +5 score points per matching goal, capped at +10. Team mappings; default off.</p>
+        <div className="mt-2 flex flex-wrap gap-2">{sdgs.filter(g=>roles.some(r=>r.sdgs.includes(g.id))).map(g=><label key={g.id} className="flex min-h-11 items-center gap-2 rounded-lg border border-border px-3 text-sm"><input type="checkbox" checked={state.sdgFocus.includes(g.id)} onChange={e=>setState({sdgFocus:e.target.checked?[...state.sdgFocus,g.id]:state.sdgFocus.filter(id=>id!==g.id)})} />{g.id}. {g.name}</label>)}</div>
+        {state.sdgFocus.length>0 && <p className="mt-2 text-sm">SDG focus applied. {routes.map(r=>`${r.title}: unadjusted rank ${r.unadjustedRank}, +${r.sdgBonus} points`).join('; ')}.</p>}
+        <label className="mt-4 flex min-h-11 items-center gap-3 text-sm">Show routes<select className="rounded-lg border border-border bg-card p-2" value={state.routeLimit} onChange={e=>setState({routeLimit:Number(e.target.value)})}>{[3,5,10].map(n=><option value={n} key={n}>{n}</option>)}</select></label>
+      </fieldset>
       <SyncNote eligible={!!state.targetRoleId && state.mode === 'personal'} />
       <p className="mt-5 text-sm text-muted-foreground">You can save up to three routes. <a href="/skills" className="text-primary underline">Edit skill ratings</a></p>
       {assessmentCoverage < 1 && <p className="mt-2 text-sm text-muted-foreground">Current exposure covers assessed reference tasks only ({Math.round(assessmentCoverage * 100)}% of selected time). Custom tasks have no estimate.</p>}

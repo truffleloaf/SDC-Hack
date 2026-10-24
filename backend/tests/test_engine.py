@@ -90,7 +90,7 @@ def test_seed_counts() -> None:
     assert len(TASKS) == 39
     assert len(SKILLS) == 15
     assert len(SIGNALS) == 20
-    assert len(SDGS) == 4
+    assert len(SDGS) == 17
     assert len(RESOURCES) == 25
     assert len(SCENARIOS) == 2
 

@@ -37,6 +37,9 @@ class ProfileInput(BaseModel):
     scenario: str = "normal"
     hoursPerWeek: Any = 6
     freeOnly: bool = False
+    routeLimit: int = 3
+    ignoreTrendSignals: bool = False
+    sdgFocus: list[int] = Field(default_factory=list)
     targetRoleId: str | None = None
 
 
@@ -52,6 +55,9 @@ class NormalizedProfile(BaseModel):
     scenario: ScenarioId
     hoursPerWeek: int
     freeOnly: bool
+    routeLimit: int = 3
+    ignoreTrendSignals: bool = False
+    sdgFocus: list[int] = Field(default_factory=list)
     targetRoleId: str | None = None
 
 
@@ -82,6 +88,7 @@ class RecomputeRequest(BaseModel):
 
 
 class SkillRead(BaseModel):
+    sdgs: list[int]
     id: str
     name: str
     category: str
@@ -210,6 +217,9 @@ class RouteResult(BaseModel):
     unknownSkillIds: list[str]
     targetExposure: float
     score: float
+    unadjustedScore: float
+    unadjustedRank: int
+    sdgBonus: float
     gaps: list[SkillGap]
     totalGapHours: int
     weeks: int
@@ -268,6 +278,9 @@ class SavedProfileResponse(BaseModel):
     scenario: ScenarioId
     hoursPerWeek: int
     freeOnly: bool
+    routeLimit: int = 3
+    ignoreTrendSignals: bool = False
+    sdgFocus: list[int] = Field(default_factory=list)
     targetRoleId: str | None = None
     completedSteps: list[str]
     customTasks: list[dict[str, Any]]

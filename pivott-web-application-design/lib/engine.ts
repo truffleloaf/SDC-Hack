@@ -246,6 +246,9 @@ export interface RouteResult {
   totalGapHours: number
   weeks: number
   sdgs: number[]
+  unadjustedScore: number
+  unadjustedRank: number
+  sdgBonus: number
   unknownSkillIds: string[]
 }
 
@@ -258,6 +261,7 @@ export function computeRoutes(params: {
   hoursPerWeek: number
   limit?: number
   previewMultiplier?: number
+  sdgFocus?: number[]
 }): RouteResult[] {
   const { currentRoleId, userTaskSkills, levels, scenarioId, signals, hoursPerWeek, limit = 3, previewMultiplier } = params
   return roles
@@ -292,6 +296,11 @@ export function computeRoutes(params: {
       }
     })
     .sort((a, b) => b.score - a.score || a.title.localeCompare(b.title))
+    .map((route,index) => {
+      const sdgBonus=Math.min(10,5 * route.sdgs.filter(id => params.sdgFocus?.includes(id)).length)
+      return {...route,unadjustedRank:index+1,unadjustedScore:route.score,sdgBonus,score:route.score+sdgBonus}
+    })
+    .sort((a,b)=>b.score-a.score || a.title.localeCompare(b.title))
     .slice(0, limit)
 }
 

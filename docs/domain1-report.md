@@ -15,3 +15,9 @@ GitHub REST/GraphQL API calls are blocked (Forbidden), while git push works. Sec
 The twelve invented publication attributions had already been removed in Brief 3: they are undated assumptions, without publisher names or URLs, and appear in their own section. Regression tests now reject every verified signal missing its date or source URL. Remaining UI percentages are calculated model outputs, with the method linked; they are not population statistics.
 
 The challenge brief supplies Malaysian figures attributed to Hays and MOSTI. Their source pages cannot be opened from this environment. In accordance with the brief's global rule to omit unverified statistics, those figures are **not** presented as verified website facts. The eight pre-existing published demo references retain their original source URLs/dates; this work does not claim they were independently reverified. Live mode uses only count-derived feed signals.
+
+## S3: SDG choices
+
+All 17 official goals are included. Every live and sample role/skill is tagged through one canonical mapping and a generated frontend copy. The mapping rationale is documented in `docs/sdg-mapping.md` and explicitly represents team judgment. Routes support an optional capped focus bonus and show unadjusted ranks; pathway/passport aggregate the selected role and skills. The optional SQL backend needs the included skill-SDG migration before deployment.
+
+Validation: 109 frontend tests, 129 backend tests, lint and production build; mapping completeness/identity, aggregate counts and focus-driven rank changes are checked.

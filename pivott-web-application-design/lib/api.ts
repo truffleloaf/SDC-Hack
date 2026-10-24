@@ -12,6 +12,9 @@ export interface ProfileInput {
   freeOnly: boolean
   customTasks?: CustomTask[]
   customSignals?: Signal[]
+  routeLimit?: number
+  ignoreTrendSignals?: boolean
+  sdgFocus?: number[]
   targetRoleId?: string
 }
 
@@ -53,6 +56,8 @@ export function parseProfile(body: unknown): { ok: true; value: ProfileInput } |
   return {
     ok: true,
     value: {
+      routeLimit: typeof b.routeLimit === 'number' ? Math.max(3,Math.min(10,Math.round(b.routeLimit))) : 3, ignoreTrendSignals: b.ignoreTrendSignals === true,
+      sdgFocus: Array.isArray(b.sdgFocus) ? [...new Set(b.sdgFocus.filter((id): id is number => typeof id === 'number' && Number.isInteger(id) && id>=1 && id<=17))] : [],
       roleId, selections, skills: levels, scenario, hoursPerWeek, freeOnly: b.freeOnly === true, targetRoleId,
       ...(b.customTasks !== undefined ? { customTasks: custom.customTasks } : {}),
       ...(b.customSignals !== undefined ? { customSignals: custom.customSignals } : {}),

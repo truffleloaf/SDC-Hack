@@ -8,7 +8,7 @@ export async function POST(req: Request) {
   const parsed = parseProfile(await req.json().catch(() => null))
   if (!parsed.ok) return json({ error: parsed.error }, 400)
   const p = parsed.value
-  const signals = allSignals(p.customSignals)
+  const signals = p.ignoreTrendSignals ? [] : allSignals(p.customSignals)
   const lookup = { ...taskById, ...Object.fromEntries((p.customTasks ?? []).map((task) => [task.id, task])) }
   const tasks = scoreTasks(p.selections, lookup, p.scenario, signals)
   const userTaskSkills = [...new Set(p.selections.flatMap((selection) => lookup[selection.taskId]?.skills ?? []))]
@@ -19,6 +19,7 @@ export async function POST(req: Request) {
     confidence: confidence(tasks, signals),
     tasks,
     routes: computeRoutes({
+      sdgFocus: p.sdgFocus, limit: p.routeLimit,
       currentRoleId: p.roleId,
       userTaskSkills,
       levels: p.skills,

@@ -1,6 +1,8 @@
+import sdgMap from './sdg-map.json'
 export type SkillCategory = 'Technical' | 'Analytical' | 'Communication' | 'Operational'
 
 export interface Skill {
+  sdgs: number[]
   id: string
   name: string
   category: SkillCategory
@@ -89,29 +91,24 @@ export let scenarios: Scenario[] = [
   },
 ]
 
-export let sdgs: Sdg[] = [
-  { id: 4, name: 'Quality Education', color: '#C5192D' },
-  { id: 8, name: 'Decent Work and Economic Growth', color: '#A21942' },
-  { id: 9, name: 'Industry, Innovation and Infrastructure', color: '#FD6925' },
-  { id: 10, name: 'Reduced Inequalities', color: '#DD1367' },
-]
+export let sdgs: Sdg[] = sdgMap.goals
 
 export let skills: Skill[] = [
-  { id: 'excel', name: 'Spreadsheet modelling', category: 'Technical', hoursPerLevel: 10, deliverable: 'A reusable reconciliation workbook with lookups and checks' },
-  { id: 'erp', name: 'ERP systems', category: 'Technical', hoursPerLevel: 14, deliverable: 'A documented test script for one ERP workflow' },
-  { id: 'sql', name: 'SQL', category: 'Technical', hoursPerLevel: 12, deliverable: 'Five queries answering real questions about a sample ledger' },
-  { id: 'python', name: 'Python', category: 'Technical', hoursPerLevel: 16, deliverable: 'A small script that cleans a messy CSV export' },
-  { id: 'bi', name: 'BI dashboards', category: 'Technical', hoursPerLevel: 10, deliverable: 'A one-page dashboard tracking three finance KPIs' },
-  { id: 'automation', name: 'Process automation', category: 'Technical', hoursPerLevel: 12, deliverable: 'An approval flow that routes invoices automatically' },
-  { id: 'ai', name: 'AI tool fluency', category: 'Technical', hoursPerLevel: 6, deliverable: 'A prompt library for three recurring tasks, with checks' },
-  { id: 'analysis', name: 'Data analysis', category: 'Analytical', hoursPerLevel: 12, deliverable: 'A variance analysis memo with three clear findings' },
-  { id: 'stats', name: 'Statistics', category: 'Analytical', hoursPerLevel: 12, deliverable: 'A short note explaining a trend with confidence intervals' },
-  { id: 'controls', name: 'Financial controls', category: 'Analytical', hoursPerLevel: 10, deliverable: 'A control matrix for one end-to-end process' },
-  { id: 'stakeholder', name: 'Stakeholder communication', category: 'Communication', hoursPerLevel: 8, deliverable: 'A requirements summary signed off by a stakeholder' },
-  { id: 'writing', name: 'Writing & storytelling', category: 'Communication', hoursPerLevel: 8, deliverable: 'A one-page narrative explaining a business change' },
-  { id: 'empathy', name: 'Customer empathy', category: 'Communication', hoursPerLevel: 6, deliverable: 'Three customer interview notes with specific pain points' },
-  { id: 'process', name: 'Process design', category: 'Operational', hoursPerLevel: 10, deliverable: 'A swimlane map of a current process with one redesign' },
-  { id: 'coordination', name: 'Project coordination', category: 'Operational', hoursPerLevel: 8, deliverable: 'A lightweight project plan with owners and milestones' },
+  { id: 'excel', name: 'Spreadsheet modelling', category: 'Technical', sdgs: [4, 9], hoursPerLevel: 10, deliverable: 'A reusable reconciliation workbook with lookups and checks' },
+  { id: 'erp', name: 'ERP systems', category: 'Technical', sdgs: [4, 9], hoursPerLevel: 14, deliverable: 'A documented test script for one ERP workflow' },
+  { id: 'sql', name: 'SQL', category: 'Technical', sdgs: [4, 9], hoursPerLevel: 12, deliverable: 'Five queries answering real questions about a sample ledger' },
+  { id: 'python', name: 'Python', category: 'Technical', sdgs: [4, 9], hoursPerLevel: 16, deliverable: 'A small script that cleans a messy CSV export' },
+  { id: 'bi', name: 'BI dashboards', category: 'Technical', sdgs: [4, 9], hoursPerLevel: 10, deliverable: 'A one-page dashboard tracking three finance KPIs' },
+  { id: 'automation', name: 'Process automation', category: 'Technical', sdgs: [4, 9], hoursPerLevel: 12, deliverable: 'An approval flow that routes invoices automatically' },
+  { id: 'ai', name: 'AI tool fluency', category: 'Technical', sdgs: [4, 9], hoursPerLevel: 6, deliverable: 'A prompt library for three recurring tasks, with checks' },
+  { id: 'analysis', name: 'Data analysis', category: 'Analytical', sdgs: [4, 9], hoursPerLevel: 12, deliverable: 'A variance analysis memo with three clear findings' },
+  { id: 'stats', name: 'Statistics', category: 'Analytical', sdgs: [4, 9], hoursPerLevel: 12, deliverable: 'A short note explaining a trend with confidence intervals' },
+  { id: 'controls', name: 'Financial controls', category: 'Analytical', sdgs: [4, 9], hoursPerLevel: 10, deliverable: 'A control matrix for one end-to-end process' },
+  { id: 'stakeholder', name: 'Stakeholder communication', category: 'Communication', sdgs: [4, 10], hoursPerLevel: 8, deliverable: 'A requirements summary signed off by a stakeholder' },
+  { id: 'writing', name: 'Writing & storytelling', category: 'Communication', sdgs: [4, 10], hoursPerLevel: 8, deliverable: 'A one-page narrative explaining a business change' },
+  { id: 'empathy', name: 'Customer empathy', category: 'Communication', sdgs: [4, 10], hoursPerLevel: 6, deliverable: 'Three customer interview notes with specific pain points' },
+  { id: 'process', name: 'Process design', category: 'Operational', sdgs: [4, 8], hoursPerLevel: 10, deliverable: 'A swimlane map of a current process with one redesign' },
+  { id: 'coordination', name: 'Project coordination', category: 'Operational', sdgs: [4, 10], hoursPerLevel: 8, deliverable: 'A lightweight project plan with owners and milestones' },
 ]
 
 export let roles: Role[] = [
@@ -432,11 +429,11 @@ export function applyCatalog(payload: CatalogPayload): boolean {
 
   roles = payload.roles
   tasks = payload.tasks
-  skills = payload.skills.map(({ id, name, category, hoursPerLevel, deliverable }) => ({ id, name, category, hoursPerLevel, deliverable }))
+  skills = payload.skills.map(({ id, name, category, hoursPerLevel, deliverable }) => ({ id, name, category, hoursPerLevel, deliverable, sdgs: (sdgMap.skills as Record<string,{sdgs:number[]}>)[id]?.sdgs ?? [4] }))
   signals = (payload.signals ?? []).map((signal) => signal.evidence === 'assumption' ? { id: signal.id, headline: signal.headline, direction: signal.direction, strength: signal.strength, impacts: signal.impacts, explanation: signal.explanation, evidence: 'assumption', assumptionWeight: signal.assumptionWeight } : signal)
   resources = payload.resources ?? []
   scenarios = payload.scenarios ?? DEMO_CATALOG.scenarios
-  sdgs = payload.sdgs ?? DEMO_CATALOG.sdgs
+  sdgs = sdgMap.goals ?? DEMO_CATALOG.sdgs
   DATA_AS_OF = payload.asOf
   SEED_VERSION = payload.version
   demoPersona = payload.demoPersona ?? DEMO_CATALOG.demoPersona

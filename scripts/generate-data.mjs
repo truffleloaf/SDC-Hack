@@ -3,6 +3,7 @@ import { readFileSync, writeFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { loadFrontendModules } from './frontend-modules.mjs'
 
+writeFileSync(fileURLToPath(new URL('../pivott-web-application-design/lib/data/sdg-map.json', import.meta.url)), readFileSync(fileURLToPath(new URL('../backend/app/data/sdg-map.json', import.meta.url))))
 const { seed, engine } = loadFrontendModules()
 const selections = seed.tasksForRole('finance-admin').map((task) => ({ taskId: task.id, share: task.defaultShare }))
 function analysis(scenario, profile = {}, previewMultiplier) {

@@ -136,7 +136,9 @@ def skill_ids_for_role_tasks(session: Session, role_id: str) -> set[str]:
 
 
 def serialize_skill(skill: Skill) -> SkillRead:
+    from app.sdg import tags
     return SkillRead(
+        sdgs=skill.sdgs or tags("skills", skill.id),
         id=skill.id,
         name=skill.name,
         category=skill.category,

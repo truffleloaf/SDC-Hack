@@ -1,5 +1,7 @@
 'use client'
 
+import { SdgContribution } from '@/components/pivott/sdg-contribution'
+
 import { FileDown, ImageDown } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { toast } from 'sonner'
@@ -121,6 +123,7 @@ export default function PassportPage() {
         </PButton>
         <CopyButton text={summary} label="Copy summary" toastMessage="Summary copied" className="h-11 px-5" />
       </div>
+      <SdgContribution roleId={target.id} skillIds={[...steps.map(s=>s.skillId),...state.completedSteps.filter(id=>id.startsWith(targetId+':')).map(id=>id.split(':')[1])]} />
     </div>
   )
 }

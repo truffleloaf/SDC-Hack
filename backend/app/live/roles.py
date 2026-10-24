@@ -253,12 +253,8 @@ SCENARIOS = (
     },
 )
 
-SDGS = (
-    {"id": 4, "name": "Quality Education", "color": "#C5192D"},
-    {"id": 8, "name": "Decent Work and Economic Growth", "color": "#A21942"},
-    {"id": 9, "name": "Industry, Innovation and Infrastructure", "color": "#FD6925"},
-    {"id": 10, "name": "Reduced Inequalities", "color": "#DD1367"},
-)
+from app.sdg import MAPPING
+SDGS = MAPPING['goals']
 
 SOURCE_CATALOG = {
     "name": f"O*NET {ONET_VERSION} Database",

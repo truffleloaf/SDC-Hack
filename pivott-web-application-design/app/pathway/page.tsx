@@ -1,5 +1,7 @@
 'use client'
 
+import { SdgContribution } from '@/components/pivott/sdg-contribution'
+
 import { useState } from 'react'
 import { SyncNote } from '@/components/account/sync-note'
 import { ArrowRight, CalendarPlus } from 'lucide-react'
@@ -179,6 +181,7 @@ export default function PathwayPage() {
           <ArrowRight aria-hidden />
         </PLink>
       </MobileActionBar>
+      <SdgContribution roleId={role.id} skillIds={steps.map(s=>s.skillId)} />
     </div>
   )
 }

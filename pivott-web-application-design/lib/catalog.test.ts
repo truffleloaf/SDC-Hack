@@ -37,7 +37,7 @@ const payload: CatalogPayload = {
     id: 'live-skill',
     name: 'Live skill',
     category: 'Technical',
-    hoursPerLevel: 8,
+    hoursPerLevel: 8, sdgs: [4],
     deliverable: 'A live deliverable',
   }],
   signals: [],

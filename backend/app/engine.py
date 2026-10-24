@@ -252,6 +252,7 @@ def compute_routes(
     hours_per_week: float,
     limit: int = 3,
     preview_multiplier: float | None = None,
+    sdg_focus: list[int] | None = None,
 ) -> list[dict[str, Any]]:
     routes: list[dict[str, Any]] = []
     for role in ROLES:
@@ -282,6 +283,7 @@ def compute_routes(
                 "ratedShare": rated_share,
                 "targetExposure": exposure,
                 "score": route_score(fit, exposure),
+                "unadjustedScore": route_score(fit, exposure), "sdgBonus": 0,
                 "gaps": gaps,
                 "totalGapHours": total_gap_hours,
                 "weeks": learning_weeks(total_gap_hours, hours_per_week),
@@ -289,6 +291,11 @@ def compute_routes(
                 "unknownSkillIds": unknown,
             }
         )
+    routes.sort(key=lambda route: (-route["score"], route["title"]))
+    for index, route in enumerate(routes):
+        route["unadjustedRank"] = index+1
+        route["sdgBonus"] = min(10, 5*len(set(route["sdgs"]) & set(sdg_focus or [])))
+        route["score"] += route["sdgBonus"]
     routes.sort(key=lambda route: (-route["score"], route["title"]))
     return routes[:limit]
 

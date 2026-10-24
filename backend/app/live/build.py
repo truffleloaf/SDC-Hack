@@ -255,6 +255,7 @@ def build_catalog(
         skills.append(
             {
                 "id": skill_id,
+                "sdgs": __import__("app.sdg",fromlist=["tags"]).tags("skills",skill_id),
                 "name": name,
                 "category": category,
                 "hours_per_level": role_config.HOURS_PER_LEVEL[category],

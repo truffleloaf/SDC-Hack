@@ -16,9 +16,10 @@ export function loadFrontendModules() {
       const target = join(temporary, `${name}.js`)
       mkdirSync(dirname(target), { recursive: true })
       writeFileSync(target, ts.transpileModule(source, {
-        compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 },
+        compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020, esModuleInterop: true, resolveJsonModule: true },
       }).outputText)
     }
+    writeFileSync(join(temporary,'data/sdg-map.json'), readFileSync(join(root,'pivott-web-application-design/lib/data/sdg-map.json')))
     return { seed: require(join(temporary, 'data/seed.js')), engine: require(join(temporary, 'engine.js')) }
   } finally {
     rmSync(temporary, { recursive: true, force: true })

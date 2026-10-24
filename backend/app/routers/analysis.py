@@ -28,10 +28,11 @@ def run_analysis(
 ) -> AnalysisResponse:
     profile = normalize_profile(session, payload)
 
-    signals = load_signals(session)
+    signals = [] if profile.ignoreTrendSignals else load_signals(session)
     return analyze(
         session,
         role_id=profile.roleId,
+        sdg_focus=profile.sdgFocus, limit=profile.routeLimit,
         selections=profile.selections,
         levels=profile.skills,
         scenario_id=profile.scenario,

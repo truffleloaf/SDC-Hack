@@ -1,0 +1,425 @@
+{
+  "goals": [
+    {
+      "id": 1,
+      "name": "No Poverty",
+      "color": "#E5243B"
+    },
+    {
+      "id": 2,
+      "name": "Zero Hunger",
+      "color": "#DDA63A"
+    },
+    {
+      "id": 3,
+      "name": "Good Health and Well-being",
+      "color": "#4C9F38"
+    },
+    {
+      "id": 4,
+      "name": "Quality Education",
+      "color": "#C5192D"
+    },
+    {
+      "id": 5,
+      "name": "Gender Equality",
+      "color": "#FF3A21"
+    },
+    {
+      "id": 6,
+      "name": "Clean Water and Sanitation",
+      "color": "#26BDE2"
+    },
+    {
+      "id": 7,
+      "name": "Affordable and Clean Energy",
+      "color": "#FCC30B"
+    },
+    {
+      "id": 8,
+      "name": "Decent Work and Economic Growth",
+      "color": "#A21942"
+    },
+    {
+      "id": 9,
+      "name": "Industry, Innovation and Infrastructure",
+      "color": "#FD6925"
+    },
+    {
+      "id": 10,
+      "name": "Reduced Inequalities",
+      "color": "#DD1367"
+    },
+    {
+      "id": 11,
+      "name": "Sustainable Cities and Communities",
+      "color": "#FD9D24"
+    },
+    {
+      "id": 12,
+      "name": "Responsible Consumption and Production",
+      "color": "#BF8B2E"
+    },
+    {
+      "id": 13,
+      "name": "Climate Action",
+      "color": "#3F7E44"
+    },
+    {
+      "id": 14,
+      "name": "Life Below Water",
+      "color": "#0A97D9"
+    },
+    {
+      "id": 15,
+      "name": "Life on Land",
+      "color": "#56C02B"
+    },
+    {
+      "id": 16,
+      "name": "Peace, Justice and Strong Institutions",
+      "color": "#00689D"
+    },
+    {
+      "id": 17,
+      "name": "Partnerships for the Goals",
+      "color": "#19486A"
+    }
+  ],
+  "skills": {
+    "excel": {
+      "sdgs": [
+        4,
+        9
+      ],
+      "reason": "Spreadsheet modelling: learning and practice support education (4); improved working methods (9)."
+    },
+    "erp": {
+      "sdgs": [
+        4,
+        9
+      ],
+      "reason": "ERP systems: learning and practice support education (4); improved working methods (9)."
+    },
+    "sql": {
+      "sdgs": [
+        4,
+        9
+      ],
+      "reason": "SQL: learning and practice support education (4); improved working methods (9)."
+    },
+    "python": {
+      "sdgs": [
+        4,
+        9
+      ],
+      "reason": "Python: learning and practice support education (4); improved working methods (9)."
+    },
+    "bi": {
+      "sdgs": [
+        4,
+        9
+      ],
+      "reason": "BI dashboards: learning and practice support education (4); improved working methods (9)."
+    },
+    "automation": {
+      "sdgs": [
+        4,
+        9
+      ],
+      "reason": "Process automation: learning and practice support education (4); improved working methods (9)."
+    },
+    "ai": {
+      "sdgs": [
+        4,
+        9
+      ],
+      "reason": "AI tool fluency: learning and practice support education (4); improved working methods (9)."
+    },
+    "analysis": {
+      "sdgs": [
+        4,
+        9
+      ],
+      "reason": "Data analysis: learning and practice support education (4); improved working methods (9)."
+    },
+    "stats": {
+      "sdgs": [
+        4,
+        9
+      ],
+      "reason": "Statistics: learning and practice support education (4); improved working methods (9)."
+    },
+    "controls": {
+      "sdgs": [
+        4,
+        9
+      ],
+      "reason": "Financial controls: learning and practice support education (4); improved working methods (9)."
+    },
+    "stakeholder": {
+      "sdgs": [
+        4,
+        10
+      ],
+      "reason": "Stakeholder communication: learning and practice support education (4); inclusive participation (10)."
+    },
+    "writing": {
+      "sdgs": [
+        4,
+        10
+      ],
+      "reason": "Writing: learning and practice support education (4); inclusive participation (10)."
+    },
+    "empathy": {
+      "sdgs": [
+        4,
+        10
+      ],
+      "reason": "Customer empathy: learning and practice support education (4); inclusive participation (10)."
+    },
+    "process": {
+      "sdgs": [
+        4,
+        8
+      ],
+      "reason": "Process design: learning and practice support education (4); productive work (8)."
+    },
+    "coordination": {
+      "sdgs": [
+        4,
+        10
+      ],
+      "reason": "Coordination: learning and practice support education (4); inclusive participation (10)."
+    },
+    "programming": {
+      "sdgs": [
+        4,
+        9
+      ],
+      "reason": "Programming: learning and practice support education (4); improved working methods (9)."
+    },
+    "active-learning": {
+      "sdgs": [
+        4,
+        9
+      ],
+      "reason": "Active Learning: learning and practice support education (4); improved working methods (9)."
+    },
+    "complex-problem-solving": {
+      "sdgs": [
+        4,
+        9
+      ],
+      "reason": "Complex Problem Solving: learning and practice support education (4); improved working methods (9)."
+    },
+    "critical-thinking": {
+      "sdgs": [
+        4,
+        9
+      ],
+      "reason": "Critical Thinking: learning and practice support education (4); improved working methods (9)."
+    },
+    "judgment-and-decision-making": {
+      "sdgs": [
+        4,
+        9
+      ],
+      "reason": "Judgment and Decision Making: learning and practice support education (4); improved working methods (9)."
+    },
+    "mathematics": {
+      "sdgs": [
+        4,
+        9
+      ],
+      "reason": "Mathematics: learning and practice support education (4); improved working methods (9)."
+    },
+    "monitoring": {
+      "sdgs": [
+        4,
+        9
+      ],
+      "reason": "Monitoring: learning and practice support education (4); improved working methods (9)."
+    },
+    "active-listening": {
+      "sdgs": [
+        4,
+        10
+      ],
+      "reason": "Active Listening: learning and practice support education (4); inclusive participation (10)."
+    },
+    "reading-comprehension": {
+      "sdgs": [
+        4,
+        10
+      ],
+      "reason": "Reading Comprehension: learning and practice support education (4); inclusive participation (10)."
+    },
+    "service-orientation": {
+      "sdgs": [
+        4,
+        10
+      ],
+      "reason": "Service Orientation: learning and practice support education (4); inclusive participation (10)."
+    },
+    "social-perceptiveness": {
+      "sdgs": [
+        4,
+        10
+      ],
+      "reason": "Social Perceptiveness: learning and practice support education (4); inclusive participation (10)."
+    },
+    "speaking": {
+      "sdgs": [
+        4,
+        10
+      ],
+      "reason": "Speaking: learning and practice support education (4); inclusive participation (10)."
+    },
+    "management-of-financial-resources": {
+      "sdgs": [
+        4,
+        8
+      ],
+      "reason": "Management of Financial Resources: learning and practice support education (4); productive work (8)."
+    },
+    "management-of-personnel-resources": {
+      "sdgs": [
+        4,
+        8
+      ],
+      "reason": "Management of Personnel Resources: learning and practice support education (4); productive work (8)."
+    },
+    "time-management": {
+      "sdgs": [
+        4,
+        8
+      ],
+      "reason": "Time Management: learning and practice support education (4); productive work (8)."
+    }
+  },
+  "roles": {
+    "finance-admin": {
+      "sdgs": [
+        8
+      ],
+      "reason": "Finance Admin: the mapped work supports productive employment; additional tags reflect its stated operational or inclusion responsibilities."
+    },
+    "finance-systems-analyst": {
+      "sdgs": [
+        8,
+        9
+      ],
+      "reason": "Finance Systems Analyst: the mapped work supports productive employment; additional tags reflect its stated operational or inclusion responsibilities."
+    },
+    "data-analyst": {
+      "sdgs": [
+        8,
+        9
+      ],
+      "reason": "Data Analyst: the mapped work supports productive employment; additional tags reflect its stated operational or inclusion responsibilities."
+    },
+    "marketing-executive": {
+      "sdgs": [
+        8
+      ],
+      "reason": "Marketing Executive: the mapped work supports productive employment; additional tags reflect its stated operational or inclusion responsibilities."
+    },
+    "customer-support-specialist": {
+      "sdgs": [
+        8,
+        10
+      ],
+      "reason": "Customer Support Specialist: the mapped work supports productive employment; additional tags reflect its stated operational or inclusion responsibilities."
+    },
+    "operations-coordinator": {
+      "sdgs": [
+        8,
+        9
+      ],
+      "reason": "Operations Coordinator: the mapped work supports productive employment; additional tags reflect its stated operational or inclusion responsibilities."
+    },
+    "sales-operations": {
+      "sdgs": [
+        8
+      ],
+      "reason": "Sales Operations Coordinator: the mapped work supports productive employment; additional tags reflect its stated operational or inclusion responsibilities."
+    },
+    "hr-operations": {
+      "sdgs": [
+        8,
+        10
+      ],
+      "reason": "HR Operations Coordinator: the mapped work supports productive employment; additional tags reflect its stated operational or inclusion responsibilities."
+    },
+    "bookkeeping-clerk": {
+      "sdgs": [
+        8,
+        10
+      ],
+      "reason": "Bookkeeping, Accounting, and Auditing Clerks: the mapped work supports productive employment; additional tags reflect its stated operational or inclusion responsibilities."
+    },
+    "executive-assistant": {
+      "sdgs": [
+        8,
+        10
+      ],
+      "reason": "Executive Secretaries and Executive Administrative Assistants: the mapped work supports productive employment; additional tags reflect its stated operational or inclusion responsibilities."
+    },
+    "customer-service-rep": {
+      "sdgs": [
+        8,
+        10
+      ],
+      "reason": "Customer Service Representatives: the mapped work supports productive employment; additional tags reflect its stated operational or inclusion responsibilities."
+    },
+    "accountant": {
+      "sdgs": [
+        8
+      ],
+      "reason": "Accountants and Auditors: the mapped work supports productive employment; additional tags reflect its stated operational or inclusion responsibilities."
+    },
+    "budget-analyst": {
+      "sdgs": [
+        8,
+        9
+      ],
+      "reason": "Budget Analysts: the mapped work supports productive employment; additional tags reflect its stated operational or inclusion responsibilities."
+    },
+    "market-research-analyst": {
+      "sdgs": [
+        8,
+        9
+      ],
+      "reason": "Market Research Analysts and Marketing Specialists: the mapped work supports productive employment; additional tags reflect its stated operational or inclusion responsibilities."
+    },
+    "bi-analyst": {
+      "sdgs": [
+        8,
+        9
+      ],
+      "reason": "Business Intelligence Analysts: the mapped work supports productive employment; additional tags reflect its stated operational or inclusion responsibilities."
+    },
+    "data-scientist": {
+      "sdgs": [
+        8,
+        9
+      ],
+      "reason": "Data Scientists: the mapped work supports productive employment; additional tags reflect its stated operational or inclusion responsibilities."
+    },
+    "project-manager": {
+      "sdgs": [
+        8,
+        9
+      ],
+      "reason": "Project Management Specialists: the mapped work supports productive employment; additional tags reflect its stated operational or inclusion responsibilities."
+    },
+    "operations-manager": {
+      "sdgs": [
+        8,
+        9
+      ],
+      "reason": "General and Operations Managers: the mapped work supports productive employment; additional tags reflect its stated operational or inclusion responsibilities."
+    }
+  }
+}

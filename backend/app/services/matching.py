@@ -109,6 +109,7 @@ def compute_routes(
     scenario_id: str,
     signals: Sequence[LoadedSignal],
     hours_per_week: int,
+    sdg_focus: list[int] | None = None,
     limit: int = ROUTE_LIMIT,
 ) -> list[RouteResult]:
     results: list[RouteResult] = []
@@ -139,6 +140,7 @@ def compute_routes(
                 ratedShare=round(rated_share, 6), unknownSkillIds=unknown,
                 targetExposure=round(exposure, 6),
                 score=round(route_score(fit, exposure), 6),
+                unadjustedScore=round(route_score(fit, exposure), 6), unadjustedRank=0, sdgBonus=0,
                 gaps=gaps,
                 totalGapHours=total_hours,
                 weeks=learning_weeks(total_hours, hours_per_week),
@@ -146,6 +148,11 @@ def compute_routes(
             )
         )
     results.sort(key=lambda row: (-row.score, row.title))
+    for index, route in enumerate(results):
+        route.unadjustedRank=index+1
+        route.sdgBonus=min(10,5*len(set(route.sdgs)&set(sdg_focus or [])))
+        route.score+=route.sdgBonus
+    results.sort(key=lambda row:(-row.score,row.title))
     return results[:limit]
 
 
@@ -158,6 +165,7 @@ def analyze(
     scenario_id: str,
     signals: Sequence[LoadedSignal],
     hours_per_week: int,
+    sdg_focus: list[int] | None = None,
     limit: int = ROUTE_LIMIT,
 ) -> AnalysisResponse:
     scored = score_tasks(session, selections, scenario_id, signals)
@@ -172,6 +180,7 @@ def analyze(
         signals=signals,
         hours_per_week=hours_per_week,
         limit=limit,
+        sdg_focus=sdg_focus,
     )
     return AnalysisResponse(
         scenario="fast" if scenario_id == "fast" else "normal",

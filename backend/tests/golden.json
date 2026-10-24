@@ -175,7 +175,10 @@
           8,
           9
         ],
-        "unknownSkillIds": []
+        "unknownSkillIds": [],
+        "unadjustedRank": 1,
+        "unadjustedScore": 58.789119434843556,
+        "sdgBonus": 0
       },
       {
         "roleId": "finance-systems-analyst",
@@ -248,7 +251,10 @@
           8,
           9
         ],
-        "unknownSkillIds": []
+        "unknownSkillIds": [],
+        "unadjustedRank": 2,
+        "unadjustedScore": 58.28684104117674,
+        "sdgBonus": 0
       },
       {
         "roleId": "hr-operations",
@@ -331,7 +337,10 @@
           8,
           10
         ],
-        "unknownSkillIds": []
+        "unknownSkillIds": [],
+        "unadjustedRank": 3,
+        "unadjustedScore": 55.97871794871795,
+        "sdgBonus": 0
       }
     ]
   },
@@ -521,7 +530,10 @@
           8,
           9
         ],
-        "unknownSkillIds": []
+        "unknownSkillIds": [],
+        "unadjustedRank": 1,
+        "unadjustedScore": 55.49684104117674,
+        "sdgBonus": 0
       },
       {
         "roleId": "operations-coordinator",
@@ -584,7 +596,10 @@
           8,
           9
         ],
-        "unknownSkillIds": []
+        "unknownSkillIds": [],
+        "unadjustedRank": 2,
+        "unadjustedScore": 55.14411943484356,
+        "sdgBonus": 0
       },
       {
         "roleId": "hr-operations",
@@ -667,7 +682,10 @@
           8,
           10
         ],
-        "unknownSkillIds": []
+        "unknownSkillIds": [],
+        "unadjustedRank": 3,
+        "unadjustedScore": 52.38621794871795,
+        "sdgBonus": 0
       }
     ]
   },
@@ -857,7 +875,10 @@
           8,
           9
         ],
-        "unknownSkillIds": []
+        "unknownSkillIds": [],
+        "unadjustedRank": 1,
+        "unadjustedScore": 53.822841041176744,
+        "sdgBonus": 0
       },
       {
         "roleId": "operations-coordinator",
@@ -920,7 +941,10 @@
           8,
           9
         ],
-        "unknownSkillIds": []
+        "unknownSkillIds": [],
+        "unadjustedRank": 2,
+        "unadjustedScore": 52.957119434843555,
+        "sdgBonus": 0
       },
       {
         "roleId": "hr-operations",
@@ -1003,7 +1027,10 @@
           8,
           10
         ],
-        "unknownSkillIds": []
+        "unknownSkillIds": [],
+        "unadjustedRank": 3,
+        "unadjustedScore": 50.23071794871795,
+        "sdgBonus": 0
       }
     ]
   },
@@ -1277,7 +1304,10 @@
           8,
           9
         ],
-        "unknownSkillIds": []
+        "unknownSkillIds": [],
+        "unadjustedRank": 1,
+        "unadjustedScore": 58.789119434843556,
+        "sdgBonus": 0
       },
       {
         "roleId": "finance-systems-analyst",
@@ -1350,7 +1380,10 @@
           8,
           9
         ],
-        "unknownSkillIds": []
+        "unknownSkillIds": [],
+        "unadjustedRank": 2,
+        "unadjustedScore": 58.28684104117674,
+        "sdgBonus": 0
       },
       {
         "roleId": "hr-operations",
@@ -1433,7 +1466,10 @@
           8,
           10
         ],
-        "unknownSkillIds": []
+        "unknownSkillIds": [],
+        "unadjustedRank": 3,
+        "unadjustedScore": 55.97871794871795,
+        "sdgBonus": 0
       }
     ]
   },
@@ -1629,7 +1665,10 @@
           8,
           9
         ],
-        "unknownSkillIds": []
+        "unknownSkillIds": [],
+        "unadjustedRank": 1,
+        "unadjustedScore": 55.49684104117674,
+        "sdgBonus": 0
       },
       {
         "roleId": "operations-coordinator",
@@ -1692,7 +1731,10 @@
           8,
           9
         ],
-        "unknownSkillIds": []
+        "unknownSkillIds": [],
+        "unadjustedRank": 2,
+        "unadjustedScore": 55.14411943484356,
+        "sdgBonus": 0
       },
       {
         "roleId": "hr-operations",
@@ -1775,7 +1817,10 @@
           8,
           10
         ],
-        "unknownSkillIds": []
+        "unknownSkillIds": [],
+        "unadjustedRank": 3,
+        "unadjustedScore": 52.38621794871795,
+        "sdgBonus": 0
       }
     ]
   },

@@ -27,6 +27,8 @@ export interface AppState {
   customTasks: CustomTask[]
   resumeSkillIds: string[]
   skills: Record<string, number>
+  sdgFocus: number[]
+  routeLimit: number
   ignoreTrendSignals: boolean
   scenario: ScenarioId
   targetRoleId: string | null
@@ -53,6 +55,7 @@ export const emptyState: AppState = {
   customTasks: [],
   resumeSkillIds: [],
   skills: {},
+  sdgFocus: [], routeLimit: 3,
   ignoreTrendSignals: false,
   scenario: 'normal',
   targetRoleId: null,
@@ -275,8 +278,9 @@ export function analyze(s: AppState, previewMultiplier?: number) {
         hoursPerWeek: s.hoursPerWeek,
         limit: 10,
         previewMultiplier,
+        sdgFocus: s.sdgFocus,
       })
     : []
   const lastUpdated = signals.reduce((a, b) => (b.date && b.date > a ? b.date : a), '2000-01-01')
-  return { signals, scored, exposure, routes: allRoutes.slice(0, 3), allRoutes, userTaskSkills, lastUpdated, unassessed, assessmentCoverage }
+  return { signals, scored, exposure, routes: allRoutes.slice(0, s.routeLimit || 3), allRoutes, userTaskSkills, lastUpdated, unassessed, assessmentCoverage }
 }

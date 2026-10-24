@@ -63,7 +63,7 @@ def test_health_and_seed_counts(client):
     assert len(data["skills"]) == 15
     assert len(data["signals"]) == 20
     assert len(data["resources"]) == 25
-    assert len(data["sdgs"]) == 4
+    assert len(data["sdgs"]) == 17
     assert len(data["scenarios"]) == 2
     assert sum(len(role["sdgs"]) for role in data["roles"]) == 13
     assert data["demoPersona"]["name"] == "Aisyah"
@@ -170,7 +170,7 @@ def test_role_tasks_and_sdgs(client):
     sdgs = client.get("/api/sdgs")
     assert sdgs.status_code == 200
     rows = {row["id"]: row for row in sdgs.json()["sdgs"]}
-    assert set(rows) == {4, 8, 9, 10}
+    assert set(rows) == set(range(1,18))
     assert len(rows[8]["roles"]) == 8
     assert rows[4]["roles"] == []
     assert len(rows[9]["roles"]) == 3

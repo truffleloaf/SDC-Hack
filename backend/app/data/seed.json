@@ -17,9 +17,39 @@
   ],
   "sdgs": [
     {
+      "id": 1,
+      "name": "No Poverty",
+      "color": "#E5243B"
+    },
+    {
+      "id": 2,
+      "name": "Zero Hunger",
+      "color": "#DDA63A"
+    },
+    {
+      "id": 3,
+      "name": "Good Health and Well-being",
+      "color": "#4C9F38"
+    },
+    {
       "id": 4,
       "name": "Quality Education",
       "color": "#C5192D"
+    },
+    {
+      "id": 5,
+      "name": "Gender Equality",
+      "color": "#FF3A21"
+    },
+    {
+      "id": 6,
+      "name": "Clean Water and Sanitation",
+      "color": "#26BDE2"
+    },
+    {
+      "id": 7,
+      "name": "Affordable and Clean Energy",
+      "color": "#FCC30B"
     },
     {
       "id": 8,
@@ -35,6 +65,41 @@
       "id": 10,
       "name": "Reduced Inequalities",
       "color": "#DD1367"
+    },
+    {
+      "id": 11,
+      "name": "Sustainable Cities and Communities",
+      "color": "#FD9D24"
+    },
+    {
+      "id": 12,
+      "name": "Responsible Consumption and Production",
+      "color": "#BF8B2E"
+    },
+    {
+      "id": 13,
+      "name": "Climate Action",
+      "color": "#3F7E44"
+    },
+    {
+      "id": 14,
+      "name": "Life Below Water",
+      "color": "#0A97D9"
+    },
+    {
+      "id": 15,
+      "name": "Life on Land",
+      "color": "#56C02B"
+    },
+    {
+      "id": 16,
+      "name": "Peace, Justice and Strong Institutions",
+      "color": "#00689D"
+    },
+    {
+      "id": 17,
+      "name": "Partnerships for the Goals",
+      "color": "#19486A"
     }
   ],
   "skills": [
@@ -42,6 +107,10 @@
       "id": "excel",
       "name": "Spreadsheet modelling",
       "category": "Technical",
+      "sdgs": [
+        4,
+        9
+      ],
       "hoursPerLevel": 10,
       "deliverable": "A reusable reconciliation workbook with lookups and checks"
     },
@@ -49,6 +118,10 @@
       "id": "erp",
       "name": "ERP systems",
       "category": "Technical",
+      "sdgs": [
+        4,
+        9
+      ],
       "hoursPerLevel": 14,
       "deliverable": "A documented test script for one ERP workflow"
     },
@@ -56,6 +129,10 @@
       "id": "sql",
       "name": "SQL",
       "category": "Technical",
+      "sdgs": [
+        4,
+        9
+      ],
       "hoursPerLevel": 12,
       "deliverable": "Five queries answering real questions about a sample ledger"
     },
@@ -63,6 +140,10 @@
       "id": "python",
       "name": "Python",
       "category": "Technical",
+      "sdgs": [
+        4,
+        9
+      ],
       "hoursPerLevel": 16,
       "deliverable": "A small script that cleans a messy CSV export"
     },
@@ -70,6 +151,10 @@
       "id": "bi",
       "name": "BI dashboards",
       "category": "Technical",
+      "sdgs": [
+        4,
+        9
+      ],
       "hoursPerLevel": 10,
       "deliverable": "A one-page dashboard tracking three finance KPIs"
     },
@@ -77,6 +162,10 @@
       "id": "automation",
       "name": "Process automation",
       "category": "Technical",
+      "sdgs": [
+        4,
+        9
+      ],
       "hoursPerLevel": 12,
       "deliverable": "An approval flow that routes invoices automatically"
     },
@@ -84,6 +173,10 @@
       "id": "ai",
       "name": "AI tool fluency",
       "category": "Technical",
+      "sdgs": [
+        4,
+        9
+      ],
       "hoursPerLevel": 6,
       "deliverable": "A prompt library for three recurring tasks, with checks"
     },
@@ -91,6 +184,10 @@
       "id": "analysis",
       "name": "Data analysis",
       "category": "Analytical",
+      "sdgs": [
+        4,
+        9
+      ],
       "hoursPerLevel": 12,
       "deliverable": "A variance analysis memo with three clear findings"
     },
@@ -98,6 +195,10 @@
       "id": "stats",
       "name": "Statistics",
       "category": "Analytical",
+      "sdgs": [
+        4,
+        9
+      ],
       "hoursPerLevel": 12,
       "deliverable": "A short note explaining a trend with confidence intervals"
     },
@@ -105,6 +206,10 @@
       "id": "controls",
       "name": "Financial controls",
       "category": "Analytical",
+      "sdgs": [
+        4,
+        9
+      ],
       "hoursPerLevel": 10,
       "deliverable": "A control matrix for one end-to-end process"
     },
@@ -112,6 +217,10 @@
       "id": "stakeholder",
       "name": "Stakeholder communication",
       "category": "Communication",
+      "sdgs": [
+        4,
+        10
+      ],
       "hoursPerLevel": 8,
       "deliverable": "A requirements summary signed off by a stakeholder"
     },
@@ -119,6 +228,10 @@
       "id": "writing",
       "name": "Writing & storytelling",
       "category": "Communication",
+      "sdgs": [
+        4,
+        10
+      ],
       "hoursPerLevel": 8,
       "deliverable": "A one-page narrative explaining a business change"
     },
@@ -126,6 +239,10 @@
       "id": "empathy",
       "name": "Customer empathy",
       "category": "Communication",
+      "sdgs": [
+        4,
+        10
+      ],
       "hoursPerLevel": 6,
       "deliverable": "Three customer interview notes with specific pain points"
     },
@@ -133,6 +250,10 @@
       "id": "process",
       "name": "Process design",
       "category": "Operational",
+      "sdgs": [
+        4,
+        8
+      ],
       "hoursPerLevel": 10,
       "deliverable": "A swimlane map of a current process with one redesign"
     },
@@ -140,6 +261,10 @@
       "id": "coordination",
       "name": "Project coordination",
       "category": "Operational",
+      "sdgs": [
+        4,
+        10
+      ],
       "hoursPerLevel": 8,
       "deliverable": "A lightweight project plan with owners and milestones"
     }

@@ -88,6 +88,8 @@ def normalize_profile(session: Session, payload: ProfileInput) -> NormalizedProf
 
     return NormalizedProfile(
         roleId=role.id,
+        routeLimit=max(3,min(10,payload.routeLimit)), ignoreTrendSignals=payload.ignoreTrendSignals,
+        sdgFocus=sorted(set(x for x in payload.sdgFocus if 1<=x<=17)),
         selections=selections,
         skills=skills,
         scenario=scenario,

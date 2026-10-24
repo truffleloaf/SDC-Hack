@@ -25,6 +25,7 @@ class Skill(SQLModel, table=True):
     id: str = Field(primary_key=True)
     name: str
     category: str
+    sdgs: list[int] = Field(default_factory=list, sa_column=Column(JSON))
     hours_per_level: int = Field(ge=1)
     deliverable: str
     why: str
