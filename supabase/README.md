@@ -1,6 +1,6 @@
 # Account sync setup
 
-Guest use and local résumé import need no Supabase connection. Sign-in controls appear only when the public connection settings are supplied. The app supports email codes and Google, and syncs profile changes after sign-in. The sign-in dialog states that behaviour before authentication.
+Guest use and local résumé import need no Supabase connection. Sign-in controls appear only when the public connection settings are supplied. The app supports email/password accounts, password reset, email codes and Google, and syncs profile changes after sign-in. The sign-in dialog states that behaviour before authentication.
 
 ## Project owner checklist (required for live sign-in)
 
@@ -13,9 +13,11 @@ These settings require access to your Supabase, email-provider, Google Cloud and
 - [ ] **Pivott redirects:** set Site URL to `https://pivottstudio.vercel.app`. Allow that production origin's `/signin` return handler and `http://localhost:3000/signin`, including their safe `next` query values (a scoped `/signin**` allowlist pattern can accommodate the query). Add other local ports or preview origins only when needed. Pivott allowlists its own return paths; it never accepts an external `next` URL.
 - [ ] **Vercel public build variables:** set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` for the Next.js service, then redeploy. Never use a service-role key in the browser. These requirements are also recorded in the cloud environment settings; supplying values there does not configure Vercel.
 - [ ] **Database:** check whether [`migrations/202610230001_profiles.sql`](migrations/202610230001_profiles.sql) is already applied; run it once if needed. It creates owner-only RLS, revision stamps and the authenticated own-account deletion function. Review its limited `SECURITY DEFINER` permission. Keep RLS enabled.
-- [ ] **Live checks:** use a fresh incognito window and a non-team Gmail address on a phone. Test both Google and email code sign-in, expiry/resend, cross-browser code entry, sync, conflicts and deletion. Confirm actual SMTP delivery and Google consent before advertising sign-in as ready.
+- [ ] **Auth settings:** in Supabase Authentication → Providers → Email, keep email/password and email OTP enabled. Add `https://pivottstudio.vercel.app/signin` to the allowed redirect URLs so confirmation and password-reset links return to the new-password screen.
+- [ ] **Abuse controls:** keep Supabase Auth rate limits enabled. For higher traffic, enable Supabase CAPTCHA and add its site key to the client before requiring it; the current UI also validates lengths, uses generic recovery responses, throttles email codes and includes a bot-trap field.
+- [ ] **Live checks:** use a fresh incognito window and a non-team email address on a phone. Test password sign-up, confirmation, sign-in and reset; then Google and email code sign-in, expiry/resend, sync, conflicts and deletion. Confirm actual SMTP delivery and Google consent before advertising sign-in as ready.
 
-See the official [email OTP](https://supabase.com/docs/guides/auth/auth-email-passwordless) and [Google](https://supabase.com/docs/guides/auth/social-login/auth-google) guides. Live provider settings and limits were not verified from this development environment.
+See the official [password auth](https://supabase.com/docs/guides/auth/passwords), [email OTP](https://supabase.com/docs/guides/auth/auth-email-passwordless) and [Google](https://supabase.com/docs/guides/auth/social-login/auth-google) guides. Live provider settings and limits were not verified from this development environment.
 
 ## Sync behaviour
 

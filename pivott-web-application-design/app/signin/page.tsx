@@ -16,13 +16,15 @@ export default function SignInPage() {
     const params = new URLSearchParams(window.location.search)
     const next = safeReturnPath(params.get('next'))
     const code = params.get('code')
+    const reset = params.get('reset') === '1'
     const client = getSupabase()
     if (!client || !accountSavingConfigured) { setMessage('Account sync is unavailable here. You can keep working on this device.'); return }
-    if (!code) { setMessage(params.has('error') ? 'Google sign-in could not be completed. Try again or use an email code.' : 'Sign in to sync your plan.'); openSignIn(next); return }
+    if (!code) { setMessage(params.has('error') ? 'Sign-in could not be completed. Try again.' : 'Sign in to sync your plan.'); openSignIn(next, reset ? 'update' : 'password'); return }
     void client.auth.exchangeCodeForSession(code).then(({ error }) => {
       if (window.location.pathname !== '/signin') return
       window.history.replaceState(null, '', `/signin?next=${encodeURIComponent(next)}`)
-      if (error) { setMessage('Google sign-in could not be completed. Try again or use an email code.'); openSignIn(next) }
+      if (error) { setMessage('The sign-in link is invalid or expired. Request a new one and try again.'); openSignIn(next, reset ? 'forgot' : 'password') }
+      else if (reset) { setMessage('Choose a new password to finish.'); openSignIn(next, 'update') }
       else router.replace(next)
     }).catch(() => setMessage('No connection. Your work is still saved on this device.'))
   }, [router, openSignIn])

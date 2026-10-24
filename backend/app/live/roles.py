@@ -1,7 +1,7 @@
 """Editorial configuration for the live catalogue.
 
 O*NET supplies the occupations, tasks, skills and job titles. What O*NET does
-not supply is Pivott's product decisions: which ten occupations the app shows,
+not supply is Pivott's product decisions: which occupations the app shows,
 which SDGs they map to, and which extra search terms (mostly German) are used
 when matching live job postings from Arbeitnow.
 
@@ -39,6 +39,10 @@ FAMILY_OFFICE = "Office & Admin Support"
 FAMILY_FINANCE = "Business & Finance"
 FAMILY_DATA = "Data & Analysis"
 FAMILY_MANAGEMENT = "Management"
+FAMILY_ENGINEERING = "Engineering & Technology"
+FAMILY_SCIENCE = "Science & Research"
+FAMILY_HEALTH = "Health"
+FAMILY_DESIGN = "Design & Digital"
 
 ROLES: tuple[LiveRoleSpec, ...] = (
     LiveRoleSpec(
@@ -181,6 +185,76 @@ ROLES: tuple[LiveRoleSpec, ...] = (
             "standortleiter",
             "bereichsleiter",
         ),
+    ),
+    LiveRoleSpec(
+        code="15-1252.00",
+        slug="software-developer",
+        family=FAMILY_ENGINEERING,
+        sdgs=(8, 9),
+        aliases=("software developer", "software engineer", "backend developer", "frontend developer", "full stack developer", "softwareentwickler"),
+    ),
+    LiveRoleSpec(
+        code="17-2051.00",
+        slug="civil-engineer",
+        family=FAMILY_ENGINEERING,
+        sdgs=(8, 9, 11),
+        aliases=("civil engineer", "structural engineer", "bauingenieur", "construction engineer"),
+    ),
+    LiveRoleSpec(
+        code="17-2071.00",
+        slug="electrical-engineer",
+        family=FAMILY_ENGINEERING,
+        sdgs=(7, 8, 9),
+        aliases=("electrical engineer", "electronics engineer", "elektroingenieur", "hardware engineer"),
+    ),
+    LiveRoleSpec(
+        code="17-2141.00",
+        slug="mechanical-engineer",
+        family=FAMILY_ENGINEERING,
+        sdgs=(8, 9, 12),
+        aliases=("mechanical engineer", "maschinenbauingenieur", "design engineer", "manufacturing engineer"),
+    ),
+    LiveRoleSpec(
+        code="17-2112.00",
+        slug="industrial-engineer",
+        family=FAMILY_ENGINEERING,
+        sdgs=(8, 9, 12),
+        aliases=("industrial engineer", "process engineer", "production engineer", "wirtschaftsingenieur"),
+    ),
+    LiveRoleSpec(
+        code="19-2041.00",
+        slug="environmental-scientist",
+        family=FAMILY_SCIENCE,
+        sdgs=(6, 12, 13),
+        aliases=("environmental scientist", "environmental specialist", "umweltwissenschaftler", "environmental consultant"),
+    ),
+    LiveRoleSpec(
+        code="19-2031.00",
+        slug="chemist",
+        family=FAMILY_SCIENCE,
+        sdgs=(3, 8, 9),
+        aliases=("chemist", "analytical chemist", "research chemist", "chemiker", "laboratory scientist"),
+    ),
+    LiveRoleSpec(
+        code="19-1042.00",
+        slug="medical-scientist",
+        family=FAMILY_SCIENCE,
+        sdgs=(3, 8, 9),
+        aliases=("medical scientist", "biomedical scientist", "clinical scientist", "medical researcher", "wissenschaftlicher mitarbeiter"),
+    ),
+    LiveRoleSpec(
+        code="29-1141.00",
+        slug="registered-nurse",
+        family=FAMILY_HEALTH,
+        sdgs=(3, 8),
+        aliases=("registered nurse", "staff nurse", "nurse", "pflegefachkraft", "krankenschwester", "krankenpfleger"),
+    ),
+    LiveRoleSpec(
+        code="15-1255.00",
+        slug="web-digital-interface-designer",
+        family=FAMILY_DESIGN,
+        sdgs=(8, 9, 10),
+        aliases=("ui designer", "ux designer", "product designer", "web designer", "interface designer", "webdesigner"),
     ),
 )
 

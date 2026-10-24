@@ -2,7 +2,7 @@ import { MotionProvider } from '@/components/pivott/motion-provider'
 import { CatalogBoot } from '@/components/pivott/catalog-boot'
 import { getCatalog } from '@/lib/catalog'
 import { AccountProvider } from '@/components/account/account-provider'
-import { Analytics } from '@vercel/analytics/next'
+import { ConsentControls, CookieSettingsButton } from '@/components/privacy/consent-controls'
 import type { Metadata, Viewport } from 'next'
 import { ThemeProvider } from 'next-themes'
 import { Toaster } from 'sonner'
@@ -26,6 +26,7 @@ const plex = localFont({
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://pivottstudio.vercel.app'),
   title: 'Pivott: see which parts of your job AI could take on',
   description:
     'Map your tasks, compare nearby roles and make a study plan. Start on this device or sign in to sync your plan.',
@@ -61,7 +62,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             <DemoBanner />
             <RouteStepper />
             <main id="main">{children}</main>
-            <footer className="mx-auto flex max-w-[1200px] justify-between gap-4 border-t border-border px-5 py-8 pb-28 text-sm text-muted-foreground lg:pb-8"><span>Pivott</span><a href="/method" className="min-h-11 underline">How scores work</a></footer>
+            <footer className="mx-auto flex max-w-[1200px] flex-col gap-3 border-t border-border px-5 py-8 pb-28 text-sm text-muted-foreground sm:flex-row sm:flex-wrap sm:items-center sm:justify-between lg:pb-8"><span className="font-medium text-foreground">Pivott</span><nav aria-label="Footer" className="flex flex-wrap items-center gap-x-5 gap-y-1"><a href="/method" className="inline-flex min-h-11 items-center underline">How scores work</a><a href="/privacy" className="inline-flex min-h-11 items-center underline">Privacy</a><a href="/terms" className="inline-flex min-h-11 items-center underline">Terms</a><CookieSettingsButton /></nav></footer>
             <Toaster
               position="bottom-center"
               toastOptions={{
@@ -70,7 +71,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             />
           </TooltipProvider></AccountProvider></MotionProvider>
         </ThemeProvider></CatalogBoot>
-        {process.env.NODE_ENV === 'production' && <Analytics />}
+        <ConsentControls />
       </body>
     </html>
   )

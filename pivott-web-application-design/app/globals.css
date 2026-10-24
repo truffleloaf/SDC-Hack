@@ -46,6 +46,24 @@
   --radius-3xl: 12px;
 }
 
+@layer components {
+  .legal-page h1 {
+    @apply mt-2 text-4xl font-semibold tracking-tight;
+  }
+  .legal-page h2 {
+    @apply mt-9 text-xl font-semibold;
+  }
+  .legal-page p {
+    @apply mt-4 leading-7 text-muted-foreground;
+  }
+  .legal-page ul {
+    @apply mt-4 list-disc space-y-2 pl-6 leading-7 text-muted-foreground;
+  }
+  .legal-page a {
+    @apply text-foreground underline underline-offset-4;
+  }
+}
+
 :root {
   --radius: 12px;
   --background: #f8faf9;

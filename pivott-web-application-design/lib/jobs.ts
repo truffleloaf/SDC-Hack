@@ -1,7 +1,13 @@
 export interface PublicJob {id:string;roleId:string;title:string;company:string;location:string;url:string;postedAt:string;remote:boolean;tags:string[]}
-export function filterJobs(jobs:PublicJob[],filters:{query:string;role:string;location:string;remote:boolean;sort:'newest'|'company'}) {
+export function filterJobs(jobs:PublicJob[],filters:{query:string;role:string;location:string;remote:boolean;sort:'newest'|'company';workplace?:'all'|'remote'|'location'}) {
  const query=filters.query.trim().toLowerCase(),location=filters.location.trim().toLowerCase()
- return jobs.filter(j=>(!filters.role||j.roleId===filters.role)&&(!filters.remote||j.remote)&&(!location||j.location.toLowerCase().includes(location))&&(!query||[j.title,j.company,...j.tags].join(' ').toLowerCase().includes(query))).sort((a,b)=>filters.sort==='company'?a.company.localeCompare(b.company)||a.title.localeCompare(b.title):b.postedAt.localeCompare(a.postedAt)||a.title.localeCompare(b.title))
+ const workplace=filters.workplace ?? (filters.remote?'remote':'all')
+ return jobs.filter(j=>(!filters.role||j.roleId===filters.role)&&(workplace==='all'||(workplace==='remote'?j.remote:!j.remote))&&(!location||j.location.toLowerCase().includes(location))&&(!query||[j.title,j.company,j.location,...j.tags].join(' ').toLowerCase().includes(query))).sort((a,b)=>filters.sort==='company'?a.company.localeCompare(b.company)||a.title.localeCompare(b.title):b.postedAt.localeCompare(a.postedAt)||a.title.localeCompare(b.title))
+}
+
+export function locationDetails(location:string) {
+ const parts=location.split(',').map(part=>part.trim()).filter(Boolean)
+ return { place: parts[0] || 'Location not supplied', region: parts.length > 1 ? parts.slice(1).join(', ') : '' }
 }
 
 /** Longest configured title/alias match, mirroring the public importer. No inferred vacancies. */
